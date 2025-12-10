@@ -1,0 +1,19 @@
+AI READ THIS FIRST
+
+This is a ride-hailing PWA called PrimeLane.
+
+Authoritative docs:
+- /ai/prd.md
+- /ai/frontend-architecture.md
+- /ai/design-system.md
+
+Rules:
+- React + Vite + MUI only
+- Follow MUI theme overrides
+- Mobile-first
+- REST APIs
+
+Key directories:
+- src/theme: MUI theme configuration and overrides
+- src/features: feature-based UI modules
+- src/services: API clients
