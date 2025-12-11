@@ -1,4 +1,5 @@
 # PrimeLane
+
 Frontend repo for PrimeLane.
 
 ## Development
@@ -24,17 +25,26 @@ npm run dev
 ## AI Guidance
 
 For automated code generation and AI assistance:
+
 - See `/ai/ai-instructions.md`
 - Follow `/ai/prd.md`
 
-
 TODO:
+
 [ ] Design system
+
 [ ] Components
+
 [ ] Auth page
+
 [ ] Home page
+
 [ ] Driver
+
 [ ] Price page
+
 [ ] Trips
+
 [ ] Finance
+
 [ ] Admin

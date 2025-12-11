@@ -1,15 +1,15 @@
+import { RouterProvider } from 'react-router-dom'
+import { ThemeProvider, CssBaseline } from '@mui/material'
+import { theme } from './theme'
+import { router } from './app/router'
 import './App.css'
-import { Typography } from '@mui/material'
-
 
 function App() {
-
-
   return (
-    <>
-      <Typography variant="h1" fontWeight={100}>This is H1 Kento</Typography>
-
-    </>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <RouterProvider router={router} />
+    </ThemeProvider>
   )
 }
 

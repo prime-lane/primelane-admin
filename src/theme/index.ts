@@ -1,11 +1,13 @@
-import { createTheme } from "@mui/material/styles";
-import palette from "./palette";
-import typography from "./typography";
-import spacing from "./spacing";
-import { borderRadius } from "./border";
-import { shadows } from "./shadows";
-import { backdropBlur } from "./effects";
-import { opacity } from "./opacity";
+import { createTheme } from '@mui/material/styles'
+import palette from './palette'
+import typography from './typography'
+import spacing from './spacing'
+import { borderRadius } from './border'
+import { shadows } from './shadows'
+import { backdropBlur } from './effects'
+import { opacity } from './opacity'
+
+import { components } from './components'
 
 export const theme = createTheme({
   palette,
@@ -19,6 +21,5 @@ export const theme = createTheme({
     opacity,
   },
   shadows,
-  components: {
-  }
-});
+  components,
+})

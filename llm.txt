@@ -1,6 +1,6 @@
 AI READ THIS FIRST
 
-This is a ride-hailing PWA called PrimeLane.
+This is a ride-hailing web app called PrimeLane.
 
 Authoritative docs:
 - /ai/prd.md

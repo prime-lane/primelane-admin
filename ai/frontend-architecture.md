@@ -13,8 +13,16 @@ All code (human or AI-generated) must follow these rules.
 - REST APIs only
 - Table: React Table
 - pnpm for package management
+- [react router](https://reactrouter.com/home)
 
-No additional libraries should be introduced without explicit approval.
+## Path Conventions
+- define routes in a `path` file
+- path name in caps
+
+## Misc
+- No additional libraries should be introduced without explicit approval.
+- Never style MUI internals with Tailwind.
+
 
 ---
 
@@ -23,21 +31,25 @@ No additional libraries should be introduced without explicit approval.
 - Feature-based folder structure
 - UI system separated from business logic
 - API consumption only (no frontend business rules)
+- kebab-case for file, folder names
+- PascalCase for component names
+- camelCase for variable names
 
 ---
 
 ## Directory Structure
 
 src/
-- app/              → app bootstrap, routing, providers
-- features/         → domain-based modules (auth, booking, trips)
+
+- app/ → app bootstrap, routing, providers
+- features/ → domain-based modules (auth, booking, trips)
 - components/
-  - ui/             → reusable design-system components
-  - layout/         → page layouts and shells
-- theme/            → MUI theme + component overrides
-- services/         → API and platform services
-- hooks/            → shared hooks
-- utils/            → pure utility functions
+  - ui/ → reusable design-system components
+  - layout/ → page layouts and shells
+- theme/ → MUI theme + component overrides
+- services/ → API and platform services
+- hooks/ → shared hooks
+- utils/ → pure utility functions
 
 Features must not import from other features.
 
@@ -56,6 +68,7 @@ No API calls inside UI components.
 ## Styling Rules
 
 Order of precedence:
+
 1. MUI theme overrides
 2. Wrapped UI components
 3. styled() utility
@@ -94,4 +107,3 @@ Inline styles and external CSS files are discouraged.
 - Follow Figma strictly
 - Mobile-first UI
 - Accessibility is mandatory
-
