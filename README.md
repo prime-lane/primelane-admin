@@ -22,6 +22,15 @@ npm install
 npm run dev
 ```
 
+## Storybook
+The design system is available in Storybook at `http://localhost:6006`.
+
+### Run Storybook
+
+```bash
+npm run storybook
+```
+
 ## AI Guidance
 
 For automated code generation and AI assistance:

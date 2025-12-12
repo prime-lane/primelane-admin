@@ -34,6 +34,23 @@ All code (human or AI-generated) must follow these rules.
 - kebab-case for file, folder names
 - PascalCase for component names
 - camelCase for variable names
+- All components must be pure and side-effect-free in render.
+
+### TypeScript
+- Never use:
+  - any
+  - untyped function parameters
+  - implicit any
+
+  - untyped API responses
+
+- Always explicitly type:
+  - component props (Props interface)
+  - state shape
+  - API response types
+  - function arguments + return types
+
+Prefer interface for object typings and type for unions.
 
 ---
 
