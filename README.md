@@ -41,20 +41,12 @@ For automated code generation and AI assistance:
 
 TODO:
 
-[x] Design system
-
-[x] Components
-
-[x] Auth page
-
-[ ] Home page
-
-[ ] Driver
-
-[ ] Price page
-
-[ ] Trips
-
-[ ] Finance
-
-[ ] Admin
+- [x] Design system
+- [x] Components
+- [x] Auth page
+- [ ] Home page
+- [ ] Driver
+- [ ] Price page
+- [ ] Trips
+- [ ] Finance
+- [ ] Admin
