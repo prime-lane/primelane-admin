@@ -1,15 +1,17 @@
 import { RouterProvider } from 'react-router-dom'
-import { ThemeProvider, CssBaseline } from '@mui/material'
-import { theme } from './theme'
-import { router } from './app/router'
 import './App.css'
+import { router } from './app/router'
+import { SolarProvider } from '@solar-icons/react';
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <>
+      <SolarProvider
+        value={{ size: '20', color: 'var(--color-gray-400)', weight: 'Linear' }}
+      >
+        <RouterProvider router={router} />
+      </SolarProvider>
+    </>
   )
 }
 

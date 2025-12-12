@@ -6,7 +6,7 @@ import { DashboardLayout } from '../components/layout/dashboard-layout'
 import { AuthLayout } from '../components/layout/auth-layout'
 
 // Constants
-import { PATHS } from './paths'
+import { path } from './paths'
 
 // Pages (Lazy Loaded)
 const Home = lazy(() =>
@@ -17,6 +17,11 @@ const SignIn = lazy(() =>
     default: module.SignIn,
   })),
 )
+const Invite = lazy(() =>
+  import('../features/auth/invite').then((module) => ({
+    default: module.Invite,
+  })),
+)
 const Otp = lazy(() =>
   import('../features/auth/otp').then((module) => ({ default: module.Otp })),
 )
@@ -25,7 +30,7 @@ const Loading = () => <div>Loading...</div>
 
 export const router = createBrowserRouter([
   {
-    path: PATHS.HOME,
+    path: path.HOME,
     element: (
       <Suspense fallback={<Loading />}>
         <Home />
@@ -33,7 +38,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: PATHS.DASHBOARD.ROOT,
+    path: path.DASHBOARD.ROOT,
     element: <DashboardLayout />,
     children: [
       {
@@ -47,11 +52,11 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: PATHS.AUTH.ROOT,
+    path: path.AUTH.ROOT,
     element: <AuthLayout />,
     children: [
       {
-        path: PATHS.AUTH.SIGN_IN,
+        path: path.AUTH.SIGN_IN,
         element: (
           <Suspense fallback={<Loading />}>
             <SignIn />
@@ -59,7 +64,16 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: PATHS.AUTH.OTP,
+        path: path.AUTH.INVITE,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Invite />
+          </Suspense>
+        ),
+      },
+
+      {
+        path: path.AUTH.OTP,
         element: (
           <Suspense fallback={<Loading />}>
             <Otp />
@@ -68,7 +82,7 @@ export const router = createBrowserRouter([
       },
       {
         index: true,
-        element: <Navigate to={PATHS.AUTH.SIGN_IN} replace />,
+        element: <Navigate to={path.AUTH.SIGN_IN} replace />,
       },
     ],
   },

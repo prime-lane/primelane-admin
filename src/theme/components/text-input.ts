@@ -19,6 +19,11 @@ export const MuiTextField: Components<Theme>['MuiTextField'] = {
                     fontSize: '1rem',
                     fontWeight: 400,
                     borderRadius: '0',
+                    padding: '12px 16px',
+                    height: '100%',
+                    boxSizing: 'border-box',
+                    display: 'flex',
+                    // alignItems: 'center',
                     backgroundColor: colors.base.white,
                     '& fieldset': {
                         borderColor: colors.gray[200],
@@ -36,6 +41,24 @@ export const MuiTextField: Components<Theme>['MuiTextField'] = {
                     '& .MuiOutlinedInput-notchedOutline legend': {
                         width: 0,
                     },
+                },
+            },
+        },
+        {
+            props: { variant: 'outlined', size: 'small' },
+            style: {
+                '& .MuiOutlinedInput-root': {
+                    height: '32px',
+                    padding: '0',
+                },
+            },
+        },
+        {
+            props: { variant: 'outlined', size: 'medium' },
+            style: {
+                '& .MuiOutlinedInput-root': {
+                    height: '48px',
+                    padding: '12px 16px',
                 },
             },
         },

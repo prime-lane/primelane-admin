@@ -54,3 +54,21 @@ export const Disabled: Story = {
     variant: 'outlined',
   },
 }
+
+export const Small: Story = {
+  args: {
+    label: 'Small Input',
+    placeholder: 'Small',
+    variant: 'outlined',
+    size: 'small',
+  },
+}
+
+export const Large: Story = {
+  args: {
+    label: 'Large Input',
+    placeholder: 'Large',
+    variant: 'outlined',
+    size: 'medium',
+  },
+}

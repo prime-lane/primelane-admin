@@ -46,6 +46,7 @@ export const Primary: Story = {
   },
 }
 
+
 export const Secondary: Story = {
   args: {
     variant: 'contained',
@@ -64,8 +65,25 @@ export const Outline: Story = {
 
 export const Ghost: Story = {
   args: {
+    variant: 'ghost',
+    color: 'primary',
+    children: 'Create',
+  },
+}
+
+export const Text: Story = {
+  args: {
     variant: 'text',
     color: 'primary',
+    children: 'Create',
+  },
+}
+
+export const Disabled: Story = {
+  args: {
+    variant: 'contained',
+    color: 'primary',
+    disabled: true,
     children: 'Create',
   },
 }

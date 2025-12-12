@@ -1,4 +1,3 @@
-// theme/custom.d.ts
 import { Theme } from '@mui/material/styles'
 
 declare module '@mui/material/styles' {
@@ -13,5 +12,13 @@ declare module '@mui/material/styles' {
       opacity?: Record<string, number>
       backdropBlur?: Record<string, string>
     }
+  }
+}
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsVariantOverrides {
+    ghost: true
+    text: true,
+    filled: true,
   }
 }
