@@ -1,16 +1,13 @@
-import { useState } from 'react'
 import {
   AppBar,
-  Toolbar,
-  Box,
   Avatar,
-  Typography,
   IconButton,
   Menu,
   MenuItem,
+  Toolbar
 } from '@mui/material'
 import { AltArrowDown } from '@solar-icons/react'
-import { DRAWER_WIDTH } from '@/config/dashboard'
+import { useState } from 'react'
 
 export const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)

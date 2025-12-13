@@ -87,7 +87,7 @@ export const TablePagination = ({
   pageSize,
   onPageChange,
   onPageSizeChange,
-  totalItems,
+  // totalItems,
 }: TablePaginationProps) => {
   return (
     <Box
