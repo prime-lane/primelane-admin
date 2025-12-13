@@ -8,20 +8,23 @@ import { AuthLayout } from '../components/layout/auth-layout'
 import { path } from './paths'
 
 const Home = lazy(() =>
-  import('../features/home/home').then((module) => ({ default: module.Home })),
+  import('@/features/home/home').then((module) => ({ default: module.Home })),
+)
+const Customers = lazy(() =>
+  import('@/features/customers/customers').then((module) => ({ default: module.Customers })),
 )
 const SignIn = lazy(() =>
-  import('../features/auth/sign-in').then((module) => ({
+  import('@/features/auth/sign-in').then((module) => ({
     default: module.SignIn,
   })),
 )
 const Invite = lazy(() =>
-  import('../features/auth/invite').then((module) => ({
+  import('@/features/auth/invite').then((module) => ({
     default: module.Invite,
   })),
 )
 const Otp = lazy(() =>
-  import('../features/auth/otp').then((module) => ({ default: module.Otp })),
+  import('@/features/auth/otp').then((module) => ({ default: module.Otp })),
 )
 
 const Loading = () => <div>Loading...</div>
@@ -30,11 +33,6 @@ export const router = createBrowserRouter([
   {
     path: path.HOME,
     element:<Navigate to={path.AUTH.ROOT} replace />
-    // element: (
-    //   <Suspense fallback={<Loading />}>
-    //     <Home />
-    //   </Suspense>
-    // ),
   },
   {
     path: path.DASHBOARD.ROOT,
@@ -45,6 +43,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <Home />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.CUSTOMERS,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Customers />
           </Suspense>
         ),
       },

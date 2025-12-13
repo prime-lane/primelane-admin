@@ -9,5 +9,6 @@ export const path = {
   },
   DASHBOARD: {
     ROOT: '/dashboard',
+    CUSTOMERS: 'customers',
   },
 } as const
