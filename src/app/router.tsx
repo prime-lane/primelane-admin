@@ -1,14 +1,12 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 
-// Layouts
+
 import { DashboardLayout } from '../components/layout/dashboard-layout'
 import { AuthLayout } from '../components/layout/auth-layout'
 
-// Constants
 import { path } from './paths'
 
-// Pages (Lazy Loaded)
 const Home = lazy(() =>
   import('../features/home/home').then((module) => ({ default: module.Home })),
 )

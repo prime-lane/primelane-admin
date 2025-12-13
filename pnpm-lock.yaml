@@ -20,6 +20,9 @@ importers:
       '@solar-icons/react':
         specifier: ^1.0.1
         version: 1.0.1(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       react:
         specifier: ^19.2.0
         version: 19.2.1
