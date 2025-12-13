@@ -18,6 +18,7 @@ All code (human or AI-generated) must follow these rules.
 - Table: React Table
 - pnpm for package management
 - [react router](https://reactrouter.com/home)
+- icon - solar icons
 
 ## Path Conventions
 - define routes in a `path` file

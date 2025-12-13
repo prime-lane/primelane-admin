@@ -4,92 +4,104 @@ const typography = {
     fontFamily: "'Kento', sans-serif",
     fontWeight: 700,
     fontSize: '8rem',
-    lineHeight: 1,
+    lineHeight: '128px',
+    letterSpacing: 0,
   },
   // text-8xl
   h2: {
     fontFamily: "'Kento', sans-serif",
     fontWeight: 700,
     fontSize: '6rem',
-    lineHeight: 1,
+    lineHeight: '96px',
+    letterSpacing: 0,
   },
   // text-7xl
   h3: {
     fontFamily: "'Kento', sans-serif",
     fontWeight: 700,
     fontSize: '4.5rem',
-    lineHeight: 1,
+    lineHeight: '72px',
+    letterSpacing: 0,
   },
   // text-6xl
   h4: {
     fontFamily: "'Kento', sans-serif",
     fontWeight: 700,
     fontSize: '3.75rem',
-    lineHeight: 1,
+    lineHeight: '60px',
+    letterSpacing: 0,
   },
   // text-5xl
   h5: {
     fontFamily: "'Kento', sans-serif",
     fontWeight: 500,
     fontSize: '3rem',
-    lineHeight: '56px',
-    letterSpacing: '-5%',
+    lineHeight: '48px',
+    letterSpacing: '-0.8px',
   },
   // text-4xl
   h6: {
     fontFamily: "'Kento', sans-serif",
-    fontWeight: 700,
+    fontWeight: 500,
     fontSize: '2.25rem',
-    lineHeight: 2.5 / 2.25,
+    lineHeight: '40px',
+    letterSpacing: 0,
   },
   // text-3xl
   subtitle1: {
     fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
     fontWeight: 400,
     fontSize: '1.875rem',
-    lineHeight: 2.25 / 1.875,
+    lineHeight: '36px',
+    letterSpacing: 0,
   },
   // text-2xl
   subtitle2: {
     fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
     fontWeight: 400,
     fontSize: '1.5rem',
-    lineHeight: 2 / 1.5,
+    lineHeight: '32px',
+    letterSpacing: 0,
   },
   // text-xl
   body1: {
     fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
     fontWeight: 400,
     fontSize: '1.25rem',
-    lineHeight: 1.75 / 1.25,
+    lineHeight: '28px',
+    letterSpacing: '-0.4px',
   },
   // text-lg
   body2: {
     fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
     fontWeight: 400,
     fontSize: '1.125rem',
-    lineHeight: 1.75 / 1.125,
+    lineHeight: '28px',
+    letterSpacing: 0,
   },
   // text-base
   caption: {
     fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
     fontWeight: 400,
     fontSize: '1rem',
-    lineHeight: 1.5 / 1,
+    lineHeight: '24px',
+    letterSpacing: 0,
   },
   // text-sm
   overline: {
     fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
     fontWeight: 400,
     fontSize: '.875rem',
-    lineHeight: 1.25 / 0.875,
+    lineHeight: '20px',
+    letterSpacing: 0,
   },
   // text-xs
   button: {
     fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
     fontWeight: 700,
     fontSize: '.75rem',
-    lineHeight: 1 / 0.75,
+    lineHeight: '16px',
+    letterSpacing: 0,
     textTransform: 'uppercase',
   },
 }

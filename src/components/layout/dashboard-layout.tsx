@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom'
 import { Box, Drawer } from '@mui/material'
 import logo from '../../assets/icon/logo.svg'
 import { SidebarNavItem } from './sidebar-nav-item'
-
+import { Navbar } from './navbar'
 
 export const DashboardLayout = () => {
   return (
@@ -18,7 +18,7 @@ export const DashboardLayout = () => {
           '& .MuiDrawer-paper': {
             width: DRAWER_WIDTH,
             boxSizing: 'border-box',
-            border:0,
+            border: 0,
             bgcolor: 'neutral .50',
           },
         }}
@@ -27,9 +27,7 @@ export const DashboardLayout = () => {
           <img src={logo} alt="Primelane Logo" className="h-10" />
         </Box>
 
-        <nav
-          className="flex-1 px-3 py-3 space-y-3 overflow-auto"
-        >
+        <nav className="flex-1 px-3 py-5 space-y-3 overflow-auto">
           {NAV_ITEMS.map((item) => (
             <SidebarNavItem
               key={item.label}
@@ -59,7 +57,8 @@ export const DashboardLayout = () => {
           flexDirection: 'column',
         }}
       >
-        <div className="flex-1 p-8">
+        <Navbar />
+        <div className="flex-1 py-2 px-4">
           <Outlet />
         </div>
       </Box>

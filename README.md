@@ -50,3 +50,4 @@ TODO:
 - [ ] Trips
 - [ ] Finance
 - [ ] Admin
+- [ ] Improve Layout (set max width)
