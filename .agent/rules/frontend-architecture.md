@@ -44,6 +44,7 @@ All code (human or AI-generated) must follow these rules.
 - All components must be pure and side-effect-free in render.
 - Component should be less than 1000
 - Use reusable components from ui folder if it exists otherwise create one
+- DRY principle. Separate presentational components/utils from logic.
 
 ### TypeScript
 - Never use:
