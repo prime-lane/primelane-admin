@@ -11,25 +11,25 @@ import {
 
 export const NAV_ITEMS = [
   { label: 'Home', icon: Home, to: path.DASHBOARD.ROOT },
-  { label: 'Customers', icon: UsersGroupRounded, to: '/dashboard/customers' },
-  { label: 'Drivers', icon: UserRounded, to: '/dashboard/drivers' },
+  { label: 'Customers', icon: UsersGroupRounded, to: path.DASHBOARD.CUSTOMERS },
+  { label: 'Drivers', icon: UserRounded, to: path.DASHBOARD.DRIVERS },
   {
     label: 'Pricing Config.',
     icon: SettingsMinimalistic,
-    to: '/dashboard/pricing',
+    to: path.DASHBOARD.PRICING_CONFIG,
   },
-  { label: 'Trips', icon: BillList, to: '/dashboard/trips' },
+  { label: 'Trips', icon: BillList, to: path.DASHBOARD.TRIPS },
   {
     label: 'Finance',
     icon: Card,
-    to: '/dashboard/finance',
+    to: path.DASHBOARD.FINANCE,
     hasSubmenu: true,
     children: [{ label: 'Finance', to: '/dashboard/finance/transactions' }],
   },
   {
     label: 'Admin Mgmt.',
     icon: ShieldUser,
-    to: '/dashboard/admin',
+    to: path.DASHBOARD.ADMIN_MANAGEMENT,
     hasSubmenu: true,
     children: [{ label: 'Admin', to: '/dashboard/admin' }],
   },

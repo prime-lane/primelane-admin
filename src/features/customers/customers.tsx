@@ -22,17 +22,10 @@ export const Customers = () => {
   }, [customers, searchTerm])
 
   return (
-    <Box>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          mb: 3,
-        }}
-      >
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
         <h1 className="text-4xl">Customer</h1>
-      </Box>
+      </div>
 
       <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
         <Box sx={{ flex: 1 }}>
@@ -45,6 +38,6 @@ export const Customers = () => {
       </Box>
 
       <DataTable data={filteredCustomers} columns={customerColumns} />
-    </Box>
+    </div>
   )
 }
