@@ -35,6 +35,7 @@ export const SidebarNavItem = ({
   return (
     <NavLink
       to={to}
+      end={to === '/dashboard'}
       className={({ isActive }) =>
         cn(
           'flex items-center justify-between px-4 py-3 transition-all duration-200 group',
@@ -52,7 +53,14 @@ export const SidebarNavItem = ({
               size={22}
               className={cn(isActive ? 'text-white' : 'text-neutral-400')}
             />
-            <span className={cn("text-sm", isActive ? "text-white font-medium" : "text-neutral-400")}>{label}</span>
+            <span
+              className={cn(
+                'text-sm',
+                isActive ? 'text-white font-medium' : 'text-neutral-400',
+              )}
+            >
+              {label}
+            </span>
           </div>
           {hasSubmenu && (
             <AltArrowRight
