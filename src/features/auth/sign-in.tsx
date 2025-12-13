@@ -1,8 +1,12 @@
 import { Button, InputAdornment, TextField, Typography } from '@mui/material'
 import { Letter, LockPassword } from '@solar-icons/react'
 import { PasswordInput } from '@/components/ui/password-input'
+import { useNavigate } from 'react-router-dom'
+import { path } from '@/app/paths'
 
 export const SignIn = () => {
+  const navigate = useNavigate()
+  
   return (
     <div className="flex flex-col gap-8">
       <Typography
@@ -55,7 +59,7 @@ export const SignIn = () => {
           </a>
         </div>
       </div>
-      <Button variant="contained" color="primary" fullWidth>
+      <Button variant="contained" color="primary" fullWidth onClick={() => navigate(path.DASHBOARD.ROOT)}>
         Login
       </Button>
     </div>

@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Frontend Architecture
 
 This document defines the authoritative frontend architecture for this project.
@@ -14,6 +18,7 @@ All code (human or AI-generated) must follow these rules.
 - Table: React Table
 - pnpm for package management
 - [react router](https://reactrouter.com/home)
+- icon - solar icons
 
 ## Path Conventions
 - define routes in a `path` file
@@ -22,6 +27,8 @@ All code (human or AI-generated) must follow these rules.
 ## Misc
 - No additional libraries should be introduced without explicit approval.
 - Never style MUI internals with Tailwind.
+- Use Tailwind for styling native html elements.
+- Use comments sparingly.
 
 
 ---
@@ -35,6 +42,9 @@ All code (human or AI-generated) must follow these rules.
 - PascalCase for component names
 - camelCase for variable names
 - All components must be pure and side-effect-free in render.
+- Component should be less than 1000
+- Use reusable components from ui folder if it exists otherwise create one
+- DRY principle. Separate presentational components/utils from logic.
 
 ### TypeScript
 - Never use:

@@ -1,84 +1,67 @@
-import { Outlet, NavLink } from 'react-router-dom'
-import {
-  Home,
-  UsersGroupRounded,
-  UserRounded,
-  SettingsMinimalistic,
-  BillList,
-  Card,
-  ShieldUser,
-  Logout,
-  AltArrowRight,
-} from '@solar-icons/react'
-import { path } from '../../app/paths'
-
-const NAV_ITEMS = [
-  { label: 'Home', icon: Home, to: path.DASHBOARD.ROOT },
-  { label: 'Customers', icon: UsersGroupRounded, to: '/dashboard/customers' },
-  { label: 'Drivers', icon: UserRounded, to: '/dashboard/drivers' },
-  { label: 'Pricing Config.', icon: SettingsMinimalistic, to: '/dashboard/pricing' },
-  { label: 'Trips', icon: BillList, to: '/dashboard/trips' },
-  { label: 'Finance', icon: Card, to: '/dashboard/finance', hasSubmenu: true },
-  { label: 'Admin Mgmt.', icon: ShieldUser, to: '/dashboard/admin', hasSubmenu: true },
-]
+import { DRAWER_WIDTH, NAV_ITEMS } from '@/config/dashboard'
+import { Logout } from '@solar-icons/react'
+import { Outlet } from 'react-router-dom'
+import { Box, Drawer } from '@mui/material'
+import logo from '../../assets/icon/logo.svg'
+import { SidebarNavItem } from './sidebar-nav-item'
+import { Navbar } from './navbar'
 
 export const DashboardLayout = () => {
   return (
-    <div className="flex min-h-screen bg-neutral-50 font-sans">
+    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'neutral.50' }}>
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: DRAWER_WIDTH,
+          flexShrink: 0,
+          display: { xs: 'none', md: 'block' },
+          '& .MuiDrawer-paper': {
+            width: DRAWER_WIDTH,
+            boxSizing: 'border-box',
+            border: 0,
+            bgcolor: 'neutral .50',
+          },
+        }}
+      >
+        <Box className="h-20 flex items-center px-8">
+          <img src={logo} alt="Primelane Logo" className="h-10" />
+        </Box>
 
-      <aside className="w-[280px] bg-white border-r border-neutral-200 flex flex-col flex-shrink-0 fixed h-full z-10 hidden md:flex">
-
-        <div className="h-20 flex items-center px-8">
-            <img src="/assets/icon/logo.svg" alt="Primelane Logo" className="h-10" />
-        </div>
-
-
-        <nav className="flex-1 px-4 py-6 space-y-1">
+        <nav className="flex-1 px-3 py-5 space-y-3 overflow-auto">
           {NAV_ITEMS.map((item) => (
-            <NavLink
+            <SidebarNavItem
               key={item.label}
+              label={item.label}
+              icon={item.icon}
               to={item.to}
-              className={({ isActive }) =>
-                `flex items-center justify-between px-4 py-3.5 rounded-sm transition-all duration-200 group ${
-                  isActive
-                    ? 'bg-black text-white hover:bg-neutral-900'
-                    : 'text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900'
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  <div className="flex items-center gap-3">
-                    <item.icon weight={isActive ? 'Bold' : 'Linear'} size={22} />
-                    <span className="text-[15px] font-medium">{item.label}</span>
-                  </div>
-                  {item.hasSubmenu && (
-                    <AltArrowRight
-                      size={18}
-                      className="text-neutral-400 group-hover:text-neutral-600"
-                    />
-                  )}
-                </>
-              )}
-            </NavLink>
+              hasSubmenu={item.hasSubmenu}
+            />
           ))}
         </nav>
 
-
         <div className="p-4 mt-auto">
-          <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-neutral-50 rounded-lg text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 transition-colors">
-            <Logout size={20} />
-            <span className="font-medium">Log Out</span>
-          </button>
+          <SidebarNavItem
+            label="Log Out"
+            icon={Logout}
+            variant="button"
+            onClick={() => console.log('Logout clicked')}
+          />
         </div>
-      </aside>
+      </Drawer>
 
-      <div className="flex-1 md:ml-[280px] flex flex-col">
-
-        <main className="flex-1 p-8">
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <Navbar />
+        <div className="flex-1 py-2 px-4">
           <Outlet />
-        </main>
-      </div>
-    </div>
+        </div>
+      </Box>
+    </Box>
   )
 }

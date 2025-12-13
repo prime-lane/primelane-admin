@@ -1,29 +1,50 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 
-// Layouts
 import { DashboardLayout } from '../components/layout/dashboard-layout'
 import { AuthLayout } from '../components/layout/auth-layout'
 
-// Constants
 import { path } from './paths'
 
-// Pages (Lazy Loaded)
 const Home = lazy(() =>
-  import('../features/home/home').then((module) => ({ default: module.Home })),
+  import('@/features/home/home').then((module) => ({ default: module.Home })),
+)
+const Customers = lazy(() =>
+  import('@/features/customers/customers').then((module) => ({
+    default: module.Customers,
+  })),
+)
+const Drivers = lazy(() =>
+  import('@/features/drivers/drivers').then((module) => ({
+    default: module.Drivers,
+  })),
 )
 const SignIn = lazy(() =>
-  import('../features/auth/sign-in').then((module) => ({
+  import('@/features/auth/sign-in').then((module) => ({
     default: module.SignIn,
   })),
 )
 const Invite = lazy(() =>
-  import('../features/auth/invite').then((module) => ({
+  import('@/features/auth/invite').then((module) => ({
     default: module.Invite,
   })),
 )
 const Otp = lazy(() =>
-  import('../features/auth/otp').then((module) => ({ default: module.Otp })),
+  import('@/features/auth/otp').then((module) => ({ default: module.Otp })),
+)
+const PricingConfig = lazy(() =>
+  import('@/features/pricing-config/pricing-config').then((module) => ({
+    default: module.PricingConfig,
+  })),
+)
+const Trips = lazy(() =>
+  import('@/features/trips/trips').then((module) => ({ default: module.Trips })),
+)
+const Finance = lazy(() =>
+  import('@/features/finance/finance').then((module) => ({ default: module.Finance })),
+)
+const AdminManagement = lazy(() =>
+  import('@/features/admin/admin-management').then((module) => ({ default: module.AdminManagement })),
 )
 
 const Loading = () => <div>Loading...</div>
@@ -31,11 +52,7 @@ const Loading = () => <div>Loading...</div>
 export const router = createBrowserRouter([
   {
     path: path.HOME,
-    element: (
-      <Suspense fallback={<Loading />}>
-        <Home />
-      </Suspense>
-    ),
+    element: <Navigate to={path.AUTH.ROOT} replace />,
   },
   {
     path: path.DASHBOARD.ROOT,
@@ -46,6 +63,54 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <Home />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.CUSTOMERS,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Customers />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.DRIVERS,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Drivers />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.PRICING_CONFIG,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <PricingConfig />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.TRIPS,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Trips />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.FINANCE,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Finance />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.ADMIN_MANAGEMENT,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <AdminManagement />
           </Suspense>
         ),
       },
