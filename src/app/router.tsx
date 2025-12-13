@@ -1,7 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 
-
 import { DashboardLayout } from '../components/layout/dashboard-layout'
 import { AuthLayout } from '../components/layout/auth-layout'
 
@@ -11,7 +10,14 @@ const Home = lazy(() =>
   import('@/features/home/home').then((module) => ({ default: module.Home })),
 )
 const Customers = lazy(() =>
-  import('@/features/customers/customers').then((module) => ({ default: module.Customers })),
+  import('@/features/customers/customers').then((module) => ({
+    default: module.Customers,
+  })),
+)
+const Drivers = lazy(() =>
+  import('@/features/drivers/drivers').then((module) => ({
+    default: module.Drivers,
+  })),
 )
 const SignIn = lazy(() =>
   import('@/features/auth/sign-in').then((module) => ({
@@ -32,7 +38,7 @@ const Loading = () => <div>Loading...</div>
 export const router = createBrowserRouter([
   {
     path: path.HOME,
-    element:<Navigate to={path.AUTH.ROOT} replace />
+    element: <Navigate to={path.AUTH.ROOT} replace />,
   },
   {
     path: path.DASHBOARD.ROOT,
@@ -51,6 +57,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <Customers />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.DRIVERS,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Drivers />
           </Suspense>
         ),
       },

@@ -10,5 +10,6 @@ export const path = {
   DASHBOARD: {
     ROOT: '/dashboard',
     CUSTOMERS: 'customers',
+    DRIVERS: 'drivers',
   },
 } as const
