@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Frontend Architecture
 
 This document defines the authoritative frontend architecture for this project.
@@ -37,6 +41,8 @@ All code (human or AI-generated) must follow these rules.
 - PascalCase for component names
 - camelCase for variable names
 - All components must be pure and side-effect-free in render.
+- Component should be less than 1000
+- Use reusable components from ui folder if it exists otherwise create one
 
 ### TypeScript
 - Never use:
