@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   AppBar,
   Toolbar,
@@ -5,47 +6,57 @@ import {
   Avatar,
   Typography,
   IconButton,
+  Menu,
+  MenuItem,
 } from '@mui/material'
+import { AltArrowDown } from '@solar-icons/react'
 import { DRAWER_WIDTH } from '@/config/dashboard'
 
 export const Navbar = () => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
   return (
     <AppBar
       position="sticky"
       elevation={0}
       sx={{
-        width: { md: `calc(100% - ${DRAWER_WIDTH}px)` },
-        ml: { md: `${DRAWER_WIDTH}px` },
+        // width: { md: `calc(100% - ${DRAWER_WIDTH}px)` },
+        // ml: { md: `${DRAWER_WIDTH}px` },
         bgcolor: 'neutral.50',
-        borderBottom: 1,
-        borderColor: 'neutral.200',
+        px: 0,
       }}
     >
       <Toolbar
         sx={{
           justifyContent: 'flex-end',
           minHeight: '80px !important',
-          px: { xs: 2, sm: 4 },
+          
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        <div className="flex items-center">
           <IconButton
+            onClick={handleClick}
             sx={{
               display: 'flex',
               alignItems: 'center',
-              gap: 1,
+              gap: 2,
+              width: '100%',
               borderRadius: 2,
-              px: 2,
-              py: 1,
-              '&:hover': {
-                bgcolor: 'neutral.100',
-              },
             }}
           >
             <Avatar
               sx={{
-                width: 32,
-                height: 32,
+                width: 27,
+                height: 27,
                 bgcolor: 'neutral.300',
                 color: 'neutral.700',
                 fontSize: '0.875rem',
@@ -54,17 +65,29 @@ export const Navbar = () => {
             >
               T
             </Avatar>
-            <Typography
-              variant="body2"
-              sx={{
-                color: 'neutral.900',
-                fontWeight: 500,
-              }}
-            >
-              Timothy
-            </Typography>
+            <span className="text-base">Timothy</span>
+            <AltArrowDown size={16} color="#000" />
           </IconButton>
-        </Box>
+          <Menu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            sx={{
+              mt: 1,
+            }}
+          >
+            <MenuItem onClick={handleClose}><span className="text-base">Profile</span></MenuItem>
+            <MenuItem onClick={handleClose}><span className="text-base">Logout</span></MenuItem>
+          </Menu>
+        </div>
       </Toolbar>
     </AppBar>
   )

@@ -269,70 +269,70 @@
     --font-heading: 'Kento', sans-serif;
 
     --text-9xl: 8rem;
-    --text-9xl-weight: 700;
-    --text-9xl-line-height: 128px;
-    --text-9xl-letter-spacing: 0;
+    --text-9xl--weight: 700;
+    --text-9xl--line-height: 128px;
+    --text-9xl--letter-spacing: 0;
 
     --text-8xl: 6rem;
-    --text-8xl-weight: 700;
-    --text-8xl-line-height: 96px;
-    --text-8xl-letter-spacing: 0;
+    --text-8xl--weight: 700;
+    --text-8xl--line-height: 96px;
+    --text-8xl--letter-spacing: 0;
 
     --text-7xl: 4.5rem;
-    --text-7xl-weight: 700;
-    --text-7xl-line-height: 72px;
-    --text-7xl-letter-spacing: 0;
+    --text-7xl--weight: 700;
+    --text-7xl--line-height: 72px;
+    --text-7xl--letter-spacing: 0;
 
     --text-6xl: 3.75rem;
-    --text-6xl-weight: 700;
-    --text-6xl-line-height: 60px;
-    --text-6xl-letter-spacing: 0;
+    --text-6xl--weight: 700;
+    --text-6xl--line-height: 60px;
+    --text-6xl--letter-spacing: 0;
 
     --text-5xl: 3rem;
-    --text-5xl-weight: 500;
-    --text-5xl-line-height: 48px;
-    --text-5xl-letter-spacing: -0.8px;
+    --text-5xl--weight: 500;
+    --text-5xl--line-height: 48px;
+    --text-5xl--letter-spacing: -0.8px;
 
     --text-4xl: 2.25rem;
-    --text-4xl-weight: 700;
-    --text-4xl-line-height: 40px;
-    --text-4xl-letter-spacing: 0;
+    --text-4xl--weight: 700;
+    --text-4xl--line-height: 40px;
+    --text-4xl--letter-spacing: 0;
 
     --text-3xl: 1.875rem;
-    --text-3xl-weight: 400;
-    --text-3xl-line-height: 36px;
-    --text-3xl-letter-spacing: 0;
+    --text-3xl--weight: 400;
+    --text-3xl--line-height: 36px;
+    --text-3xl--letter-spacing: 0;
 
     --text-2xl: 1.5rem;
-    --text-2xl-weight: 400;
-    --text-2xl-line-height: 32px;
-    --text-2xl-letter-spacing: 0;
+    --text-2xl--weight: 400;
+    --text-2xl--line-height: 32px;
+    --text-2xl--letter-spacing: 0;
 
     --text-xl: 1.25rem;
-    --text-xl-weight: 400;
-    --text-xl-line-height: 28px;
-    --text-xl-letter-spacing: -0.4px;
+    --text-xl--weight: 400;
+    --text-xl--line-height: 28px;
+    --text-xl--letter-spacing: -0.4px;
 
     --text-lg: 1.125rem;
-    --text-lg-weight: 400;
-    --text-lg-line-height: 28px;
-    --text-lg-letter-spacing: 0;
+    --text-lg--weight: 400;
+    --text-lg--line-height: 28px;
+    --text-lg--letter-spacing: 0;
 
     --text-base: 1rem;
-    --text-base-weight: 400;
-    --text-base-line-height: 24px;
-    --text-base-letter-spacing: 0;
+    --text-base--weight: 400;
+    --text-base--line-height: 24px;
+    --text-base--letter-spacing: 0;
 
     --text-sm: 0.875rem;
-    --text-sm-weight: 400;
-    --text-sm-line-height: 20px;
-    --text-sm-letter-spacing: 0;
+    --text-sm--weight: 400;
+    --text-sm--line-height: 20px;
+    --text-sm--letter-spacing: 0;
 
     --text-xs: 0.75rem;
-    --text-xs-weight: 700;
-    --text-xs-line-height: 16px;
-    --text-xs-letter-spacing: 0;
-    --text-xs-transform: uppercase;
+    --text-xs--weight: 700;
+    --text-xs--line-height: 16px;
+    --text-xs--letter-spacing: 0;
+    --text-xs--transform: uppercase;
 }
 
 #root {}

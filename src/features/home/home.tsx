@@ -1,20 +1,17 @@
-import { Box, Button, Card, CardContent, Grid, Typography } from '@mui/material'
+import { Box, Card, CardContent, Grid } from '@mui/material'
+import { FilterButton } from '@/components/ui/data-controls'
 import {
+  AltArrowDown,
   Banknote,
   Bill,
-  BillList,
-  ClockCircle,
-  ClockSquare,
-  MapPoint,
+  Bill2,
   Rocket,
-  Routing2,
+  Shield,
   ShieldCheck,
-  User,
+  ShieldCross,
   UserCheck,
   UserCross,
   UsersGroupRounded,
-  Wallet,
-  WalletMoney
 } from '@solar-icons/react'
 
 interface StatCardProps {
@@ -25,35 +22,15 @@ interface StatCardProps {
 
 const StatCard = ({ icon, label, value }: StatCardProps) => {
   return (
-    <Card>
+    <Card sx={{ bgcolor: 'neutral.50' }}>
       <CardContent>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-          <Box sx={{ color: 'text.secondary', fontSize: '24px' }}>{icon}</Box>
-          <Box>
-            <Typography
-              variant="caption"
-              sx={{
-                color: '#637381',
-                fontSize: '0.75rem',
-                fontWeight: 400,
-                mb: 0.5,
-                display: 'block',
-              }}
-            >
-              {label}
-            </Typography>
-            <Typography
-              sx={{
-                fontWeight: 600,
-                fontSize: '1.5rem',
-                lineHeight: 1.2,
-                color: '#212B36',
-              }}
-            >
-              {value}
-            </Typography>
-          </Box>
-        </Box>
+        <div className="flex flex-col gap-[70px]">
+          <span>{icon}</span>
+          <div className="flex flex-col gap-[2px]">
+            <span className="text-sm text-neutral-500">{label}</span>
+            <p className="text-xl font-semibold">{value}</p>
+          </div>
+        </div>
       </CardContent>
     </Card>
   )
@@ -62,62 +39,62 @@ const StatCard = ({ icon, label, value }: StatCardProps) => {
 export const Home = () => {
   const stats = [
     {
-      icon: <Bill size={24} />,
+      icon: <Bill size={24} color="black" />,
       label: 'Total trip revenue',
       value: '₦212,312',
     },
     {
-      icon: <Banknote size={24} />,
+      icon: <Banknote size={24} color="black" />,
       label: 'Total commission',
       value: '₦234,234',
     },
     {
-      icon: <BillList size={24} />,
+      icon: <Bill2 size={24} color="black" />,
       label: 'Driver earning',
       value: '₦1,850,680',
     },
     {
-      icon: <Rocket size={24} />,
+      icon: <Rocket size={24} color="black" />,
       label: 'Completed trips',
       value: '12,312',
     },
     {
-      icon: <Rocket size={24} />,
+      icon: <Rocket size={24} color="black" />,
       label: 'Total one-way trips',
       value: '212,312',
     },
     {
-      icon: <Rocket size={24} />,
+      icon: <Rocket size={24} color="black" />,
       label: 'Total hourly trips',
       value: '1,850,680',
     },
     {
-      icon: <UsersGroupRounded size={24} />,
+      icon: <UsersGroupRounded size={24} color="black" />,
       label: 'Total Customers',
       value: '12,312',
     },
     {
-      icon: <UserCross size={24} />,
+      icon: <UserCross size={24} color="black" />,
       label: 'Unverified Customers',
       value: '12,312',
     },
     {
-      icon: <UserCheck size={24} />,
+      icon: <UserCheck size={24} color="black" />,
       label: 'Verified Customers',
       value: '12,312',
     },
     {
-      icon: <User size={24} />,
+      icon: <Shield size={24} color="black" />,
       label: 'Total drivers',
       value: '300',
     },
     {
-      icon: <ShieldCheck size={24} />,
+      icon: <ShieldCheck size={24} color="black" />,
       label: 'Verified drivers',
       value: '300',
     },
     {
-      icon: <ClockSquare size={24} />,
+      icon: <ShieldCross size={24} color="black" />,
       label: 'Pending Drivers',
       value: '300',
     },
@@ -133,11 +110,14 @@ export const Home = () => {
           mb: 3,
         }}
       >
-        <h1 className='text-4xl'>Summary</h1>
-        <Button variant="outlined">Filter by</Button>
+        <h1 className="text-4xl">Summary</h1>
+        <FilterButton className='space-x-2'>
+          <span>Filter By</span>
+          <AltArrowDown size={16} color="#000" />
+        </FilterButton>
       </Box>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={4}>
         {stats.map((stat, index) => (
           <Grid size={{ xs: 12, md: 4 }} key={index}>
             <StatCard icon={stat.icon} label={stat.label} value={stat.value} />

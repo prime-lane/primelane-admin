@@ -29,11 +29,12 @@ const Loading = () => <div>Loading...</div>
 export const router = createBrowserRouter([
   {
     path: path.HOME,
-    element: (
-      <Suspense fallback={<Loading />}>
-        <Home />
-      </Suspense>
-    ),
+    element:<Navigate to={path.AUTH.ROOT} replace />
+    // element: (
+    //   <Suspense fallback={<Loading />}>
+    //     <Home />
+    //   </Suspense>
+    // ),
   },
   {
     path: path.DASHBOARD.ROOT,
