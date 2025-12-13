@@ -44,8 +44,8 @@ TODO:
 - [x] Design system
 - [x] Components
 - [x] Auth page
-- [ ] Home page
-- [ ] Driver
+- [x] Home page
+- [x] Driver
 - [ ] Price page
 - [ ] Trips
 - [ ] Finance
