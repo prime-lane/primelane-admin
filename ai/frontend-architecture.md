@@ -22,6 +22,8 @@ All code (human or AI-generated) must follow these rules.
 ## Misc
 - No additional libraries should be introduced without explicit approval.
 - Never style MUI internals with Tailwind.
+- Use Tailwind for styling native html elements.
+- Use comments sparingly.
 
 
 ---
