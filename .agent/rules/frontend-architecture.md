@@ -133,3 +133,17 @@ Inline styles and external CSS files are discouraged.
 - Follow Figma strictly
 - Mobile-first UI
 - Accessibility is mandatory
+
+## Output
+- Strict brevity.
+- Assume the reader is a senior frontend engineer.
+- No explanations, tutorials, or commentary.
+- Output only what is required to solve the task.
+
+## Exception Rule
+
+- Provide explanations **only if explicitly requested** using phrases like:
+  - “explain”
+  - “why”
+  - “reasoning”
+  - “trade-offs”
