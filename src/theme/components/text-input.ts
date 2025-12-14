@@ -6,7 +6,9 @@ export const MuiTextField: Components<Theme>['MuiTextField'] = {
         root: {
             '& .MuiFormHelperText-root': {
                 margin: 0,
-                marginTop: '4px',
+                marginTop: '2px',
+                fontSize: '12px',
+                color: colors.red[100]
             },
         },
     },
