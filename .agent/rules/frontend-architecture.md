@@ -107,7 +107,6 @@ Inline styles and external CSS files are discouraged.
 
 ## State Management
 
-- Server state: React Query
 - Local UI state: React hooks
 - No global Redux store
 
@@ -115,7 +114,7 @@ Inline styles and external CSS files are discouraged.
 
 ## API Layer
 
-- RTK for API consumption
+- Tanstack Query for API consumption
 - API logic lives inside feature folders
 - No direct API calls inside pages or UI components
 
