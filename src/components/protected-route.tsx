@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom'
-import { useIsAuthenticated } from '@/features/auth/hooks/use-current-user'
+import { useCurrentUser } from '@/features/auth/hooks/use-current-user'
 import { path } from '@/app/paths'
 import type { ReactNode } from 'react'
 
@@ -8,12 +8,16 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const isAuthenticated = useIsAuthenticated()
+  const { data: user, isLoading } = useCurrentUser()
+  const hasToken = !!localStorage.getItem('access_token')
 
-  if (!isAuthenticated) {
+  if (isLoading) {
+    return null
+  }
+
+  if (!user || !hasToken) {
     return <Navigate to={path.AUTH.SIGN_IN} replace />
   }
 
   return <>{children}</>
 }
-
