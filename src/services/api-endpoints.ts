@@ -34,6 +34,10 @@ export const API_ENDPOINTS = {
         PREFERENCES: (userId?: string) =>
             userId ? `/users/preferences/${userId}` : '/users/preferences',
     },
+    CUSTOMERS: {
+        ROOT: '/users',
+        BY_ID: (id: string) => `/users/${id}`,
+    },
     ANALYTICS: {
         MY_RIDE_STATS: '/analytics/my-ride-stats',
         USER_RIDE_STATS: (id: string) => `/analytics/user-ride-stats/${id}`,

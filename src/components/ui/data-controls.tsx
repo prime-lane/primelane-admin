@@ -87,8 +87,48 @@ export const TablePagination = ({
   pageSize,
   onPageChange,
   onPageSizeChange,
-  // totalItems,
+  totalItems,
 }: TablePaginationProps) => {
+  const startParam = (currentPage - 1) * pageSize + 1
+  const endParam = Math.min(currentPage * pageSize, totalItems)
+
+  const renderPageNumbers = () => {
+    const pages = []
+    const maxVisiblePages = 5
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2))
+    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1)
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <IconButton
+          key={i}
+          onClick={() => onPageChange(i)}
+          size="small"
+          sx={{
+            border: '1px solid',
+            borderColor: i === currentPage ? 'black' : '#E2E4E9',
+            bgcolor: i === currentPage ? 'black' : 'transparent',
+            color: i === currentPage ? 'white' : '#0A0D14',
+            '&:hover': {
+              bgcolor: i === currentPage ? 'neutral.900' : 'neutral.100',
+            },
+            width: '32px',
+            height: '32px',
+            borderRadius: '0',
+            fontSize: '12px',
+          }}
+        >
+          {i}
+        </IconButton>,
+      )
+    }
+    return pages
+  }
+
   return (
     <Box
       sx={{
@@ -100,7 +140,9 @@ export const TablePagination = ({
       }}
     >
       <span className="text-sm text-neutral-500">
-        Page {currentPage} of {totalPages}
+        {totalItems > 0
+          ? `Showing ${startParam} - ${endParam} of ${totalItems}`
+          : 'No results found'}
       </span>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -112,31 +154,7 @@ export const TablePagination = ({
           <AltArrowLeft size={20} color="#525866" />
         </IconButton>
 
-        {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-          const page = i + 1
-          return (
-            <IconButton
-              key={page}
-              onClick={() => onPageChange(page)}
-              size="small"
-              sx={{
-                border: '1px solid',
-                borderColor: page === currentPage ? 'black' : '#E2E4E9',
-                bgcolor: page === currentPage ? 'black' : 'transparent',
-                color: page === currentPage ? 'white' : '#0A0D14',
-                '&:hover': {
-                  bgcolor: page === currentPage ? 'neutral.900' : 'neutral.100',
-                },
-                width: '32px',
-                height: '32px',
-                borderRadius: '0',
-                fontSize: '12px',
-              }}
-            >
-              {page}
-            </IconButton>
-          )
-        })}
+        {renderPageNumbers()}
 
         <IconButton
           onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
@@ -151,6 +169,7 @@ export const TablePagination = ({
             value={pageSize}
             onChange={(e) => onPageSizeChange(Number(e.target.value))}
             size="small"
+            displayEmpty
             sx={{
               fontSize: '0.875rem',
               '& .MuiOutlinedInput-notchedOutline': {
@@ -158,7 +177,11 @@ export const TablePagination = ({
               },
             }}
           >
-            <MenuItem value={7}><span className="text-sm text-neutral-500">7 / page</span></MenuItem>
+            {[10, 20, 50, 100].map((size) => (
+              <MenuItem key={size} value={size}>
+                <span className="text-sm text-neutral-500">{size} / page</span>
+              </MenuItem>
+            ))}
           </Select>
         </Box>
       </Box>

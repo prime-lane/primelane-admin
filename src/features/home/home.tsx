@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Grid } from '@mui/material'
+import { Box, Card, CardContent, Grid, Skeleton } from '@mui/material'
 import { FilterButton } from '@/components/ui/data-controls'
 import {
   AltArrowDown,
@@ -13,6 +13,9 @@ import {
   UserCross,
   UsersGroupRounded,
 } from '@solar-icons/react'
+import { useDashboardStats } from './api/use-dashboard-stats'
+import { formatCurrency, formatNumber } from '@/lib/format'
+import { ErrorState } from '@/components/ui/loading-error-states'
 
 interface StatCardProps {
   icon: React.ReactNode
@@ -36,69 +39,61 @@ const StatCard = ({ icon, label, value }: StatCardProps) => {
   )
 }
 
+const SkeletonStatCard = () => {
+  return (
+    <Card sx={{ bgcolor: 'neutral.50' }}>
+      <CardContent>
+        <div className="flex flex-col gap-[70px]">
+          <Skeleton variant="circular" width={24} height={24} />
+          <div className="flex flex-col gap-[2px]">
+            <Skeleton variant="text" width="60%" height={20} />
+            <Skeleton variant="text" width="80%" height={28} />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
 export const Home = () => {
-  const stats = [
-    {
-      icon: <Bill size={24} color="black" />,
-      label: 'Total trip revenue',
-      value: '₦212,312',
-    },
-    {
-      icon: <Banknote size={24} color="black" />,
-      label: 'Total commission',
-      value: '₦234,234',
-    },
-    {
-      icon: <Bill2 size={24} color="black" />,
-      label: 'Driver earning',
-      value: '₦1,850,680',
-    },
-    {
-      icon: <Rocket size={24} color="black" />,
-      label: 'Completed trips',
-      value: '12,312',
-    },
-    {
-      icon: <Rocket size={24} color="black" />,
-      label: 'Total one-way trips',
-      value: '212,312',
-    },
-    {
-      icon: <Rocket size={24} color="black" />,
-      label: 'Total hourly trips',
-      value: '1,850,680',
-    },
-    {
-      icon: <UsersGroupRounded size={24} color="black" />,
-      label: 'Total Customers',
-      value: '12,312',
-    },
-    {
-      icon: <UserCross size={24} color="black" />,
-      label: 'Unverified Customers',
-      value: '12,312',
-    },
-    {
-      icon: <UserCheck size={24} color="black" />,
-      label: 'Verified Customers',
-      value: '12,312',
-    },
-    {
-      icon: <Shield size={24} color="black" />,
-      label: 'Total drivers',
-      value: '300',
-    },
-    {
-      icon: <ShieldCheck size={24} color="black" />,
-      label: 'Verified drivers',
-      value: '300',
-    },
-    {
-      icon: <ShieldCross size={24} color="black" />,
-      label: 'Pending Drivers',
-      value: '300',
-    },
-  ]
+  const { data: dashboardData, isLoading, error } = useDashboardStats()
+
+  if (error) return <ErrorState message="Failed to load dashboard statistics" />
+
+  const stats = dashboardData
+    ? [
+        {
+          icon: <Rocket size={24} color="black" />,
+          label: 'Total Rides',
+          value: formatNumber(dashboardData.total_rides),
+        },
+        {
+          icon: <Rocket size={24} color="black" />,
+          label: 'Total Accepted Rides',
+          value: formatNumber(dashboardData.total_accepted_rides),
+        },
+        {
+          icon: <ShieldCross size={24} color="black" />,
+          label: 'Total Cancelled Rides',
+          value: formatNumber(dashboardData.total_cancelled_rides),
+        },
+        {
+          icon: <Bill size={24} color="black" />,
+          label: 'Acceptance Rate',
+          value: `${dashboardData.acceptance_rate.toFixed(2)}%`,
+        },
+        {
+          icon: <Bill2 size={24} color="black" />,
+          label: 'Cancellation Rate',
+          value: `${dashboardData.cancellation_rate.toFixed(2)}%`,
+        },
+        {
+          icon: <Shield size={24} color="black" />,
+          label: 'Average Rating',
+          value: dashboardData.average_rating.toFixed(1),
+        },
+      ]
+    : []
 
   return (
     <Box>
@@ -111,18 +106,28 @@ export const Home = () => {
         }}
       >
         <h1 className="text-4xl">Summary</h1>
-        <FilterButton className='space-x-2'>
+        <FilterButton className="space-x-2">
           <span>Filter By</span>
           <AltArrowDown size={16} color="#000" />
         </FilterButton>
       </Box>
 
       <Grid container spacing={4}>
-        {stats.map((stat, index) => (
-          <Grid size={{ xs: 12, md: 4 }} key={index}>
-            <StatCard icon={stat.icon} label={stat.label} value={stat.value} />
-          </Grid>
-        ))}
+        {isLoading
+          ? Array.from({ length: 6 }).map((_, index) => (
+              <Grid size={{ xs: 12, md: 4 }} key={index}>
+                <SkeletonStatCard />
+              </Grid>
+            ))
+          : stats.map((stat, index) => (
+              <Grid size={{ xs: 12, md: 4 }} key={index}>
+                <StatCard
+                  icon={stat.icon}
+                  label={stat.label}
+                  value={stat.value}
+                />
+              </Grid>
+            ))}
       </Grid>
     </Box>
   )

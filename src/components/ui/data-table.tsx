@@ -126,7 +126,7 @@ export function DataTable<T>({
         onPageSizeChange={(size) => {
           setPagination({ pageIndex: 0, pageSize: size })
         }}
-        totalItems={data.length}
+        totalItems={data.length} // ask backend if pagination should come from server
       />
     </div>
   )

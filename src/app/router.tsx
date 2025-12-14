@@ -9,6 +9,9 @@ import { ProtectedRoute } from '../components/protected-route'
 import { PublicRoute } from '../components/public-route'
 
 import { path } from './paths'
+import { SignIn } from '@/features/auth/sign-in'
+import { Invite } from '@/features/auth/invite'
+import { Otp } from '@/features/auth/otp'
 
 const Home = lazy(() =>
   import('@/features/home/home').then((module) => ({ default: module.Home })),
@@ -22,19 +25,6 @@ const Drivers = lazy(() =>
   import('@/features/drivers/drivers').then((module) => ({
     default: module.Drivers,
   })),
-)
-const SignIn = lazy(() =>
-  import('@/features/auth/sign-in').then((module) => ({
-    default: module.SignIn,
-  })),
-)
-const Invite = lazy(() =>
-  import('@/features/auth/invite').then((module) => ({
-    default: module.Invite,
-  })),
-)
-const Otp = lazy(() =>
-  import('@/features/auth/otp').then((module) => ({ default: module.Otp })),
 )
 const PricingConfig = lazy(() =>
   import('@/features/pricing-config/pricing-config').then((module) => ({

@@ -29,7 +29,7 @@ const statusConfig: Record<
 }
 
 export const StatusBadge = ({ status, sx }: StatusBadgeProps) => {
-  const config = statusConfig[status]
+  const config = statusConfig[status] || statusConfig.pending // Fallback to pending if invalid
 
   return (
     <Chip
@@ -41,7 +41,7 @@ export const StatusBadge = ({ status, sx }: StatusBadgeProps) => {
         py: 1,
         px: 0,
         borderRadius: 0,
-        width:'fit-content',
+        width: 'fit-content',
         ...sx,
       }}
     />
