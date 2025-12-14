@@ -3,6 +3,7 @@ import { apiClient } from '@/services/api-client'
 import { API_ENDPOINTS as e } from '@/services/api-endpoints'
 import type { PaginationParams, PaginatedResponse } from '@/services/api-types'
 import { transformPaginatedResponse } from '@/utils/api-utils'
+import { buildQueryParams } from '@/lib/utils'
 import type { Customer } from '../types'
 
 interface UseCustomersParams extends PaginationParams { }
@@ -11,10 +12,7 @@ export const useCustomers = (params?: UseCustomersParams) => {
     return useQuery({
         queryKey: ['customers', params],
         queryFn: async () => {
-            const searchParams = new URLSearchParams()
-            if (params?.page) searchParams.set('page', params.page.toString())
-            if (params?.limit) searchParams.set('limit', params.limit.toString())
-            if (params?.search) searchParams.set('search', params.search)
+            const searchParams = buildQueryParams(params)
 
             const endpoint = searchParams.toString()
                 ? `${e.CUSTOMERS.ROOT}?${searchParams.toString()}`

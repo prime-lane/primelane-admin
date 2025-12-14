@@ -38,9 +38,17 @@ export const API_ENDPOINTS = {
         ROOT: '/users',
         BY_ID: (id: string) => `/users/${id}`,
     },
+    DRIVERS: {
+        ROOT: '/users',
+        BY_ID: (id: string) => `/users/${id}`,
+    },
     ANALYTICS: {
         MY_RIDE_STATS: '/analytics/my-ride-stats',
         USER_RIDE_STATS: (id: string) => `/analytics/user-ride-stats/${id}`,
+    },
+    TRIPS: {
+        ROOT: '/rides',
+        BY_ID: (id: string) => `/rides/${id}`,
     },
     KYC: {
         VERIFY: (idType: 'nin' | 'dl' | 'ip') => `/kyc/verify/${idType}`,

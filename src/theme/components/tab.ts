@@ -2,6 +2,9 @@ import type { Components, Theme } from '@mui/material'
 import { colors } from '../colors'
 
 export const MuiTab: Components<Theme>['MuiTab'] = {
+    defaultProps: {
+        variant: 'standard',
+    },
     styleOverrides: {
         root: {
             textTransform: 'none',

@@ -21,6 +21,11 @@ const Customers = lazy(() =>
     default: module.Customers,
   })),
 )
+const CustomerDetails = lazy(() =>
+  import('@/features/customers/customer-details').then((module) => ({
+    default: module.CustomerDetails,
+  })),
+)
 const Drivers = lazy(() =>
   import('@/features/drivers/drivers').then((module) => ({
     default: module.Drivers,
@@ -77,6 +82,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <Customers />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.CUSTOMER_DETAILS,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <CustomerDetails />
           </Suspense>
         ),
       },

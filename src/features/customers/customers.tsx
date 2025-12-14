@@ -7,8 +7,11 @@ import { customerColumns } from './components/columns'
 import { useCustomers } from './api/use-customers'
 import { LoadingState, ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
+import { useNavigate } from 'react-router-dom'
+import type { Customer } from './types'
 
 export const Customers = () => {
+  const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
   const debouncedSearch = useDebounce(searchTerm, 500)
 
@@ -40,7 +43,13 @@ export const Customers = () => {
       {isLoading ? (
         <LoadingState />
       ) : (
-        <DataTable data={customers} columns={customerColumns} />
+        <DataTable
+          data={customers}
+          columns={customerColumns}
+          onRowClick={(row: Customer) =>
+            navigate(`/dashboard/customers/${row.id}`)
+          }
+        />
       )}
     </div>
   )
