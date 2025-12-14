@@ -41,7 +41,7 @@ export const AuthLayout = () => {
       {/* Right Side - Content */}
       <div
         
-        className='w-full lg:w-1/2 flex flex-col items-center justify-center py-16 lg:py-32 relative gap-[93px] h-full p-4 lg:p-0'
+        className='w-full lg:w-1/2 flex flex-col items-center justify-center py-16 lg:py-32 relative gap-[93px] h-full p-4 lg:p-0 max-w-7xl'
       >
         <Box sx={{ width: '100%', maxWidth: '480px' }}>
           <Outlet />
