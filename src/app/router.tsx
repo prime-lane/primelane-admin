@@ -5,6 +5,8 @@ import { DashboardLayout } from '../components/layout/dashboard-layout'
 import { AuthLayout } from '../components/layout/auth-layout'
 import { ErrorBoundary } from '../components/error-boundary'
 import { NotFound } from '../components/not-found'
+import { ProtectedRoute } from '../components/protected-route'
+import { PublicRoute } from '../components/public-route'
 
 import { path } from './paths'
 
@@ -65,7 +67,11 @@ export const router = createBrowserRouter([
   },
   {
     path: path.DASHBOARD.ROOT,
-    element: <DashboardLayout />,
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorBoundary />,
     children: [
       {
@@ -128,7 +134,11 @@ export const router = createBrowserRouter([
   },
   {
     path: path.AUTH.ROOT,
-    element: <AuthLayout />,
+    element: (
+      <PublicRoute>
+        <AuthLayout />
+      </PublicRoute>
+    ),
     errorElement: <ErrorBoundary />,
     children: [
       {

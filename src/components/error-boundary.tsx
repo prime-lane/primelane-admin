@@ -10,9 +10,6 @@ export const ErrorBoundary = () => {
   const error = useRouteError()
   const navigate = useNavigate()
 
-  console.log('Error received:', error)
-  console.log('Is route error response:', isRouteErrorResponse(error))
-
   let errorMessage: string
   let errorStatus: number | string = 'Error'
   let errorTitle: string = 'Something went wrong'
@@ -53,7 +50,9 @@ export const ErrorBoundary = () => {
           gap: 3,
         }}
       >
-        <Typography variant="subtitle1" fontWeight={600}>{errorStatus}</Typography>
+        <Typography variant="subtitle1" fontWeight={600}>
+          {errorStatus}
+        </Typography>
 
         <div>
           <Typography variant="subtitle2" fontWeight={500} sx={{}}>

@@ -1,12 +1,30 @@
 import { Button, InputAdornment, TextField, Typography } from '@mui/material'
 import { Letter, LockPassword } from '@solar-icons/react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { PasswordInput } from '@/components/ui/password-input'
-import { useNavigate } from 'react-router-dom'
-import { path } from '@/app/paths'
+import { signInSchema, type SignInFormData } from './schemas/sign-in-schema'
+import { useSignIn } from './api/use-auth'
 
 export const SignIn = () => {
-  const navigate = useNavigate()
-  
+  const signIn = useSignIn()
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<SignInFormData>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  })
+
+  const onSubmit = async (data: SignInFormData) => {
+    await signIn.mutateAsync({ ...data, user_type: 'admin' })
+  }
+
   return (
     <div className="flex flex-col gap-8">
       <Typography
@@ -20,13 +38,17 @@ export const SignIn = () => {
         LOG IN AS ADMIN
       </Typography>
 
-      <div className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <TextField
+          {...register('email')}
           hiddenLabel
           fullWidth
           size="medium"
           label="Email"
           placeholder="exodustimothy@gmail.com"
+          error={!!errors.email}
+          helperText={errors.email?.message}
+          disabled={isSubmitting || signIn.isPending}
           slotProps={{
             input: {
               startAdornment: (
@@ -39,11 +61,15 @@ export const SignIn = () => {
         />
         <div className="flex flex-col gap-4">
           <PasswordInput
+            {...register('password')}
             hiddenLabel
             fullWidth
             size="medium"
             placeholder="******"
-            label="Enter New Password"
+            label="Enter Password"
+            error={!!errors.password}
+            helperText={errors.password?.message}
+            disabled={isSubmitting || signIn.isPending}
             slotProps={{
               input: {
                 startAdornment: (
@@ -58,10 +84,17 @@ export const SignIn = () => {
             Forgot Password?
           </a>
         </div>
-      </div>
-      <Button variant="contained" color="primary" fullWidth onClick={() => navigate(path.DASHBOARD.ROOT)}>
-        Login
-      </Button>
+
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          disabled={isSubmitting || signIn.isPending}
+        >
+          {isSubmitting || signIn.isPending ? 'Logging in...' : 'Login'}
+        </Button>
+      </form>
     </div>
   )
 }

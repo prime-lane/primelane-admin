@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import type { User } from '@/features/auth/types'
+import { path } from '@/app/paths'
 
 export const useCurrentUser = () => {
     return useQuery<User | null>({
@@ -23,6 +24,6 @@ export const useLogout = () => {
         localStorage.removeItem('access_token')
         localStorage.removeItem('refresh_token')
         localStorage.removeItem('user')
-        window.location.href = '/auth/sign-in'
+        window.location.href = path.AUTH.SIGN_IN
     }
 }

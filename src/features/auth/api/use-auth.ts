@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { apiClient } from '@/services/api-client'
-import { API_ENDPOINTS } from '@/services/api-endpoints'
+import { API_ENDPOINTS as e } from '@/services/api-endpoints'
 import { path } from '@/app/paths'
 import type {
     SignInRequest,
@@ -23,7 +23,7 @@ export const useSignIn = () => {
     return useMutation({
         mutationFn: async (data: SignInRequest) => {
             const response = await apiClient.post<AuthResponse>(
-                API_ENDPOINTS.AUTH.LOGIN.ADMIN,
+                e.AUTH.LOGIN.ADMIN,
                 data
             )
             return response.data
@@ -46,7 +46,7 @@ export const useSignUp = () => {
     return useMutation({
         mutationFn: async (data: SignUpRequest) => {
             const response = await apiClient.post<Record<string, never>>(
-                API_ENDPOINTS.AUTH.SIGN_UP,
+                e.AUTH.SIGN_UP,
                 data
             )
             return response
@@ -61,7 +61,7 @@ export const useSignUp = () => {
 export const useRefreshToken = () => {
     return useMutation({
         mutationFn: async (data: RefreshTokenRequest) => {
-            const response = await apiClient.post<AuthResponse>(API_ENDPOINTS.AUTH.REFRESH, data)
+            const response = await apiClient.post<AuthResponse>(e.AUTH.REFRESH, data)
             return response.data
         },
         onSuccess: (data) => {
@@ -76,7 +76,7 @@ export const useForgotPassword = () => {
     return useMutation({
         mutationFn: async (data: ForgotPasswordRequest) => {
             const response = await apiClient.post<Record<string, never>>(
-                API_ENDPOINTS.AUTH.FORGOT_PASSWORD,
+                e.AUTH.FORGOT_PASSWORD,
                 data
             )
             return response
@@ -94,7 +94,7 @@ export const useChangePassword = () => {
     return useMutation({
         mutationFn: async (data: ChangePasswordRequest) => {
             const response = await apiClient.patch<Record<string, never>>(
-                API_ENDPOINTS.AUTH.CHANGE_PASSWORD,
+                e.AUTH.CHANGE_PASSWORD,
                 data
             )
             return response
@@ -114,7 +114,7 @@ export const useVerifyOTP = (action: 'verify-phone' | 'login') => {
     return useMutation({
         mutationFn: async (data: VerifyOTPRequest) => {
             const response = await apiClient.post<AuthResponse>(
-                API_ENDPOINTS.AUTH.VERIFY_OTP(action),
+                e.AUTH.VERIFY_OTP(action),
                 data
             )
             return response.data
@@ -141,7 +141,7 @@ export const useConfirmOTP = (action: 'reset-password' | 'change-email' | 'chang
     return useMutation({
         mutationFn: async (data: VerifyOTPRequest) => {
             const response = await apiClient.post<Record<string, never>>(
-                API_ENDPOINTS.AUTH.CONFIRM_OTP(action),
+                e.AUTH.CONFIRM_OTP(action),
                 data
             )
             return response
@@ -157,7 +157,7 @@ export const useResendOTP = (action: 'verify-phone' | 'login') => {
     return useMutation({
         mutationFn: async (data: ResendOTPRequest) => {
             const response = await apiClient.post<Record<string, never>>(
-                API_ENDPOINTS.AUTH.RESEND_OTP(action),
+                e.AUTH.RESEND_OTP(action),
                 data
             )
             return response
@@ -176,7 +176,7 @@ export const useGoogleSignUp = () => {
     return useMutation({
         mutationFn: async (token: string) => {
             const response = await apiClient.post<AuthResponse>(
-                API_ENDPOINTS.AUTH.GOOGLE.SIGN_UP,
+                e.AUTH.GOOGLE.SIGN_UP,
                 { token }
             )
             return response.data
@@ -202,7 +202,7 @@ export const useGoogleLogin = () => {
     return useMutation({
         mutationFn: async (token: string) => {
             const response = await apiClient.post<AuthResponse>(
-                API_ENDPOINTS.AUTH.GOOGLE.LOGIN,
+                e.AUTH.GOOGLE.LOGIN,
                 { token }
             )
             return response.data
