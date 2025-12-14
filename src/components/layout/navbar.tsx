@@ -4,14 +4,17 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Toolbar
+  Toolbar,
 } from '@mui/material'
 import { AltArrowDown } from '@solar-icons/react'
 import { useState } from 'react'
+import { useCurrentUser, useLogout } from '@/features/auth/hooks/use-current-user'
 
 export const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
+  const { data: user } = useCurrentUser()
+  const logout = useLogout()
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -20,6 +23,18 @@ export const Navbar = () => {
   const handleClose = () => {
     setAnchorEl(null)
   }
+
+  const handleLogout = () => {
+    handleClose()
+    logout()
+  }
+
+  const getInitials = (firstName: string, lastName: string) => {
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase()
+  }
+
+  const displayName = user ? user.first_name : 'User'
+  const avatarInitials = user ? getInitials(user.first_name, user.last_name) : 'U'
 
   return (
     <AppBar
@@ -36,7 +51,6 @@ export const Navbar = () => {
         sx={{
           justifyContent: 'flex-end',
           minHeight: '80px !important',
-          
         }}
       >
         <div className="flex items-center">
@@ -51,6 +65,7 @@ export const Navbar = () => {
             }}
           >
             <Avatar
+              src={user?.image_url || undefined}
               sx={{
                 width: 27,
                 height: 27,
@@ -60,9 +75,9 @@ export const Navbar = () => {
                 fontWeight: 500,
               }}
             >
-              T
+              {avatarInitials}
             </Avatar>
-            <span className="text-base">Timothy</span>
+            <span className="text-base">{displayName}</span>
             <AltArrowDown size={16} color="#000" />
           </IconButton>
           <Menu
@@ -81,11 +96,16 @@ export const Navbar = () => {
               mt: 1,
             }}
           >
-            <MenuItem onClick={handleClose}><span className="text-base">Profile</span></MenuItem>
-            <MenuItem onClick={handleClose}><span className="text-base">Logout</span></MenuItem>
+            <MenuItem onClick={handleClose}>
+              <span className="text-base">Profile</span>
+            </MenuItem>
+            <MenuItem onClick={handleLogout}>
+              <span className="text-base">Logout</span>
+            </MenuItem>
           </Menu>
         </div>
       </Toolbar>
     </AppBar>
   )
 }
+
