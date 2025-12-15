@@ -1,21 +1,16 @@
-import { Box, Card, CardContent, Grid, Skeleton } from '@mui/material'
 import { FilterButton } from '@/components/ui/data-controls'
+import { ErrorState } from '@/components/ui/loading-error-states'
+import { formatNumber } from '@/lib/format'
+import { Box, Card, CardContent, Grid, Skeleton } from '@mui/material'
 import {
   AltArrowDown,
-  Banknote,
   Bill,
   Bill2,
   Rocket,
   Shield,
-  ShieldCheck,
-  ShieldCross,
-  UserCheck,
-  UserCross,
-  UsersGroupRounded,
+  ShieldCross
 } from '@solar-icons/react'
 import { useDashboardStats } from './api/use-dashboard-stats'
-import { formatCurrency, formatNumber } from '@/lib/format'
-import { ErrorState } from '@/components/ui/loading-error-states'
 
 interface StatCardProps {
   icon: React.ReactNode

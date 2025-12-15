@@ -1,17 +1,14 @@
-import { useState } from 'react'
+import { FilterButton, SearchInput } from '@/components/ui/data-controls'
+import { DataTable } from '@/components/ui/data-table'
+import { ErrorState, LoadingState } from '@/components/ui/loading-error-states'
+import { useDebounce } from '@/hooks/use-debounce'
 import { Box } from '@mui/material'
 import { AltArrowDown } from '@solar-icons/react'
-import { DataTable } from '@/components/ui/data-table'
-import { SearchInput, FilterButton } from '@/components/ui/data-controls'
-import { columns } from './components/columns'
+import { useState } from 'react'
 import { useTrips } from './api/use-trips'
-import { LoadingState, ErrorState } from '@/components/ui/loading-error-states'
-import { useDebounce } from '@/hooks/use-debounce'
-import { useNavigate } from 'react-router-dom'
-import type { Trip } from './types'
+import { columns } from './components/columns'
 
 export const Trips = () => {
-  const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
   const debouncedSearch = useDebounce(searchTerm, 500)
 

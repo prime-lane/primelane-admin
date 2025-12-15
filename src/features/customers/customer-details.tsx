@@ -12,6 +12,8 @@ import { useParams } from 'react-router-dom'
 import { useCustomer } from './api/use-customers'
 import { useCustomerStats } from './api/use-customer-stats'
 import { CustomerOverview } from './components/customer-overview'
+import { IdentityDetails } from './components/identity-details'
+import { CustomerRatings } from './components/customer-ratings'
 
 export const CustomerDetails = () => {
   const { id } = useParams<{ id: string }>()
@@ -84,10 +86,10 @@ export const CustomerDetails = () => {
       </TabPanel>
 
       <TabPanel value={tabValue} index={1}>
-        <Typography>Identity Details Content</Typography>
+        <IdentityDetails customer={customer} />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
-        <Typography>Ratings Content</Typography>
+        <CustomerRatings stats={stats} />
       </TabPanel>
       <TabPanel value={tabValue} index={3}>
         <Typography>Wallet Content</Typography>

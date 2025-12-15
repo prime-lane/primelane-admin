@@ -69,6 +69,7 @@ export const StatusBadge = ({ status, sx }: StatusBadgeProps) => {
         px: 0,
         borderRadius: 0,
         width: 'fit-content',
+        fontWeight: 500,
         ...sx,
       }}
     />
