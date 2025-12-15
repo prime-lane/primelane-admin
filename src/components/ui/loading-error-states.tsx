@@ -31,9 +31,7 @@ export const ErrorState = ({
 }: ErrorStateProps) => {
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h6" color="error">
-        {children || message}
-      </Typography>
+      <p className="text-base text-red-500">{children || message}</p>
     </Box>
   )
 }
