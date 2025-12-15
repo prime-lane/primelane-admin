@@ -1,5 +1,6 @@
-import { Button, TextField, Typography } from '@mui/material'
+import { Button, InputAdornment, TextField, Typography } from '@mui/material'
 import { PasswordInput } from '@/components/ui/password-input'
+import { Letter, LockPassword } from '@solar-icons/react'
 
 export const Invite = () => {
   return (
@@ -22,6 +23,15 @@ export const Invite = () => {
           size="medium"
           label="Email"
           placeholder="exodustimothy@gmail.com"
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Letter />
+                </InputAdornment>
+              ),
+            },
+          }}
         />
 
         <div className="space-y-4">
@@ -34,10 +44,28 @@ export const Invite = () => {
               size="medium"
               placeholder="******"
               label="Enter New Password"
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockPassword />
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
 
             <PasswordInput
               hiddenLabel
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockPassword />
+                    </InputAdornment>
+                  ),
+                },
+              }}
               fullWidth
               size="medium"
               placeholder="******"

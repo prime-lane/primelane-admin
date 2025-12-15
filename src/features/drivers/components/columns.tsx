@@ -8,34 +8,37 @@ export const driverColumns: ColumnDef<Driver>[] = [
   {
     accessorKey: 'id',
     header: 'ID',
-    cell: ({ row }) => <span className="text-sm">{row.original.id}</span>,
+    cell: ({ row }) => (
+      <span className="text-sm">{row.original.id.substring(0, 8)}...</span>
+    ),
   },
   {
-    accessorKey: 'dateJoined',
+    accessorKey: 'created_at',
     header: 'Date Joined',
     cell: ({ row }) => (
-      <span className="text-sm">{formatDate(row.original.dateJoined)}</span>
+      <span className="text-sm">{formatDate(row.original.created_at)}</span>
     ),
   },
   {
     accessorKey: 'name',
     header: 'Driver name',
     cell: ({ row }) => (
-      <span className="text-sm font-medium">{row.original.name}</span>
+      <div className="flex flex-col gap-[2px]">
+        <span className="text-sm font-medium">
+          {row.original.first_name} {row.original.last_name}
+        </span>
+        <span className="text-sm text-neutral-500">{row.original.email}</span>
+      </div>
     ),
   },
   {
-    accessorKey: 'phone',
+    accessorKey: 'phone_number',
     header: 'Phone number',
-    cell: ({ row }) => <span className="text-sm">{row.original.phone}</span>,
-  },
-  {
-    accessorKey: 'email',
-    header: 'Email address',
     cell: ({ row }) => (
-      <span className="text-sm text-neutral-500">{row.original.email}</span>
+      <span className="text-sm">{row.original.phone_number || 'N/A'}</span>
     ),
   },
+  /*
   {
     accessorKey: 'vehicleCategory',
     header: 'Vehicle Category',
@@ -43,16 +46,17 @@ export const driverColumns: ColumnDef<Driver>[] = [
       <span className="text-sm">{row.original.vehicleCategory}</span>
     ),
   },
+  */
   {
-    accessorKey: 'accountStatus',
+    accessorKey: 'status',
     header: 'Account status',
-    cell: ({ row }) => <StatusBadge status={row.original.accountStatus} />,
+    cell: ({ row }) => <StatusBadge status={row.original.status as any} />,
   },
   {
-    accessorKey: 'idVerification',
+    accessorKey: 'is_email_verified',
     header: 'ID Verification',
     cell: ({ row }) => (
-      <VerificationBadge verified={row.original.idVerification} />
+      <VerificationBadge verified={row.original.is_email_verified} />
     ),
   },
 ]

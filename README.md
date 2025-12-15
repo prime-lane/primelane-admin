@@ -45,9 +45,12 @@ TODO:
 - [x] Components
 - [x] Auth page
 - [x] Home page
+- [x] Customers
+- [ ] Customers details
 - [x] Driver
-- [ ] Price page
-- [ ] Trips
+- [x] Trips
+- [ ] Trips details
+- [x] Improve Layout (set max width)
+- [ ] Price config page
 - [ ] Finance
 - [ ] Admin
-- [ ] Improve Layout (set max width)

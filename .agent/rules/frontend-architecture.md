@@ -107,7 +107,6 @@ Inline styles and external CSS files are discouraged.
 
 ## State Management
 
-- Server state: React Query
 - Local UI state: React hooks
 - No global Redux store
 
@@ -115,7 +114,7 @@ Inline styles and external CSS files are discouraged.
 
 ## API Layer
 
-- RTK for API consumption
+- Tanstack Query for API consumption
 - API logic lives inside feature folders
 - No direct API calls inside pages or UI components
 
@@ -134,3 +133,17 @@ Inline styles and external CSS files are discouraged.
 - Follow Figma strictly
 - Mobile-first UI
 - Accessibility is mandatory
+
+## Output
+- Strict brevity.
+- Assume the reader is a senior frontend engineer.
+- No explanations, tutorials, or commentary.
+- Output only what is required to solve the task.
+
+## Exception Rule
+
+- Provide explanations **only if explicitly requested** using phrases like:
+  - “explain”
+  - “why”
+  - “reasoning”
+  - “trade-offs”

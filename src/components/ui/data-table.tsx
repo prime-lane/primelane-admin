@@ -23,6 +23,7 @@ interface DataTableProps<T> {
   columns: ColumnDef<T>[]
   enableRowSelection?: boolean
   pageSize?: number
+  onRowClick?: (row: T) => void
 }
 
 export function DataTable<T>({
@@ -30,6 +31,7 @@ export function DataTable<T>({
   columns,
   enableRowSelection = true,
   pageSize: initialPageSize = 7,
+  onRowClick,
 }: DataTableProps<T>) {
   const [rowSelection, setRowSelection] = useState({})
   const [pagination, setPagination] = useState({
@@ -91,8 +93,10 @@ export function DataTable<T>({
               <TableRow
                 key={row.id}
                 hover
+                onClick={() => onRowClick?.(row.original)}
                 sx={{
-                  cursor: enableRowSelection ? 'pointer' : 'default',
+                  cursor:
+                    onRowClick || enableRowSelection ? 'pointer' : 'default',
                   '&:hover': {
                     bgcolor: 'neutral.50',
                   },
@@ -126,7 +130,7 @@ export function DataTable<T>({
         onPageSizeChange={(size) => {
           setPagination({ pageIndex: 0, pageSize: size })
         }}
-        totalItems={data.length}
+        totalItems={data.length} // ask backend if pagination should come from server
       />
     </div>
   )

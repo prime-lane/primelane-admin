@@ -5,8 +5,11 @@ import { Box, Drawer } from '@mui/material'
 import logo from '../../assets/icon/logo.svg'
 import { SidebarNavItem } from './sidebar-nav-item'
 import { Navbar } from './navbar'
+import { useLogout } from '@/features/auth/hooks/use-current-user'
 
 export const DashboardLayout = () => {
+  const logout = useLogout()
+  
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'neutral.50' }}>
       <Drawer
@@ -44,7 +47,7 @@ export const DashboardLayout = () => {
             label="Log Out"
             icon={Logout}
             variant="button"
-            onClick={() => console.log('Logout clicked')}
+            onClick={() => logout()}
           />
         </div>
       </Drawer>
@@ -58,7 +61,7 @@ export const DashboardLayout = () => {
         }}
       >
         <Navbar />
-        <div className="flex-1 py-2 px-4">
+        <div className="flex-1 py-2 px-4 max-w-7xl">
           <Outlet />
         </div>
       </Box>

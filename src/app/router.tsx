@@ -3,8 +3,15 @@ import { lazy, Suspense } from 'react'
 
 import { DashboardLayout } from '../components/layout/dashboard-layout'
 import { AuthLayout } from '../components/layout/auth-layout'
+import { ErrorBoundary } from '../components/error-boundary'
+import { NotFound } from '../components/not-found'
+import { ProtectedRoute } from '../components/protected-route'
+import { PublicRoute } from '../components/public-route'
 
 import { path } from './paths'
+import { SignIn } from '@/features/auth/sign-in'
+import { Invite } from '@/features/auth/invite'
+import { Otp } from '@/features/auth/otp'
 
 const Home = lazy(() =>
   import('@/features/home/home').then((module) => ({ default: module.Home })),
@@ -14,23 +21,15 @@ const Customers = lazy(() =>
     default: module.Customers,
   })),
 )
+const CustomerDetails = lazy(() =>
+  import('@/features/customers/customer-details').then((module) => ({
+    default: module.CustomerDetails,
+  })),
+)
 const Drivers = lazy(() =>
   import('@/features/drivers/drivers').then((module) => ({
     default: module.Drivers,
   })),
-)
-const SignIn = lazy(() =>
-  import('@/features/auth/sign-in').then((module) => ({
-    default: module.SignIn,
-  })),
-)
-const Invite = lazy(() =>
-  import('@/features/auth/invite').then((module) => ({
-    default: module.Invite,
-  })),
-)
-const Otp = lazy(() =>
-  import('@/features/auth/otp').then((module) => ({ default: module.Otp })),
 )
 const PricingConfig = lazy(() =>
   import('@/features/pricing-config/pricing-config').then((module) => ({
@@ -38,13 +37,19 @@ const PricingConfig = lazy(() =>
   })),
 )
 const Trips = lazy(() =>
-  import('@/features/trips/trips').then((module) => ({ default: module.Trips })),
+  import('@/features/trips/trips').then((module) => ({
+    default: module.Trips,
+  })),
 )
 const Finance = lazy(() =>
-  import('@/features/finance/finance').then((module) => ({ default: module.Finance })),
+  import('@/features/finance/finance').then((module) => ({
+    default: module.Finance,
+  })),
 )
 const AdminManagement = lazy(() =>
-  import('@/features/admin/admin-management').then((module) => ({ default: module.AdminManagement })),
+  import('@/features/admin/admin-management').then((module) => ({
+    default: module.AdminManagement,
+  })),
 )
 
 const Loading = () => <div>Loading...</div>
@@ -53,10 +58,16 @@ export const router = createBrowserRouter([
   {
     path: path.HOME,
     element: <Navigate to={path.AUTH.ROOT} replace />,
+    errorElement: <ErrorBoundary />,
   },
   {
     path: path.DASHBOARD.ROOT,
-    element: <DashboardLayout />,
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
+    errorElement: <ErrorBoundary />,
     children: [
       {
         index: true,
@@ -71,6 +82,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <Customers />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.CUSTOMER_DETAILS,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <CustomerDetails />
           </Suspense>
         ),
       },
@@ -118,7 +137,12 @@ export const router = createBrowserRouter([
   },
   {
     path: path.AUTH.ROOT,
-    element: <AuthLayout />,
+    element: (
+      <PublicRoute>
+        <AuthLayout />
+      </PublicRoute>
+    ),
+    errorElement: <ErrorBoundary />,
     children: [
       {
         path: path.AUTH.SIGN_IN,
@@ -150,5 +174,9 @@ export const router = createBrowserRouter([
         element: <Navigate to={path.AUTH.SIGN_IN} replace />,
       },
     ],
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ])
