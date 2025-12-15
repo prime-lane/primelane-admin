@@ -1,5 +1,7 @@
+import { ErrorState, LoadingState } from '@/components/ui/loading-error-states'
 import { Avatar } from '@mui/material'
 import { ArrowRightUp } from '@solar-icons/react'
+import { useKycDetails } from '../api/use-customers'
 import type { Customer } from '../types'
 import { StatsCard } from './stats-card'
 
@@ -20,7 +22,7 @@ const InfoRow = ({
 }) => {
   return (
     <div className="flex items-center py-3 gap-4">
-      <span className="text-neutral-500 text-sm">{index}.</span>
+      <span className="text-neutral-500 text-sm w-4">{index}.</span>
       <span className="text-neutral-500 text-sm w-40">{label}</span>
       <span className="text-neutral-500 text-sm font-semibold">-</span>
       {isImage && typeof value === 'string' ? (
@@ -37,43 +39,69 @@ const InfoRow = ({
   )
 }
 
-
 export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
-  // Mock data for fields not yet in API
-  const mockData = {
-    nin: '34309604',
-    faceMatchScore: '20%',
-    middleName: 'Exodus',
-    gender: 'Male',
-    dob: '1982-01-01',
-    employmentStatus: 'unemployment',
-    maritalStatus: 'Single',
-  }
+  const { data: kycDetails, isLoading, error } = useKycDetails()
+
+  if (isLoading) return <LoadingState />
+  if (error || !kycDetails)
+    return <ErrorState message="Failed to load KYC details" />
+
+  const metaData = kycDetails.meta_data || {}
+  console.log(kycDetails)
 
   return (
     <div className="space-y-8">
       {/* Top Stats Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <StatsCard label="NIN" value={mockData.nin} />
-        <StatsCard label="ID Verification Status" status="pending" />
-        <StatsCard label="Face Match Score" value={mockData.faceMatchScore} />
+        <StatsCard
+          label="NIN"
+          value={
+            kycDetails.id_type === 'nin'
+              ? kycDetails.id_number
+              : metaData.nin || 'N/A'
+          }
+        />
+        <StatsCard
+          label="ID Verification Status"
+          status={kycDetails.is_id_verified ? 'verified' : 'pending'}
+        />
+        <StatsCard
+          label="Face Match Score"
+          value={
+            kycDetails.selfie_confidence
+              ? `${kycDetails.selfie_confidence}%`
+              : 'N/A'
+          }
+        />
       </div>
 
       {/* Details List Section */}
       <div className="space-y-4">
         <h3 className="text-sm font-medium">Result from NIN</h3>
         <div className="flex flex-col gap-1">
-          <InfoRow index={1} label="First Name" value={customer.first_name} />
-          <InfoRow index={2} label="Last Name" value={customer.last_name} />
-          <InfoRow index={3} label="Middle Name" value={mockData.middleName} />
-          <InfoRow index={4} label="Gender" value={mockData.gender} />
+          <InfoRow
+            index={1}
+            label="First Name"
+            value={kycDetails.first_name || customer.first_name}
+          />
+          <InfoRow
+            index={2}
+            label="Last Name"
+            value={kycDetails.last_name || customer.last_name}
+          />
+          <InfoRow
+            index={3}
+            label="Middle Name"
+            value={metaData.middle_name || 'N/A'}
+          />
+          <InfoRow index={4} label="Gender" value={metaData.gender || 'N/A'} />
           <InfoRow
             index={5}
             label="Photo"
-            value={customer.image_url || ''}
+            value={kycDetails.selfie_image || customer.image_url || ''}
             isImage
           />
-          <InfoRow index={6} label="Date of Birth" value={mockData.dob} />
+          <InfoRow index={6} label="Date of Birth" value={kycDetails.dob} />
           <InfoRow index={7} label="Email Address" value={customer.email} />
           <InfoRow
             index={8}
@@ -83,12 +111,12 @@ export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
           <InfoRow
             index={9}
             label="Employment Status"
-            value={mockData.employmentStatus}
+            value={metaData.employment_status || 'N/A'}
           />
           <InfoRow
             index={10}
             label="Marital Status"
-            value={mockData.maritalStatus}
+            value={metaData.marital_status || 'N/A'}
           />
         </div>
       </div>

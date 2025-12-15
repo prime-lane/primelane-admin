@@ -8,6 +8,7 @@ export type StatusVariant =
   | 'cancelled'
   | 'started'
   | 'accepted'
+  | 'verified'
 
 interface StatusBadgeProps {
   status: StatusVariant
@@ -52,6 +53,11 @@ const statusConfig: Record<
     label: 'Accepted',
     color: 'purple.400',
     bgcolor: '#A855F71A',
+  },
+  verified: {
+    label: 'Verified',
+    color: 'green.400',
+    bgcolor: '#22C55E1A',
   },
 }
 

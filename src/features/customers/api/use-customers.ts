@@ -4,7 +4,7 @@ import { API_ENDPOINTS as e } from '@/services/api-endpoints'
 import type { PaginationParams, PaginatedResponse } from '@/services/api-types'
 import { transformPaginatedResponse } from '@/utils/api-utils'
 import { buildQueryParams } from '@/lib/utils'
-import type { Customer } from '../types'
+import type { Customer, KycDetails } from '../types'
 
 interface UseCustomersParams extends PaginationParams { }
 
@@ -33,6 +33,15 @@ export const useCustomer = (id: string) => {
             const response = await apiClient.get<{ user: Customer }>(e.CUSTOMERS.BY_ID(id))
             return response.data
         },
-        enabled: !!id,
+    })
+}
+
+export const useKycDetails = () => {
+    return useQuery({
+        queryKey: ['kyc-details'],
+        queryFn: async () => {
+            const response = await apiClient.get<KycDetails>(e.KYC.MY_KYC)
+            return response.data
+        },
     })
 }

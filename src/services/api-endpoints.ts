@@ -52,5 +52,6 @@ export const API_ENDPOINTS = {
     },
     KYC: {
         VERIFY: (idType: 'nin' | 'dl' | 'ip') => `/kyc/verify/${idType}`,
+        MY_KYC: '/kyc/my-kyc',
     },
 } as const

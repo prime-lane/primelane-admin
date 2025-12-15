@@ -51,6 +51,15 @@ TODO:
 - [x] Trips
 - [ ] Trips details
 - [x] Improve Layout (set max width)
+- [ ] adjust home bg(admin)
+- [ ] adjust customers bg(admin)
+- [ ] paginate from backend
 - [ ] Price config page
 - [ ] Finance
 - [ ] Admin
+- [ ] identity details - /kyc/my-kyc
+
+
+under trip summary:
+1. wallet bal
+2. total amount spent

@@ -11,7 +11,7 @@ export const DashboardLayout = () => {
   const logout = useLogout()
   
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'neutral.50' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'white' }}>
       <Drawer
         variant="permanent"
         sx={{
