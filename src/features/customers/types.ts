@@ -7,6 +7,7 @@ export interface Customer {
     last_name: string
     email: string
     phone_number: string
+    image_url: string | null
     status: AccountStatus
     is_email_verified: boolean
 }
