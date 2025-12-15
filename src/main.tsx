@@ -12,13 +12,28 @@ import App from './App.tsx'
 
 import { theme } from './theme'
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <ErrorBoundary fallback={<div>something went wrong</div>}>
-        <App />
-      </ErrorBoundary>
-    </ThemeProvider>
-  </StrictMode>,
-)
+async function enableMocking() {
+  if (import.meta.env.VITE_USE_MOCK_API !== 'true') {
+    return
+  }
+
+  const { worker } = await import('./mocks/browser')
+
+  // Service Worker Registration
+  return worker.start({
+    onUnhandledRequest: 'bypass', // Don't warn about unmocked requests (like assets)
+  })
+}
+
+enableMocking().then(() => {
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <ErrorBoundary fallback={<div>something went wrong</div>}>
+          <App />
+        </ErrorBoundary>
+      </ThemeProvider>
+    </StrictMode>,
+  )
+})
