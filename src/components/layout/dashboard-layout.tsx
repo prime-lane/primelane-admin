@@ -61,7 +61,7 @@ export const DashboardLayout = () => {
         }}
       >
         <Navbar />
-        <div className="flex-1 py-2 px-4">
+        <div className="flex-1 py-2 px-4 max-w-7xl">
           <Outlet />
         </div>
       </Box>
