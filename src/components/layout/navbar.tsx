@@ -9,6 +9,7 @@ import {
 import { AltArrowDown } from '@solar-icons/react'
 import { useState } from 'react'
 import { useCurrentUser, useLogout } from '@/features/auth/hooks/use-current-user'
+import { getInitials } from '@/lib/utils'
 
 export const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -27,10 +28,6 @@ export const Navbar = () => {
   const handleLogout = () => {
     handleClose()
     logout()
-  }
-
-  const getInitials = (firstName: string, lastName: string) => {
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase()
   }
 
   const displayName = user ? user.first_name : 'User'
