@@ -19,7 +19,6 @@ export const useCustomers = (params?: UseCustomersParams) => {
                 : e.CUSTOMERS.ROOT
 
             const response = await apiClient.get<{ users: Customer[]; pagination: PaginatedResponse<unknown>['pagination'] }>(endpoint)
-            console.log('Customers API Data Sample:', response.data.users?.[0])
 
             return transformPaginatedResponse(response.data, 'users')
         },
@@ -31,7 +30,7 @@ export const useCustomer = (id: string) => {
     return useQuery({
         queryKey: ['customer', id],
         queryFn: async () => {
-            const response = await apiClient.get<Customer>(e.CUSTOMERS.BY_ID(id))
+            const response = await apiClient.get<{ user: Customer }>(e.CUSTOMERS.BY_ID(id))
             return response.data
         },
         enabled: !!id,

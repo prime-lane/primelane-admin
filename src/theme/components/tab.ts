@@ -10,7 +10,7 @@ export const MuiTab: Components<Theme>['MuiTab'] = {
             textTransform: 'none',
             fontWeight: 500,
             fontSize: '1rem',
-            color: colors.gray[500],
+            color: '#5E6660',
             '&.Mui-selected': {
                 color: colors.base.black,
             },
@@ -23,7 +23,7 @@ export const MuiTab: Components<Theme>['MuiTab'] = {
                 borderRadius: '8px',
                 border: `1px solid ${colors.gray[300]}`,
                 backgroundColor: colors.base.white,
-                color: colors.gray[500],
+                color: '#5E6660',
                 minHeight: '40px',
                 '&.Mui-selected': {
                     backgroundColor: colors.base.black,
@@ -39,7 +39,7 @@ export const MuiTab: Components<Theme>['MuiTab'] = {
             props: { variant: 'standard' },
             style: {
                 backgroundColor: colors.base.white,
-                color: colors.gray[500],
+                color: '#5E6660',
                 minHeight: '40px',
                 border: 'none',
                 '&.Mui-selected': {

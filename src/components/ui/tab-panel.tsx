@@ -13,18 +13,18 @@ export function CustomTabPanel(props: TabPanelProps) {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      id={`primelane-tabpanel-${index}`}
+      aria-labelledby={`primelane-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box>{children}</Box>}
     </div>
   )
 }
 
 export function a11yProps(index: number) {
   return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    id: `primelane-tab-${index}`,
+    'aria-controls': `primelane-tabpanel-${index}`,
   }
 }

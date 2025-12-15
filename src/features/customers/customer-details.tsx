@@ -1,27 +1,70 @@
 import { ErrorState, LoadingState } from '@/components/ui/loading-error-states'
-import { CustomTabPanel, a11yProps } from '@/components/ui/tab-panel'
-import { Box, Tab, Tabs, Typography } from '@mui/material'
+import { StatusBadge } from '@/components/ui/status-badge'
+import {
+  CustomTabPanel as TabPanel,
+  a11yProps,
+} from '@/components/ui/tab-panel'
+import { getInitials } from '@/lib/utils'
+import { Avatar, Button, Tab, Tabs, Typography } from '@mui/material'
+import { AltArrowDown } from '@solar-icons/react'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useCustomer } from './api/use-customers'
+import { useCustomerStats } from './api/use-customer-stats'
+import { CustomerOverview } from './components/customer-overview'
 
 export const CustomerDetails = () => {
   const { id } = useParams<{ id: string }>()
-  const { data: customer, isLoading, error } = useCustomer(id!)
+  const { data: customerResp, isLoading, error } = useCustomer(id!)
+  const customer = customerResp?.user
+  const { data: stats } = useCustomerStats(id!)
+
   const [tabValue, setTabValue] = useState(0)
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue)
   }
 
+  const avatarInitials = getInitials(
+    `${customer?.first_name}` || '',
+    `${customer?.last_name}` || '',
+  )
+  const customerName = `${customer?.first_name} ${customer?.last_name}`
+
   if (isLoading) return <LoadingState />
   if (error || !customer)
     return <ErrorState message="Failed to load customer details" />
 
   return (
-    <Box>
-      {/* Tabs */}
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+    <>
+      <div className="flex justify-between items-center">
+        <div className="flex gap-4 items-center">
+          <Avatar
+            src={customer?.image_url || undefined}
+            sx={{
+              width: 51,
+              height: 51,
+              bgcolor: 'orange.100',
+              color: 'neutral.700',
+              fontSize: '0.875rem',
+              fontWeight: 500,
+            }}
+          >
+            {avatarInitials}
+          </Avatar>
+          <div className="flex flex-col gap-[2px]">
+            <span className="text-xl text-black font-semibold">
+              {customerName}
+            </span>
+            <span className="text-sm text-neutral-500">{customer.email}</span>
+          </div>
+          <StatusBadge status={customer.status as any} />
+        </div>
+        <Button variant="contained" endIcon={<AltArrowDown />}>
+          Action
+        </Button>
+      </div>
+      <div className="my-6">
         <Tabs
           value={tabValue}
           onChange={handleTabChange}
@@ -33,49 +76,25 @@ export const CustomerDetails = () => {
           <Tab label="Wallet" {...a11yProps(3)} />
           <Tab label="Identity details" {...a11yProps(4)} />
         </Tabs>
-      </Box>
+      </div>
 
       {/* Overview Tab Content */}
-      <CustomTabPanel value={tabValue} index={0}>
-        <Box sx={{ mb: 4 }}>
-          <p className="text-sm font-semibold">Personal Info</p>
-        </Box>
-      </CustomTabPanel>
+      <TabPanel value={tabValue} index={0}>
+        <CustomerOverview customer={customer} stats={stats} />
+      </TabPanel>
 
-      <CustomTabPanel value={tabValue} index={1}>
+      <TabPanel value={tabValue} index={1}>
         <Typography>Identity Details Content</Typography>
-      </CustomTabPanel>
-      <CustomTabPanel value={tabValue} index={2}>
+      </TabPanel>
+      <TabPanel value={tabValue} index={2}>
         <Typography>Ratings Content</Typography>
-      </CustomTabPanel>
-      <CustomTabPanel value={tabValue} index={3}>
+      </TabPanel>
+      <TabPanel value={tabValue} index={3}>
         <Typography>Wallet Content</Typography>
-      </CustomTabPanel>
-      <CustomTabPanel value={tabValue} index={4}>
+      </TabPanel>
+      <TabPanel value={tabValue} index={4}>
         <Typography>Identity details Content</Typography>
-      </CustomTabPanel>
-    </Box>
-  )
-}
-
-function AltArrowDown(props: any) {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <path
-        d="M19.9201 8.95001L13.4001 15.47C12.6301 16.24 11.3701 16.24 10.6001 15.47L4.08008 8.95001"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeMiterlimit="10"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+      </TabPanel>
+    </>
   )
 }
