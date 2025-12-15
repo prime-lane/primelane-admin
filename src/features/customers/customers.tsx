@@ -9,6 +9,7 @@ import { LoadingState, ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
 import { useNavigate } from 'react-router-dom'
 import type { Customer } from './types'
+import { path } from '@/app/paths'
 
 export const Customers = () => {
   const navigate = useNavigate()
@@ -47,7 +48,7 @@ export const Customers = () => {
           data={customers}
           columns={customerColumns}
           onRowClick={(row: Customer) =>
-            navigate(`/dashboard/customers/${row.id}`)
+            navigate(path.DASHBOARD.CUSTOMER_DETAILS.replace(':id', row.id))
           }
         />
       )}
