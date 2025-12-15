@@ -24,7 +24,7 @@ export const SidebarNavItem = ({
     return (
       <button
         onClick={onClick}
-        className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-neutral-50 text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 transition-colors"
+        className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-neutral-50 text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 transition-colors cursor-pointer"
       >
         <Icon size={22} />
         <span className="text-sm">{label}</span>
