@@ -46,6 +46,15 @@ export const API_ENDPOINTS = {
         MY_RIDE_STATS: '/analytics/my-ride-stats',
         USER_RIDE_STATS: (id: string) => `/analytics/user-ride-stats/${id}`,
     },
+    REVIEWS: {
+        ROOT: '/reviews/my-reviews',
+    },
+    WALLETS: {
+        MY_WALLET: '/wallets/my-wallet',
+    },
+    TRANSACTIONS: {
+        MY_TRANSACTIONS: '/transactions/my-transactions',
+    },
     TRIPS: {
         ROOT: '/rides',
         BY_ID: (id: string) => `/rides/${id}`,

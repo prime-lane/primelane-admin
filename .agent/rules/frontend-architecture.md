@@ -87,8 +87,7 @@ Features must not import from other features.
 - Pages orchestrate data and layout
 - Components are presentational
 - UI components must be reusable and stateless where possible
-
-No API calls inside UI components.
+- No API calls inside granular UI components (like button, input, etc).
 
 ---
 

@@ -1,48 +1,14 @@
-import {
-  Button,
-  Card,
-  CardContent
-} from '@mui/material'
+import { Button, Card, CardContent } from '@mui/material'
 import { Star } from '@solar-icons/react'
+import { format } from 'date-fns'
 import type { CustomerStats } from '../api/use-customer-stats'
+import type { Review } from '../types'
 import { StatsCard } from './stats-card'
 
 interface CustomerRatingsProps {
   stats?: CustomerStats
+  reviews?: Review[]
 }
-
-// Mock data for reviews since API doesn't provide them yet
-const REVIEWS = [
-  {
-    id: 1,
-    name: 'Sarah A.',
-    date: '1982-01-01',
-    rating: 4,
-    comment:
-      'Driver was professional, car was clean, and the ride was smooth. Highly recommended.',
-  },
-  {
-    id: 2,
-    name: 'Michael O.',
-    date: '1982-01-01',
-    rating: 3,
-    comment: 'Quick pickup and respectful, but the AC wasn’t cooling well.',
-  },
-  {
-    id: 3,
-    name: 'Daniel K.',
-    date: '1982-01-01',
-    rating: 3,
-    comment: 'Good driving but arrived 5 minutes late.',
-  },
-  {
-    id: 4,
-    name: 'Daniel K.',
-    date: '1982-01-01',
-    rating: 4,
-    comment: 'Good driving but arrived 5 minutes late.',
-  },
-]
 
 const RatingBreakdownRow = ({
   star,
@@ -70,13 +36,17 @@ const RatingBreakdownRow = ({
   )
 }
 
-const ReviewCard = ({ review }: { review: (typeof REVIEWS)[0] }) => {
+const ReviewCard = ({ review }: { review: Review }) => {
   return (
     <Card>
       <CardContent className="space-y-3">
         <div>
-          <h4 className="font-semibold text-neutral-900">{review.name}</h4>
-          <span className="text-xs text-neutral-500">{review.date}</span>
+          <h4 className="font-semibold text-neutral-900">
+            {review.reviewer.first_name} {review.reviewer.last_name}
+          </h4>
+          <span className="text-xs text-neutral-500">
+            {format(new Date(review.created_at), 'yyyy-MM-dd')}
+          </span>
         </div>
         <div className="flex gap-1">
           {[...Array(5)].map((_, i) => (
@@ -91,18 +61,29 @@ const ReviewCard = ({ review }: { review: (typeof REVIEWS)[0] }) => {
           ))}
         </div>
         <p className="text-sm text-neutral-600 line-clamp-3">
-          {review.comment}
+          {review.feedback}
         </p>
       </CardContent>
     </Card>
   )
 }
 
-export const CustomerRatings = ({ stats }: CustomerRatingsProps) => {
-  const averageRating = stats?.average_rating || 4.7
-  // Mock totals for display
-  const totalReviews = 128
-  const last30DaysRating = 4.8
+export const CustomerRatings = ({
+  stats,
+  reviews = [],
+}: CustomerRatingsProps) => {
+  const averageRating = stats?.average_rating || 0
+  const totalReviews = reviews.length
+
+  // Calculate rating breakdown
+  const ratingCounts = reviews.reduce(
+    (acc, review) => {
+      const rating = Math.round(review.rating)
+      acc[rating] = (acc[rating] || 0) + 1
+      return acc
+    },
+    {} as Record<number, number>,
+  )
 
   return (
     <div className="space-y-6">
@@ -111,33 +92,75 @@ export const CustomerRatings = ({ stats }: CustomerRatingsProps) => {
         <div className="p-2 grid grid-cols-1 md:grid-cols-3 gap-4">
           <StatsCard label="Average Rating" value={`${averageRating} / 5.0`} />
           <StatsCard label="Total Reviews" value={`${totalReviews} Reviews`} />
-          <StatsCard label="Last 30 Days Rating" value={last30DaysRating} />
+          {/* <StatsCard label="Last 30 Days Rating" value={last30DaysRating} /> */}
         </div>
       </div>
 
       <div className="space-y-4">
         <h3 className="text-sm font-semibold">5-Star Rating Breakdown</h3>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-16">
-          <RatingBreakdownRow star={5} count={102} total={totalReviews} />
-          <RatingBreakdownRow star={4} count={18} total={totalReviews} />
-          <RatingBreakdownRow star={3} count={6} total={totalReviews} />
-          <RatingBreakdownRow star={2} count={1} total={totalReviews} />
-          <RatingBreakdownRow star={1} count={0} total={totalReviews} />
+          <RatingBreakdownRow
+            star={5}
+            count={ratingCounts[5] || 0}
+            total={totalReviews}
+          />
+          <RatingBreakdownRow
+            star={4}
+            count={ratingCounts[4] || 0}
+            total={totalReviews}
+          />
+          <RatingBreakdownRow
+            star={3}
+            count={ratingCounts[3] || 0}
+            total={totalReviews}
+          />
+          <RatingBreakdownRow
+            star={2}
+            count={ratingCounts[2] || 0}
+            total={totalReviews}
+          />
+          <RatingBreakdownRow
+            star={1}
+            count={ratingCounts[1] || 0}
+            total={totalReviews}
+          />
         </div>
       </div>
 
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h3 className="text-sm font-semibold">Recent Reviews</h3>
-          <Button variant="text" sx={{ color: 'neutral.500' }}>
+          <Button
+            variant="text"
+            sx={{
+              bgcolor: 'neutral.100',
+              fontWeight: 500,
+              fontSize: '0.875rem',
+              borderRadius: '100px',
+              textTransform: 'none',
+              px: 2,
+              py: 1,
+              height: 'fit-content',
+              minWidth: 'auto',
+              '&:hover': {
+                bgcolor: 'neutral.200',
+              },
+            }}
+          >
             View more
           </Button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {REVIEWS.map((review) => (
-            <ReviewCard key={review.id} review={review} />
-          ))}
-        </div>
+        {reviews.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {reviews.map((review) => (
+              <ReviewCard key={review.id} review={review} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-neutral-500 text-sm text-center py-4">
+            No reviews yet.
+          </p>
+        )}
       </div>
     </div>
   )

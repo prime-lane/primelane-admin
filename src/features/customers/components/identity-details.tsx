@@ -1,7 +1,7 @@
 import { ErrorState, LoadingState } from '@/components/ui/loading-error-states'
 import { Avatar } from '@mui/material'
 import { ArrowRightUp } from '@solar-icons/react'
-import { useKycDetails } from '../api/use-customers'
+import { useKycDetails, useUserRideStats } from '../api/use-customers'
 import type { Customer } from '../types'
 import { StatsCard } from './stats-card'
 
@@ -41,6 +41,7 @@ const InfoRow = ({
 
 export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
   const { data: kycDetails, isLoading, error } = useKycDetails()
+  const { data: rideStats } = useUserRideStats(customer.id)
 
   if (isLoading) return <LoadingState />
   if (error || !kycDetails)
@@ -71,6 +72,24 @@ export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
             kycDetails.selfie_confidence
               ? `${kycDetails.selfie_confidence}%`
               : 'N/A'
+          }
+        />
+      </div>
+
+      {/* Ride Stats Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <StatsCard
+          label="Total Rides"
+          value={rideStats?.total_rides?.toString() || '0'}
+        />
+        <StatsCard
+          label="Rating"
+          value={rideStats?.average_rating?.toString() || 'N/A'}
+        />
+        <StatsCard
+          label="Completion Rate"
+          value={
+            rideStats?.acceptance_rate ? `${rideStats.acceptance_rate}%` : 'N/A'
           }
         />
       </div>

@@ -4,9 +4,15 @@ import { API_ENDPOINTS as e } from '@/services/api-endpoints'
 import type { PaginationParams, PaginatedResponse } from '@/services/api-types'
 import { transformPaginatedResponse } from '@/utils/api-utils'
 import { buildQueryParams } from '@/lib/utils'
-import type { Customer, KycDetails } from '../types'
+import type { Customer, KycDetails, UserRideStats, Review, Wallet } from '../types'
 
-interface UseCustomersParams extends PaginationParams { }
+interface UseCustomersParams extends PaginationParams {
+    user_type?: 'customer' | 'driver'
+}
+
+interface UseCustomerTransactionsParams extends PaginationParams {
+    user_id: string
+}
 
 export const useCustomers = (params?: UseCustomersParams) => {
     return useQuery({
@@ -43,5 +49,54 @@ export const useKycDetails = () => {
             const response = await apiClient.get<KycDetails>(e.KYC.MY_KYC)
             return response.data
         },
+    })
+}
+
+export const useUserRideStats = (id: string) => {
+    return useQuery({
+        queryKey: ['user-ride-stats', id],
+        queryFn: async () => {
+            const response = await apiClient.get<UserRideStats>(e.ANALYTICS.USER_RIDE_STATS(id))
+            return response.data
+        },
+        enabled: !!id,
+    })
+}
+
+
+export const useCustomerReviews = (userId?: string) => {
+    return useQuery({
+        queryKey: ['reviews', userId],
+        queryFn: async () => {
+            const endpoint = `${e.REVIEWS.ROOT}`
+            const response = await apiClient.get<{ reviews: Review[]; pagination: PaginatedResponse<unknown>['pagination'] }>(endpoint)
+            return transformPaginatedResponse(response.data, 'reviews')
+        },
+        enabled: !!userId,
+    })
+}
+
+export const useCustomerWallet = (userId: string) => {
+    return useQuery({
+        queryKey: ['wallet', userId],
+        queryFn: async () => {
+            const response = await apiClient.get<{ data: Wallet }>(`${e.WALLETS.MY_WALLET}`)
+            return response.data.data
+        },
+        enabled: !!userId,
+    })
+}
+
+export const useCustomerTransactions = (params: UseCustomerTransactionsParams) => {
+    return useQuery({
+        queryKey: ['transactions', params],
+        queryFn: async () => {
+            const searchParams = buildQueryParams(params)
+
+            const endpoint = `${e.TRANSACTIONS.MY_TRANSACTIONS}?${searchParams.toString()}`
+            const response = await apiClient.get<{ transactions: import('../types').Transaction[]; pagination: PaginatedResponse<unknown>['pagination'] }>(endpoint)
+            return transformPaginatedResponse(response.data, 'transactions')
+        },
+        enabled: !!params.user_id,
     })
 }

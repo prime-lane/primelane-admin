@@ -13,7 +13,6 @@ export interface PaginationParams {
     page?: number
     limit?: number
     search?: string
-    user_type?: 'customer' | 'driver'
 }
 
 export interface PaginatedResponse<T> {

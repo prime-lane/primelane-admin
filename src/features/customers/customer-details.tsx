@@ -9,17 +9,26 @@ import { Avatar, Button, Tab, Tabs, Typography } from '@mui/material'
 import { AltArrowDown } from '@solar-icons/react'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useCustomer } from './api/use-customers'
+import {
+  useCustomer,
+  useCustomerReviews,
+  useCustomerWallet,
+  useCustomerTransactions,
+} from './api/use-customers'
 import { useCustomerStats } from './api/use-customer-stats'
 import { CustomerOverview } from './components/customer-overview'
 import { IdentityDetails } from './components/identity-details'
 import { CustomerRatings } from './components/customer-ratings'
+import { CustomerWallet } from './components/customer-wallet'
 
 export const CustomerDetails = () => {
   const { id } = useParams<{ id: string }>()
   const { data: customerResp, isLoading, error } = useCustomer(id!)
   const customer = customerResp?.user
   const { data: stats } = useCustomerStats(id!)
+  const { data: reviews } = useCustomerReviews(id!)
+  const { data: wallet, isLoading: isWalletLoading } = useCustomerWallet(id!)
+  const { data: transactions } = useCustomerTransactions({ user_id: id! })
 
   const [tabValue, setTabValue] = useState(0)
 
@@ -76,7 +85,6 @@ export const CustomerDetails = () => {
           <Tab label="Identity Details" {...a11yProps(1)} />
           <Tab label="Ratings" {...a11yProps(2)} />
           <Tab label="Wallet" {...a11yProps(3)} />
-          <Tab label="Identity details" {...a11yProps(4)} />
         </Tabs>
       </div>
 
@@ -89,13 +97,56 @@ export const CustomerDetails = () => {
         <IdentityDetails customer={customer} />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
-        <CustomerRatings stats={stats} />
+        <CustomerRatings stats={stats} reviews={reviews?.items} />
       </TabPanel>
       <TabPanel value={tabValue} index={3}>
-        <Typography>Wallet Content</Typography>
-      </TabPanel>
-      <TabPanel value={tabValue} index={4}>
-        <Typography>Identity details Content</Typography>
+        <CustomerWallet
+          wallet={{
+            id: 'wallet-123',
+            user_id: 'user-123',
+            virtual_bank_account_number: '1234567890',
+            virtual_bank_account_name: 'John Doe',
+            virtual_bank_code: '057',
+            virtual_bank_name: 'GTBank',
+            current_balance: 150000,
+            last_balance: 145000,
+            currency: 'NGN',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          }}
+          transactions={[
+            {
+              id: 'tx-1',
+              user_id: 'user-123',
+              transaction_type: 'CR',
+              description: 'Wallet Top up',
+              reference: 'ref-1',
+              ride_id: null,
+              amount: 5000,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+              status: 'Completed',
+            },
+            {
+              id: 'tx-2',
+              user_id: 'user-123',
+              transaction_type: 'DR',
+              description: 'Ride Payment',
+              reference: 'ref-2',
+              ride_id: 'ride-1',
+              amount: 2500,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+              status: 'Completed',
+            },
+          ]}
+          isLoading={false}
+        />
+        {/* <CustomerWallet
+          wallet={wallet}
+          transactions={transactions?.items}
+          isLoading={isWalletLoading}
+        /> */}
       </TabPanel>
     </>
   )

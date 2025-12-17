@@ -20,3 +20,11 @@ export function buildQueryParams(params?: object) {
 export const getInitials = (firstName: string, lastName: string) => {
   return `${firstName?.charAt(0)}${lastName?.charAt(0)}`.toUpperCase()
 }
+
+export function formatCurrency(amount: number | string) {
+  const numericAmount = typeof amount === 'string' ? parseFloat(amount) : amount
+  return new Intl.NumberFormat('en-NG', {
+    style: 'currency',
+    currency: 'NGN',
+  }).format(numericAmount)
+}
