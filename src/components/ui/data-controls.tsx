@@ -2,6 +2,7 @@ import {
   Button,
   type ButtonProps,
   TextField,
+  type TextFieldProps,
   Box,
   IconButton,
   Select,
@@ -36,16 +37,17 @@ export const FilterButton = ({
   )
 }
 
-interface SearchInputProps {
+interface SearchInputProps extends Omit<TextFieldProps, 'value' | 'onChange'> {
   value: string
   onChange: (value: string) => void
-  placeholder?: string
 }
 
 export const SearchInput = ({
   value,
   onChange,
   placeholder = 'Search by name, ID, phone number',
+  sx,
+  ...props
 }: SearchInputProps) => {
   return (
     <TextField
@@ -67,7 +69,9 @@ export const SearchInput = ({
         '& .MuiOutlinedInput-root': {
           width: '340px',
         },
+        ...sx,
       }}
+      {...props}
     />
   )
 }

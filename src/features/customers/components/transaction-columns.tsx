@@ -1,15 +1,16 @@
 import { type ColumnDef } from '@tanstack/react-table'
 import type { Transaction } from '../types'
 import { formatCurrency } from '@/lib/utils'
+import { StatusBadge } from '@/components/ui/status-badge'
 import { format } from 'date-fns'
 
 export const transactionColumns: ColumnDef<Transaction>[] = [
   {
-    accessorKey: 'description',
-    header: 'Description',
+    accessorKey: 'id',
+    header: 'ID',
     cell: ({ row }) => (
-      <span className="text-sm font-medium text-neutral-900">
-        {row.original.description}
+      <span className="text-sm text-neutral-600">
+        {row.original.id.substring(0, 8)}...
       </span>
     ),
   },
@@ -23,11 +24,11 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
     ),
   },
   {
-    accessorKey: 'created_at',
-    header: 'Date',
+    accessorKey: 'description',
+    header: 'Description',
     cell: ({ row }) => (
-      <span className="text-sm text-neutral-600">
-        {format(new Date(row.original.created_at), 'dd/MM/yyyy')}
+      <span className="text-sm font-medium text-neutral-900">
+        {row.original.description}
       </span>
     ),
   },
@@ -45,20 +46,16 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
     header: 'Status',
     cell: ({ row }) => {
       const status = row.original.status || 'Completed'
-      const statusColor =
-        status === 'Completed'
-          ? 'bg-green-100 text-green-700'
-          : status === 'Pending'
-            ? 'bg-yellow-100 text-yellow-700'
-            : 'bg-red-100 text-red-700'
-
-      return (
-        <span
-          className={`px-2 py-1 rounded-full text-xs font-medium ${statusColor}`}
-        >
-          {status}
-        </span>
-      )
+      return <StatusBadge status={status.toLowerCase() as any} />
     },
+  },
+  {
+    accessorKey: 'created_at',
+    header: 'Date',
+    cell: ({ row }) => (
+      <span className="text-sm text-neutral-600">
+        {format(new Date(row.original.created_at), 'dd/MM/yyyy')}
+      </span>
+    ),
   },
 ]

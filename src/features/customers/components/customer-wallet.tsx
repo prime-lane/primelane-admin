@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { DataTable } from '@/components/ui/data-table'
+import { SearchInput } from '@/components/ui/data-controls'
 import { formatCurrency } from '@/lib/utils'
 import type { Transaction, Wallet } from '../types'
 import { StatsCard } from './stats-card'
@@ -15,7 +17,18 @@ export const CustomerWallet = ({
   transactions = [],
   isLoading,
 }: CustomerWalletProps) => {
+  const [searchQuery, setSearchQuery] = useState('')
+
+  const filteredTransactions = transactions.filter(
+    (transaction) =>
+      transaction.description
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      transaction.id.toLowerCase().includes(searchQuery.toLowerCase()),
+  )
+
   if (isLoading) {
+    // TODO: use skeleton text
     return <div className="p-4 text-center">Loading wallet details...</div>
   }
 
@@ -40,6 +53,12 @@ export const CustomerWallet = ({
           />
           <StatsCard label="Total Spent" value={formatCurrency(0)} />
           <StatsCard label="Pending Refunds" value={formatCurrency(0)} />
+          <StatsCard
+            label="Lifetime Spend"
+            value={formatCurrency(wallet.current_balance)}
+          />
+          <StatsCard label="Fill" value={formatCurrency(0)} />
+          <StatsCard label="Fill" value={formatCurrency(0)} />
         </div>
       </section>
 
@@ -48,10 +67,16 @@ export const CustomerWallet = ({
           <h3 className="text-base font-semibold text-neutral-900">
             Transaction History
           </h3>
+          <SearchInput
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search transactions..."
+            fullWidth={false}
+          />
         </div>
 
         <DataTable
-          data={transactions}
+          data={filteredTransactions}
           columns={transactionColumns}
           enableRowSelection={false}
           pageSize={10}
