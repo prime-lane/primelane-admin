@@ -10,6 +10,7 @@ export interface Customer {
     image_url: string | null
     status: AccountStatus
     is_email_verified: boolean
+    residential_address?: string
 }
 
 export interface Meta {

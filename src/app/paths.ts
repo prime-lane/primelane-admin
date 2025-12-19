@@ -11,6 +11,7 @@ export const path = {
     ROOT: '/dashboard',
     CUSTOMERS: '/dashboard/customers',
     CUSTOMER_DETAILS: '/dashboard/customers/:id',
+    CUSTOMER_EDIT: '/dashboard/customers/:id/edit',
     DRIVERS: '/dashboard/drivers',
     PRICING_CONFIG: '/dashboard/pricing-config',
     TRIPS: '/dashboard/trips',
