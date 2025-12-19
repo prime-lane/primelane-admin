@@ -55,9 +55,25 @@ export const handlers = [
   // login
   http.post(`${API_BASE_URL}/auth/login/:user_type`, () => {
     return HttpResponse.json({
-        "data": {},
+        "data": {
+          "user": {
+            "id": "c77b6f3c-5b86-40ed-8e6a-2649cb592a62",
+            "email": "ujadninth+1@gmail.com",
+            "first_name": "Emeka",
+            "last_name": "Uja",
+            "gender": null,
+            "phone_number": "2347032278199",
+            "image_url": "https://res.cloudinary.com/deolwnm9f/image/upload/v1764421626/chat_files/1764421625904-image-1764421623220.jpg.jpg",
+            "is_phone_number_verified": true,
+            "is_preference_set": true,
+            "is_kyc_complete": true,
+            "is_email_verified": true
+          },
+          "access_token": "{{vault:json-web-token}}",
+          "refresh_token": "{{vault:json-web-token}}"
+        },
         "success": true,
-        "message": "OTP sent successfully"
+        "message": "Login successful"
       })
   }),
 
