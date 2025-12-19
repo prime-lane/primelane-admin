@@ -1,5 +1,6 @@
 import { toast } from 'sonner'
 import type { ApiResponse, ApiError } from './api-types'
+import { logout } from '@/utils/auth-utils'
 
 const API_BASE_URL = import.meta.env.VITE_PRIMELANE_API_BASE_URL
 
@@ -34,6 +35,10 @@ class ApiClient {
             const data: ApiResponse<T> = await response.json()
 
             if (!response.ok) {
+                if (response.status === 401 && !window.location.pathname.startsWith('/auth')) {
+                    logout()
+                }
+
                 const error = data.data as unknown as ApiError
                 const errorMessage = error?.message || data.message || 'An error occurred'
 
