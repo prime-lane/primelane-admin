@@ -59,3 +59,4 @@ TODO:
 - [ ] Admin
 - [ ] identity details - /kyc/my-kyc
 - [ ] improve loading screen (use skeleton)
+- [ ] persist search params

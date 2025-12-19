@@ -93,7 +93,7 @@ export const CustomerDetails = () => {
       return
     }
 
-    const newStatus = dialogType === 'deactivate' ? 'deactivated' : 'active'
+    const newStatus = dialogType === 'deactivate' ? 'inactive' : 'active'
 
     updateCustomer(
       {

@@ -1,4 +1,5 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { apiClient } from '@/services/api-client'
 import { API_ENDPOINTS as e } from '@/services/api-endpoints'
 import type { PaginationParams, PaginatedResponse } from '@/services/api-types'
@@ -98,5 +99,22 @@ export const useCustomerTransactions = (params: UseCustomerTransactionsParams) =
             return transformPaginatedResponse(response.data, 'transactions')
         },
         enabled: !!params.user_id,
+    })
+}
+
+export const useUpdateCustomer = (id?: string) => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (data: Partial<Customer>) => {
+            if (!id) throw new Error('Customer ID is required')
+            const response = await apiClient.patch<{ user: Customer }>(e.CUSTOMERS.BY_ID(id), data)
+            return response.data
+        },
+        onSuccess: () => {
+            toast.success('Customer updated successfully')
+            queryClient.invalidateQueries({ queryKey: ['customer', id] })
+            queryClient.invalidateQueries({ queryKey: ['customers'] })
+        },
     })
 }
