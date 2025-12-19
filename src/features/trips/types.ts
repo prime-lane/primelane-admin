@@ -25,7 +25,7 @@ export interface Trip {
     fare: number
     distance: number
     duration: number
-    created_at: string
+    createdAt: string
     updated_at: string
     rider?: Rider
     driver?: Driver

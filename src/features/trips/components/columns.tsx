@@ -15,7 +15,7 @@ export const columns: ColumnDef<Trip>[] = [
   },
   {
     accessorKey: 'rider',
-    header: 'Rider',
+    header: 'Rider Name/ID',
     cell: ({ row }) => (
       <div className="flex flex-col gap-[2px]">
         <span className="text-sm font-medium">
@@ -66,7 +66,7 @@ export const columns: ColumnDef<Trip>[] = [
     accessorKey: 'created_at',
     header: 'Date',
     cell: ({ row }) => (
-      <span className="text-sm">{formatDate(row.original.created_at)}</span>
+      <span className="text-sm">{formatDate(row.original.createdAt)}</span>
     ),
   },
 ]

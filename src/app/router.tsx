@@ -36,6 +36,11 @@ const Drivers = lazy(() =>
     default: module.Drivers,
   })),
 )
+const DriverDetails = lazy(() =>
+  import('@/features/drivers/driver-details').then((module) => ({
+    default: module.DriverDetails,
+  })),
+)
 const PricingConfig = lazy(() =>
   import('@/features/pricing-config/pricing-config').then((module) => ({
     default: module.PricingConfig,
@@ -111,6 +116,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <Drivers />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.DRIVER_DETAILS,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <DriverDetails />
           </Suspense>
         ),
       },

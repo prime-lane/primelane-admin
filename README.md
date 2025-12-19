@@ -50,9 +50,9 @@ TODO:
 - [x] Driver
 - [x] Improve Layout (set max width)
 - [x] Trips
-- [ ] Customers details
+- [x] adjust customers bg(admin)
+- [x] Customers details
 - [ ] Trips details
-- [ ] adjust customers bg(admin)
 - [ ] paginate from backend
 - [ ] Price config page
 - [ ] Finance

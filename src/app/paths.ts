@@ -13,6 +13,8 @@ export const path = {
     CUSTOMER_DETAILS: '/dashboard/customers/:id',
     CUSTOMER_EDIT: '/dashboard/customers/:id/edit',
     DRIVERS: '/dashboard/drivers',
+    DRIVER_DETAILS: '/dashboard/drivers/:id',
+    DRIVER_EDIT: '/dashboard/drivers/:id/edit',
     PRICING_CONFIG: '/dashboard/pricing-config',
     TRIPS: '/dashboard/trips',
     FINANCE: '/dashboard/finance',
