@@ -58,7 +58,7 @@ export function DataTable<T>({
 
   return (
     <div>
-      <TableContainer component={Paper} elevation={0} sx={{ border: '0' }}>
+      <TableContainer component={Paper} elevation={0}>
         <Table>
           <TableHead sx={{ bgcolor: 'neutral.50' }}>
             {table.getHeaderGroups().map((headerGroup) => (
