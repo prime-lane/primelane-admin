@@ -4,7 +4,7 @@ import { API_ENDPOINTS as e } from '@/services/api-endpoints'
 import type { PaginationParams, PaginatedResponse } from '@/services/api-types'
 import { transformPaginatedResponse } from '@/utils/api-utils'
 import { buildQueryParams } from '@/lib/utils'
-import type { Trip } from '../types'
+import type { Trip, TripDetail } from '../types'
 
 interface UseTripsParams extends PaginationParams {
     status?: string
@@ -31,7 +31,7 @@ export const useTrip = (id: string) => {
     return useQuery({
         queryKey: ['trip', id],
         queryFn: async () => {
-            const response = await apiClient.get<Trip>(e.TRIPS.BY_ID(id))
+            const response = await apiClient.get<TripDetail>(e.TRIPS.BY_ID(id))
             return response.data
         },
         enabled: !!id,

@@ -70,7 +70,7 @@ export const MuiTextField: Components<Theme>['MuiTextField'] = {
 export const MuiInputLabel: Components<Theme>['MuiInputLabel'] = {
     styleOverrides: {
         root: {
-            fontSize: '1rem',
+            fontSize: '0.875rem',
             fontWeight: 400,
             color: colors.base.black,
             transform: 'none',

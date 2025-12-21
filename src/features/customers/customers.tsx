@@ -19,6 +19,7 @@ export const Customers = () => {
   const { data, isLoading, error } = useCustomers({
     search: debouncedSearch,
     limit: 100,
+    user_type: 'customer',
   })
 
   if (error) return <ErrorState message="Failed to load customers" />

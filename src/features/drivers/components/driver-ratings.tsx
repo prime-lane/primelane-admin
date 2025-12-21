@@ -1,19 +1,17 @@
 import { Button, Card, CardContent } from '@mui/material'
 import { Star } from '@solar-icons/react'
 import { format } from 'date-fns'
-import type { CustomerStats } from '../api/use-customer-stats'
-import type { Review } from '../types'
-import { StatsCard } from './stats-card'
+import type { UserRideStats, Review } from '../types'
+import { StatsCard } from '@/features/customers/components/stats-card'
 
-interface CustomerRatingsProps {
-  stats?: CustomerStats
+interface DriverRatingsProps {
+  stats?: UserRideStats
   reviews?: Review[]
 }
 
 const RatingBreakdownRow = ({
   star,
   count,
-  // total,
 }: {
   star: number
   count: number
@@ -41,9 +39,7 @@ const ReviewCard = ({ review }: { review: Review }) => {
     <Card>
       <CardContent className="space-y-3">
         <div>
-          <h4 className="font-semibold text-neutral-900">
-            {review.reviewer.first_name} {review.reviewer.last_name}
-          </h4>
+          <h4 className="font-semibold text-neutral-900">Rider Review</h4>
           <span className="text-xs text-neutral-500">
             {format(new Date(review.created_at), 'yyyy-MM-dd')}
           </span>
@@ -61,21 +57,17 @@ const ReviewCard = ({ review }: { review: Review }) => {
           ))}
         </div>
         <p className="text-sm text-neutral-600 line-clamp-3">
-          {review.feedback}
+          {review.comment}
         </p>
       </CardContent>
     </Card>
   )
 }
 
-export const CustomerRatings = ({
-  stats,
-  reviews = [],
-}: CustomerRatingsProps) => {
+export const DriverRatings = ({ stats, reviews = [] }: DriverRatingsProps) => {
   const averageRating = stats?.average_rating || 0
   const totalReviews = reviews.length
 
-  // Calculate rating breakdown
   const ratingCounts = reviews.reduce(
     (acc, review) => {
       const rating = Math.round(review.rating)
@@ -92,7 +84,6 @@ export const CustomerRatings = ({
         <div className="p-2 grid grid-cols-1 md:grid-cols-3 gap-4">
           <StatsCard label="Average Rating" value={`${averageRating} / 5.0`} />
           <StatsCard label="Total Reviews" value={`${totalReviews} Reviews`} />
-          {/* <StatsCard label="Last 30 Days Rating" value={last30DaysRating} /> */}
         </div>
       </div>
 

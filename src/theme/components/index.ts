@@ -2,6 +2,7 @@ import { MuiButton } from './button'
 import { MuiTextField, MuiInputLabel } from './text-input'
 import { MuiCard, MuiCardContent } from './card'
 import { MuiTab, MuiTabs } from './tab'
+import { MuiOutlinedInput } from './select'
 
 export const components = {
   MuiButton,
@@ -11,4 +12,5 @@ export const components = {
   MuiCardContent,
   MuiTab,
   MuiTabs,
+  MuiOutlinedInput,
 }

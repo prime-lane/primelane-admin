@@ -1,12 +1,13 @@
 import { ErrorState, LoadingState } from '@/components/ui/loading-error-states'
 import { Avatar } from '@mui/material'
 import { ArrowRightUp } from '@solar-icons/react'
-import { useKycDetails, useUserRideStats } from '../api/use-customers'
-import type { Customer } from '../types'
-import { StatsCard } from './stats-card'
+import { useKycDetails } from '@/features/customers/api/use-customers'
+import { useDriverStats } from '../api/use-drivers'
+import type { Driver } from '../types'
+import { StatsCard } from '@/features/customers/components/stats-card'
 
 interface IdentityDetailsProps {
-  customer: Customer
+  driver: Driver
 }
 
 const InfoRow = ({
@@ -39,9 +40,9 @@ const InfoRow = ({
   )
 }
 
-export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
+export const IdentityDetails = ({ driver }: IdentityDetailsProps) => {
   const { data: kycDetails, isLoading, error } = useKycDetails()
-  const { data: rideStats } = useUserRideStats(customer.id)
+  const { data: rideStats } = useDriverStats(driver.id)
 
   if (isLoading) return <LoadingState />
   if (error || !kycDetails)
@@ -51,7 +52,6 @@ export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
 
   return (
     <div className="space-y-8">
-      {/* Top Stats Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <StatsCard
           label="NIN"
@@ -75,7 +75,6 @@ export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
         />
       </div>
 
-      {/* Ride Stats Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <StatsCard
           label="Total Rides"
@@ -86,26 +85,25 @@ export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
           value={rideStats?.average_rating?.toString() || 'N/A'}
         />
         <StatsCard
-          label="Completion Rate"
+          label="Acceptance Rate"
           value={
             rideStats?.acceptance_rate ? `${rideStats.acceptance_rate}%` : 'N/A'
           }
         />
       </div>
 
-      {/* Details List Section */}
       <div className="space-y-4">
         <h3 className="text-sm font-medium">Result from NIN</h3>
         <div className="flex flex-col gap-1">
           <InfoRow
             index={1}
             label="First Name"
-            value={kycDetails.first_name || customer.first_name}
+            value={kycDetails.first_name || driver.first_name}
           />
           <InfoRow
             index={2}
             label="Last Name"
-            value={kycDetails.last_name || customer.last_name}
+            value={kycDetails.last_name || driver.last_name}
           />
           <InfoRow
             index={3}
@@ -116,16 +114,12 @@ export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
           <InfoRow
             index={5}
             label="Photo"
-            value={kycDetails.selfie_image || customer.image_url || ''}
+            value={kycDetails.selfie_image || driver.image_url || ''}
             isImage
           />
           <InfoRow index={6} label="Date of Birth" value={kycDetails.dob} />
-          <InfoRow index={7} label="Email Address" value={customer.email} />
-          <InfoRow
-            index={8}
-            label="Phone Number"
-            value={customer.phone_number}
-          />
+          <InfoRow index={7} label="Email Address" value={driver.email} />
+          <InfoRow index={8} label="Phone Number" value={driver.phone_number} />
           <InfoRow
             index={9}
             label="Employment Status"

@@ -26,9 +26,24 @@ const CustomerDetails = lazy(() =>
     default: module.CustomerDetails,
   })),
 )
+const EditCustomer = lazy(() =>
+  import('@/features/customers/edit-customer').then((module) => ({
+    default: module.EditCustomer,
+  })),
+)
 const Drivers = lazy(() =>
   import('@/features/drivers/drivers').then((module) => ({
     default: module.Drivers,
+  })),
+)
+const DriverDetails = lazy(() =>
+  import('@/features/drivers/driver-details').then((module) => ({
+    default: module.DriverDetails,
+  })),
+)
+const EditDriver = lazy(() =>
+  import('@/features/drivers/edit-driver').then((module) => ({
+    default: module.EditDriver,
   })),
 )
 const PricingConfig = lazy(() =>
@@ -39,6 +54,11 @@ const PricingConfig = lazy(() =>
 const Trips = lazy(() =>
   import('@/features/trips/trips').then((module) => ({
     default: module.Trips,
+  })),
+)
+const TripDetails = lazy(() =>
+  import('@/features/trips/trip-details').then((module) => ({
+    default: module.TripDetails,
   })),
 )
 const Finance = lazy(() =>
@@ -94,10 +114,34 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: path.DASHBOARD.CUSTOMER_EDIT,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <EditCustomer />
+          </Suspense>
+        ),
+      },
+      {
         path: path.DASHBOARD.DRIVERS,
         element: (
           <Suspense fallback={<Loading />}>
             <Drivers />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.DRIVER_DETAILS,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <DriverDetails />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.DRIVER_EDIT,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <EditDriver />
           </Suspense>
         ),
       },
@@ -114,6 +158,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <Trips />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.TRIP_DETAILS,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <TripDetails />
           </Suspense>
         ),
       },

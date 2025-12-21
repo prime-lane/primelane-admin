@@ -11,7 +11,7 @@ export const StatsCard = ({ label, value, status }: StatsCardProps) => {
   return (
     <Card>
       <CardContent className="flex flex-col items-center justify-center gap-2">
-        <span className="text-sm text-neutral-500">{label}</span>
+        <span className="text-sm text-neutral-500 font-normal">{label}</span>
         {status ? (
           <StatusBadge status={status} />
         ) : (

@@ -11,7 +11,7 @@ export const DashboardLayout = () => {
   const logout = useLogout()
   
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'neutral.50' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'white' }}>
       <Drawer
         variant="permanent"
         sx={{
@@ -61,7 +61,7 @@ export const DashboardLayout = () => {
         }}
       >
         <Navbar />
-        <div className="flex-1 py-2 px-4 max-w-7xl">
+        <div className="flex-1 pt-2 pb-6 px-4 max-w-7xl">
           <Outlet />
         </div>
       </Box>

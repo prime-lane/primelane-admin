@@ -46,11 +46,19 @@ TODO:
 - [x] Auth page
 - [x] Home page
 - [x] Customers
-- [ ] Customers details
+- [x] adjust home bg(admin)
 - [x] Driver
-- [x] Trips
-- [ ] Trips details
 - [x] Improve Layout (set max width)
+- [x] Trips
+- [x] adjust customers bg(admin)
+- [x] Customers details
+- [x] Trips details
+- [ ] vehicle details
+- [ ] paginate from backend
 - [ ] Price config page
 - [ ] Finance
 - [ ] Admin
+- [ ] identity details - /kyc/my-kyc
+- [ ] improve loading screen (use skeleton)
+- [ ] persist search params
+- [ ] filter button
