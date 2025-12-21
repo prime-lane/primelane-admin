@@ -1,4 +1,4 @@
-    import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { apiClient } from '@/services/api-client'
 import { API_ENDPOINTS as e } from '@/services/api-endpoints'
@@ -68,8 +68,8 @@ export const useDriverWallet = (userId: string) => {
     return useQuery({
         queryKey: ['driver-wallet', userId],
         queryFn: async () => {
-            const response = await apiClient.get<{ data: Wallet }>(`${e.WALLETS.MY_WALLET}`)
-            return response.data.data
+            const response = await apiClient.get<Wallet>(`${e.WALLETS.MY_WALLET}`)
+            return response.data
         },
         enabled: !!userId,
     })

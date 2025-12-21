@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
 import { LoadingState } from '@/components/ui/loading-error-states'
@@ -7,15 +8,10 @@ import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useCustomer, useUpdateCustomer } from './api/use-customers'
-
-interface EditCustomerForm {
-  first_name: string
-  last_name: string
-  email: string
-  phone_number: string
-  residential_address: string
-  image_url: string
-}
+import {
+  type EditCustomerFormData,
+  editCustomerSchema,
+} from './schemas/edit-customer-schema'
 
 export const EditCustomer = () => {
   const { id } = useParams<{ id: string }>()
@@ -25,8 +21,15 @@ export const EditCustomer = () => {
     useUpdateCustomer(id)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
 
-  const { register, handleSubmit, setValue, watch } =
-    useForm<EditCustomerForm>()
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<EditCustomerFormData>({
+    resolver: zodResolver(editCustomerSchema),
+  })
   const customer = customerData?.user
   const watchedImage = watch('image_url')
 
@@ -48,13 +51,13 @@ export const EditCustomer = () => {
     }
   }, [watchedImage])
 
-  const onSubmit = (data: EditCustomerForm) => {
+  const onSubmit = (data: EditCustomerFormData) => {
     updateCustomer(
       {
         email: data.email,
         phone_number: data.phone_number,
         residential_address: data.residential_address,
-        image_url: data.image_url,
+        image_url: data.image_url || undefined,
       },
       {
         onSuccess: () => {
@@ -100,7 +103,7 @@ export const EditCustomer = () => {
         </div>
       </div>
 
-      <div onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-lg mx-auto">
+      <div className="space-y-4 max-w-lg mx-auto">
         <div className="flex justify-center mb-6">
           <div className="relative">
             <Avatar
@@ -124,7 +127,6 @@ export const EditCustomer = () => {
             disabled
             {...register('first_name')}
             helperText="First name cannot be changed"
-            
           />
           <TextField
             label="Last name"
@@ -134,12 +136,20 @@ export const EditCustomer = () => {
             helperText="Last name cannot be changed"
           />
 
-          <TextField label="Email address" size="medium" {...register('email')} />
+          <TextField
+            label="Email address"
+            size="medium"
+            {...register('email')}
+            error={!!errors.email}
+            helperText={errors.email?.message}
+          />
 
           <TextField
             label="Phone number"
             size="medium"
             {...register('phone_number')}
+            error={!!errors.phone_number}
+            helperText={errors.phone_number?.message}
           />
 
           <TextField
@@ -147,6 +157,8 @@ export const EditCustomer = () => {
             size="medium"
             {...register('residential_address')}
             placeholder="Enter address"
+            error={!!errors.residential_address}
+            helperText={errors.residential_address?.message}
           />
 
           <TextField
@@ -154,6 +166,8 @@ export const EditCustomer = () => {
             size="medium"
             {...register('image_url')}
             placeholder="https://..."
+            error={!!errors.image_url}
+            helperText={errors.image_url?.message}
           />
         </div>
       </div>

@@ -41,6 +41,11 @@ const DriverDetails = lazy(() =>
     default: module.DriverDetails,
   })),
 )
+const EditDriver = lazy(() =>
+  import('@/features/drivers/edit-driver').then((module) => ({
+    default: module.EditDriver,
+  })),
+)
 const PricingConfig = lazy(() =>
   import('@/features/pricing-config/pricing-config').then((module) => ({
     default: module.PricingConfig,
@@ -49,6 +54,11 @@ const PricingConfig = lazy(() =>
 const Trips = lazy(() =>
   import('@/features/trips/trips').then((module) => ({
     default: module.Trips,
+  })),
+)
+const TripDetails = lazy(() =>
+  import('@/features/trips/trip-details').then((module) => ({
+    default: module.TripDetails,
   })),
 )
 const Finance = lazy(() =>
@@ -128,6 +138,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: path.DASHBOARD.DRIVER_EDIT,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <EditDriver />
+          </Suspense>
+        ),
+      },
+      {
         path: path.DASHBOARD.PRICING_CONFIG,
         element: (
           <Suspense fallback={<Loading />}>
@@ -140,6 +158,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <Trips />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.TRIP_DETAILS,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <TripDetails />
           </Suspense>
         ),
       },

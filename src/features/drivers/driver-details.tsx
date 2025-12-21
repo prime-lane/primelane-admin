@@ -20,6 +20,9 @@ import {
   Menu,
   MenuItem,
   Select,
+  Checkbox,
+  FormGroup,
+  FormControlLabel,
   Tab,
   Tabs,
 } from '@mui/material'
@@ -57,9 +60,10 @@ export const DriverDetails = () => {
   const openMenu = Boolean(anchorEl)
 
   const [dialogType, setDialogType] = useState<
-    'inactive' | 'reactivate' | null
+    'inactive' | 'reactivate' | 'vehicle_category' | null
   >(null)
   const [reason, setReason] = useState('')
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
 
   const handleActionClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -74,18 +78,33 @@ export const DriverDetails = () => {
     navigate(path.DASHBOARD.DRIVER_EDIT.replace(':id', id!))
   }
 
-  const handleStatusChangeClick = (type: 'inactive' | 'reactivate') => {
+  const handleStatusChangeClick = (
+    type: 'inactive' | 'reactivate' | 'vehicle_category',
+  ) => {
     handleCloseMenu()
     setDialogType(type)
     setReason('')
+    setSelectedCategories([])
   }
 
   const handleCloseDialog = () => {
     setDialogType(null)
     setReason('')
+    setSelectedCategories([])
   }
 
   const handleConfirmStatusChange = () => {
+    if (dialogType === 'vehicle_category') {
+      if (selectedCategories.length === 0) {
+        toast.error('Please select at least one category')
+        return
+      }
+      // TODO: Implement actual API call when endpoint is ready
+      toast.success('Vehicle category updated successfully')
+      handleCloseDialog()
+      return
+    }
+
     if (!reason) {
       toast.error('Please select a reason')
       return
@@ -182,6 +201,11 @@ export const DriverDetails = () => {
           <MenuItem onClick={handleEdit}>
             <span className="text-base text-neutral-500">Edit Account</span>
           </MenuItem>
+          <MenuItem onClick={() => handleStatusChangeClick('vehicle_category')}>
+            <span className="text-base text-neutral-500">
+              Update vehicle category
+            </span>
+          </MenuItem>
           {driver.status === 'active' ? (
             <MenuItem
               onClick={() => handleStatusChangeClick('inactive')}
@@ -209,7 +233,11 @@ export const DriverDetails = () => {
         >
           <DialogTitle className="font-sans!">
             <span className="text-2xl font-medium">
-              {dialogType === 'inactive' ? 'Deactivate' : 'Re-activate'}
+              {dialogType === 'inactive'
+                ? 'Deactivate'
+                : dialogType === 'reactivate'
+                  ? 'Re-activate'
+                  : 'Update vehicle category'}
             </span>
           </DialogTitle>
           <DialogContent>
@@ -217,56 +245,96 @@ export const DriverDetails = () => {
               <p className="text-neutral-500 text-sm">
                 {dialogType === 'inactive'
                   ? 'Please confirm the reason for deactivating this account. The driver will lose access until the account is activated.'
-                  : 'Provide a reason for re-active this account. The driver will regain access immediately.'}
+                  : dialogType === 'reactivate' // Added check for reactivate to avoid showing wrong text for vehicle_category
+                    ? 'Provide a reason for re-active this account. The driver will regain access immediately.'
+                    : 'Provide a reason for active this account. The user will regain access immediately.'}
               </p>
-              <FormControl fullWidth>
-                <InputLabel id="reason-label">
-                  {dialogType === 'inactive'
-                    ? 'Reason for Deactivation'
-                    : 'Reason for activation'}
-                </InputLabel>
-                <Select
-                  labelId="reason-label"
-                  value={reason}
-                  label={
-                    dialogType === 'inactive'
+
+              {dialogType === 'vehicle_category' ? (
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-neutral-700">
+                    Vehicle Category
+                  </p>
+                  <FormControl fullWidth>
+                    <FormGroup>
+                      {['Business', 'Business SUV', 'First Class'].map(
+                        (category) => (
+                          <FormControlLabel
+                            key={category}
+                            control={
+                              <Checkbox
+                                checked={selectedCategories.includes(category)}
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    setSelectedCategories((prev) => [
+                                      ...prev,
+                                      category,
+                                    ])
+                                  } else {
+                                    setSelectedCategories((prev) =>
+                                      prev.filter((c) => c !== category),
+                                    )
+                                  }
+                                }}
+                              />
+                            }
+                            label={category}
+                          />
+                        ),
+                      )}
+                    </FormGroup>
+                  </FormControl>
+                </div>
+              ) : (
+                <FormControl fullWidth>
+                  <InputLabel id="reason-label">
+                    {dialogType === 'inactive'
                       ? 'Reason for Deactivation'
-                      : 'Reason for activation'
-                  }
-                  onChange={(e) => setReason(e.target.value)}
-                >
-                  <MenuItem value="" disabled>
-                    Select a reason
-                  </MenuItem>
-                  {dialogType === 'inactive'
-                    ? [
-                        <MenuItem key="1" value="Policy Violation">
-                          Policy Violation
-                        </MenuItem>,
-                        <MenuItem key="2" value="Fraud suspicion">
-                          Fraud suspicion
-                        </MenuItem>,
-                        <MenuItem key="3" value="Incomplete document">
-                          Incomplete document
-                        </MenuItem>,
-                      ]
-                    : [
-                        <MenuItem key="1" value="Issue resolved">
-                          Issue resolved
-                        </MenuItem>,
-                        <MenuItem key="2" value="Documents verified">
-                          Documents verified
-                        </MenuItem>,
-                        <MenuItem key="3" value="Account review completed">
-                          Account review completed
-                        </MenuItem>,
-                      ]}
-                </Select>
-              </FormControl>
+                      : 'Reason for activation'}
+                  </InputLabel>
+                  <Select
+                    labelId="reason-label"
+                    value={reason}
+                    label={
+                      dialogType === 'inactive'
+                        ? 'Reason for Deactivation'
+                        : 'Reason for activation'
+                    }
+                    onChange={(e) => setReason(e.target.value)}
+                  >
+                    <MenuItem value="" disabled>
+                      Select a reason
+                    </MenuItem>
+                    {dialogType === 'inactive'
+                      ? [
+                          <MenuItem key="1" value="Policy Violation">
+                            Policy Violation
+                          </MenuItem>,
+                          <MenuItem key="2" value="Fraud suspicion">
+                            Fraud suspicion
+                          </MenuItem>,
+                          <MenuItem key="3" value="Incomplete document">
+                            Incomplete document
+                          </MenuItem>,
+                        ]
+                      : [
+                          <MenuItem key="1" value="Issue resolved">
+                            Issue resolved
+                          </MenuItem>,
+                          <MenuItem key="2" value="Documents verified">
+                            Documents verified
+                          </MenuItem>,
+                          <MenuItem key="3" value="Account review completed">
+                            Account review completed
+                          </MenuItem>,
+                        ]}
+                  </Select>
+                </FormControl>
+              )}
             </div>
           </DialogContent>
           <DialogActions sx={{ p: 3, pt: 0 }}>
-            <Button onClick={handleCloseDialog} variant="contained" fullWidth>
+            <Button onClick={handleCloseDialog} variant="outlined" fullWidth>
               Cancel
             </Button>
             <Button
@@ -274,8 +342,13 @@ export const DriverDetails = () => {
               variant="outlined"
               fullWidth
               disabled={isUpdating}
+              sx={{
+                bgcolor: 'black',
+                color: 'white',
+                '&:hover': { bgcolor: 'neutral.800' },
+              }}
             >
-              {dialogType === 'inactive' ? 'Deactivate' : 'Activate'}
+              {dialogType === 'inactive' ? 'Deactivate' : 'Active'}
             </Button>
           </DialogActions>
         </Dialog>

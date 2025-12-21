@@ -8,9 +8,14 @@ import { useState } from 'react'
 import { useTrips } from './api/use-trips'
 import { columns } from './components/columns'
 
+import { useNavigate } from 'react-router-dom'
+import { path } from '@/app/paths'
+import type { Trip } from './types'
+
 export const Trips = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const debouncedSearch = useDebounce(searchTerm, 500)
+  const navigate = useNavigate()
 
   const { data, isLoading, error } = useTrips({
     search: debouncedSearch,
@@ -43,7 +48,9 @@ export const Trips = () => {
         <DataTable
           data={trips}
           columns={columns}
-          // onRowClick={(row: Trip) => navigate(`/dashboard/trips/${row.id}`)}
+          onRowClick={(row: Trip) =>
+            navigate(path.DASHBOARD.TRIP_DETAILS.replace(':id', row.id))
+          }
         />
       )}
     </div>

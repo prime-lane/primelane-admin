@@ -48,7 +48,6 @@ export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
     return <ErrorState message="Failed to load KYC details" />
 
   const metaData = kycDetails.meta_data || {}
-  console.log(kycDetails)
 
   return (
     <div className="space-y-8">

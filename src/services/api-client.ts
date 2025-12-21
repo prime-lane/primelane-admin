@@ -36,7 +36,9 @@ class ApiClient {
 
             if (!response.ok) {
                 if (response.status === 401 && !window.location.pathname.startsWith('/auth')) {
-                    logout()
+                    setTimeout(() => {
+                        logout()
+                    }, 2000)
                 }
 
                 const error = data.data as unknown as ApiError

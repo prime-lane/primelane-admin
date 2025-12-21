@@ -52,7 +52,8 @@ TODO:
 - [x] Trips
 - [x] adjust customers bg(admin)
 - [x] Customers details
-- [ ] Trips details
+- [x] Trips details
+- [ ] vehicle details
 - [ ] paginate from backend
 - [ ] Price config page
 - [ ] Finance
@@ -60,3 +61,4 @@ TODO:
 - [ ] identity details - /kyc/my-kyc
 - [ ] improve loading screen (use skeleton)
 - [ ] persist search params
+- [ ] filter button

@@ -43,9 +43,14 @@ export interface Wallet {
     virtual_bank_account_name: string
     virtual_bank_code: string
     virtual_bank_name: string
+    outflow_bank_account_number: string | null
+    outflow_bank_code: string | null
+    outflow_bank_name: string | null
     current_balance: number
     last_balance: number
     currency: string
+    pin: string | null
+    is_pin_set: boolean
     created_at: string
     updated_at: string
 }

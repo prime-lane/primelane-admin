@@ -17,6 +17,7 @@ export const path = {
     DRIVER_EDIT: '/dashboard/drivers/:id/edit',
     PRICING_CONFIG: '/dashboard/pricing-config',
     TRIPS: '/dashboard/trips',
+    TRIP_DETAILS: '/dashboard/trips/:id',
     FINANCE: '/dashboard/finance',
     ADMIN_MANAGEMENT: '/dashboard/admin-management',
   },

@@ -21,10 +21,19 @@ export const getInitials = (firstName: string, lastName: string) => {
   return `${firstName?.charAt(0)}${lastName?.charAt(0)}`.toUpperCase()
 }
 
-export function formatCurrency(amount: number | string) {
+export function formatCurrency(amount: number | string | null | undefined) {
+  if (!amount) return 'N0.00'
   const numericAmount = typeof amount === 'string' ? parseFloat(amount) : amount
   return new Intl.NumberFormat('en-NG', {
     style: 'currency',
     currency: 'NGN',
   }).format(numericAmount)
+}
+
+export const formatDuration = (seconds: string | number | null | undefined) => {
+  if (!seconds) return '-'
+  const secs = typeof seconds === 'string' ? parseInt(seconds, 10) : seconds
+  if (isNaN(secs)) return '-'
+  const mins = Math.floor(secs / 60)
+  return `${mins} minutes`
 }
