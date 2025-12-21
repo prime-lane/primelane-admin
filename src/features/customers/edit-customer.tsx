@@ -19,7 +19,6 @@ export const EditCustomer = () => {
   const { data: customerData, isLoading: isCustomerLoading } = useCustomer(id!)
   const { mutate: updateCustomer, isPending: isUpdating } =
     useUpdateCustomer(id)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
 
   const {
     register,
@@ -31,7 +30,6 @@ export const EditCustomer = () => {
     resolver: zodResolver(editCustomerSchema),
   })
   const customer = customerData?.user
-  const watchedImage = watch('image_url')
 
   useEffect(() => {
     if (customer) {
@@ -39,25 +37,19 @@ export const EditCustomer = () => {
       setValue('last_name', customer.last_name)
       setValue('email', customer.email)
       setValue('phone_number', customer.phone_number)
-      setValue('residential_address', customer.residential_address || '')
-      setValue('image_url', customer.image_url || '')
-      setImagePreview(customer.image_url || null)
+      setValue('nin', customer.nin || '')
     }
   }, [customer, setValue])
-
-  useEffect(() => {
-    if (watchedImage) {
-      setImagePreview(watchedImage)
-    }
-  }, [watchedImage])
 
   const onSubmit = (data: EditCustomerFormData) => {
     updateCustomer(
       {
+        first_name: data.first_name,
+        last_name: data.last_name,
         email: data.email,
         phone_number: data.phone_number,
-        residential_address: data.residential_address,
-        image_url: data.image_url || undefined,
+        nin: data.nin,
+        // image_url: data.image_url || undefined,
       },
       {
         onSuccess: () => {
@@ -104,7 +96,7 @@ export const EditCustomer = () => {
       </div>
 
       <div className="space-y-4 max-w-lg mx-auto">
-        <div className="flex justify-center mb-6">
+        {/* <div className="flex justify-center mb-6">
           <div className="relative">
             <Avatar
               src={imagePreview || undefined}
@@ -118,22 +110,22 @@ export const EditCustomer = () => {
               {customer?.first_name?.[0]}
             </Avatar>
           </div>
-        </div>
+        </div> */}
 
         <div className="grid grid-cols-1 gap-4">
           <TextField
             label="First name"
             size="medium"
-            disabled
+            // disabled
             {...register('first_name')}
-            helperText="First name cannot be changed"
+            // helperText="First name cannot be changed"
           />
           <TextField
             label="Last name"
             size="medium"
-            disabled
+            // disabled
             {...register('last_name')}
-            helperText="Last name cannot be changed"
+            // helperText="Last name cannot be changed"
           />
 
           <TextField
@@ -153,21 +145,12 @@ export const EditCustomer = () => {
           />
 
           <TextField
-            label="NIN / Residential Address" // Using residential address as requested, mapping NIN if that's what was meant but following payload text
+            label="NIN"
             size="medium"
-            {...register('residential_address')}
-            placeholder="Enter address"
-            error={!!errors.residential_address}
-            helperText={errors.residential_address?.message}
-          />
-
-          <TextField
-            label="Image URL"
-            size="medium"
-            {...register('image_url')}
-            placeholder="https://..."
-            error={!!errors.image_url}
-            helperText={errors.image_url?.message}
+            {...register('nin')}
+            placeholder="Enter NIN"
+            error={!!errors.nin}
+            helperText={errors.nin?.message}
           />
         </div>
       </div>

@@ -56,7 +56,8 @@ export const useDriverReviews = (userId?: string) => {
     return useQuery({
         queryKey: ['driver-reviews', userId],
         queryFn: async () => {
-            const endpoint = `${e.REVIEWS.ROOT}`
+            if (!userId) throw new Error('User ID is required')
+            const endpoint = e.REVIEWS.ROOT(userId)
             const response = await apiClient.get<{ reviews: Review[]; pagination: PaginatedResponse<unknown>['pagination'] }>(endpoint)
             return transformPaginatedResponse(response.data, 'reviews')
         },
@@ -86,6 +87,17 @@ export const useDriverTransactions = (params: UseDriverTransactionsParams) => {
             return transformPaginatedResponse(response.data, 'transactions')
         },
         enabled: !!params.user_id,
+    })
+}
+
+export const useDriverVehicle = (driverId: string) => {
+    return useQuery({
+        queryKey: ['driver-vehicle', driverId],
+        queryFn: async () => {
+            const response = await apiClient.get<import('../types').Vehicle>(e.VEHICLES.BY_DRIVER_ID(driverId))
+            return response.data
+        },
+        enabled: !!driverId,
     })
 }
 

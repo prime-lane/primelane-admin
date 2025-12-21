@@ -21,15 +21,16 @@ All code (human or AI-generated) must follow these rules.
 - icon - solar icons
 
 ## Path Conventions
+
 - define routes in a `path` file
 - path name in caps
 
 ## Misc
+
 - No additional libraries should be introduced without explicit approval.
 - Never style MUI internals with Tailwind.
 - Use Tailwind for styling native html elements.
 - Use comments sparingly.
-
 
 ---
 
@@ -45,8 +46,10 @@ All code (human or AI-generated) must follow these rules.
 - Component should be less than 1000
 - Use reusable components from ui folder if it exists otherwise create one
 - DRY principle. Separate presentational components/utils from logic.
+- use typescript interface for component props
 
 ### TypeScript
+
 - Never use:
   - any
   - untyped function parameters
@@ -134,6 +137,7 @@ Inline styles and external CSS files are discouraged.
 - Accessibility is mandatory
 
 ## Output
+
 - Strict brevity.
 - Assume the reader is a senior frontend engineer.
 - No explanations, tutorials, or commentary.

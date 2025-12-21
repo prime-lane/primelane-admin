@@ -10,6 +10,8 @@ export type StatusVariant =
   | 'accepted'
   | 'verified'
 
+  export type TripStatus=''
+
 interface StatusBadgeProps {
   status: StatusVariant
   sx?: ChipProps['sx']

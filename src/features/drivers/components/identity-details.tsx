@@ -41,7 +41,7 @@ const InfoRow = ({
 }
 
 export const IdentityDetails = ({ driver }: IdentityDetailsProps) => {
-  const { data: kycDetails, isLoading, error } = useKycDetails()
+  const { data: kycDetails, isLoading, error } = useKycDetails(driver.id)
   const { data: rideStats } = useDriverStats(driver.id)
 
   if (isLoading) return <LoadingState />

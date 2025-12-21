@@ -67,3 +67,37 @@ export interface Transaction {
     updated_at: string
     status: string
 }
+
+export interface RoadWorthiness {
+    doc: string
+    expiry_date: string
+}
+
+export interface VehicleInsurance {
+    doc: string
+    expiry_date: string
+}
+
+export interface Vehicle {
+    id: string
+    vin: string
+    make: string
+    model: string
+    year: number
+    color: string
+    plate_number: string
+    type: string
+    mileage: string
+    driver_id: string
+    status: AccountStatus
+    category_id: string | null
+    front_image: string
+    back_image: string
+    side_image: string
+    road_worthiness: RoadWorthiness
+    vehicle_insurance: VehicleInsurance
+    driver: Driver
+    category: null // category structure is unknown or null for now
+    created_at: string
+    updated_at: string
+}

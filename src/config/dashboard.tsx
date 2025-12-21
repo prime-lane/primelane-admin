@@ -22,9 +22,18 @@ export const NAV_ITEMS = [
   {
     label: 'Finance',
     icon: Card,
-    to: path.DASHBOARD.FINANCE,
+    to: path.DASHBOARD.FINANCE.ROOT,
     hasSubmenu: true,
-    children: [{ label: 'Finance', to: '/dashboard/finance/transactions' }],
+    children: [
+      { label: 'Commission', to: path.DASHBOARD.FINANCE.COMMISSION },
+      {
+        label: 'Driver settlements',
+        to: path.DASHBOARD.FINANCE.DRIVER_SETTLEMENTS,
+      },
+      { label: 'Driver wallet', to: path.DASHBOARD.FINANCE.DRIVER_WALLET },
+      { label: 'Customer wallet', to: path.DASHBOARD.FINANCE.CUSTOMER_WALLET },
+      { label: 'Refund', to: path.DASHBOARD.FINANCE.REFUND },
+    ],
   },
   {
     label: 'Admin Mgmt.',

@@ -1,7 +1,7 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { AltArrowRight } from '@solar-icons/react'
 import { cn } from '@/lib/utils'
-import type { ComponentType } from 'react'
+import { useState, type ComponentType, useLayoutEffect } from 'react'
 
 interface SidebarNavItemProps {
   label: string
@@ -10,6 +10,7 @@ interface SidebarNavItemProps {
   hasSubmenu?: boolean
   onClick?: () => void
   variant?: 'nav' | 'button'
+  children?: { label: string; to: string }[]
 }
 
 export const SidebarNavItem = ({
@@ -19,8 +20,19 @@ export const SidebarNavItem = ({
   hasSubmenu,
   onClick,
   variant = 'nav',
+  children,
 }: SidebarNavItemProps) => {
-  if (variant === 'button' || !to) {
+  const [isOpen, setIsOpen] = useState(false)
+  const location = useLocation()
+
+  // Check if any child is active to auto-expand
+  useLayoutEffect(() => {
+    if (children?.some((child) => location.pathname === child.to)) {
+      setIsOpen(true)
+    }
+  }, [location.pathname, children])
+
+  if (variant === 'button' || (!to && !hasSubmenu)) {
     return (
       <button
         onClick={onClick}
@@ -32,9 +44,68 @@ export const SidebarNavItem = ({
     )
   }
 
+  if (hasSubmenu) {
+    return (
+      <div className="flex flex-col">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className={cn(
+            'flex items-center justify-between px-4 py-3 transition-all duration-200 group w-full cursor-pointer',
+            isOpen
+              ? 'bg-neutral-50 text-neutral-900'
+              : 'text-neutral-500 hover:bg-neutral-50',
+          )}
+        >
+          <div className="flex items-center gap-3">
+            <Icon
+              weight={isOpen ? 'Bold' : 'Linear'}
+              size={22}
+              className={cn(isOpen ? 'text-neutral-900' : 'text-neutral-400')}
+            />
+            <span
+              className={cn(
+                'text-sm',
+                isOpen ? 'text-neutral-900 font-medium' : 'text-neutral-400',
+              )}
+            >
+              {label}
+            </span>
+          </div>
+          <AltArrowRight
+            size={18}
+            className={cn(
+              'text-neutral-400 group-hover:text-neutral-600 transition-transform duration-200',
+              isOpen && 'rotate-90',
+            )}
+          />
+        </button>
+        {isOpen && children && (
+          <div className="flex flex-col bg-neutral-50/50">
+            {children.map((child) => (
+              <NavLink
+                key={child.label}
+                to={child.to}
+                className={({ isActive }) =>
+                  cn(
+                    'pl-12 pr-4 py-2.5 text-sm transition-colors',
+                    isActive
+                      ? 'text-neutral-900 font-medium'
+                      : 'text-neutral-500 hover:text-neutral-900',
+                  )
+                }
+              >
+                {child.label}
+              </NavLink>
+            ))}
+          </div>
+        )}
+      </div>
+    )
+  }
+
   return (
     <NavLink
-      to={to}
+      to={to!}
       end={to === '/dashboard'}
       className={({ isActive }) =>
         cn(
@@ -62,12 +133,6 @@ export const SidebarNavItem = ({
               {label}
             </span>
           </div>
-          {hasSubmenu && (
-            <AltArrowRight
-              size={18}
-              className="text-neutral-400 group-hover:text-neutral-600"
-            />
-          )}
         </>
       )}
     </NavLink>

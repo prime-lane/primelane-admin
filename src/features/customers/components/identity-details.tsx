@@ -40,7 +40,7 @@ const InfoRow = ({
 }
 
 export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
-  const { data: kycDetails, isLoading, error } = useKycDetails()
+  const { data: kycDetails, isLoading, error } = useKycDetails(customer.id)
   const { data: rideStats } = useUserRideStats(customer.id)
 
   if (isLoading) return <LoadingState />
@@ -113,12 +113,6 @@ export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
             value={metaData.middle_name || 'N/A'}
           />
           <InfoRow index={4} label="Gender" value={metaData.gender || 'N/A'} />
-          <InfoRow
-            index={5}
-            label="Photo"
-            value={kycDetails.selfie_image || customer.image_url || ''}
-            isImage
-          />
           <InfoRow index={6} label="Date of Birth" value={kycDetails.dob} />
           <InfoRow index={7} label="Email Address" value={customer.email} />
           <InfoRow

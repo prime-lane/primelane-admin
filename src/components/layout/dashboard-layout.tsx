@@ -9,7 +9,7 @@ import { useLogout } from '@/features/auth/hooks/use-current-user'
 
 export const DashboardLayout = () => {
   const logout = useLogout()
-  
+
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'white' }}>
       <Drawer
@@ -38,6 +38,7 @@ export const DashboardLayout = () => {
               icon={item.icon}
               to={item.to}
               hasSubmenu={item.hasSubmenu}
+              children={item.children}
             />
           ))}
         </nav>

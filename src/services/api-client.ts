@@ -37,7 +37,7 @@ class ApiClient {
             if (!response.ok) {
                 if (response.status === 401 && !window.location.pathname.startsWith('/auth')) {
                     setTimeout(() => {
-                        logout()
+                        // logout()
                     }, 2000)
                 }
 

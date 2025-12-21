@@ -43,13 +43,14 @@ export const useCustomer = (id: string) => {
     })
 }
 
-export const useKycDetails = () => {
+export const useKycDetails = (userId: string) => {
     return useQuery({
-        queryKey: ['kyc-details'],
+        queryKey: ['kyc-details', userId],
         queryFn: async () => {
-            const response = await apiClient.get<KycDetails>(e.KYC.MY_KYC)
+            const response = await apiClient.get<KycDetails>(e.KYC.BY_ID(userId))
             return response.data
         },
+        enabled: !!userId,
     })
 }
 
@@ -69,7 +70,8 @@ export const useCustomerReviews = (userId?: string) => {
     return useQuery({
         queryKey: ['reviews', userId],
         queryFn: async () => {
-            const endpoint = `${e.REVIEWS.ROOT}`
+            if (!userId) throw new Error('User ID is required')
+            const endpoint = e.REVIEWS.ROOT(userId)
             const response = await apiClient.get<{ reviews: Review[]; pagination: PaginatedResponse<unknown>['pagination'] }>(endpoint)
             return transformPaginatedResponse(response.data, 'reviews')
         },

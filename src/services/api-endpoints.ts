@@ -47,20 +47,23 @@ export const API_ENDPOINTS = {
         USER_RIDE_STATS: (id: string) => `/analytics/user-ride-stats/${id}`,
     },
     REVIEWS: {
-        ROOT: '/reviews/my-reviews',
+        ROOT: (userId: string) => `/reviews/${userId}`,
     },
     WALLETS: {
         MY_WALLET: '/wallets/my-wallet',
     },
     TRANSACTIONS: {
-        MY_TRANSACTIONS: '/transactions/my-transactions',
+        MY_TRANSACTIONS: '/transactions',
     },
     TRIPS: {
         ROOT: '/rides',
         BY_ID: (id: string) => `/rides/${id}`,
     },
+    VEHICLES: {
+        BY_DRIVER_ID: (id: string) => `/vehicles/driver/${id}`,
+    },
     KYC: {
         VERIFY: (idType: 'nin' | 'dl' | 'ip') => `/kyc/verify/${idType}`,
-        MY_KYC: '/kyc/my-kyc',
+        BY_ID: (userId: string) => `/kyc/${userId}`,
     },
 } as const

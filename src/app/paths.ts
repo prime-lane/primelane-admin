@@ -18,7 +18,14 @@ export const path = {
     PRICING_CONFIG: '/dashboard/pricing-config',
     TRIPS: '/dashboard/trips',
     TRIP_DETAILS: '/dashboard/trips/:id',
-    FINANCE: '/dashboard/finance',
+    FINANCE: {
+      ROOT: '/dashboard/finance',
+      COMMISSION: '/dashboard/finance/commission',
+      DRIVER_SETTLEMENTS: '/dashboard/finance/driver-settlements',
+      DRIVER_WALLET: '/dashboard/finance/driver-wallet',
+      CUSTOMER_WALLET: '/dashboard/finance/customer-wallet',
+      REFUND: '/dashboard/finance/refund',
+    },
     ADMIN_MANAGEMENT: '/dashboard/admin-management',
   },
 } as const
