@@ -9,7 +9,7 @@ export const columns: ColumnDef<Trip>[] = [
     header: 'Trip ID',
     cell: ({ row }) => (
       <span className="text-sm">
-        #{row.original.id.substring(0, 8).toUpperCase()}
+        #{row.original?.id?.substring(0, 8).toUpperCase()}
       </span>
     ),
   },
@@ -31,7 +31,7 @@ export const columns: ColumnDef<Trip>[] = [
             : 'N/A'}
         </span>
         <span className="text-xs text-gray-500">
-          #{row.original.riderId.substring(0, 8).toUpperCase()}
+          #{row.original?.riderId?.substring(0, 8).toUpperCase()}
         </span>
       </div>
     ),
@@ -48,7 +48,7 @@ export const columns: ColumnDef<Trip>[] = [
         </span>
         {row.original.driverId && (
           <span className="text-xs text-gray-500">
-            #{row.original.driverId.substring(0, 8).toUpperCase()}
+            #{row.original?.driverId?.substring(0, 8).toUpperCase()}
           </span>
         )}
       </div>

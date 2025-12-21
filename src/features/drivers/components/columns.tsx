@@ -9,7 +9,7 @@ export const driverColumns: ColumnDef<Driver>[] = [
     accessorKey: 'id',
     header: 'ID',
     cell: ({ row }) => (
-      <span className="text-sm">{row.original.id.substring(0, 8)}...</span>
+      <span className="text-sm">{row.original?.id?.substring(0, 8)}...</span>
     ),
   },
   {

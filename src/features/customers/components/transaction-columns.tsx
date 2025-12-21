@@ -10,7 +10,7 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
     header: 'ID',
     cell: ({ row }) => (
       <span className="text-sm text-neutral-600">
-        {row.original.id.substring(0, 8)}...
+        {row.original?.id?.substring(0, 8)}...
       </span>
     ),
   },
