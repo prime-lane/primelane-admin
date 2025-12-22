@@ -59,6 +59,10 @@ export const API_ENDPOINTS = {
         ROOT: '/rides',
         BY_ID: (id: string) => `/rides/${id}`,
     },
+    VEHICLE_CATEGORIES: {
+        CONFIGURE_PRICING: (categoryId: string, type: string) =>
+            `/vehicle-categories/configure-pricing/${categoryId}/${type}`,
+    },
     VEHICLES: {
         BY_DRIVER_ID: (id: string) => `/vehicles/driver/${id}`,
     },

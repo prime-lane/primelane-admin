@@ -51,6 +51,11 @@ const PricingConfig = lazy(() =>
     default: module.PricingConfig,
   })),
 )
+const PricingConfigDetails = lazy(() =>
+  import('@/features/pricing-config/pricing-config-details').then((module) => ({
+    default: module.PricingConfigDetails,
+  })),
+)
 const Trips = lazy(() =>
   import('@/features/trips/trips').then((module) => ({
     default: module.Trips,
@@ -175,6 +180,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <PricingConfig />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.PRICING_CONFIG_DETAILS,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <PricingConfigDetails />
           </Suspense>
         ),
       },

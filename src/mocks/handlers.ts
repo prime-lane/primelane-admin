@@ -3,6 +3,41 @@ import { http, HttpResponse } from 'msw'
 const API_BASE_URL = import.meta.env.VITE_PRIMELANE_API_BASE_URL || 'https://prime-lane-uvtut.ondigitalocean.app'
 
 export const handlers = [
+  // Pricing Config
+  http.get('*/vehicle-categories/configure-pricing/:categoryId/:type', () => {
+    return HttpResponse.json({
+      success: true,
+      data: {
+        id: '08bd1a56-9ad1-484a-8986-bc250e8cd601',
+        slug: 'BUSINESS',
+        name: 'Business',
+        description: 'Premium sedans for everyday',
+        hourly_base_price: 200000,
+        hourly_per_km: 1500,
+        hourly_per_min: 1500,
+        hourly_trip_commission_percentage: 10,
+        hourly_cancellation_base: 2200000,
+        hourly_cancellation_percentage: 10,
+        hourly_cancellation_fee_type: 'fixed',
+        one_way_base_price: 150000,
+        one_way_per_km: 1000,
+        one_way_per_min: 800,
+        one_way_trip_commission_percentage: 10,
+        one_way_cancellation_base: 1500000,
+        one_way_cancellation_percentage: 10,
+        one_way_cancellation_fee_type: 'percentage',
+      },
+    })
+  }),
+
+  http.put('*/vehicle-categories/configure-pricing/:categoryId/:type', () => {
+    return HttpResponse.json({
+      success: true,
+      data: {
+        id: '08bd1a56-9ad1-484a-8986-bc250e8cd601',
+      },
+    })
+  }),
 
   // my ride analytics
   http.get(`${API_BASE_URL}/analytics/my-ride-stats`, () => {
