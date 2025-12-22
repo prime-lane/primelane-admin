@@ -47,6 +47,7 @@ All code (human or AI-generated) must follow these rules.
 - Use reusable components from ui folder if it exists otherwise create one
 - DRY principle. Separate presentational components/utils from logic.
 - use typescript interface for component props
+- avoid the use of margin when styling where possible especially in nested div/components, use gap/spacing if possible (apply this rule to components that are wrapped in a parent tag)
 
 ### TypeScript
 
