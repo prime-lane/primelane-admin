@@ -1,5 +1,5 @@
 import { API_ENDPOINTS } from '@/services/api-endpoints'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import type { PricingConfigFormData } from '../schemas/pricing-config-schema'
 import { apiClient } from '@/services/api-client'
@@ -41,10 +41,14 @@ export const usePricingConfig = (categoryId: string, type: string) => {
     })
 }
 
+
+
 export const useUpdatePricingConfig = (categoryId: string, type: string) => {
+    const queryClient = useQueryClient()
+
     return useMutation({
         mutationFn: async (data: PricingConfigFormData) => {
-            const response = await apiClient.put(
+            const response = await apiClient.patch(
                 API_ENDPOINTS.VEHICLE_CATEGORIES.CONFIGURE_PRICING(categoryId, type),
                 data,
             )
@@ -52,6 +56,8 @@ export const useUpdatePricingConfig = (categoryId: string, type: string) => {
         },
         onSuccess: () => {
             toast.success('Pricing configuration updated successfully')
+            queryClient.invalidateQueries({ queryKey: ['vehicle-category', categoryId] })
+            queryClient.invalidateQueries({ queryKey: ['vehicle-categories'] })
         },
         onError: (error: any) => {
             toast.error(

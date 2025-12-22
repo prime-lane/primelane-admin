@@ -37,3 +37,10 @@ export const formatDuration = (seconds: string | number | null | undefined) => {
   const mins = Math.floor(secs / 60)
   return `${mins} minutes`
 }
+
+export const formatTitle = (id: string) => {
+  return id
+    .split('_')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}

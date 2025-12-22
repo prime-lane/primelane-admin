@@ -10,6 +10,9 @@ export const MuiTextField: Components<Theme>['MuiTextField'] = {
                 fontSize: '12px',
                 color: colors.red[100]
             },
+            '& .MuiOutlinedInput-root': {
+                bgcolor: 'white',
+            },
         },
     },
     variants: [

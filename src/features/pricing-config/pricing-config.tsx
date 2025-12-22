@@ -1,23 +1,8 @@
 import { path } from '@/app/paths'
 import { Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-
-interface PricingItem {
-  id: string
-  label: string
-}
-
-const oneWayItems: PricingItem[] = [
-  { id: 'business', label: 'Business' },
-  { id: 'business_suv', label: 'Business SUV' },
-  { id: 'first_class', label: 'First Class' },
-]
-
-const hourlyItems: PricingItem[] = [
-  { id: 'hourly_business', label: 'Business' },
-  { id: 'hourly_business_suv', label: 'Business SUV' },
-  { id: 'hourly_first_class', label: 'First Class' },
-]
+import { useVehicleCategories } from './api/use-vehicle-categories'
+import { LoadingState, ErrorState } from '@/components/ui/loading-error-states'
 
 const SectionHeader = ({ title }: { title: string }) => (
   <h2 className="text-base font-semibold text-neutral-800">{title}</h2>
@@ -55,6 +40,12 @@ const PricingRow = ({ id, label }: { id: string; label: string }) => {
 }
 
 export const PricingConfig = () => {
+  const { data: categoriesData, isLoading, error } = useVehicleCategories()
+
+  if (isLoading) return <LoadingState />
+  if (error) return <ErrorState message="Failed to load vehicle categories" />
+  console.log(categoriesData)
+
   return (
     <>
       <h1 className="text-2xl font-bold text-neutral-900 mb-12">
@@ -63,19 +54,14 @@ export const PricingConfig = () => {
 
       <div className="max-w-lg mx-auto space-y-10">
         <section className="space-y-4">
-          <SectionHeader title="One-way Configuration" />
+          <SectionHeader title="Vehicle Categories" />
           <div className="space-y-4">
-            {oneWayItems.map((item) => (
-              <PricingRow key={item.id} id={item.id} label={item.label} />
-            ))}
-          </div>
-        </section>
-
-        <section className="space-y-4">
-          <SectionHeader title="Hourly Configuration" />
-          <div className="space-y-4">
-            {hourlyItems.map((item) => (
-              <PricingRow key={item.id} id={item.id} label={item.label} />
+            {categoriesData?.categories?.map((category) => (
+              <PricingRow
+                key={category.id}
+                id={category.id}
+                label={category.name}
+              />
             ))}
           </div>
         </section>
