@@ -6,10 +6,8 @@ import {
   CustomTabPanel as TabPanel,
   a11yProps,
 } from '@/components/ui/tab-panel'
-import { getInitials } from '@/lib/utils'
 import { colors } from '@/theme/colors'
 import {
-  Avatar,
   Button,
   Dialog,
   DialogActions,
@@ -28,16 +26,10 @@ import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useCustomerStats } from './api/use-customer-stats'
-import {
-  useCustomer,
-  useCustomerReviews,
-  useCustomerTransactions,
-  useCustomerWallet,
-  useUpdateCustomer,
-} from './api/use-customers'
+import { useCustomer, useCustomerReviews } from './api/use-customers'
+import { useManageUserStatus } from '../shared/api/use-users'
 import { CustomerOverview } from './components/customer-overview'
 import { CustomerRatings } from './components/customer-ratings'
-import { CustomerWallet } from './components/customer-wallet'
 import { IdentityDetails } from './components/identity-details'
 
 export const CustomerDetails = () => {
@@ -46,10 +38,8 @@ export const CustomerDetails = () => {
   const customer = customerResp?.user
   const { data: stats } = useCustomerStats(id!)
   const { data: reviews } = useCustomerReviews(id!)
-  const { data: wallet, isLoading: isWalletLoading } = useCustomerWallet(id!)
-  const { data: transactions } = useCustomerTransactions({ user_id: id! })
-  const { mutate: updateCustomer, isPending: isUpdating } =
-    useUpdateCustomer(id)
+  const { mutate: manageUserStatus, isPending: isUpdating } =
+    useManageUserStatus(id)
   const navigate = useNavigate()
 
   // Menu State
@@ -92,12 +82,12 @@ export const CustomerDetails = () => {
       return
     }
 
-    const newStatus = dialogType === 'inactive' ? 'inactive' : 'active'
+    const action = dialogType === 'inactive' ? 'deactivate' : 'activate'
 
-    updateCustomer(
+    manageUserStatus(
       {
-        status: newStatus,
-        // In a real app we might send the reason too e.g. status_reason: reason
+        action,
+        reason,
       },
       {
         onSuccess: () => {
@@ -116,10 +106,6 @@ export const CustomerDetails = () => {
     setTabValue(newValue)
   }
 
-  const avatarInitials = getInitials(
-    `${customer?.first_name}` || '',
-    `${customer?.last_name}` || '',
-  )
   const customerName = `${customer?.first_name} ${customer?.last_name}`
 
   if (isLoading) return <LoadingState />
@@ -139,19 +125,6 @@ export const CustomerDetails = () => {
       />
       <div className="flex justify-between items-center">
         <div className="flex gap-4 items-center">
-          <Avatar
-            src={customer?.image_url || undefined}
-            sx={{
-              width: 51,
-              height: 51,
-              bgcolor: 'orange.100',
-              color: 'neutral.700',
-              fontSize: '0.875rem',
-              fontWeight: 500,
-            }}
-          >
-            {avatarInitials}
-          </Avatar>
           <div className="flex flex-col gap-[2px]">
             <span className="text-xl text-black font-semibold">
               {customerName}
@@ -235,6 +208,7 @@ export const CustomerDetails = () => {
                       ? 'Reason for Deactivation'
                       : 'Reason for activation'
                   }
+                  fullWidth
                   onChange={(e) => setReason(e.target.value)}
                 >
                   <MenuItem value="" disabled>
@@ -268,12 +242,12 @@ export const CustomerDetails = () => {
             </div>
           </DialogContent>
           <DialogActions sx={{ p: 3, pt: 0 }}>
-            <Button onClick={handleCloseDialog} variant="contained" fullWidth>
+            <Button onClick={handleCloseDialog} variant="outlined" fullWidth>
               Cancel
             </Button>
             <Button
               onClick={handleConfirmStatusChange}
-              variant="outlined"
+              variant="contained"
               fullWidth
               disabled={isUpdating}
             >
@@ -291,7 +265,6 @@ export const CustomerDetails = () => {
           <Tab label="Overview" {...a11yProps(0)} />
           <Tab label="Identity Details" {...a11yProps(1)} />
           <Tab label="Ratings" {...a11yProps(2)} />
-          <Tab label="Wallet" {...a11yProps(3)} />
         </Tabs>
       </div>
 
@@ -305,55 +278,6 @@ export const CustomerDetails = () => {
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
         <CustomerRatings stats={stats} reviews={reviews?.items} />
-      </TabPanel>
-      <TabPanel value={tabValue} index={3}>
-        {/* <CustomerWallet
-          wallet={{
-            id: 'wallet-123',
-            user_id: 'user-123',
-            virtual_bank_account_number: '1234567890',
-            virtual_bank_account_name: 'John Doe',
-            virtual_bank_code: '057',
-            virtual_bank_name: 'GTBank',
-            current_balance: 150000,
-            last_balance: 145000,
-            currency: 'NGN',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          }}
-          transactions={[
-            {
-              id: 'tx-1',
-              user_id: 'user-123',
-              transaction_type: 'CR',
-              description: 'Wallet Top up',
-              reference: 'ref-1',
-              ride_id: null,
-              amount: 5000,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString(),
-              status: 'Completed',
-            },
-            {
-              id: 'tx-2',
-              user_id: 'user-123',
-              transaction_type: 'DR',
-              description: 'Ride Payment',
-              reference: 'ref-2',
-              ride_id: 'ride-1',
-              amount: 2500,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString(),
-              status: 'Completed',
-            },
-          ]}
-          isLoading={false}
-        /> */}
-        <CustomerWallet
-          wallet={wallet}
-          transactions={transactions?.items}
-          isLoading={isWalletLoading}
-        />
       </TabPanel>
     </>
   )

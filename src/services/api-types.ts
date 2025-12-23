@@ -24,3 +24,10 @@ export interface PaginatedResponse<T> {
         limit: number | string
     }
 }
+
+export type UserType = 'driver' | 'customer'
+
+export interface ManageUserStatusRequest {
+    action: 'activate' | 'deactivate'
+    reason: string
+}

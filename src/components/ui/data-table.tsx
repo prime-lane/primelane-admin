@@ -18,12 +18,22 @@ import {
 } from '@mui/material'
 import { TablePagination } from './data-controls'
 
+import { TableSkeleton } from './table-skeleton'
+
 interface DataTableProps<T> {
   data: T[]
   columns: ColumnDef<T>[]
   enableRowSelection?: boolean
   pageSize?: number
   onRowClick?: (row: T) => void
+  isLoading?: boolean
+  pagination?: {
+    currentPage: number
+    totalPages: number
+    totalItems: number
+  }
+  onPageChange?: (page: number) => void
+  onPageSizeChange?: (size: number) => void
 }
 
 export function DataTable<T>({
@@ -32,6 +42,10 @@ export function DataTable<T>({
   enableRowSelection = true,
   pageSize: initialPageSize = 7,
   onRowClick,
+  isLoading = false,
+  pagination: backendPagination,
+  onPageChange,
+  onPageSizeChange,
 }: DataTableProps<T>) {
   const [rowSelection, setRowSelection] = useState({})
   const [pagination, setPagination] = useState({
@@ -39,11 +53,15 @@ export function DataTable<T>({
     pageSize: initialPageSize,
   })
 
+  const useFrontendPagination = !backendPagination
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    getPaginationRowModel: useFrontendPagination
+      ? getPaginationRowModel()
+      : undefined,
     onRowSelectionChange: setRowSelection,
     onPaginationChange: setPagination,
     state: {
@@ -51,10 +69,13 @@ export function DataTable<T>({
       pagination,
     },
     enableRowSelection,
+    manualPagination: !useFrontendPagination,
+    pageCount: backendPagination?.totalPages ?? -1,
   })
 
-  const totalPages = table.getPageCount()
-  const currentPage = pagination.pageIndex + 1
+  const totalPages = backendPagination?.totalPages ?? table.getPageCount()
+  const currentPage = backendPagination?.currentPage ?? pagination.pageIndex + 1
+  const totalItems = backendPagination?.totalItems ?? data.length
 
   return (
     <div>
@@ -89,35 +110,46 @@ export function DataTable<T>({
             ))}
           </TableHead>
           <TableBody>
-            {table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                hover
-                onClick={() => onRowClick?.(row.original)}
-                sx={{
-                  cursor:
-                    onRowClick || enableRowSelection ? 'pointer' : 'default',
-                  '&:hover': {
-                    bgcolor: 'neutral.50',
-                  },
-                }}
-              >
-                {enableRowSelection && (
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={row.getIsSelected()}
-                      onChange={row.getToggleSelectedHandler()}
-                      size="small"
-                    />
-                  </TableCell>
-                )}
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
+            {isLoading ? (
+              <TableSkeleton
+                rows={pagination.pageSize}
+                columns={columns.length}
+                includeCheckbox={enableRowSelection}
+              />
+            ) : (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  hover
+                  onClick={() => onRowClick?.(row.original)}
+                  sx={{
+                    cursor:
+                      onRowClick || enableRowSelection ? 'pointer' : 'default',
+                    '&:hover': {
+                      bgcolor: 'neutral.50',
+                    },
+                  }}
+                >
+                  {enableRowSelection && (
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={row.getIsSelected()}
+                        onChange={row.getToggleSelectedHandler()}
+                        size="small"
+                      />
+                    </TableCell>
+                  )}
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -126,11 +158,21 @@ export function DataTable<T>({
         currentPage={currentPage}
         totalPages={totalPages}
         pageSize={pagination.pageSize}
-        onPageChange={(page) => table.setPageIndex(page - 1)}
-        onPageSizeChange={(size) => {
-          setPagination({ pageIndex: 0, pageSize: size })
+        onPageChange={(page) => {
+          if (onPageChange) {
+            onPageChange(page)
+          } else {
+            table.setPageIndex(page - 1)
+          }
         }}
-        totalItems={data.length} // ask backend if pagination should come from server
+        onPageSizeChange={(size) => {
+          if (onPageSizeChange) {
+            onPageSizeChange(size)
+          } else {
+            setPagination({ pageIndex: 0, pageSize: size })
+          }
+        }}
+        totalItems={totalItems}
       />
     </div>
   )

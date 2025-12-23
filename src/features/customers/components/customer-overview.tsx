@@ -1,6 +1,7 @@
 import { Card, CardContent } from '@mui/material'
 import type { Customer } from '../types'
 import type { CustomerStats } from '../api/use-customer-stats'
+import { formatCurrency } from '@/lib/utils'
 
 const DetailItem = ({
   label,
@@ -66,7 +67,7 @@ export const CustomerOverview = ({
             label="Completed"
             value={stats?.total_accepted_rides || 0}
           />
-          <TripSummaryCard label="Wallet Balance" value="N/A" />
+          <TripSummaryCard label="Wallet Balance" value={formatCurrency(stats?.wallet_balance || 0)} />
           <TripSummaryCard
             label="Average Rating"
             value={stats?.average_rating || 0}

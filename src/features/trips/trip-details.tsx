@@ -78,8 +78,8 @@ export const TripDetails = () => {
 
       <div className="space-y-6 max-w-lg mx-auto">
         {/* Rider & Driver Info */}
-        <div className="grid grid-cols-1 gap-4">
-          <h3 className="text-sm font-semibold text-neutral-600">
+        <div className="grid grid-cols-1 gap-2">
+          <h3 className="text-sm font-bold text-neutral-600">
             Parties Involved
           </h3>
           <div className="flex flex-col gap-6">
@@ -106,7 +106,7 @@ export const TripDetails = () => {
         </div>
 
         {/* Trip Info */}
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-2">
           <h3 className="text-sm font-semibold text-neutral-600">
             Trip Information
           </h3>
@@ -132,7 +132,7 @@ export const TripDetails = () => {
         </div>
 
         {/* Location Info */}
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-2">
           <h3 className="text-sm font-semibold text-neutral-600">
             Location Details
           </h3>

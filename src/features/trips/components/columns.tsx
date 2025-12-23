@@ -14,14 +14,14 @@ export const columns: ColumnDef<Trip>[] = [
     ),
   },
   {
-    accessorKey: 'createdAt',
+    accessorKey: 'created_at',
     header: 'Trip Date',
     cell: ({ row }) => (
-      <span className="text-sm">{formatDate(row.original.createdAt)}</span>
+      <span className="text-sm">{formatDate(row.original?.created_at)}</span>
     ),
   },
   {
-    accessorKey: 'riderId',
+    accessorKey: 'rider_id',
     header: 'Rider Name/ID',
     cell: ({ row }) => (
       <div className="flex flex-col gap-[2px]">
@@ -31,13 +31,13 @@ export const columns: ColumnDef<Trip>[] = [
             : 'N/A'}
         </span>
         <span className="text-xs text-gray-500">
-          #{row.original?.riderId?.substring(0, 8).toUpperCase()}
+          #{row.original?.rider_id?.substring(0, 8).toUpperCase()}
         </span>
       </div>
     ),
   },
   {
-    accessorKey: 'driverId',
+    accessorKey: 'driver_id',
     header: 'Driver Name/ID',
     cell: ({ row }) => (
       <div className="flex flex-col gap-[2px]">
@@ -46,46 +46,46 @@ export const columns: ColumnDef<Trip>[] = [
             ? `${row.original.driver.first_name} ${row.original.driver.last_name}`
             : 'N/A'}
         </span>
-        {row.original.driverId && (
+        {row.original.driver_id && (
           <span className="text-xs text-gray-500">
-            #{row.original?.driverId?.substring(0, 8).toUpperCase()}
+            #{row.original?.driver_id?.substring(0, 8).toUpperCase()}
           </span>
         )}
       </div>
     ),
   },
   {
-    accessorKey: 'tripType',
+    accessorKey: 'ride_type',
     header: 'Trip Type',
     cell: ({ row }) => (
-      <span className="text-sm">{row.original.tripType || 'N/A'}</span>
+      <span className="text-sm">{row.original.ride_type || 'N/A'}</span>
     ),
   },
   {
-    accessorKey: 'vehicleCategory',
+    accessorKey: 'vehicle_category',
     header: 'Vehicle Category',
     cell: ({ row }) => (
-      <span className="text-sm">{row.original.vehicleCategory || 'N/A'}</span>
+      <span className="text-sm">{row.original.vehicle_category || 'N/A'}</span>
     ),
   },
   {
-    accessorKey: 'actualFare',
+    accessorKey: 'actual_fare',
     header: 'Actual Fare',
     cell: ({ row }) => (
       <span className="text-sm">
-        {row.original.actualFare
-          ? `N${row.original.actualFare.toLocaleString()}`
+        {row.original.actual_fare
+          ? `N${row.original.actual_fare.toLocaleString()}`
           : 'N/A'}
       </span>
     ),
   },
   {
-    accessorKey: 'driversEarning',
+    accessorKey: 'drivers_earning',
     header: "Driver's Earning",
     cell: ({ row }) => (
       <span className="text-sm">
-        {row.original.driversEarning
-          ? `N${row.original.driversEarning.toLocaleString()}`
+        {row.original.drivers_earning
+          ? `N${row.original.drivers_earning.toLocaleString()}`
           : 'N/A'}
       </span>
     ),
@@ -102,12 +102,12 @@ export const columns: ColumnDef<Trip>[] = [
     ),
   },
   {
-    accessorKey: 'calculationFee',
-    header: 'Calculation Fee',
+    accessorKey: 'calculation_fee',
+    header: 'Cancellation Fee',
     cell: ({ row }) => (
       <span className="text-sm">
-        {row.original.calculationFee
-          ? `N${row.original.calculationFee.toLocaleString()}`
+        {row.original.cancellation_fee
+          ? `N${row.original.cancellation_fee.toLocaleString()}`
           : 'N/A'}
       </span>
     ),

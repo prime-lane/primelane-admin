@@ -1,24 +1,27 @@
-import { useState } from 'react'
+import { path } from '@/app/paths'
+import { FilterButton, SearchInput } from '@/components/ui/data-controls'
+import { DataTable } from '@/components/ui/data-table'
+import { ErrorState } from '@/components/ui/loading-error-states'
+import { useDebounce } from '@/hooks/use-debounce'
 import { Box } from '@mui/material'
 import { AltArrowDown } from '@solar-icons/react'
-import { DataTable } from '@/components/ui/data-table'
-import { SearchInput, FilterButton } from '@/components/ui/data-controls'
-import { customerColumns } from './components/columns'
-import { useCustomers } from './api/use-customers'
-import { LoadingState, ErrorState } from '@/components/ui/loading-error-states'
-import { useDebounce } from '@/hooks/use-debounce'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useCustomers } from './api/use-customers'
+import { customerColumns } from './components/columns'
 import type { Customer } from './types'
-import { path } from '@/app/paths'
 
 export const Customers = () => {
   const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(10)
   const debouncedSearch = useDebounce(searchTerm, 500)
 
   const { data, isLoading, error } = useCustomers({
     search: debouncedSearch,
-    limit: 100,
+    page,
+    limit,
     user_type: 'customer',
   })
 
@@ -42,17 +45,28 @@ export const Customers = () => {
         </FilterButton>
       </Box>
 
-      {isLoading ? (
-        <LoadingState />
-      ) : (
-        <DataTable
-          data={customers}
-          columns={customerColumns}
-          onRowClick={(row: Customer) =>
-            navigate(path.DASHBOARD.CUSTOMER_DETAILS.replace(':id', row.id))
-          }
-        />
-      )}
+      <DataTable
+        data={customers}
+        columns={customerColumns}
+        onRowClick={(row: Customer) =>
+          navigate(path.DASHBOARD.CUSTOMER_DETAILS.replace(':id', row.id))
+        }
+        isLoading={isLoading}
+        pagination={
+          data?.pagination
+            ? {
+                currentPage: Number(data.pagination.current_page),
+                totalPages: data.pagination.total_pages,
+                totalItems: data.pagination.total_items,
+              }
+            : undefined
+        }
+        onPageChange={setPage}
+        onPageSizeChange={(newSize) => {
+          setLimit(newSize)
+          setPage(1)
+        }}
+      />
     </div>
   )
 }

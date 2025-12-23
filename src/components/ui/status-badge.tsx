@@ -1,5 +1,6 @@
 import { Chip, type ChipProps } from '@mui/material'
 
+export type TripStatus = 'SCHEDULED' | 'COMPLETED'
 export type StatusVariant =
   | 'active'
   | 'pending'
@@ -10,59 +11,89 @@ export type StatusVariant =
   | 'accepted'
   | 'verified'
 
+  // driver status
+  | 'PENDING_VERIFICATION' | TripStatus
+
+
 interface StatusBadgeProps {
   status: StatusVariant
   sx?: ChipProps['sx']
 }
 
-const statusConfig: Record<
-  StatusVariant,
-  { label: string; color: string; bgcolor: string }
-> = {
-  active: {
-    label: 'Active',
-    color: 'green.400',
-    bgcolor: '#22C55E1A',
-  },
-  pending: {
-    label: 'Pending',
-    color: 'orange.400',
-    bgcolor: '#F973161A',
-  },
-  deactivated: {
-    label: 'Deactivated',
-    color: 'red.500',
-    bgcolor: '#EF44441A',
-  },
-  completed: {
-    label: 'Completed',
-    color: 'green.400',
-    bgcolor: '#22C55E1A',
-  },
-  cancelled: {
-    label: 'Cancelled',
-    color: 'red.500',
-    bgcolor: '#EF44441A',
-  },
-  started: {
-    label: 'On trip',
-    color: 'blue.400',
-    bgcolor: '#3B82F61A',
-  },
-  accepted: {
-    label: 'Accepted',
-    color: 'purple.400',
-    bgcolor: '#A855F71A',
-  },
-  verified: {
-    label: 'Verified',
-    color: 'green.400',
-    bgcolor: '#22C55E1A',
-  },
+const getStatusConfig = (status: string) => {
+  switch (status) {
+    case 'active':
+      return {
+        label: 'Active',
+        color: 'green.400',
+        bgcolor: '#22C55E1A',
+      }
+    case 'pending':
+      return {
+        label: 'Pending',
+        color: 'orange.400',
+        bgcolor: '#F973161A',
+      }
+    case 'deactivated':
+      return {
+        label: 'Deactivated',
+        color: 'red.500',
+        bgcolor: '#EF44441A',
+      }
+    case 'completed':
+    case 'COMPLETED':
+      return {
+        label: 'Completed',
+        color: 'green.400',
+        bgcolor: '#22C55E1A',
+      }
+    case 'cancelled':
+      return {
+        label: 'Cancelled',
+        color: 'red.500',
+        bgcolor: '#EF44441A',
+      }
+    case 'started':
+      return {
+        label: 'On trip',
+        color: 'blue.400',
+        bgcolor: '#3B82F61A',
+      }
+    case 'accepted':
+      return {
+        label: 'Accepted',
+        color: 'purple.400',
+        bgcolor: '#A855F71A',
+      }
+    case 'verified':
+      return {
+        label: 'Verified',
+        color: 'green.400',
+        bgcolor: '#22C55E1A',
+      }
+    case 'PENDING_VERIFICATION':
+      return {
+        label: 'Pending Verification',
+        color: 'orange.400',
+        bgcolor: '#F973161A',
+      }
+    case 'SCHEDULED':
+      return {
+        label: 'Scheduled',
+        color: 'blue.400',
+        bgcolor: '#3B82F61A',
+      }
+    default:
+      return {
+        label: 'N/A',
+        color: 'neutral.500',
+        bgcolor: 'neutral.100',
+      }
+  }
 }
 
 export const StatusBadge = ({ status, sx }: StatusBadgeProps) => {
-  const config = statusConfig[status] || statusConfig.pending // Fallback to pending if invalid
+  const config = getStatusConfig(status)
 
   return (
     <Chip

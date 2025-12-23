@@ -22,7 +22,7 @@ export const getInitials = (firstName: string, lastName: string) => {
 }
 
 export function formatCurrency(amount: number | string | null | undefined) {
-  if (!amount) return 'N0.00'
+  if (!amount) return '₦0.00'
   const numericAmount = typeof amount === 'string' ? parseFloat(amount) : amount
   return new Intl.NumberFormat('en-NG', {
     style: 'currency',
@@ -36,4 +36,15 @@ export const formatDuration = (seconds: string | number | null | undefined) => {
   if (isNaN(secs)) return '-'
   const mins = Math.floor(secs / 60)
   return `${mins} minutes`
+}
+
+export const formatTitle = (id: string) => {
+  return id
+    .split('_')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
+
+export const formatGender = (initial: 'M' | 'F') => {
+  return initial === 'M' ? 'Male' : 'Female'
 }

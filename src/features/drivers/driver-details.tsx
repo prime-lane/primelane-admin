@@ -11,18 +11,18 @@ import { colors } from '@/theme/colors'
 import {
   Avatar,
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   FormControl,
+  FormControlLabel,
+  FormGroup,
   InputLabel,
   Menu,
   MenuItem,
   Select,
-  Checkbox,
-  FormGroup,
-  FormControlLabel,
   Tab,
   Tabs,
 } from '@mui/material'
@@ -30,19 +30,12 @@ import { AltArrowDown } from '@solar-icons/react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
-import {
-  useDriver,
-  useDriverStats,
-  useDriverReviews,
-  useDriverTransactions,
-  useDriverWallet,
-  useUpdateDriver,
-} from './api/use-drivers'
+import { useDriver, useDriverReviews, useDriverStats } from './api/use-drivers'
+import { useManageUserStatus } from '../shared/api/use-users'
+import { DriverLicense } from './components/driver-license'
 import { DriverOverview } from './components/driver-overview'
 import { DriverRatings } from './components/driver-ratings'
-import { DriverWallet } from './components/driver-wallet'
 import { IdentityDetails } from './components/identity-details'
-import { DriverLicense } from './components/driver-license'
 import { VehicleDetails } from './components/vehicle-details'
 
 export const DriverDetails = () => {
@@ -51,9 +44,8 @@ export const DriverDetails = () => {
   const driver = driverResp?.user
   const { data: stats } = useDriverStats(id!)
   const { data: reviews } = useDriverReviews(id!)
-  const { data: wallet, isLoading: isWalletLoading } = useDriverWallet(id!)
-  const { data: transactions } = useDriverTransactions({ user_id: id! })
-  const { mutate: updateDriver, isPending: isUpdating } = useUpdateDriver(id)
+  const { mutate: manageUserStatus, isPending: isUpdating } =
+    useManageUserStatus(id)
   const navigate = useNavigate()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -110,11 +102,12 @@ export const DriverDetails = () => {
       return
     }
 
-    const newStatus = dialogType === 'inactive' ? 'inactive' : 'active'
+    const action = dialogType === 'inactive' ? 'deactivate' : 'activate'
 
-    updateDriver(
+    manageUserStatus(
       {
-        status: newStatus,
+        action,
+        reason,
       },
       {
         onSuccess: () => {
@@ -364,7 +357,6 @@ export const DriverDetails = () => {
           <Tab label="Driver License" {...a11yProps(2)} />
           <Tab label="Vehicle Details" {...a11yProps(3)} />
           <Tab label="Ratings" {...a11yProps(4)} />
-          <Tab label="Wallet" {...a11yProps(5)} />
         </Tabs>
       </div>
 
@@ -381,19 +373,11 @@ export const DriverDetails = () => {
       </TabPanel>
 
       <TabPanel value={tabValue} index={3}>
-        <VehicleDetails />
+        <VehicleDetails driverId={id!} />
       </TabPanel>
 
       <TabPanel value={tabValue} index={4}>
         <DriverRatings stats={stats} reviews={reviews?.items} />
-      </TabPanel>
-
-      <TabPanel value={tabValue} index={5}>
-        <DriverWallet
-          wallet={wallet}
-          transactions={transactions?.items}
-          isLoading={isWalletLoading}
-        />
       </TabPanel>
     </>
   )

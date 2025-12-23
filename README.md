@@ -44,7 +44,6 @@ TODO:
 - [x] Design system
 - [x] Components
 - [x] Auth page
-- [x] Home page
 - [x] Customers
 - [x] adjust home bg(admin)
 - [x] Driver
@@ -53,12 +52,31 @@ TODO:
 - [x] adjust customers bg(admin)
 - [x] Customers details
 - [x] Trips details
-- [ ] vehicle details
-- [ ] paginate from backend
-- [ ] Price config page
+- [x] identity details - (pending endpoint) /kyc/my-kyc is not for admin. avail types: nin,dl,ip
+- [x] review
+- [x] improve loading screen (use skeleton)
+- [x] Price config page
+- [x] (de/a)ctivate user endpoint (backend)
+- [x] vehicle details
+- [x] driver license from kyc
+- [x] paginate from backend
+- [x] trip status for trips/rides
 - [ ] Finance
 - [ ] Admin
-- [ ] identity details - /kyc/my-kyc
-- [ ] improve loading screen (use skeleton)
-- [ ] persist search params
+- [ ] all reviews page
+- [ ] Home page (pending endpoint, dont' use this `/analytics/my-ride-stats`)
 - [ ] filter button
+
+
+
+BACKEND
+- [ ] update driver/vehicle (pending, awaiting for chijiooke response)
+- [ ] Home/summary page (pending endpoint)
+- [ ] identity details - (pending endpoint) /kyc/my-kyc is not for admin
+- [ ] endpoint for admin to view customer ratings by id
+- [ ] fetch wallet by id
+- [ ] update user endpoint should allow intl passport
+- [ ] disable nin on edit customer; submit empty string
+- [ ] update vehicle category
+- [ ] trip cancellation fee (pending)
+- [ ] settlements

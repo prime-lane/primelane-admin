@@ -1,0 +1,123 @@
+import { ExportButton, SearchInput } from '@/components/ui/data-controls'
+import { DataTable } from '@/components/ui/data-table'
+import { ErrorState } from '@/components/ui/loading-error-states'
+import { useDebounce } from '@/hooks/use-debounce'
+import { Box, Tab, Tabs } from '@mui/material'
+import { Download } from '@solar-icons/react'
+import { useState } from 'react'
+import { format } from 'date-fns'
+import { useTransactions, useWallet } from './api/use-finance'
+import type { Transaction } from './types'
+import { transactionColumns } from './components/columns'
+
+const exportToCSV = (data: Transaction[], type: string) => {
+  const headers = [
+    'Transaction ID',
+    'Transaction Date',
+    'Driver Name/ID',
+    'Description',
+    'Amount',
+    'Wallet Balance',
+  ]
+  const rows = data.map((item) => [
+    item.id,
+    format(new Date(item.transaction_date), 'MMM dd, yyyy HH:mm'),
+    item.user_name,
+    item.description,
+    item.amount,
+    item.wallet_balance,
+  ])
+
+  const csvContent = [
+    headers.join(','),
+    ...rows.map((row) => row.join(',')),
+  ].join('\n')
+
+  const blob = new Blob([csvContent], { type: 'text/csv' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `driver-wallet-${type}-${format(new Date(), 'yyyy-MM-dd')}.csv`
+  link.click()
+  URL.revokeObjectURL(url)
+}
+
+export const DriverWallet = () => {
+  const [activeTab, setActiveTab] = useState(0)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(10)
+  const debouncedSearch = useDebounce(searchTerm, 500)
+
+  const type = activeTab === 0 ? 'debit' : 'credit'
+
+  const { data: walletData, isLoading: walletLoading } = useWallet()
+  const {
+    data: transactionsData,
+    isLoading: transactionsLoading,
+    error,
+  } = useTransactions({
+    search: debouncedSearch,
+    page,
+    page_size: limit,
+  })
+
+  if (error) return <ErrorState message="Failed to load transactions" />
+
+  const transactions = transactionsData?.data || []
+  const wallet = walletData?.data?.[0]
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-4xl">Driver Wallet</h1>
+        {wallet && !walletLoading && (
+          <p className="text-lg text-neutral-600 mt-2">
+            Current Balance:{' '}
+            <span className="font-semibold">
+              ₦{wallet.current_balance.toLocaleString()}
+            </span>
+          </p>
+        )}
+      </div>
+
+      <Tabs
+        value={activeTab}
+        onChange={(_, newValue) => setActiveTab(newValue)}
+      >
+        <Tab label="Debit" />
+        <Tab label="Credit" />
+      </Tabs>
+
+      <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+        <Box sx={{ flex: 1 }}>
+          <SearchInput value={searchTerm} onChange={setSearchTerm} />
+        </Box>
+        <ExportButton
+          onClick={() => exportToCSV(transactions, type)}
+          startIcon={<Download size={16} />}
+        />
+      </Box>
+
+      <DataTable
+        data={transactions}
+        columns={transactionColumns('driver')}
+        isLoading={transactionsLoading}
+        pagination={
+          transactionsData?.pagination
+            ? {
+                currentPage: Number(transactionsData.pagination.current_page),
+                totalPages: transactionsData.pagination.total_pages,
+                totalItems: transactionsData.pagination.total_items,
+              }
+            : undefined
+        }
+        onPageChange={setPage}
+        onPageSizeChange={(size) => {
+          setLimit(size)
+          setPage(1)
+        }}
+      />
+    </div>
+  )
+}

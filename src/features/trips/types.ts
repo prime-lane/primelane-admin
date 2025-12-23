@@ -110,24 +110,24 @@ export interface TripDetail {
 
 export interface Trip {
     id: string
-    riderId: string
-    driverId: string | null
+    rider_id: string
+    driver_id: string | null
     pickup?: Location
     dropoff?: Location
     status: StatusVariant
-    tripType?: string
-    vehicleCategory?: string
-    estimatedFare: number | null
-    actualFare: number | null
-    driversEarning?: number | null
+    ride_type?: string
+    vehicle_category?: string
+    estimated_fare: number | null
+    actual_fare: number | null
+    drivers_earning?: number | null
     commission?: number | null
-    calculationFee?: number | null
-    estimatedDistance: number | null
-    actualDistance: number | null
-    estimatedDuration: number | null
-    actualDuration: number | null
-    createdAt: string
-    requestedAt: string
+    cancellation_fee?: number | null
+    estimated_distance: number | null
+    actual_distance: number | null
+    estimated_duration: number | null
+    actual_duration: number | null
+    created_at: string
+    requested_at: string
     rider?: Rider
     driver?: Driver
 }

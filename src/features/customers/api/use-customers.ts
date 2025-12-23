@@ -5,7 +5,7 @@ import { API_ENDPOINTS as e } from '@/services/api-endpoints'
 import type { PaginationParams, PaginatedResponse } from '@/services/api-types'
 import { transformPaginatedResponse } from '@/utils/api-utils'
 import { buildQueryParams } from '@/lib/utils'
-import type { Customer, KycDetails, UserRideStats, Review, Wallet } from '../types'
+import type { Customer, UserRideStats, Review, Wallet } from '../types'
 
 interface UseCustomersParams extends PaginationParams {
     user_type?: 'customer' | 'driver'
@@ -43,15 +43,7 @@ export const useCustomer = (id: string) => {
     })
 }
 
-export const useKycDetails = () => {
-    return useQuery({
-        queryKey: ['kyc-details'],
-        queryFn: async () => {
-            const response = await apiClient.get<KycDetails>(e.KYC.MY_KYC)
-            return response.data
-        },
-    })
-}
+
 
 export const useUserRideStats = (id: string) => {
     return useQuery({
@@ -69,7 +61,8 @@ export const useCustomerReviews = (userId?: string) => {
     return useQuery({
         queryKey: ['reviews', userId],
         queryFn: async () => {
-            const endpoint = `${e.REVIEWS.ROOT}`
+            if (!userId) throw new Error('User ID is required')
+            const endpoint = e.REVIEWS.ROOT(userId)
             const response = await apiClient.get<{ reviews: Review[]; pagination: PaginatedResponse<unknown>['pagination'] }>(endpoint)
             return transformPaginatedResponse(response.data, 'reviews')
         },
@@ -81,7 +74,7 @@ export const useCustomerWallet = (userId: string) => {
     return useQuery({
         queryKey: ['wallet', userId],
         queryFn: async () => {
-            const response = await apiClient.get<{ data: Wallet }>(`${e.WALLETS.MY_WALLET}`)
+            const response = await apiClient.get<{ data: Wallet }>(`${e.WALLETS.WALLET}`)
             return response.data.data
         },
         enabled: !!userId,
@@ -118,3 +111,5 @@ export const useUpdateCustomer = (id?: string) => {
         },
     })
 }
+
+

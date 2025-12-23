@@ -28,11 +28,44 @@ export const FilterButton = ({
         border: '1px solid',
         borderColor: 'neutral.200',
         color: 'neutral.500',
+        fontWeight: 400,
         ...sx,
       }}
       {...props}
     >
       {children}
+    </Button>
+  )
+}
+
+interface ExportButtonProps extends Omit<ButtonProps, 'variant'> {
+  onClick: () => void
+  variant?: 'outlined' | 'contained' | 'text'
+  label?: string
+}
+
+export const ExportButton = ({
+  onClick,
+  variant = 'outlined',
+  label = 'Export CSV',
+  sx,
+  ...props
+}: ExportButtonProps) => {
+  return (
+    <Button
+      variant={variant}
+      size="small"
+      onClick={onClick}
+      sx={{
+        textTransform: 'none',
+        borderColor: 'neutral.200',
+        color: 'neutral.500',
+        fontWeight: 400,
+        ...sx,
+      }}
+      {...props}
+    >
+      {label}
     </Button>
   )
 }

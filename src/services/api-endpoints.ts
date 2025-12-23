@@ -33,6 +33,8 @@ export const API_ENDPOINTS = {
         MY_PROFILE: '/users/my-profile',
         PREFERENCES: (userId?: string) =>
             userId ? `/users/preferences/${userId}` : '/users/preferences',
+        MANAGE_STATUS: (id: string, action: 'activate' | 'deactivate') =>
+            `/users/manage/${id}/${action}`,
     },
     CUSTOMERS: {
         ROOT: '/users',
@@ -47,20 +49,30 @@ export const API_ENDPOINTS = {
         USER_RIDE_STATS: (id: string) => `/analytics/user-ride-stats/${id}`,
     },
     REVIEWS: {
-        ROOT: '/reviews/my-reviews',
+        ROOT: (userId: string) => `/reviews/${userId}`,
     },
     WALLETS: {
-        MY_WALLET: '/wallets/my-wallet',
+        WALLET: '/wallets/my-wallet',
     },
     TRANSACTIONS: {
-        MY_TRANSACTIONS: '/transactions/my-transactions',
+        MY_TRANSACTIONS: '/transactions',
     },
     TRIPS: {
         ROOT: '/rides',
         BY_ID: (id: string) => `/rides/${id}`,
     },
+    VEHICLE_CATEGORIES: {
+        ROOT: '/vehicle-categories',
+        BY_ID: (id: string) => `/vehicle-categories/${id}`,
+        CONFIGURE_PRICING: (categoryId: string, type: string) =>
+            `/vehicle-categories/configure-pricing/${categoryId}/${type}`,
+    },
+    VEHICLES: {
+        BY_DRIVER_ID: (id: string) => `/vehicles/driver/${id}`,
+    },
     KYC: {
         VERIFY: (idType: 'nin' | 'dl' | 'ip') => `/kyc/verify/${idType}`,
-        MY_KYC: '/kyc/my-kyc',
+        BY_ID: (userId: string) => `/kyc/${userId}`,
     },
+    ROLES: '/roles',
 } as const

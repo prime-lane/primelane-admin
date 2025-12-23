@@ -1,10 +1,11 @@
 import { ErrorState, LoadingState } from '@/components/ui/loading-error-states'
 import { Avatar } from '@mui/material'
 import { ArrowRightUp } from '@solar-icons/react'
-import { useKycDetails } from '@/features/customers/api/use-customers'
+import { useKycDetails } from '@/features/shared/api/use-users'
 import { useDriverStats } from '../api/use-drivers'
 import type { Driver } from '../types'
 import { StatsCard } from '@/features/customers/components/stats-card'
+import type { StatusVariant } from '@/components/ui/status-badge'
 
 interface IdentityDetailsProps {
   driver: Driver
@@ -41,29 +42,25 @@ const InfoRow = ({
 }
 
 export const IdentityDetails = ({ driver }: IdentityDetailsProps) => {
-  const { data: kycDetails, isLoading, error } = useKycDetails()
+  const { data: kycDetails, isLoading, error } = useKycDetails(driver.id)
   const { data: rideStats } = useDriverStats(driver.id)
 
   if (isLoading) return <LoadingState />
   if (error || !kycDetails)
     return <ErrorState message="Failed to load KYC details" />
 
-  const metaData = kycDetails.meta_data || {}
+  const ninData = kycDetails.meta_data?.nin_verification || ({} as any)
 
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <StatsCard
           label="NIN"
-          value={
-            kycDetails.id_type === 'nin'
-              ? kycDetails.id_number
-              : metaData.nin || 'N/A'
-          }
+          value={ninData.nin || kycDetails.id_number || 'N/A'}
         />
         <StatsCard
           label="ID Verification Status"
-          status={kycDetails.is_id_verified ? 'verified' : 'pending'}
+          status={kycDetails.id_verification_status as StatusVariant}
         />
         <StatsCard
           label="Face Match Score"
@@ -98,37 +95,49 @@ export const IdentityDetails = ({ driver }: IdentityDetailsProps) => {
           <InfoRow
             index={1}
             label="First Name"
-            value={kycDetails.first_name || driver.first_name}
+            value={
+              ninData.first_name || kycDetails.first_name || driver.first_name
+            }
           />
           <InfoRow
             index={2}
             label="Last Name"
-            value={kycDetails.last_name || driver.last_name}
+            value={
+              ninData.last_name || kycDetails.last_name || driver.last_name
+            }
           />
           <InfoRow
             index={3}
             label="Middle Name"
-            value={metaData.middle_name || 'N/A'}
+            value={ninData.middle_name || 'N/A'}
           />
-          <InfoRow index={4} label="Gender" value={metaData.gender || 'N/A'} />
+          <InfoRow index={4} label="Gender" value={ninData.gender || 'N/A'} />
           <InfoRow
             index={5}
             label="Photo"
-            value={kycDetails.selfie_image || driver.image_url || ''}
+            value={ninData.image || kycDetails.selfie_image || ''}
             isImage
           />
-          <InfoRow index={6} label="Date of Birth" value={kycDetails.dob} />
+          <InfoRow
+            index={6}
+            label="Date of Birth"
+            value={ninData.dob || kycDetails.dob}
+          />
           <InfoRow index={7} label="Email Address" value={driver.email} />
-          <InfoRow index={8} label="Phone Number" value={driver.phone_number} />
+          <InfoRow
+            index={8}
+            label="Phone Number"
+            value={ninData.mobile || driver.phone_number}
+          />
           <InfoRow
             index={9}
             label="Employment Status"
-            value={metaData.employment_status || 'N/A'}
+            value={ninData.employment_status || 'N/A'}
           />
           <InfoRow
             index={10}
             label="Marital Status"
-            value={metaData.marital_status || 'N/A'}
+            value={ninData.marital_status || 'N/A'}
           />
         </div>
       </div>

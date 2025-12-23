@@ -3,6 +3,41 @@ import { http, HttpResponse } from 'msw'
 const API_BASE_URL = import.meta.env.VITE_PRIMELANE_API_BASE_URL || 'https://prime-lane-uvtut.ondigitalocean.app'
 
 export const handlers = [
+  // Pricing Config
+  http.get('*/vehicle-categories/configure-pricing/:categoryId/:type', () => {
+    return HttpResponse.json({
+      success: true,
+      data: {
+        id: '08bd1a56-9ad1-484a-8986-bc250e8cd601',
+        slug: 'BUSINESS',
+        name: 'Business',
+        description: 'Premium sedans for everyday',
+        hourly_base_price: 200000,
+        hourly_per_km: 1500,
+        hourly_per_min: 1500,
+        hourly_trip_commission_percentage: 10,
+        hourly_cancellation_base: 2200000,
+        hourly_cancellation_percentage: 10,
+        hourly_cancellation_fee_type: 'fixed',
+        one_way_base_price: 150000,
+        one_way_per_km: 1000,
+        one_way_per_min: 800,
+        one_way_trip_commission_percentage: 10,
+        one_way_cancellation_base: 1500000,
+        one_way_cancellation_percentage: 10,
+        one_way_cancellation_fee_type: 'percentage',
+      },
+    })
+  }),
+
+  http.put('*/vehicle-categories/configure-pricing/:categoryId/:type', () => {
+    return HttpResponse.json({
+      success: true,
+      data: {
+        id: '08bd1a56-9ad1-484a-8986-bc250e8cd601',
+      },
+    })
+  }),
 
   // my ride analytics
   http.get(`${API_BASE_URL}/analytics/my-ride-stats`, () => {
@@ -1173,39 +1208,55 @@ export const handlers = [
       "data": {
         "rides": [
           {
-            "id": "ea9f75ac-00d1-4881-b529-20c61611f3b1",
-            "riderId": "2f67f80e-39d2-4760-a0d8-ee7c4e3090ed",
+            "id": "623588e2-9d46-406a-a976-6c2585e5cf11",
+            "rider_id": "a04ed836-6122-4afb-b4f2-bbfa9a87e5ba",
             "pickup": {
               "lat": 6.6018,
               "lng": 3.3515,
-              "address": "Ikeja City Mall, Alausa, Ikeja, Lagos"
+              "address": "Ikeja City Mall, Lagos"
             },
+            "stops": [
+              {
+                "lat": 6.5174,
+                "lng": 3.3719,
+                "address": "Yaba Bus Stop, Lagos"
+              },
+              {
+                "lat": 6.501,
+                "lng": 3.3577,
+                "address": "Surulere Shopping Complex, Lagos"
+              }
+            ],
             "dropoff": {
-              "lat": 6.587,
-              "lng": 3.3584,
-              "address": "Computer Village, Ikeja, Lagos"
+              "lat": 6.501,
+              "lng": 3.3577,
+              "address": "Wuse Surulere Shopping Complex, Lagos"
             },
-            "status": "COMPLETED",
-            "driverId": "bb9a08b3-d0b0-4d57-a213-a70479b4e9c5",
-            "createdAt": "2025-10-21T14:29:45.253Z",
-            "requestedAt": "2025-10-21T14:29:44.613Z",
-            "offeredAt": "2025-10-21T14:29:45.355Z",
-            "acceptedAt": "2025-10-21T14:30:05.722Z",
-            "startedAt": "2025-10-22T06:38:55.494Z",
-            "completedAt": "2025-10-22T07:09:05.337Z",
-            "cancelledAt": null,
-            "updatedAt": "2025-10-22T07:09:05.730Z",
-            "estimatedFare": null,
-            "actualFare": null,
-            "estimatedDistance": null,
-            "actualDistance": null,
-            "estimatedDuration": null,
-            "actualDuration": null,
-            "cancellationReason": null,
-            "cancelledBy": null,
+            "status": "CANCELLED",
+            "driver_id": "bb9a08b3-d0b0-4d57-a213-a70479b4e9c5",
+            "ride_type": "one_off",
+            "booked_hours": null,
+            "is_scheduled": false,
+            "scheduled_at": null,
+            "created_at": "2025-10-29T13:17:43.822Z",
+            "requested_at": "2025-10-29T13:16:28.227Z",
+            "offered_at": null,
+            "accepted_at": "2025-10-29T13:17:43.339Z",
+            "arrived_pickup_at": "2025-10-29T13:24:40.365Z",
+            "started_at": null,
+            "completed_at": null,
+            "cancelled_at": "2025-10-29T14:31:27.201Z",
+            "updated_at": "2025-10-29T14:31:27.885Z",
+            "estimated_fare": "2000.00",
+            "actual_fare": "10000.00",
+            "estimated_distance": "2.5",
+            "actual_distance": "3.4",
+            "estimated_duration": "2700",
+            "actual_duration": "3600",
+            "cancellation_reason": null,
+            "cancelled_by": null,
             "rating": null,
-            "feedback": null,
-            "metadata": null
+            "feedback": "Wait time was too long"
           }
         ],
         "pagination": {
@@ -2523,7 +2574,7 @@ export const handlers = [
   }),
 
   // get my reviews
-  http.get(`${API_BASE_URL}/reviews/my-reviews`, () => {
+  http.get(`${API_BASE_URL}/reviews/:userId`, () => {
     return HttpResponse.json({
       "data": {
         "reviews": [
@@ -3058,6 +3109,64 @@ export const handlers = [
           "current_page": 1,
           "limit": 10
         }
+      },
+      "success": true
+    })
+  }),
+
+  // get driver vehicle details
+  http.get(`${API_BASE_URL}/vehicles/driver/:id`, () => {
+    return HttpResponse.json({
+      "data": {
+        "id": "4ea6f89f-bc8d-4f0f-9258-160d15c0d506",
+        "vin": "1737377373",
+        "make": "Lexus",
+        "model": "ES",
+        "year": 2019,
+        "color": "Red",
+        "plate_number": "SEEDFFF",
+        "type": "sedan",
+        "mileage": "0.00",
+        "driver_id": "6e99af6d-54d5-4ba2-ace6-eeda6cf791a1",
+        "status": "active",
+        "category_id": null,
+        "front_image": "https://res.cloudinary.com/deolwnm9f/image/upload/v1764252796/chat_files/1764252795975-image-1764252795691.jpg.jpg",
+        "back_image": "https://res.cloudinary.com/deolwnm9f/image/upload/v1764252800/chat_files/1764252800559-image-1764252799949.jpg.jpg",
+        "side_image": "https://res.cloudinary.com/deolwnm9f/image/upload/v1764252953/chat_files/1764252952405-image-1764252951756.jpg.jpg",
+        "road_worthiness": {
+          "doc": "https://res.cloudinary.com/deolwnm9f/image/upload/v1764252737/chat_files/1764252736505-image-1764252736019.jpg.jpg",
+          "expiry_date": "2005-12-13"
+        },
+        "vehicle_insurance": {
+          "doc": "https://res.cloudinary.com/deolwnm9f/image/upload/v1764252782/chat_files/1764252781945-image-1764252781527.jpg.jpg",
+          "expiry_date": "2005-05-12"
+        },
+        "driver": {
+          "id": "6e99af6d-54d5-4ba2-ace6-eeda6cf791a1",
+          "email": "mi@yopmail.com",
+          "first_name": "Anhs",
+          "last_name": "Shshs",
+          "device_token": null,
+          "phone_number": "23421545454554",
+          "image_url": "https://res.cloudinary.com/deolwnm9f/image/upload/v1764252473/user_selfies/1764252470879-base64.jpg",
+          "gender": null,
+          "apple_id": null,
+          "kyc_id": null,
+          "role_id": null,
+          "is_kyc_complete": true,
+          "is_phone_number_verified": true,
+          "is_email_verified": true,
+          "is_preference_set": false,
+          "is_online": true,
+          "is_deleted": false,
+          "user_type": "driver",
+          "status": "pending",
+          "created_at": "2025-11-27T12:46:00.557Z",
+          "updated_at": "2025-11-27T13:07:54.015Z"
+        },
+        "category": null,
+        "created_at": "2025-11-27T13:15:54.752Z",
+        "updated_at": "2025-11-27T13:15:54.752Z"
       },
       "success": true
     })
