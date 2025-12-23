@@ -5,7 +5,7 @@ import { API_ENDPOINTS as e } from '@/services/api-endpoints'
 import type { PaginationParams, PaginatedResponse } from '@/services/api-types'
 import { transformPaginatedResponse } from '@/utils/api-utils'
 import { buildQueryParams } from '@/lib/utils'
-import type { Customer, KycDetails, UserRideStats, Review, Wallet } from '../types'
+import type { Customer, UserRideStats, Review, Wallet } from '../types'
 
 interface UseCustomersParams extends PaginationParams {
     user_type?: 'customer' | 'driver'
@@ -43,16 +43,7 @@ export const useCustomer = (id: string) => {
     })
 }
 
-export const useKycDetails = (userId: string) => {
-    return useQuery({
-        queryKey: ['kyc-details', userId],
-        queryFn: async () => {
-            const response = await apiClient.get<KycDetails>(e.KYC.BY_ID(userId))
-            return response.data
-        },
-        enabled: !!userId,
-    })
-}
+
 
 export const useUserRideStats = (id: string) => {
     return useQuery({
@@ -83,7 +74,7 @@ export const useCustomerWallet = (userId: string) => {
     return useQuery({
         queryKey: ['wallet', userId],
         queryFn: async () => {
-            const response = await apiClient.get<{ data: Wallet }>(`${e.WALLETS.MY_WALLET}`)
+            const response = await apiClient.get<{ data: Wallet }>(`${e.WALLETS.WALLET}`)
             return response.data.data
         },
         enabled: !!userId,
@@ -120,3 +111,5 @@ export const useUpdateCustomer = (id?: string) => {
         },
     })
 }
+
+

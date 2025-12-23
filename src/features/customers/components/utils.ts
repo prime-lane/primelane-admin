@@ -11,5 +11,6 @@ export function getMockCustomers(): Customer[] {
         image_url: null,
         status: (i === 0 ? 'pending' : i === 1 ? 'deactivated' : 'active') as any, // Cast to avoid inference issues for now, or just rely on Customer type
         is_email_verified: i > 0,
+        nin: '1234567890',
     }))
 }

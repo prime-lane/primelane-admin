@@ -1,8 +1,9 @@
 import { API_ENDPOINTS } from '@/services/api-endpoints'
 import { apiClient } from '@/services/api-client'
 import { useQuery } from '@tanstack/react-query'
-import type { Wallet, Transaction, Refund } from '../types'
-import type { PaginationParams } from '@/services/api-types'
+import { buildQueryParams } from '@/lib/utils'
+import type { Wallet, Transaction, Refund, DriverSettlement } from '../types'
+import type { PaginationParams, UserType } from '@/services/api-types'
 
 interface WalletResponse {
     data: Wallet[]
@@ -25,22 +26,18 @@ export const useWallet = () => {
         queryKey: ['wallet'],
         queryFn: async () => {
             const response = await apiClient.get<WalletResponse>(
-                API_ENDPOINTS.WALLETS.MY_WALLET,
+                API_ENDPOINTS.WALLETS.WALLET,
             )
             return response.data
         },
     })
 }
 
-export const useTransactions = (params?: PaginationParams & { type?: 'debit' | 'credit' }) => {
+export const useTransactions = (params?: PaginationParams & { user_type?: UserType; page_size?: number }) => {
     return useQuery({
         queryKey: ['transactions', params],
         queryFn: async () => {
-            const queryParams = new URLSearchParams()
-            if (params?.page) queryParams.append('page', params.page.toString())
-            if (params?.limit) queryParams.append('limit', params.limit.toString())
-            if (params?.search) queryParams.append('search', params.search)
-            if (params?.type) queryParams.append('type', params.type)
+            const queryParams = buildQueryParams(params)
 
             const response = await apiClient.get<TransactionsResponse>(
                 `${API_ENDPOINTS.TRANSACTIONS.MY_TRANSACTIONS}?${queryParams.toString()}`,
@@ -76,6 +73,23 @@ export const useCommissions = (params?: PaginationParams) => {
             // Placeholder - return empty array until endpoint is ready
             return {
                 data: [],
+                pagination: {
+                    total_items: 0,
+                    total_pages: 0,
+                    current_page: 1,
+                    limit: 10,
+                },
+            }
+        },
+    })
+}
+
+export const useDriverSettlements = (params?: PaginationParams) => {
+    return useQuery({
+        queryKey: ['driver-settlements', params],
+        queryFn: async () => {
+            return {
+                data: [] as DriverSettlement[],
                 pagination: {
                     total_items: 0,
                     total_pages: 0,

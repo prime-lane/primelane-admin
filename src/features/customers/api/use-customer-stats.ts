@@ -9,6 +9,7 @@ export interface CustomerStats {
     total_accepted_rides: number
     acceptance_rate: number
     average_rating: number
+    wallet_balance: number
 }
 
 export const useCustomerStats = (id: string) => {

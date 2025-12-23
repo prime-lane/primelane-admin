@@ -1,6 +1,6 @@
 import { ExportButton, SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
-import { ErrorState, LoadingState } from '@/components/ui/loading-error-states'
+import { ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
 import { Box, Tab, Tabs } from '@mui/material'
 import { Download } from '@solar-icons/react'
@@ -45,6 +45,8 @@ const exportToCSV = (data: Transaction[], type: string) => {
 export const DriverWallet = () => {
   const [activeTab, setActiveTab] = useState(0)
   const [searchTerm, setSearchTerm] = useState('')
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(10)
   const debouncedSearch = useDebounce(searchTerm, 500)
 
   const type = activeTab === 0 ? 'debit' : 'credit'
@@ -56,8 +58,8 @@ export const DriverWallet = () => {
     error,
   } = useTransactions({
     search: debouncedSearch,
-    type,
-    limit: 100,
+    page,
+    page_size: limit,
   })
 
   if (error) return <ErrorState message="Failed to load transactions" />
@@ -97,11 +99,25 @@ export const DriverWallet = () => {
         />
       </Box>
 
-      {transactionsLoading ? (
-        <LoadingState />
-      ) : (
-        <DataTable data={transactions} columns={transactionColumns('driver')} />
-      )}
+      <DataTable
+        data={transactions}
+        columns={transactionColumns('driver')}
+        isLoading={transactionsLoading}
+        pagination={
+          transactionsData?.pagination
+            ? {
+                currentPage: Number(transactionsData.pagination.current_page),
+                totalPages: transactionsData.pagination.total_pages,
+                totalItems: transactionsData.pagination.total_items,
+              }
+            : undefined
+        }
+        onPageChange={setPage}
+        onPageSizeChange={(size) => {
+          setLimit(size)
+          setPage(1)
+        }}
+      />
     </div>
   )
 }

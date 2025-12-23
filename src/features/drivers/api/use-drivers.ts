@@ -69,7 +69,7 @@ export const useDriverWallet = (userId: string) => {
     return useQuery({
         queryKey: ['driver-wallet', userId],
         queryFn: async () => {
-            const response = await apiClient.get<Wallet>(`${e.WALLETS.MY_WALLET}`)
+            const response = await apiClient.get<Wallet>(`${e.WALLETS.WALLET}`)
             return response.data
         },
         enabled: !!userId,
@@ -117,3 +117,7 @@ export const useUpdateDriver = (id?: string) => {
         },
     })
 }
+
+
+
+

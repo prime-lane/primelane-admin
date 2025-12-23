@@ -4,16 +4,16 @@ import {
   SearchInput,
 } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
-import { ErrorState, LoadingState } from '@/components/ui/loading-error-states'
+import { ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
 import { Box } from '@mui/material'
 import { AltArrowDown, FileDownload } from '@solar-icons/react'
-import { useState } from 'react'
-import { format } from 'date-fns'
-import { useCommissions } from './api/use-finance'
-import type { Commission as CommissionType } from './types'
-import { commissionColumns } from './components/columns'
 import type { ColumnDef } from '@tanstack/react-table'
+import { format } from 'date-fns'
+import { useState } from 'react'
+import { useCommissions } from './api/use-finance'
+import { commissionColumns } from './components/columns'
+import type { Commission as CommissionType } from './types'
 
 const exportToCSV = (data: CommissionType[]) => {
   const headers = [
@@ -55,11 +55,14 @@ const exportToCSV = (data: CommissionType[]) => {
 
 export const Commission = () => {
   const [searchTerm, setSearchTerm] = useState('')
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(10)
   const debouncedSearch = useDebounce(searchTerm, 500)
 
   const { data, isLoading, error } = useCommissions({
     search: debouncedSearch,
-    limit: 100,
+    page,
+    limit,
   })
 
   if (error) return <ErrorState message="Failed to load commissions" />
@@ -84,14 +87,25 @@ export const Commission = () => {
         />
       </Box>
 
-      {isLoading ? (
-        <LoadingState />
-      ) : (
-        <DataTable
-          data={commissions}
-          columns={commissionColumns as ColumnDef<CommissionType>[]}
-        />
-      )}
+      <DataTable
+        data={commissions}
+        columns={commissionColumns as ColumnDef<CommissionType>[]}
+        isLoading={isLoading}
+        pagination={
+          data?.pagination
+            ? {
+                currentPage: Number(data.pagination.current_page),
+                totalPages: data.pagination.total_pages,
+                totalItems: data.pagination.total_items,
+              }
+            : undefined
+        }
+        onPageChange={setPage}
+        onPageSizeChange={(size) => {
+          setLimit(size)
+          setPage(1)
+        }}
+      />
     </div>
   )
 }

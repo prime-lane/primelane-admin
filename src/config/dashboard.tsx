@@ -40,7 +40,7 @@ export const NAV_ITEMS = [
     icon: ShieldUser,
     to: path.DASHBOARD.ADMIN_MANAGEMENT,
     hasSubmenu: true,
-    children: [{ label: 'Admin', to: '/dashboard/admin' }],
+    children: [{ label: 'Admin', to: path.DASHBOARD.ADMIN_MANAGEMENT }],
   },
 ]
 

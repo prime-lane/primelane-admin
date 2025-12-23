@@ -1,9 +1,9 @@
-import { zodResolver } from '@hookform/resolvers/zod'
 import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
 import { LoadingState } from '@/components/ui/loading-error-states'
-import { Avatar, Button, TextField } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button, TextField } from '@mui/material'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -24,7 +24,6 @@ export const EditCustomer = () => {
     register,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
   } = useForm<EditCustomerFormData>({
     resolver: zodResolver(editCustomerSchema),

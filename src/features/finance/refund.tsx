@@ -4,10 +4,10 @@ import {
   SearchInput,
 } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
-import { ErrorState, LoadingState } from '@/components/ui/loading-error-states'
+import { ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
 import { Box } from '@mui/material'
-import { AltArrowDown, FileDownload, } from '@solar-icons/react'
+import { AltArrowDown, FileDownload } from '@solar-icons/react'
 import { format } from 'date-fns'
 import { useState } from 'react'
 import { useRefunds } from './api/use-finance'
@@ -48,11 +48,14 @@ const exportToCSV = (data: RefundType[]) => {
 
 export const Refund = () => {
   const [searchTerm, setSearchTerm] = useState('')
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(10)
   const debouncedSearch = useDebounce(searchTerm, 500)
 
   const { data, isLoading, error } = useRefunds({
     search: debouncedSearch,
-    limit: 100,
+    page,
+    limit,
   })
 
   if (error) return <ErrorState message="Failed to load refunds" />
@@ -77,11 +80,25 @@ export const Refund = () => {
         />
       </Box>
 
-      {isLoading ? (
-        <LoadingState />
-      ) : (
-        <DataTable data={refunds} columns={refundColumns} />
-      )}
+      <DataTable
+        data={refunds}
+        columns={refundColumns}
+        isLoading={isLoading}
+        pagination={
+          data?.pagination
+            ? {
+                currentPage: Number(data.pagination.current_page),
+                totalPages: data.pagination.total_pages,
+                totalItems: data.pagination.total_items,
+              }
+            : undefined
+        }
+        onPageChange={setPage}
+        onPageSizeChange={(size) => {
+          setLimit(size)
+          setPage(1)
+        }}
+      />
     </div>
   )
 }

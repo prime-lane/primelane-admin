@@ -1,3 +1,5 @@
+
+
 export type AccountStatus = 'active' | 'pending' | 'inactive'
 
 export interface Customer {
@@ -12,32 +14,7 @@ export interface Customer {
     is_email_verified: boolean
 }
 
-export interface Meta {
-    nin?: string
-    image?: string
-    [key: string]: any
-}
-
-export interface KycDetails {
-    id: string
-    user_id: string
-    is_id_verified: boolean
-    is_selfie_verified: boolean
-    is_physical_inspection_done: boolean;
-    is_vehicle_set: boolean;
-    is_driver_license_verified: boolean;
-    driver_license_expiry_date: string;
-    residential_address: string;
-    first_name: string;
-    last_name: string;
-    dob: string;
-    id_type: string;
-    id_number: string;
-    id_document: string | null;
-    selfie_confidence: string;
-    selfie_image: string;
-    meta_data: Meta
-}
+export type { NinVerification, Meta, KycDetails } from "../shared/types"
 
 export interface UserRideStats {
     total_rides: number
@@ -84,12 +61,12 @@ export interface Wallet {
 export interface Transaction {
     id: string
     user_id: string
-    transaction_type: 'CR' | 'DR' // CR for Credit, DR for Debit
+    transaction_type: 'CR' | 'DR'
     description: string
     reference: string | null
     ride_id: string | null
     amount: number
     created_at: string
     updated_at: string
-    status?: string // Optional as it wasn't in the provided JSON sample but is in UI
+    status?: string
 }

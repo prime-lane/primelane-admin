@@ -12,6 +12,20 @@ export interface Commission {
     created_at: string
 }
 
+export interface DriverSettlement {
+    id: string
+    settlement_id: string
+    settlement_date: string
+    trip_id: string
+    trip_type: string
+    fare_charged: number
+    platform_earning: number
+    driver_earning: number
+    amount: number
+    status: 'pending' | 'completed' | 'failed'
+    created_at: string
+}
+
 export interface Wallet {
     id: string
     user_id: string

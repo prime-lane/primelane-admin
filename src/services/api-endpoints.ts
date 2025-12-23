@@ -33,6 +33,8 @@ export const API_ENDPOINTS = {
         MY_PROFILE: '/users/my-profile',
         PREFERENCES: (userId?: string) =>
             userId ? `/users/preferences/${userId}` : '/users/preferences',
+        MANAGE_STATUS: (id: string, action: 'activate' | 'deactivate') =>
+            `/users/manage/${id}/${action}`,
     },
     CUSTOMERS: {
         ROOT: '/users',
@@ -50,7 +52,7 @@ export const API_ENDPOINTS = {
         ROOT: (userId: string) => `/reviews/${userId}`,
     },
     WALLETS: {
-        MY_WALLET: '/wallets/my-wallet',
+        WALLET: '/wallets/my-wallet',
     },
     TRANSACTIONS: {
         MY_TRANSACTIONS: '/transactions',
@@ -72,4 +74,5 @@ export const API_ENDPOINTS = {
         VERIFY: (idType: 'nin' | 'dl' | 'ip') => `/kyc/verify/${idType}`,
         BY_ID: (userId: string) => `/kyc/${userId}`,
     },
+    ROLES: '/roles',
 } as const

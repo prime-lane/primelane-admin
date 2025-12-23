@@ -1,6 +1,12 @@
 import { createColumnHelper, type ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
-import type { Commission, Transaction, Refund } from '../types'
+import type {
+  Commission,
+  Transaction,
+  Refund,
+  DriverSettlement,
+} from '../types'
+import type { UserType } from '@/services/api-types'
 
 const commissionHelper = createColumnHelper<Commission>()
 
@@ -55,8 +61,72 @@ export const commissionColumns = [
   }),
 ]
 
+export const driverSettlementColumns: ColumnDef<DriverSettlement>[] = [
+  {
+    accessorKey: 'settlement_id',
+    header: 'Settlement ID',
+    cell: (info) => info.getValue(),
+  },
+  {
+    accessorKey: 'settlement_date',
+    header: 'Settlement Date',
+    cell: (info) => format(new Date(info.getValue() as string), 'MMM dd, yyyy'),
+  },
+  {
+    accessorKey: 'trip_id',
+    header: 'Trip ID / Type',
+    cell: ({ row }) => {
+      const tripId = row.original.trip_id
+      const tripType = row.original.trip_type
+      return (
+        <div className="flex flex-col gap-[2px]">
+          <span className="text-sm font-medium">{tripId}</span>
+          <span className="text-xs text-gray-500">{tripType}</span>
+        </div>
+      )
+    },
+  },
+  {
+    accessorKey: 'fare_charged',
+    header: 'Fare Charged',
+    cell: (info) => `₦${(info.getValue() as number).toLocaleString()}`,
+  },
+  {
+    accessorKey: 'platform_earning',
+    header: 'Platform Earning',
+    cell: (info) => `₦${(info.getValue() as number).toLocaleString()}`,
+  },
+  {
+    accessorKey: 'driver_earning',
+    header: 'Driver Earning',
+    cell: (info) => `₦${(info.getValue() as number).toLocaleString()}`,
+  },
+  {
+    accessorKey: 'amount',
+    header: 'Amount',
+    cell: (info) => `₦${(info.getValue() as number).toLocaleString()}`,
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ row }) => {
+      const status = row.original.status
+      const colors = {
+        completed: 'bg-green-100 text-green-800',
+        pending: 'bg-yellow-100 text-yellow-800',
+        failed: 'bg-red-100 text-red-800',
+      }
+      return (
+        <span className={`px-2 py-1 rounded-full text-xs ${colors[status]}`}>
+          {status.charAt(0).toUpperCase() + status.slice(1)}
+        </span>
+      )
+    },
+  },
+]
+
 export const transactionColumns = (
-  userType: 'driver' | 'customer',
+  userType: UserType,
 ): ColumnDef<Transaction>[] => [
   {
     accessorKey: 'id',

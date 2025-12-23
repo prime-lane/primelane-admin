@@ -30,12 +30,8 @@ import { AltArrowDown } from '@solar-icons/react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
-import {
-  useDriver,
-  useDriverReviews,
-  useDriverStats,
-  useUpdateDriver,
-} from './api/use-drivers'
+import { useDriver, useDriverReviews, useDriverStats } from './api/use-drivers'
+import { useManageUserStatus } from '../shared/api/use-users'
 import { DriverLicense } from './components/driver-license'
 import { DriverOverview } from './components/driver-overview'
 import { DriverRatings } from './components/driver-ratings'
@@ -48,7 +44,8 @@ export const DriverDetails = () => {
   const driver = driverResp?.user
   const { data: stats } = useDriverStats(id!)
   const { data: reviews } = useDriverReviews(id!)
-  const { mutate: updateDriver, isPending: isUpdating } = useUpdateDriver(id)
+  const { mutate: manageUserStatus, isPending: isUpdating } =
+    useManageUserStatus(id)
   const navigate = useNavigate()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -105,11 +102,12 @@ export const DriverDetails = () => {
       return
     }
 
-    const newStatus = dialogType === 'inactive' ? 'inactive' : 'active'
+    const action = dialogType === 'inactive' ? 'deactivate' : 'activate'
 
-    updateDriver(
+    manageUserStatus(
       {
-        status: newStatus,
+        action,
+        reason,
       },
       {
         onSuccess: () => {

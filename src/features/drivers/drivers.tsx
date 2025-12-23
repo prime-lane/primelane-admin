@@ -1,24 +1,27 @@
-import { useState } from 'react'
+import { path } from '@/app/paths'
+import { FilterButton, SearchInput } from '@/components/ui/data-controls'
+import { DataTable } from '@/components/ui/data-table'
+import { ErrorState } from '@/components/ui/loading-error-states'
+import { useDebounce } from '@/hooks/use-debounce'
 import { Box } from '@mui/material'
 import { AltArrowDown } from '@solar-icons/react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { DataTable } from '@/components/ui/data-table'
-import { SearchInput, FilterButton } from '@/components/ui/data-controls'
-import { driverColumns } from './components/columns'
 import { useDrivers } from './api/use-drivers'
-import { LoadingState, ErrorState } from '@/components/ui/loading-error-states'
-import { useDebounce } from '@/hooks/use-debounce'
-import { path } from '@/app/paths'
+import { driverColumns } from './components/columns'
 import type { Driver } from './types'
 
 export const Drivers = () => {
   const [searchTerm, setSearchTerm] = useState('')
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(10)
   const debouncedSearch = useDebounce(searchTerm, 500)
   const navigate = useNavigate()
 
   const { data, isLoading, error } = useDrivers({
     search: debouncedSearch,
-    limit: 100,
+    page,
+    limit,
   })
 
   const drivers = data?.items || []
@@ -49,15 +52,26 @@ export const Drivers = () => {
         </FilterButton>
       </Box>
 
-      {isLoading ? (
-        <LoadingState />
-      ) : (
-        <DataTable
-          data={drivers}
-          columns={driverColumns}
-          onRowClick={handleRowClick}
-        />
-      )}
+      <DataTable
+        data={drivers}
+        columns={driverColumns}
+        onRowClick={handleRowClick}
+        isLoading={isLoading}
+        pagination={
+          data?.pagination
+            ? {
+                currentPage: Number(data.pagination.current_page),
+                totalPages: data.pagination.total_pages,
+                totalItems: data.pagination.total_items,
+              }
+            : undefined
+        }
+        onPageChange={setPage}
+        onPageSizeChange={(newSize) => {
+          setLimit(newSize)
+          setPage(1)
+        }}
+      />
     </div>
   )
 }

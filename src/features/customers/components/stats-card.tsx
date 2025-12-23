@@ -15,7 +15,7 @@ export const StatsCard = ({ label, value, status }: StatsCardProps) => {
         {status ? (
           <StatusBadge status={status} />
         ) : (
-          <span className="text-xl font-semibold text-black">{value}</span>
+          <span className="text-xl font-semibold text-black">{value || 'N/A'}</span>
         )}
       </CardContent>
     </Card>

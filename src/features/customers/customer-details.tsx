@@ -26,11 +26,8 @@ import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useCustomerStats } from './api/use-customer-stats'
-import {
-  useCustomer,
-  useCustomerReviews,
-  useUpdateCustomer,
-} from './api/use-customers'
+import { useCustomer, useCustomerReviews } from './api/use-customers'
+import { useManageUserStatus } from '../shared/api/use-users'
 import { CustomerOverview } from './components/customer-overview'
 import { CustomerRatings } from './components/customer-ratings'
 import { IdentityDetails } from './components/identity-details'
@@ -41,8 +38,8 @@ export const CustomerDetails = () => {
   const customer = customerResp?.user
   const { data: stats } = useCustomerStats(id!)
   const { data: reviews } = useCustomerReviews(id!)
-  const { mutate: updateCustomer, isPending: isUpdating } =
-    useUpdateCustomer(id)
+  const { mutate: manageUserStatus, isPending: isUpdating } =
+    useManageUserStatus(id)
   const navigate = useNavigate()
 
   // Menu State
@@ -85,12 +82,12 @@ export const CustomerDetails = () => {
       return
     }
 
-    const newStatus = dialogType === 'inactive' ? 'inactive' : 'active'
+    const action = dialogType === 'inactive' ? 'deactivate' : 'activate'
 
-    updateCustomer(
+    manageUserStatus(
       {
-        status: newStatus,
-        // send the reason too e.g. status_reason: reason
+        action,
+        reason,
       },
       {
         onSuccess: () => {
@@ -211,6 +208,7 @@ export const CustomerDetails = () => {
                       ? 'Reason for Deactivation'
                       : 'Reason for activation'
                   }
+                  fullWidth
                   onChange={(e) => setReason(e.target.value)}
                 >
                   <MenuItem value="" disabled>
@@ -244,12 +242,12 @@ export const CustomerDetails = () => {
             </div>
           </DialogContent>
           <DialogActions sx={{ p: 3, pt: 0 }}>
-            <Button onClick={handleCloseDialog} variant="contained" fullWidth>
+            <Button onClick={handleCloseDialog} variant="outlined" fullWidth>
               Cancel
             </Button>
             <Button
               onClick={handleConfirmStatusChange}
-              variant="outlined"
+              variant="contained"
               fullWidth
               disabled={isUpdating}
             >
