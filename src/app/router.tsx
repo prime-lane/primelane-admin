@@ -66,11 +66,6 @@ const TripDetails = lazy(() =>
     default: module.TripDetails,
   })),
 )
-const Finance = lazy(() =>
-  import('@/features/finance/finance').then((module) => ({
-    default: module.Finance,
-  })),
-)
 const Commission = lazy(() =>
   import('@/features/finance/commission').then((module) => ({
     default: module.Commission,
@@ -209,11 +204,7 @@ export const router = createBrowserRouter([
       },
       {
         path: path.DASHBOARD.FINANCE.ROOT,
-        element: (
-          <Suspense fallback={<Loading />}>
-            <Finance />
-          </Suspense>
-        ),
+        element: <Navigate to={path.DASHBOARD.FINANCE.COMMISSION} replace />,
       },
       {
         path: path.DASHBOARD.FINANCE.COMMISSION,

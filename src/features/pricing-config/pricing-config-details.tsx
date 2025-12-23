@@ -12,7 +12,6 @@ import {
   type PricingConfigFormData,
   pricingConfigSchema,
 } from './schemas/pricing-config-schema'
-import { formatTitle } from '@/lib/utils'
 import { useVehicleCategory } from './api/use-vehicle-categories'
 
 export const PricingConfigDetails = () => {
@@ -78,7 +77,12 @@ export const PricingConfigDetails = () => {
   }
 
   if (isLoading) return <LoadingState />
-  if (error) return <ErrorState message="Failed to load configuration" />
+  if (error)
+    return (
+      <ErrorState
+        message={`${error?.message || 'Failed to load configuration'}`}
+      />
+    )
 
   return (
     <div className="max-w-4xl">
