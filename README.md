@@ -54,18 +54,18 @@ TODO:
 - [x] Trips details
 - [x] identity details - (pending endpoint) /kyc/my-kyc is not for admin. avail types: nin,dl,ip
 - [x] review
-- [ ] driver license from kyc
-- [ ] vehicle details
-- [ ] paginate from backend
-- [ ] Price config page
+- [x] improve loading screen (use skeleton)
+- [x] Price config page
+- [x] (de/a)ctivate user endpoint (backend)
+- [x] vehicle details
+- [x] driver license from kyc
+- [x] paginate from backend
+- [x] trip status for trips/rides
 - [ ] Finance
 - [ ] Admin
-- [ ] Home page (pending endpoint)
-- [ ] improve loading screen (use skeleton)
-- [ ] persist search params
-- [ ] filter button
-- [ ] trip status for trips/rides
 - [ ] all reviews page
+- [ ] Home page (pending endpoint, dont' use this `/analytics/my-ride-stats`)
+- [ ] filter button
 
 
 
@@ -75,7 +75,6 @@ BACKEND
 - [ ] identity details - (pending endpoint) /kyc/my-kyc is not for admin
 - [ ] endpoint for admin to view customer ratings by id
 - [ ] fetch wallet by id
-- [ ] (de/a)ctivate user endpoint
 - [ ] update user endpoint should allow intl passport
 - [ ] disable nin on edit customer; submit empty string
 - [ ] update vehicle category
