@@ -40,11 +40,11 @@ export const useInviteAdmin = () => {
 
     return useMutation({
         mutationFn: async (data: InviteAdminRequest) => {
-            const response = await apiClient.post(e.AUTH.ADMIN_INVITE, data)
+            const response = await apiClient.post<{ message: string }>(e.AUTH.ADMIN_INVITE, data)
             return response.data
         },
-        onSuccess: () => {
-            toast.success('Admin invited successfully')
+        onSuccess: (response) => {
+            toast.success(response.message || 'Admin invited successfully')
             queryClient.invalidateQueries({ queryKey: ['admins'] })
         },
         onError: (error: any) => {
