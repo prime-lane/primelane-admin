@@ -1,6 +1,6 @@
 import { FilterButton } from '@/components/ui/data-controls'
 import { ErrorState } from '@/components/ui/loading-error-states'
-import { formatNumber } from '@/lib/format'
+import { formatNumber } from '@/lib/utils'
 import { Box, Card, CardContent, Grid, Skeleton } from '@mui/material'
 import {
   AltArrowDown,
@@ -8,7 +8,7 @@ import {
   Bill2,
   Rocket,
   Shield,
-  ShieldCross
+  ShieldCross,
 } from '@solar-icons/react'
 import { useDashboardStats } from './api/use-dashboard-stats'
 

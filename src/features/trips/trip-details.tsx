@@ -1,6 +1,6 @@
 import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
-import { ErrorState, LoadingState } from '@/components/ui/loading-error-states'
+import { ErrorState } from '@/components/ui/loading-error-states'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { Link, useParams } from 'react-router-dom'
 import { useTrip } from './api/use-trips'
@@ -9,6 +9,7 @@ import { ArrowRightUp as ExternalLink } from '@solar-icons/react'
 import { formatCurrency, formatDuration } from '@/lib/utils'
 import { useEffect } from 'react'
 import { CAR_CURSOR } from '@/config/dashboard'
+import { TripDetailsSkeleton } from './components/skeletons'
 
 interface DetailRowProps {
   label: string
@@ -45,7 +46,7 @@ export const TripDetails = () => {
     }
   }, [])
 
-  if (isLoading) return <LoadingState />
+  if (isLoading) return <TripDetailsSkeleton />
   if (error || !trip)
     return <ErrorState message="Failed to load trip details" />
 

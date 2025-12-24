@@ -1,11 +1,11 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
+import { buildQueryParams } from '@/lib/utils'
 import { apiClient } from '@/services/api-client'
 import { API_ENDPOINTS as e } from '@/services/api-endpoints'
-import type { PaginationParams, PaginatedResponse, ManageUserStatusRequest } from '@/services/api-types'
+import type { ManageUserStatusRequest, PaginatedResponse, PaginationParams } from '@/services/api-types'
 import { transformPaginatedResponse } from '@/utils/api-utils'
-import { buildQueryParams } from '@/lib/utils'
-import type { Driver, UserRideStats, Review, Wallet, Transaction, VehicleCategory } from '../types'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
+import type { Driver, Review, Transaction, UserRideStats, Wallet } from '../types'
 
 interface UseDriversParams extends PaginationParams { }
 

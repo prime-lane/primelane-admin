@@ -49,9 +49,9 @@ export const DriverDetails = () => {
   const { id } = useParams<{ id: string }>()
   const { data: driverResp, isLoading, error } = useDriver(id!)
   const driver = driverResp?.user
-  const { data: kycDetails } = useKycDetails(id!)
+  const { data: kycDetails, isLoading: isKycLoading } = useKycDetails(id!)
   const { data: stats } = useDriverStats(id!)
-  const { data: reviews } = useDriverReviews(id!)
+  const { data: reviews, isLoading: isReviewsLoading } = useDriverReviews(id!)
   const { mutate: manageVehicleStatus, isPending: isUpdating } =
     useManageVehicleStatus(id)
   const { data: vehicleCategories } = useVehicleCategories()
@@ -374,7 +374,11 @@ export const DriverDetails = () => {
       </TabPanel>
 
       <TabPanel value={tabValue} index={1}>
-        <IdentityDetails driver={driver} kycDetails={kycDetails} />
+        <IdentityDetails
+          driver={driver}
+          kycDetails={kycDetails}
+          isLoading={isKycLoading}
+        />
       </TabPanel>
 
       <TabPanel value={tabValue} index={2}>
@@ -389,7 +393,11 @@ export const DriverDetails = () => {
       </TabPanel>
 
       <TabPanel value={tabValue} index={4}>
-        <DriverRatings stats={stats} reviews={reviews?.items} />
+        <DriverRatings
+          stats={stats}
+          reviews={reviews?.items}
+          isLoading={isReviewsLoading}
+        />
       </TabPanel>
     </>
   )

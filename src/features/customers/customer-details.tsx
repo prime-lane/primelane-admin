@@ -38,7 +38,7 @@ export const CustomerDetails = () => {
   const { data: customerResp, isLoading, error } = useCustomer(id!)
   const customer = customerResp?.user
   const { data: stats } = useCustomerStats(id!)
-  const { data: reviews } = useCustomerReviews(id!)
+  const { data: reviews, isLoading: isReviewsLoading } = useCustomerReviews(id!)
   const { mutate: manageUserStatus, isPending: isUpdating } =
     useManageUserStatus(id)
   const navigate = useNavigate()
@@ -278,7 +278,11 @@ export const CustomerDetails = () => {
         <IdentityDetails customer={customer} />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
-        <CustomerRatings stats={stats} reviews={reviews?.items} />
+        <CustomerRatings
+          stats={stats}
+          reviews={reviews?.items}
+          isLoading={isReviewsLoading}
+        />
       </TabPanel>
     </>
   )

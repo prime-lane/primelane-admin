@@ -1,17 +1,17 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
 
-import { DashboardLayout } from '../components/layout/dashboard-layout'
-import { AuthLayout } from '../components/layout/auth-layout'
 import { ErrorBoundary } from '../components/error-boundary'
+import { AuthLayout } from '../components/layout/auth-layout'
+import { DashboardLayout } from '../components/layout/dashboard-layout'
 import { NotFound } from '../components/not-found'
 import { ProtectedRoute } from '../components/protected-route'
 import { PublicRoute } from '../components/public-route'
 
-import { path } from './paths'
-import { SignIn } from '@/features/auth/sign-in'
 import { Invite } from '@/features/auth/invite'
 import { Otp } from '@/features/auth/otp'
+import { SignIn } from '@/features/auth/sign-in'
+import { path } from './paths'
 
 const Home = lazy(() =>
   import('@/features/home/home').then((module) => ({ default: module.Home })),
@@ -102,7 +102,7 @@ const RolesManagement = lazy(() =>
   })),
 )
 
-const Loading = () => <div>Loading...</div>
+const Loading = () => null
 
 export const router = createBrowserRouter([
   {

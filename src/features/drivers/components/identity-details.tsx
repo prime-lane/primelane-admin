@@ -6,10 +6,12 @@ import type { Driver } from '../types'
 import { StatsCard } from '@/features/customers/components/stats-card'
 import type { StatusVariant } from '@/components/ui/status-badge'
 import type { KycDetails } from '@/features/shared/types'
+import { IdentitySkeleton } from '@/components/ui/tab-skeletons'
 
 interface IdentityDetailsProps {
   driver: Driver
   kycDetails: KycDetails | undefined
+  isLoading?: boolean
 }
 
 const InfoRow = ({
@@ -45,9 +47,11 @@ const InfoRow = ({
 export const IdentityDetails = ({
   driver,
   kycDetails,
+  isLoading,
 }: IdentityDetailsProps) => {
   const { data: rideStats } = useDriverStats(driver.id)
 
+  if (isLoading) return <IdentitySkeleton />
   if (!kycDetails) return <ErrorState message="Failed to load KYC details" />
 
   const ninData = kycDetails.meta_data?.nin_verification || ({} as any)

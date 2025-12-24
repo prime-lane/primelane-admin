@@ -2,6 +2,7 @@ import { type ColumnDef } from '@tanstack/react-table'
 import { type Trip } from '../types'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { formatDate } from '@/utils/table-utils'
+import { formatCurrency } from '@/lib/utils'
 
 export const columns: ColumnDef<Trip>[] = [
   {
@@ -74,7 +75,7 @@ export const columns: ColumnDef<Trip>[] = [
     cell: ({ row }) => (
       <span className="text-sm">
         {row.original.actual_fare
-          ? `N${row.original.actual_fare.toLocaleString()}`
+          ? `${formatCurrency(row.original.actual_fare)}`
           : 'N/A'}
       </span>
     ),
@@ -85,7 +86,7 @@ export const columns: ColumnDef<Trip>[] = [
     cell: ({ row }) => (
       <span className="text-sm">
         {row.original.drivers_earning
-          ? `N${row.original.drivers_earning.toLocaleString()}`
+          ? `${formatCurrency(row.original.drivers_earning)}`
           : 'N/A'}
       </span>
     ),
@@ -96,7 +97,7 @@ export const columns: ColumnDef<Trip>[] = [
     cell: ({ row }) => (
       <span className="text-sm">
         {row.original.commission
-          ? `N${row.original.commission.toLocaleString()}`
+          ? `${formatCurrency(row.original.commission)}`
           : 'N/A'}
       </span>
     ),
@@ -107,7 +108,7 @@ export const columns: ColumnDef<Trip>[] = [
     cell: ({ row }) => (
       <span className="text-sm">
         {row.original.cancellation_fee
-          ? `N${row.original.cancellation_fee.toLocaleString()}`
+          ? `${formatCurrency(row.original.cancellation_fee)}`
           : 'N/A'}
       </span>
     ),

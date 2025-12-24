@@ -3,11 +3,15 @@ import { Star } from '@solar-icons/react'
 import { format } from 'date-fns'
 import type { UserRideStats, Review } from '../types'
 import { StatsCard } from '@/features/customers/components/stats-card'
+import { RatingsSkeleton } from '@/components/ui/tab-skeletons'
 
 interface DriverRatingsProps {
   stats?: UserRideStats
   reviews?: Review[]
+  isLoading?: boolean
 }
+
+// ... helper components remain same
 
 const RatingBreakdownRow = ({
   star,
@@ -64,7 +68,13 @@ const ReviewCard = ({ review }: { review: Review }) => {
   )
 }
 
-export const DriverRatings = ({ stats, reviews = [] }: DriverRatingsProps) => {
+export const DriverRatings = ({
+  stats,
+  reviews = [],
+  isLoading,
+}: DriverRatingsProps) => {
+  if (isLoading) return <RatingsSkeleton />
+
   const averageRating = stats?.average_rating || 0
   const totalReviews = reviews.length
 

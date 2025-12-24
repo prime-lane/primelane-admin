@@ -1,4 +1,5 @@
-import { ErrorState, LoadingState } from '@/components/ui/loading-error-states'
+import { ErrorState } from '@/components/ui/loading-error-states'
+import { VehicleSkeleton } from '@/components/ui/tab-skeletons'
 import { StatsCard } from '@/features/customers/components/stats-card'
 import { FileCard } from '@/components/ui/file-card'
 import { useDriverVehicle } from '../api/use-drivers'
@@ -17,13 +18,13 @@ export const VehicleDetails = ({
     isLoading,
     error,
   } = useDriverVehicle(driverId, { enabled: isVehicleSet })
-  console.log({isVehicleSet})
+  console.log({ isVehicleSet })
 
-  if (!isVehicleSet) return <ErrorState message="No vehicle found" />
+  if (!isVehicleSet) return <ErrorState message="No vehicle found." />
 
-  if (isLoading) return <LoadingState />
-  if (error) return <ErrorState message="Failed to load vehicle details" />
-  if (!vehicle) return <ErrorState message="No vehicle details found" />
+  if (isLoading) return <VehicleSkeleton />
+  if (error) return <ErrorState message="Failed to load vehicle details." />
+  if (!vehicle) return <ErrorState message="No vehicle details found." />
 
   return (
     <div className="space-y-8">

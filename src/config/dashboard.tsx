@@ -1,14 +1,13 @@
-import { type ElementType } from 'react'
 import { path } from '@/app/paths'
 import {
-  Home,
-  UsersGroupRounded,
-  UserRounded,
-  SettingsMinimalistic,
   BillList,
-  Card,
+  Home,
+  SettingsMinimalistic,
   ShieldUser,
+  UserRounded,
+  UsersGroupRounded,
 } from '@solar-icons/react'
+import { type ElementType } from 'react'
 
 export type NavItem = {
   label: string

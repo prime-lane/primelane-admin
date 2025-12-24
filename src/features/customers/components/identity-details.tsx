@@ -1,4 +1,5 @@
-import { ErrorState, LoadingState } from '@/components/ui/loading-error-states'
+import { ErrorState } from '@/components/ui/loading-error-states'
+import { IdentitySkeleton } from '@/components/ui/tab-skeletons'
 import { Avatar } from '@mui/material'
 import { ArrowRightUp } from '@solar-icons/react'
 import { useKycDetails } from '@/features/shared/api/use-users'
@@ -45,7 +46,7 @@ export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
   const { data: kycDetails, isLoading, error } = useKycDetails(customer.id)
   const { data: rideStats } = useUserRideStats(customer.id)
 
-  if (isLoading) return <LoadingState />
+  if (isLoading) return <IdentitySkeleton />
   if (error || !kycDetails)
     return <ErrorState message="Failed to load KYC details" />
 

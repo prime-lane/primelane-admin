@@ -47,32 +47,49 @@ export const DetailsSkeleton = () => {
 
       {/* Content */}
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-        <Box sx={{ display: 'flex', gap: 4 }}>
-          <Skeleton
-            variant="rectangular"
-            width="100%"
-            height={200}
-            sx={{ borderRadius: 2 }}
-          />
-          <Skeleton
-            variant="rectangular"
-            width="100%"
-            height={200}
-            sx={{ borderRadius: 2 }}
-          />
-          <Skeleton
-            variant="rectangular"
-            width="100%"
-            height={200}
-            sx={{ borderRadius: 2 }}
-          />
+        {/* Personal Info */}
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Skeleton variant="text" width={100} height={20} />
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+              gap: 4,
+            }}
+          >
+            {Array.from(new Array(5)).map((_, index) => (
+              <Box
+                key={index}
+                sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}
+              >
+                <Skeleton variant="text" width={80} height={20} />
+                <Skeleton variant="text" width={150} height={24} />
+              </Box>
+            ))}
+          </Box>
         </Box>
-        <Skeleton
-          variant="rectangular"
-          width="100%"
-          height={400}
-          sx={{ borderRadius: 2 }}
-        />
+
+        {/* Trip Summary */}
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Skeleton variant="text" width={100} height={20} />
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', md: 'repeat(4, 1fr)' },
+              gap: 2,
+            }}
+          >
+            {Array.from(new Array(4)).map((_, index) => (
+              <Skeleton
+                key={index}
+                variant="rectangular"
+                width="100%"
+                height={110}
+                sx={{ borderRadius: 2 }}
+              />
+            ))}
+          </Box>
+        </Box>
       </Box>
     </Box>
   )

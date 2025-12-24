@@ -2,7 +2,8 @@ import { path } from '@/app/paths'
 import { Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useVehicleCategories } from './api/use-vehicle-categories'
-import { LoadingState, ErrorState } from '@/components/ui/loading-error-states'
+import { ErrorState } from '@/components/ui/loading-error-states'
+import { PricingConfigSkeleton } from './components/skeletons'
 
 const SectionHeader = ({ title }: { title: string }) => (
   <h2 className="text-base font-semibold text-neutral-800">{title}</h2>
@@ -42,7 +43,7 @@ const PricingRow = ({ id, label }: { id: string; label: string }) => {
 export const PricingConfig = () => {
   const { data: categoriesData, isLoading, error } = useVehicleCategories()
 
-  if (isLoading) return <LoadingState />
+  if (isLoading) return <PricingConfigSkeleton />
   if (error) return <ErrorState message="Failed to load vehicle categories" />
   console.log(categoriesData)
 
