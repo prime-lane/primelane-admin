@@ -1,3 +1,4 @@
+import { type ElementType } from 'react'
 import { path } from '@/app/paths'
 import {
   Home,
@@ -9,7 +10,15 @@ import {
   ShieldUser,
 } from '@solar-icons/react'
 
-export const NAV_ITEMS = [
+export type NavItem = {
+  label: string
+  icon?: ElementType
+  to: string
+  hasSubmenu?: boolean
+  children?: NavItem[]
+}
+
+export const NAV_ITEMS: NavItem[] = [
   { label: 'Home', icon: Home, to: path.DASHBOARD.ROOT },
   { label: 'Customers', icon: UsersGroupRounded, to: path.DASHBOARD.CUSTOMERS },
   { label: 'Drivers', icon: UserRounded, to: path.DASHBOARD.DRIVERS },
@@ -20,27 +29,17 @@ export const NAV_ITEMS = [
   },
   { label: 'Trips', icon: BillList, to: path.DASHBOARD.TRIPS },
   {
-    label: 'Finance',
-    icon: Card,
-    to: path.DASHBOARD.FINANCE.ROOT,
-    hasSubmenu: true,
-    children: [
-      { label: 'Commission', to: path.DASHBOARD.FINANCE.COMMISSION },
-      {
-        label: 'Driver settlements',
-        to: path.DASHBOARD.FINANCE.DRIVER_SETTLEMENTS,
-      },
-      { label: 'Driver wallet', to: path.DASHBOARD.FINANCE.DRIVER_WALLET },
-      { label: 'Customer wallet', to: path.DASHBOARD.FINANCE.CUSTOMER_WALLET },
-      { label: 'Refund', to: path.DASHBOARD.FINANCE.REFUND },
-    ],
-  },
-  {
     label: 'Admin Mgmt.',
     icon: ShieldUser,
     to: path.DASHBOARD.ADMIN_MANAGEMENT,
     hasSubmenu: true,
-    children: [{ label: 'Admin', to: path.DASHBOARD.ADMIN_MANAGEMENT }],
+    children: [
+      { label: 'Admin', to: path.DASHBOARD.ADMIN_MANAGEMENT },
+      {
+        label: 'Roles & Permissions',
+        to: path.DASHBOARD.ADMIN_MANAGEMENT,
+      },
+    ],
   },
 ]
 
