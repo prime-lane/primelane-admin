@@ -67,6 +67,7 @@ TODO:
 - [x] use kyc.is vehicle set to conditionally render vehicle details
 - [x] update category dropdown , (list of categories)
 - [ ] filter button
+- [ ] add remainng summary card
 - [ ] updating vehicle category endpoint (dependent on chijiooke)
 
 

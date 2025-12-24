@@ -37,7 +37,7 @@ export const NAV_ITEMS: NavItem[] = [
       { label: 'Admin', to: path.DASHBOARD.ADMIN_MANAGEMENT },
       {
         label: 'Roles & Permissions',
-        to: path.DASHBOARD.ADMIN_MANAGEMENT,
+        to: path.DASHBOARD.ROLES_PERMISSIONS,
       },
     ],
   },

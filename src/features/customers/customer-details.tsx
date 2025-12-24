@@ -1,6 +1,7 @@
 import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
-import { ErrorState, LoadingState } from '@/components/ui/loading-error-states'
+import { DetailsSkeleton } from '@/components/ui/details-skeleton'
+import { ErrorState } from '@/components/ui/loading-error-states'
 import { StatusBadge } from '@/components/ui/status-badge'
 import {
   CustomTabPanel as TabPanel,
@@ -108,7 +109,7 @@ export const CustomerDetails = () => {
 
   const customerName = `${customer?.first_name} ${customer?.last_name}`
 
-  if (isLoading) return <LoadingState />
+  if (isLoading) return <DetailsSkeleton />
   if (error || !customer)
     return <ErrorState message="Failed to load customer details" />
 

@@ -35,6 +35,18 @@ export const useRoles = () => {
     })
 }
 
+export const usePaginatedRoles = (params?: PaginationParams) => {
+    return useQuery({
+        queryKey: ['roles-paginated', params],
+        queryFn: async () => {
+            const searchParams = buildQueryParams(params)
+            const endpoint = `${e.ROLES}?${searchParams.toString()}`
+            const response = await apiClient.get<{ roles: Role[]; pagination: PaginatedResponse<unknown>['pagination'] }>(endpoint)
+            return transformPaginatedResponse(response.data, 'roles')
+        }
+    })
+}
+
 export const useInviteAdmin = () => {
     const queryClient = useQueryClient()
 

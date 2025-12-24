@@ -96,6 +96,11 @@ const AdminManagement = lazy(() =>
     default: module.AdminManagement,
   })),
 )
+const RolesManagement = lazy(() =>
+  import('@/features/admin/roles/roles-management').then((module) => ({
+    default: module.RolesManagement,
+  })),
+)
 
 const Loading = () => <div>Loading...</div>
 
@@ -251,6 +256,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <AdminManagement />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.ROLES_PERMISSIONS,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <RolesManagement />
           </Suspense>
         ),
       },

@@ -1,44 +1,42 @@
-import {
-  ExportButton,
-  FilterButton,
-  SearchInput,
-} from '@/components/ui/data-controls'
-import { DataTable } from '@/components/ui/data-table'
-import { PageHeader } from '@/components/ui/page-header'
 import { Box, Button } from '@mui/material'
-import { UserPlus } from '@solar-icons/react'
-import { useState } from 'react'
-import { useAdmins } from './api/use-admins'
-import { adminColumns } from './components/columns'
-import { InviteAdminModal } from './components/invite-admin-modal'
-
+import { AddCircle } from '@solar-icons/react'
+import { usePaginatedRoles } from '../api/use-admins'
+import { DataTable } from '@/components/ui/data-table'
+import { SearchInput, FilterButton } from '@/components/ui/data-controls'
+import { PageHeader } from '@/components/ui/page-header'
+import { roleColumns } from './components/columns'
 import { useDebounce } from '@/hooks/use-debounce'
+import { useState } from 'react'
 
-export const AdminManagement = () => {
+export const RolesManagement = () => {
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [search, setSearch] = useState('')
-  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false)
 
   const debouncedSearch = useDebounce(search, 500)
 
-  const { data, isLoading } = useAdmins({
+  const { data, isLoading } = usePaginatedRoles({
     page,
-    limit: pageSize,
+    page_size: pageSize,
     search: debouncedSearch,
   })
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Admin Management"
+        title="Roles & Permissions"
         action={
           <Button
             variant="contained"
-            onClick={() => setIsInviteModalOpen(true)}
-            endIcon={<UserPlus />}
+            onClick={() => {}}
+            endIcon={<AddCircle />}
+            sx={{
+              bgcolor: 'black',
+              color: 'white',
+              '&:hover': { bgcolor: 'neutral.800' },
+            }}
           >
-            Invite
+            Create
           </Button>
         }
       />
@@ -48,18 +46,17 @@ export const AdminManagement = () => {
           <SearchInput
             value={search}
             onChange={setSearch}
-            placeholder="Search by admin id, name..."
+            placeholder="Search by role..."
           />
         </Box>
         <div className="flex gap-3">
           <FilterButton>Filter</FilterButton>
-          <ExportButton onClick={() => console.log('Exporting...')} />
         </div>
       </Box>
 
       <DataTable
         data={data?.items || []}
-        columns={adminColumns}
+        columns={roleColumns}
         isLoading={isLoading}
         pagination={{
           currentPage:
@@ -71,11 +68,6 @@ export const AdminManagement = () => {
         }}
         onPageChange={setPage}
         onPageSizeChange={setPageSize}
-      />
-
-      <InviteAdminModal
-        open={isInviteModalOpen}
-        onClose={() => setIsInviteModalOpen(false)}
       />
     </div>
   )

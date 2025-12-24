@@ -14,6 +14,12 @@ export interface Role {
     id: string
     name: string
     description?: string
+    permissions: string[]
+    type: string
+    isDefaultRole: boolean
+    slug: string
+    createdAt: string
+    updatedAt: string
 }
 
 export interface InviteAdminRequest {

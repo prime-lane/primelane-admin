@@ -12,6 +12,7 @@ export interface ApiError {
 export interface PaginationParams {
     page?: number
     limit?: number
+    page_size?: number
     search?: string
 }
 

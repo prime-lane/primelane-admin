@@ -1,6 +1,7 @@
 import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
-import { ErrorState, LoadingState } from '@/components/ui/loading-error-states'
+import { DetailsSkeleton } from '@/components/ui/details-skeleton'
+import { ErrorState } from '@/components/ui/loading-error-states'
 import { StatusBadge } from '@/components/ui/status-badge'
 import {
   CustomTabPanel as TabPanel,
@@ -141,7 +142,7 @@ export const DriverDetails = () => {
   )
   const driverName = `${driver?.first_name} ${driver?.last_name}`
 
-  if (isLoading) return <LoadingState />
+  if (isLoading) return <DetailsSkeleton />
   if (error || !driver)
     return <ErrorState message="Failed to load driver details" />
 
