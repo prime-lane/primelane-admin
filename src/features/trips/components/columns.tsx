@@ -65,7 +65,7 @@ export const columns: ColumnDef<Trip>[] = [
     accessorKey: 'vehicle_category',
     header: 'Vehicle Category',
     cell: ({ row }) => (
-      <span className="text-sm">{row.original.vehicle_category || 'N/A'}</span>
+      <span className="text-sm">{row.original.category_id || 'N/A'}</span>
     ),
   },
   {

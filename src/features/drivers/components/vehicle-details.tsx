@@ -5,10 +5,21 @@ import { useDriverVehicle } from '../api/use-drivers'
 
 interface VehicleDetailsProps {
   driverId: string
+  isVehicleSet?: boolean
 }
 
-export const VehicleDetails = ({ driverId }: VehicleDetailsProps) => {
-  const { data: vehicle, isLoading, error } = useDriverVehicle(driverId)
+export const VehicleDetails = ({
+  driverId,
+  isVehicleSet,
+}: VehicleDetailsProps) => {
+  const {
+    data: vehicle,
+    isLoading,
+    error,
+  } = useDriverVehicle(driverId, { enabled: isVehicleSet })
+  console.log({isVehicleSet})
+
+  if (!isVehicleSet) return <ErrorState message="No vehicle found" />
 
   if (isLoading) return <LoadingState />
   if (error) return <ErrorState message="Failed to load vehicle details" />
@@ -20,10 +31,10 @@ export const VehicleDetails = ({ driverId }: VehicleDetailsProps) => {
       <div className="space-y-4">
         <h3 className="text-sm font-semibold">Vehicle Details</h3>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <StatsCard label="Make" value={vehicle.make} />
-          <StatsCard label="Model" value={vehicle.model} />
-          <StatsCard label="Year" value={vehicle.year.toString()} />
-          <StatsCard label="Plate Number" value={vehicle.plate_number} />
+          <StatsCard label="Make" value={vehicle?.make} />
+          <StatsCard label="Model" value={vehicle?.model} />
+          <StatsCard label="Year" value={vehicle?.year.toString()} />
+          <StatsCard label="Plate Number" value={vehicle?.plate_number} />
           <StatsCard label="Vehicle VIN/Chassis no." value={vehicle.vin} />
           {/* <StatsCard label="Color" value={vehicle.color} /> */}
           {/* <StatsCard label="Vehicle Category" value={vehicle.type} /> */}

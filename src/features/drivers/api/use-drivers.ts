@@ -2,10 +2,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { apiClient } from '@/services/api-client'
 import { API_ENDPOINTS as e } from '@/services/api-endpoints'
-import type { PaginationParams, PaginatedResponse } from '@/services/api-types'
+import type { PaginationParams, PaginatedResponse, ManageUserStatusRequest } from '@/services/api-types'
 import { transformPaginatedResponse } from '@/utils/api-utils'
 import { buildQueryParams } from '@/lib/utils'
-import type { Driver, UserRideStats, Review, Wallet, Transaction } from '../types'
+import type { Driver, UserRideStats, Review, Wallet, Transaction, VehicleCategory } from '../types'
 
 interface UseDriversParams extends PaginationParams { }
 
@@ -90,14 +90,14 @@ export const useDriverTransactions = (params: UseDriverTransactionsParams) => {
     })
 }
 
-export const useDriverVehicle = (driverId: string) => {
+export const useDriverVehicle = (driverId: string, options?: { enabled?: boolean }) => {
     return useQuery({
         queryKey: ['driver-vehicle', driverId],
         queryFn: async () => {
             const response = await apiClient.get<import('../types').Vehicle>(e.VEHICLES.BY_DRIVER_ID(driverId))
             return response.data
         },
-        enabled: !!driverId,
+        enabled: !!driverId && (options?.enabled ?? true),
     })
 }
 
@@ -121,3 +121,24 @@ export const useUpdateDriver = (id?: string) => {
 
 
 
+export const useManageVehicleStatus = (id?: string) => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async ({ action, reason }: ManageUserStatusRequest) => {
+            if (!id) throw new Error('User ID is required')
+            const response = await apiClient.patch(
+                e.VEHICLES.MANAGE_STATUS(id, action),
+                { reason },
+            )
+            return response.data
+        },
+        onSuccess: () => {
+            toast.success('User status updated successfully')
+            queryClient.invalidateQueries({ queryKey: ['customer', id] })
+            queryClient.invalidateQueries({ queryKey: ['customers'] })
+            queryClient.invalidateQueries({ queryKey: ['driver', id] })
+            queryClient.invalidateQueries({ queryKey: ['drivers'] })
+        },
+    })
+}

@@ -25,9 +25,11 @@ export interface PaginatedResponse<T> {
     }
 }
 
-export type UserType = 'driver' | 'customer'
+export type UserType = 'driver' | 'customer' | 'admin'
 
 export interface ManageUserStatusRequest {
-    action: 'activate' | 'deactivate'
+    action: ActivationStatus
     reason: string
 }
+
+export type ActivationStatus = 'activate' | 'deactivate'

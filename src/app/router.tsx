@@ -66,26 +66,26 @@ const TripDetails = lazy(() =>
     default: module.TripDetails,
   })),
 )
-const Commission = lazy(() =>
-  import('@/features/finance/commission').then((module) => ({
-    default: module.Commission,
-  })),
-)
-const DriverSettlements = lazy(() =>
-  import('@/features/finance/driver-settlements').then((module) => ({
-    default: module.DriverSettlements,
-  })),
-)
-const DriverWallet = lazy(() =>
-  import('@/features/finance/driver-wallet').then((module) => ({
-    default: module.DriverWallet,
-  })),
-)
-const CustomerWallet = lazy(() =>
-  import('@/features/finance/customer-wallet').then((module) => ({
-    default: module.CustomerWallet,
-  })),
-)
+// const Commission = lazy(() =>
+//   import('@/features/finance/commission').then((module) => ({
+//     default: module.Commission,
+//   })),
+// )
+// const DriverSettlements = lazy(() =>
+//   import('@/features/finance/driver-settlements').then((module) => ({
+//     default: module.DriverSettlements,
+//   })),
+// )
+// const DriverWallet = lazy(() =>
+//   import('@/features/finance/driver-wallet').then((module) => ({
+//     default: module.DriverWallet,
+//   })),
+// )
+// const CustomerWallet = lazy(() =>
+//   import('@/features/finance/customer-wallet').then((module) => ({
+//     default: module.CustomerWallet,
+//   })),
+// )
 const Refund = lazy(() =>
   import('@/features/finance/refund').then((module) => ({
     default: module.Refund,
@@ -202,42 +202,42 @@ export const router = createBrowserRouter([
           </Suspense>
         ),
       },
-      {
-        path: path.DASHBOARD.FINANCE.ROOT,
-        element: <Navigate to={path.DASHBOARD.FINANCE.COMMISSION} replace />,
-      },
-      {
-        path: path.DASHBOARD.FINANCE.COMMISSION,
-        element: (
-          <Suspense fallback={<Loading />}>
-            <Commission />
-          </Suspense>
-        ),
-      },
-      {
-        path: path.DASHBOARD.FINANCE.DRIVER_SETTLEMENTS,
-        element: (
-          <Suspense fallback={<Loading />}>
-            <DriverSettlements />
-          </Suspense>
-        ),
-      },
-      {
-        path: path.DASHBOARD.FINANCE.DRIVER_WALLET,
-        element: (
-          <Suspense fallback={<Loading />}>
-            <DriverWallet />
-          </Suspense>
-        ),
-      },
-      {
-        path: path.DASHBOARD.FINANCE.CUSTOMER_WALLET,
-        element: (
-          <Suspense fallback={<Loading />}>
-            <CustomerWallet />
-          </Suspense>
-        ),
-      },
+      // {
+      //   path: path.DASHBOARD.FINANCE.ROOT,
+      //   element: <Navigate to={path.DASHBOARD.FINANCE.COMMISSION} replace />,
+      // },
+      // {
+      //   path: path.DASHBOARD.FINANCE.COMMISSION,
+      //   element: (
+      //     <Suspense fallback={<Loading />}>
+      //       <Commission />
+      //     </Suspense>
+      //   ),
+      // },
+      // {
+      //   path: path.DASHBOARD.FINANCE.DRIVER_SETTLEMENTS,
+      //   element: (
+      //     <Suspense fallback={<Loading />}>
+      //       <DriverSettlements />
+      //     </Suspense>
+      //   ),
+      // },
+      // {
+      //   path: path.DASHBOARD.FINANCE.DRIVER_WALLET,
+      //   element: (
+      //     <Suspense fallback={<Loading />}>
+      //       <DriverWallet />
+      //     </Suspense>
+      //   ),
+      // },
+      // {
+      //   path: path.DASHBOARD.FINANCE.CUSTOMER_WALLET,
+      //   element: (
+      //     <Suspense fallback={<Loading />}>
+      //       <CustomerWallet />
+      //     </Suspense>
+      //   ),
+      // },
       {
         path: path.DASHBOARD.FINANCE.REFUND,
         element: (

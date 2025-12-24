@@ -30,22 +30,30 @@ import { AltArrowDown } from '@solar-icons/react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
-import { useDriver, useDriverReviews, useDriverStats } from './api/use-drivers'
-import { useManageUserStatus } from '../shared/api/use-users'
+import { useKycDetails } from '../shared/api/use-users'
+import {
+  useDriver,
+  useDriverReviews,
+  useDriverStats,
+  useManageVehicleStatus,
+} from './api/use-drivers'
 import { DriverLicense } from './components/driver-license'
 import { DriverOverview } from './components/driver-overview'
 import { DriverRatings } from './components/driver-ratings'
 import { IdentityDetails } from './components/identity-details'
 import { VehicleDetails } from './components/vehicle-details'
+import { useVehicleCategories } from '../pricing-config/api/use-vehicle-categories'
 
 export const DriverDetails = () => {
   const { id } = useParams<{ id: string }>()
   const { data: driverResp, isLoading, error } = useDriver(id!)
   const driver = driverResp?.user
+  const { data: kycDetails } = useKycDetails(id!)
   const { data: stats } = useDriverStats(id!)
   const { data: reviews } = useDriverReviews(id!)
-  const { mutate: manageUserStatus, isPending: isUpdating } =
-    useManageUserStatus(id)
+  const { mutate: manageVehicleStatus, isPending: isUpdating } =
+    useManageVehicleStatus(id)
+  const { data: vehicleCategories } = useVehicleCategories()
   const navigate = useNavigate()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -91,6 +99,7 @@ export const DriverDetails = () => {
         toast.error('Please select at least one category')
         return
       }
+
       // TODO: Implement actual API call when endpoint is ready
       toast.success('Vehicle category updated successfully')
       handleCloseDialog()
@@ -104,7 +113,7 @@ export const DriverDetails = () => {
 
     const action = dialogType === 'inactive' ? 'deactivate' : 'activate'
 
-    manageUserStatus(
+    manageVehicleStatus(
       {
         action,
         reason,
@@ -210,6 +219,7 @@ export const DriverDetails = () => {
             <MenuItem
               onClick={() => handleStatusChangeClick('reactivate')}
               sx={{ color: 'success.main' }}
+              disabled={!kycDetails?.is_vehicle_set}
             >
               <span className="text-base text-green-500">
                 Re-activate Account
@@ -238,9 +248,9 @@ export const DriverDetails = () => {
               <p className="text-neutral-500 text-sm">
                 {dialogType === 'inactive'
                   ? 'Please confirm the reason for deactivating this account. The driver will lose access until the account is activated.'
-                  : dialogType === 'reactivate' // Added check for reactivate to avoid showing wrong text for vehicle_category
-                    ? 'Provide a reason for re-active this account. The driver will regain access immediately.'
-                    : 'Provide a reason for active this account. The user will regain access immediately.'}
+                  : dialogType === 'reactivate'
+                    ? 'Provide a reason for re-activate this account. The driver will regain access immediately.'
+                    : 'Provide a reason for activating this account. The user will regain access immediately.'}
               </p>
 
               {dialogType === 'vehicle_category' ? (
@@ -250,31 +260,29 @@ export const DriverDetails = () => {
                   </p>
                   <FormControl fullWidth>
                     <FormGroup>
-                      {['Business', 'Business SUV', 'First Class'].map(
-                        (category) => (
-                          <FormControlLabel
-                            key={category}
-                            control={
-                              <Checkbox
-                                checked={selectedCategories.includes(category)}
-                                onChange={(e) => {
-                                  if (e.target.checked) {
-                                    setSelectedCategories((prev) => [
-                                      ...prev,
-                                      category,
-                                    ])
-                                  } else {
-                                    setSelectedCategories((prev) =>
-                                      prev.filter((c) => c !== category),
-                                    )
-                                  }
-                                }}
-                              />
-                            }
-                            label={category}
-                          />
-                        ),
-                      )}
+                      {(vehicleCategories?.categories || []).map((category) => (
+                        <FormControlLabel
+                          key={category.id}
+                          control={
+                            <Checkbox
+                              checked={selectedCategories.includes(category.id)}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setSelectedCategories((prev) => [
+                                    ...prev,
+                                    category.id,
+                                  ])
+                                } else {
+                                  setSelectedCategories((prev) =>
+                                    prev.filter((c) => c !== category.id),
+                                  )
+                                }
+                              }}
+                            />
+                          }
+                          label={category.name}
+                        />
+                      ))}
                     </FormGroup>
                   </FormControl>
                 </div>
@@ -341,7 +349,7 @@ export const DriverDetails = () => {
                 '&:hover': { bgcolor: 'neutral.800' },
               }}
             >
-              {dialogType === 'inactive' ? 'Deactivate' : 'Active'}
+              {dialogType === 'inactive' ? 'Deactivate' : 'Activate'}
             </Button>
           </DialogActions>
         </Dialog>
@@ -365,7 +373,7 @@ export const DriverDetails = () => {
       </TabPanel>
 
       <TabPanel value={tabValue} index={1}>
-        <IdentityDetails driver={driver} />
+        <IdentityDetails driver={driver} kycDetails={kycDetails} />
       </TabPanel>
 
       <TabPanel value={tabValue} index={2}>
@@ -373,7 +381,10 @@ export const DriverDetails = () => {
       </TabPanel>
 
       <TabPanel value={tabValue} index={3}>
-        <VehicleDetails driverId={id!} />
+        <VehicleDetails
+          driverId={id!}
+          isVehicleSet={!!kycDetails?.is_vehicle_set}
+        />
       </TabPanel>
 
       <TabPanel value={tabValue} index={4}>

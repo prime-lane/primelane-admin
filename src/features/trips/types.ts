@@ -117,6 +117,7 @@ export interface Trip {
     status: StatusVariant
     ride_type?: string
     vehicle_category?: string
+    category_id?: string
     estimated_fare: number | null
     actual_fare: number | null
     drivers_earning?: number | null

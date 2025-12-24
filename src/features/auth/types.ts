@@ -1,3 +1,5 @@
+import type { UserType } from "@/services/api-types"
+
 export interface User {
     id: string
     email: string | null
@@ -29,7 +31,7 @@ export interface SignUpRequest {
     first_name: string
     last_name: string
     referal_code?: string
-    user_type: 'customer' | 'driver'
+    user_type: UserType
     image_url?: string
     gender?: 'male' | 'female'
     email?: string
@@ -54,7 +56,7 @@ export interface VerifyOTPRequest {
     phone_number?: string
     email?: string
     otp: string
-    user_type?: 'customer' | 'driver'
+    user_type?: UserType
     device_token?: string
 }
 

@@ -2,13 +2,13 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { apiClient } from '@/services/api-client'
 import { API_ENDPOINTS as e } from '@/services/api-endpoints'
-import type { PaginationParams, PaginatedResponse } from '@/services/api-types'
+import type { PaginationParams, PaginatedResponse, UserType } from '@/services/api-types'
 import { transformPaginatedResponse } from '@/utils/api-utils'
 import { buildQueryParams } from '@/lib/utils'
 import type { Customer, UserRideStats, Review, Wallet } from '../types'
 
 interface UseCustomersParams extends PaginationParams {
-    user_type?: 'customer' | 'driver'
+    user_type?: UserType
 }
 
 interface UseCustomerTransactionsParams extends PaginationParams {

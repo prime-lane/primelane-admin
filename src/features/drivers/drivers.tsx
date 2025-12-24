@@ -1,6 +1,7 @@
 import { path } from '@/app/paths'
 import { FilterButton, SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
+import { PageHeader } from '@/components/ui/page-header'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
 import { Box } from '@mui/material'
@@ -34,9 +35,7 @@ export const Drivers = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-4xl">Drivers</h1>
-      </div>
+      <PageHeader title="Drivers" />
 
       <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
         <Box sx={{ flex: 1 }}>
