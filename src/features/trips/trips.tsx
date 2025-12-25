@@ -1,33 +1,92 @@
-import { FilterButton, SearchInput } from '@/components/ui/data-controls'
+import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
+import { SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
 import { Box } from '@mui/material'
-import { AltArrowDown } from '@solar-icons/react'
+
 import { useState } from 'react'
-import { useTrips } from './api/use-trips'
+import * as useTrips from './api/use-trips'
 import { columns } from './components/columns'
 
 import { path } from '@/app/paths'
 import { useNavigate } from 'react-router-dom'
 import type { Trip } from './types'
+import { useVehicleCategories } from '../pricing-config/api/use-vehicle-categories'
 
 export const Trips = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(10)
+  const [filters, setFilters] = useState<{
+    status?: string
+    start_date?: string
+    end_date?: string
+    vehicle_category_id?: string
+  }>({})
   const debouncedSearch = useDebounce(searchTerm, 500)
   const navigate = useNavigate()
 
-  const { data, isLoading, error } = useTrips({
+  const { data: vehicleCategories } = useVehicleCategories()
+
+  const { data, isLoading, error } = useTrips.useTrips({
     search: debouncedSearch,
     page,
     limit,
+    ...filters,
   })
+
+  const handleFilterChange = (key: string, value: any) => {
+    setPage(1)
+    if (key === 'status') {
+      setFilters((prev) => ({
+        ...prev,
+        status: value.toLowerCase() === 'all' ? undefined : value.toLowerCase(),
+      }))
+    } else if (key === 'date') {
+      setFilters((prev) => ({
+        ...prev,
+        start_date: value.start ? value.start.toISOString() : undefined,
+        end_date: value.end ? value.end.toISOString() : undefined,
+      }))
+    } else if (key === 'vehicle_category') {
+      setFilters((prev) => ({
+        ...prev,
+        vehicle_category_id: value,
+      }))
+    }
+  }
 
   if (error) return <ErrorState message="Failed to load trips" />
 
   const trips = data?.items || []
+
+  const filterOptions: FilterOption[] = [
+    {
+      label: 'Trip Status',
+      key: 'status',
+      type: 'select',
+      options: [
+        { label: 'All', value: 'all' },
+        { label: 'Pending', value: 'pending' },
+        { label: 'Completed', value: 'completed' },
+        { label: 'Cancelled', value: 'cancelled' },
+        { label: 'Active', value: 'active' },
+      ],
+    },
+    {
+      label: 'Date',
+      key: 'date',
+      type: 'date-range',
+    },
+    {
+      label: 'Vehicle category',
+      key: 'vehicle_category',
+      type: 'select',
+      options:
+        (vehicleCategories?.categories || [])?.map((cat) => ({ label: cat.name, value: cat.id })) || [],
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -39,10 +98,14 @@ export const Trips = () => {
         <Box sx={{ flex: 1 }}>
           <SearchInput value={searchTerm} onChange={setSearchTerm} />
         </Box>
-        <FilterButton className="space-x-2">
-          <span>Filter By</span>
-          <AltArrowDown size={16} color="#000" />
-        </FilterButton>
+        <FilterMenu
+          options={filterOptions}
+          onFilterChange={handleFilterChange}
+          activeFilters={{
+            status: filters.status || 'all',
+            vehicle_category: filters.vehicle_category_id,
+          }}
+        />
       </Box>
 
       <DataTable

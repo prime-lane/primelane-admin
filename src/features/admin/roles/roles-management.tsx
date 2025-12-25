@@ -1,17 +1,33 @@
-import { Box, Button } from '@mui/material'
-import { AddCircle } from '@solar-icons/react'
-import { usePaginatedRoles } from '../api/use-admins'
+import { FilterButton, SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
-import { SearchInput, FilterButton } from '@/components/ui/data-controls'
 import { PageHeader } from '@/components/ui/page-header'
-import { roleColumns } from './components/columns'
 import { useDebounce } from '@/hooks/use-debounce'
-import { useState } from 'react'
+import { Box, Button } from '@mui/material'
+import { UserCross } from '@solar-icons/react'
+import { useMemo, useState } from 'react'
+import {
+  useCreateRole,
+  useDeleteRole,
+  usePaginatedRoles,
+  useUpdateRole,
+} from '../api/use-admins'
+import type { Role } from '../types'
+import { getRoleColumns } from './components/columns'
+import { DeleteRoleModal } from './components/delete-role-modal'
+import { RoleModal } from './components/role-modal'
 
 export const RolesManagement = () => {
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [search, setSearch] = useState('')
+
+  const [roleModalOpen, setRoleModalOpen] = useState(false)
+  const [editingRole, setEditingRole] = useState<Role | null>(null)
+  const [roleToDelete, setRoleToDelete] = useState<Role | null>(null)
+
+  const createRole = useCreateRole()
+  const updateRole = useUpdateRole()
+  const deleteRole = useDeleteRole()
 
   const debouncedSearch = useDebounce(search, 500)
 
@@ -21,6 +37,50 @@ export const RolesManagement = () => {
     search: debouncedSearch,
   })
 
+  const handleCreate = () => {
+    setEditingRole(null)
+    setRoleModalOpen(true)
+  }
+
+  const handleEdit = (role: Role) => {
+    setEditingRole(role)
+    setRoleModalOpen(true)
+  }
+
+  const handleDeleteClick = (role: Role) => {
+    setRoleToDelete(role)
+  }
+
+  const handleConfirmDelete = () => {
+    if (roleToDelete) {
+      deleteRole.mutate(roleToDelete.id, {
+        onSuccess: () => setRoleToDelete(null),
+      })
+    }
+  }
+
+  const handleRoleSubmit = (data: { name: string; permissions: string[] }) => {
+    if (editingRole) {
+      updateRole.mutate(
+        { id: editingRole.id, data },
+        {
+          onSuccess: () => setRoleModalOpen(false),
+        },
+      )
+    } else {
+      createRole.mutate(data, {
+        onSuccess: () => setRoleModalOpen(false),
+      })
+    }
+  }
+
+  const columns = useMemo(
+    () => getRoleColumns(handleEdit, handleDeleteClick),
+    [],
+  )
+
+  const isSaving = createRole.isPending || updateRole.isPending
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -28,8 +88,8 @@ export const RolesManagement = () => {
         action={
           <Button
             variant="contained"
-            onClick={() => {}}
-            endIcon={<AddCircle />}
+            onClick={handleCreate}
+            endIcon={<UserCross className="text-white" />}
             sx={{
               bgcolor: 'black',
               color: 'white',
@@ -56,7 +116,7 @@ export const RolesManagement = () => {
 
       <DataTable
         data={data?.items || []}
-        columns={roleColumns}
+        columns={columns}
         isLoading={isLoading}
         pagination={{
           currentPage:
@@ -68,6 +128,22 @@ export const RolesManagement = () => {
         }}
         onPageChange={setPage}
         onPageSizeChange={setPageSize}
+      />
+
+      <RoleModal
+        open={roleModalOpen}
+        onClose={() => setRoleModalOpen(false)}
+        onSubmit={handleRoleSubmit}
+        initialData={editingRole}
+        isLoading={isSaving}
+      />
+
+      <DeleteRoleModal
+        open={Boolean(roleToDelete)}
+        onClose={() => setRoleToDelete(null)}
+        onConfirm={handleConfirmDelete}
+        roleName={roleToDelete?.name}
+        isLoading={deleteRole.isPending}
       />
     </div>
   )

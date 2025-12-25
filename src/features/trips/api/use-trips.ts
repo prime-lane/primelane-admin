@@ -8,6 +8,9 @@ import type { Trip, TripDetail } from '../types'
 
 interface UseTripsParams extends PaginationParams {
     status?: string
+    start_date?: string
+    end_date?: string
+    vehicle_category_id?: string
 }
 
 export const useTrips = (params?: UseTripsParams) => {

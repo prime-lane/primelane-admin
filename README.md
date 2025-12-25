@@ -66,8 +66,8 @@ TODO:
 - [x] new endpoint for managing vehcile activation status (kycDetails.is_vehicle_set)
 - [x] use kyc.is vehicle set to conditionally render vehicle details
 - [x] update category dropdown , (list of categories)
+- [x] add remaining summary card
 - [ ] filter button
-- [ ] add remainng summary card
 - [ ] updating vehicle category endpoint (dependent on chijiooke)
 
 

@@ -4,16 +4,33 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { useState } from 'react'
 import type { Role } from '../../types'
 
-const ActionMenu = ({ role }: { role: Role }) => {
+const ActionMenu = ({
+  role,
+  onEdit,
+  onDelete,
+}: {
+  role: Role
+  onEdit: (role: Role) => void
+  onDelete: (role: Role) => void
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
-    console.log(role.id)
   }
 
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const handleEdit = () => {
+    onEdit(role)
+    handleClose()
+  }
+
+  const handleDelete = () => {
+    onDelete(role)
+    handleClose()
   }
 
   return (
@@ -28,18 +45,23 @@ const ActionMenu = ({ role }: { role: Role }) => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleClose}>
-          <span className='text-sm font-medium text-[#262626]'>Edit Permissions</span>
+        <MenuItem onClick={handleEdit}>
+          <span className="text-sm font-medium text-[#262626]">
+            Edit Permissions
+          </span>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <span className='text-sm font-medium text-[red]'>Delete Role</span>
+        <MenuItem onClick={handleDelete}>
+          <span className="text-sm font-medium text-[red]">Delete Role</span>
         </MenuItem>
       </Menu>
     </>
   )
 }
 
-export const roleColumns: ColumnDef<Role>[] = [
+export const getRoleColumns = (
+  onEdit: (role: Role) => void,
+  onDelete: (role: Role) => void,
+): ColumnDef<Role>[] => [
   {
     accessorKey: 'name',
     header: 'Role',
@@ -58,6 +80,8 @@ export const roleColumns: ColumnDef<Role>[] = [
   {
     id: 'actions',
     header: 'Actions',
-    cell: ({ row }) => <ActionMenu role={row.original} />,
+    cell: ({ row }) => (
+      <ActionMenu role={row.original} onEdit={onEdit} onDelete={onDelete} />
+    ),
   },
 ]

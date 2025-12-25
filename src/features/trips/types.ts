@@ -135,3 +135,20 @@ export interface Trip {
 
 
 
+export interface VehicleCategory {
+    id: string
+    name: string
+    description: string
+    image_url: string
+    base_fare: number
+    distance_rate: number
+    time_rate: number
+    cancellation_fee: number
+    minimum_fare: number
+    booking_fee: number
+    commission_rate: number
+    surge_multiplier: number
+    is_active: boolean
+    created_at: string
+    updated_at: string
+}

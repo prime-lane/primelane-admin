@@ -7,7 +7,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import type { Driver, Review, Transaction, UserRideStats, Wallet } from '../types'
 
-interface UseDriversParams extends PaginationParams { }
+interface UseDriversParams extends PaginationParams {
+    status?: string
+    start_date?: string
+    end_date?: string
+}
 
 interface UseDriverTransactionsParams extends PaginationParams {
     user_id: string

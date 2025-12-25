@@ -1,14 +1,19 @@
 import { FilterButton } from '@/components/ui/data-controls'
 import { ErrorState } from '@/components/ui/loading-error-states'
-import { formatNumber } from '@/lib/utils'
+import { formatCurrency, formatNumber } from '@/lib/utils'
 import { Box, Card, CardContent, Grid, Skeleton } from '@mui/material'
 import {
   AltArrowDown,
+  Banknote2,
   Bill,
   Bill2,
   Rocket,
   Shield,
+  ShieldCheck,
   ShieldCross,
+  UserCheck,
+  UserCross,
+  UsersGroupTwoRounded,
 } from '@solar-icons/react'
 import { useDashboardStats } from './api/use-dashboard-stats'
 
@@ -58,34 +63,64 @@ export const Home = () => {
   const stats = dashboardData
     ? [
         {
-          icon: <Rocket size={24} color="black" />,
-          label: 'Total Rides',
-          value: formatNumber(dashboardData.total_rides),
-        },
-        {
-          icon: <Rocket size={24} color="black" />,
-          label: 'Total Accepted Rides',
-          value: formatNumber(dashboardData.total_accepted_rides),
-        },
-        {
-          icon: <ShieldCross size={24} color="black" />,
-          label: 'Total Cancelled Rides',
-          value: formatNumber(dashboardData.total_cancelled_rides),
-        },
-        {
           icon: <Bill size={24} color="black" />,
-          label: 'Acceptance Rate',
-          value: `${dashboardData.acceptance_rate.toFixed(2)}%`,
+          label: 'Total trip revenue',
+          value: formatNumber(0),
+        },
+        {
+          icon: <Banknote2 size={24} color="black" />,
+          label: 'Total commission',
+          value: formatNumber(0),
         },
         {
           icon: <Bill2 size={24} color="black" />,
-          label: 'Cancellation Rate',
-          value: `${dashboardData.cancellation_rate.toFixed(2)}%`,
+          label: 'Driver earning',
+          value: formatCurrency(0),
+        },
+        {
+          icon: <Rocket size={24} color="black" />,
+          label: 'Completed trips',
+          value: formatNumber(0),
+        },
+        {
+          icon: <Rocket size={24} color="black" />,
+          label: 'Total one-way trips',
+          value: formatNumber(0),
+        },
+        {
+          icon: <Rocket size={24} color="black" />,
+          label: 'Total hourly trips',
+          value: formatNumber(0),
+        },
+        {
+          icon: <UsersGroupTwoRounded size={24} color="black" />,
+          label: 'Total Customers',
+          value: formatNumber(0),
+        },
+        {
+          icon: <UserCross size={24} color="black" />,
+          label: 'Unverified Customers',
+          value: formatNumber(0),
+        },
+        {
+          icon: <UserCheck size={24} color="black" />,
+          label: 'Verified Customers',
+          value: formatNumber(0),
         },
         {
           icon: <Shield size={24} color="black" />,
-          label: 'Average Rating',
-          value: dashboardData.average_rating.toFixed(1),
+          label: 'Total Drivers',
+          value: formatNumber(0),
+        },
+        {
+          icon: <ShieldCheck size={24} color="black" />,
+          label: 'Verified Drivers',
+          value: formatNumber(0),
+        },
+        {
+          icon: <ShieldCross size={24} color="black" />,
+          label: 'Pending Drivers',
+          value: formatNumber(0),
         },
       ]
     : []

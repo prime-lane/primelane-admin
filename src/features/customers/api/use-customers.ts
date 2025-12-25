@@ -9,6 +9,9 @@ import type { Customer, UserRideStats, Review, Wallet } from '../types'
 
 interface UseCustomersParams extends PaginationParams {
     user_type?: UserType
+    status?: string
+    start_date?: string
+    end_date?: string
 }
 
 interface UseCustomerTransactionsParams extends PaginationParams {

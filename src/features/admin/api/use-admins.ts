@@ -30,7 +30,7 @@ export const useRoles = () => {
         queryKey: ['roles'],
         queryFn: async () => {
             const response = await apiClient.get<{ roles: Role[] }>(e.ROLES)
-            return response.data.roles
+            return response.data?.roles
         }
     })
 }
@@ -61,6 +61,59 @@ export const useInviteAdmin = () => {
         },
         onError: (error: any) => {
             toast.error(error.message || 'Failed to invite admin')
+        }
+    })
+}
+export const useCreateRole = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (data: { name: string; permissions: string[] }) => {
+            const response = await apiClient.post<{ message: string }>(e.ROLES, data)
+            return response.data
+        },
+        onSuccess: (response) => {
+            toast.success(response.message || 'Role created successfully')
+            queryClient.invalidateQueries({ queryKey: ['roles-paginated'] })
+        },
+        onError: (error: any) => {
+            toast.error(error.message || 'Failed to create role')
+        }
+    })
+}
+
+export const useUpdateRole = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async ({ id, data }: { id: string; data: { name: string; permissions: string[] } }) => {
+            const response = await apiClient.put<{ message: string }>(`${e.ROLES}/${id}`, data)
+            return response.data
+        },
+        onSuccess: (response) => {
+            toast.success(response.message || 'Role updated successfully')
+            queryClient.invalidateQueries({ queryKey: ['roles-paginated'] })
+        },
+        onError: (error: any) => {
+            toast.error(error.message || 'Failed to update role')
+        }
+    })
+}
+
+export const useDeleteRole = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (id: string) => {
+            const response = await apiClient.delete<{ message: string }>(`${e.ROLES}/${id}`)
+            return response.data
+        },
+        onSuccess: (response) => {
+            toast.success(response.message || 'Role deleted successfully')
+            queryClient.invalidateQueries({ queryKey: ['roles-paginated'] })
+        },
+        onError: (error: any) => {
+            toast.error(error.message || 'Failed to delete role')
         }
     })
 }
