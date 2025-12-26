@@ -32,7 +32,7 @@ export const Trips = () => {
   const { data, isLoading, error } = useTrips.useTrips({
     search: debouncedSearch,
     page,
-    limit,
+    page_size: limit,
     ...filters,
   })
 
@@ -84,7 +84,10 @@ export const Trips = () => {
       key: 'vehicle_category',
       type: 'select',
       options:
-        (vehicleCategories?.categories || [])?.map((cat) => ({ label: cat.name, value: cat.id })) || [],
+        (vehicleCategories?.categories || [])?.map((cat) => ({
+          label: cat.name,
+          value: cat.id,
+        })) || [],
     },
   ]
 
