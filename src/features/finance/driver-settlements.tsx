@@ -61,7 +61,7 @@ export const DriverSettlements = () => {
   const { data, isLoading, error } = useDriverSettlements({
     search: debouncedSearch,
     page,
-    limit,
+    page_size: limit,
   })
 
   if (error) return <ErrorState message="Failed to load driver settlements" />

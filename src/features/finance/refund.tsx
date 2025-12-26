@@ -55,7 +55,7 @@ export const Refund = () => {
   const { data, isLoading, error } = useRefunds({
     search: debouncedSearch,
     page,
-    limit,
+    page_size: limit,
   })
 
   if (error) return <ErrorState message="Failed to load refunds" />
