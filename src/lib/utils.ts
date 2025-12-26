@@ -48,3 +48,7 @@ export const formatTitle = (id: string) => {
 export const formatGender = (initial: 'M' | 'F') => {
   return initial === 'M' ? 'Male' : 'Female'
 }
+export const formatNumber = (num?: number) => {
+  if (num === undefined || num === null) return '0'
+  return num.toLocaleString()
+}

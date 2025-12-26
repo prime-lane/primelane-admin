@@ -1,13 +1,12 @@
-import type { AccountStatus } from '../drivers/types'
+export type AccountStatus = 'active' | 'pending' | 'inactive'
 
 export interface Admin {
     id: string
     first_name: string
     last_name: string
     email: string
-    role: string
+    user_type: string
     status: AccountStatus
-    last_active_at: string
     created_at: string
 }
 
@@ -15,11 +14,17 @@ export interface Role {
     id: string
     name: string
     description?: string
+    permissions: string[]
+    type: string
+    isDefaultRole: boolean
+    slug: string
+    createdAt: string
+    updatedAt: string
 }
 
 export interface InviteAdminRequest {
     first_name: string
     last_name: string
     email: string
-    role: string
+    role_id: string
 }

@@ -1,3 +1,5 @@
+import type { ActivationStatus } from "./api-types";
+
 export const API_ENDPOINTS = {
     AUTH: {
         SIGN_UP: '/auth/sign-up',
@@ -30,10 +32,7 @@ export const API_ENDPOINTS = {
     USERS: {
         ROOT: '/users',
         BY_ID: (id: string) => `/users/${id}`,
-        MY_PROFILE: '/users/my-profile',
-        PREFERENCES: (userId?: string) =>
-            userId ? `/users/preferences/${userId}` : '/users/preferences',
-        MANAGE_STATUS: (id: string, action: 'activate' | 'deactivate') =>
+        MANAGE_STATUS: (id: string, action: ActivationStatus) =>
             `/users/manage/${id}/${action}`,
     },
     CUSTOMERS: {
@@ -43,6 +42,7 @@ export const API_ENDPOINTS = {
     DRIVERS: {
         ROOT: '/users',
         BY_ID: (id: string) => `/users/${id}`,
+        
     },
     ANALYTICS: {
         MY_RIDE_STATS: '/analytics/my-ride-stats',
@@ -69,6 +69,8 @@ export const API_ENDPOINTS = {
     },
     VEHICLES: {
         BY_DRIVER_ID: (id: string) => `/vehicles/driver/${id}`,
+        MANAGE_STATUS: (id: string, action: ActivationStatus) =>
+            `/vehicles/manage/${id}/${action}`,
     },
     KYC: {
         VERIFY: (idType: 'nin' | 'dl' | 'ip') => `/kyc/verify/${idType}`,

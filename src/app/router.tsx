@@ -1,17 +1,17 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
 
-import { DashboardLayout } from '../components/layout/dashboard-layout'
-import { AuthLayout } from '../components/layout/auth-layout'
 import { ErrorBoundary } from '../components/error-boundary'
+import { AuthLayout } from '../components/layout/auth-layout'
+import { DashboardLayout } from '../components/layout/dashboard-layout'
 import { NotFound } from '../components/not-found'
 import { ProtectedRoute } from '../components/protected-route'
 import { PublicRoute } from '../components/public-route'
 
-import { path } from './paths'
-import { SignIn } from '@/features/auth/sign-in'
 import { Invite } from '@/features/auth/invite'
 import { Otp } from '@/features/auth/otp'
+import { SignIn } from '@/features/auth/sign-in'
+import { path } from './paths'
 
 const Home = lazy(() =>
   import('@/features/home/home').then((module) => ({ default: module.Home })),
@@ -66,26 +66,26 @@ const TripDetails = lazy(() =>
     default: module.TripDetails,
   })),
 )
-const Commission = lazy(() =>
-  import('@/features/finance/commission').then((module) => ({
-    default: module.Commission,
-  })),
-)
-const DriverSettlements = lazy(() =>
-  import('@/features/finance/driver-settlements').then((module) => ({
-    default: module.DriverSettlements,
-  })),
-)
-const DriverWallet = lazy(() =>
-  import('@/features/finance/driver-wallet').then((module) => ({
-    default: module.DriverWallet,
-  })),
-)
-const CustomerWallet = lazy(() =>
-  import('@/features/finance/customer-wallet').then((module) => ({
-    default: module.CustomerWallet,
-  })),
-)
+// const Commission = lazy(() =>
+//   import('@/features/finance/commission').then((module) => ({
+//     default: module.Commission,
+//   })),
+// )
+// const DriverSettlements = lazy(() =>
+//   import('@/features/finance/driver-settlements').then((module) => ({
+//     default: module.DriverSettlements,
+//   })),
+// )
+// const DriverWallet = lazy(() =>
+//   import('@/features/finance/driver-wallet').then((module) => ({
+//     default: module.DriverWallet,
+//   })),
+// )
+// const CustomerWallet = lazy(() =>
+//   import('@/features/finance/customer-wallet').then((module) => ({
+//     default: module.CustomerWallet,
+//   })),
+// )
 const Refund = lazy(() =>
   import('@/features/finance/refund').then((module) => ({
     default: module.Refund,
@@ -96,8 +96,13 @@ const AdminManagement = lazy(() =>
     default: module.AdminManagement,
   })),
 )
+const RolesManagement = lazy(() =>
+  import('@/features/admin/roles/roles-management').then((module) => ({
+    default: module.RolesManagement,
+  })),
+)
 
-const Loading = () => <div>Loading...</div>
+const Loading = () => null
 
 export const router = createBrowserRouter([
   {
@@ -202,42 +207,42 @@ export const router = createBrowserRouter([
           </Suspense>
         ),
       },
-      {
-        path: path.DASHBOARD.FINANCE.ROOT,
-        element: <Navigate to={path.DASHBOARD.FINANCE.COMMISSION} replace />,
-      },
-      {
-        path: path.DASHBOARD.FINANCE.COMMISSION,
-        element: (
-          <Suspense fallback={<Loading />}>
-            <Commission />
-          </Suspense>
-        ),
-      },
-      {
-        path: path.DASHBOARD.FINANCE.DRIVER_SETTLEMENTS,
-        element: (
-          <Suspense fallback={<Loading />}>
-            <DriverSettlements />
-          </Suspense>
-        ),
-      },
-      {
-        path: path.DASHBOARD.FINANCE.DRIVER_WALLET,
-        element: (
-          <Suspense fallback={<Loading />}>
-            <DriverWallet />
-          </Suspense>
-        ),
-      },
-      {
-        path: path.DASHBOARD.FINANCE.CUSTOMER_WALLET,
-        element: (
-          <Suspense fallback={<Loading />}>
-            <CustomerWallet />
-          </Suspense>
-        ),
-      },
+      // {
+      //   path: path.DASHBOARD.FINANCE.ROOT,
+      //   element: <Navigate to={path.DASHBOARD.FINANCE.COMMISSION} replace />,
+      // },
+      // {
+      //   path: path.DASHBOARD.FINANCE.COMMISSION,
+      //   element: (
+      //     <Suspense fallback={<Loading />}>
+      //       <Commission />
+      //     </Suspense>
+      //   ),
+      // },
+      // {
+      //   path: path.DASHBOARD.FINANCE.DRIVER_SETTLEMENTS,
+      //   element: (
+      //     <Suspense fallback={<Loading />}>
+      //       <DriverSettlements />
+      //     </Suspense>
+      //   ),
+      // },
+      // {
+      //   path: path.DASHBOARD.FINANCE.DRIVER_WALLET,
+      //   element: (
+      //     <Suspense fallback={<Loading />}>
+      //       <DriverWallet />
+      //     </Suspense>
+      //   ),
+      // },
+      // {
+      //   path: path.DASHBOARD.FINANCE.CUSTOMER_WALLET,
+      //   element: (
+      //     <Suspense fallback={<Loading />}>
+      //       <CustomerWallet />
+      //     </Suspense>
+      //   ),
+      // },
       {
         path: path.DASHBOARD.FINANCE.REFUND,
         element: (
@@ -251,6 +256,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <AdminManagement />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.ROLES_PERMISSIONS,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <RolesManagement />
           </Suspense>
         ),
       },

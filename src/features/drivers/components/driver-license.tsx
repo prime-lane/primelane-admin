@@ -1,4 +1,5 @@
-import { ErrorState, LoadingState } from '@/components/ui/loading-error-states'
+import { ErrorState } from '@/components/ui/loading-error-states'
+import { LicenseSkeleton } from '@/components/ui/tab-skeletons'
 import { StatsCard } from '@/features/customers/components/stats-card'
 import { useKycDetails } from '@/features/shared/api/use-users'
 import { useParams } from 'react-router-dom'
@@ -7,7 +8,7 @@ export const DriverLicense = () => {
   const { id } = useParams<{ id: string }>()
   const { data: kyc, isLoading, error } = useKycDetails(id!)
 
-  if (isLoading) return <LoadingState />
+  if (isLoading) return <LicenseSkeleton />
   if (error || !kyc)
     return <ErrorState message="Failed to load driver license details" />
 

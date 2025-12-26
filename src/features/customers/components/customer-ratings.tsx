@@ -4,11 +4,15 @@ import { format } from 'date-fns'
 import type { CustomerStats } from '../api/use-customer-stats'
 import type { Review } from '../types'
 import { StatsCard } from './stats-card'
+import { RatingsSkeleton } from '@/components/ui/tab-skeletons'
 
 interface CustomerRatingsProps {
   stats?: CustomerStats
   reviews?: Review[]
+  isLoading?: boolean
 }
+
+// ... helper components remain same
 
 const RatingBreakdownRow = ({
   star,
@@ -71,7 +75,10 @@ const ReviewCard = ({ review }: { review: Review }) => {
 export const CustomerRatings = ({
   stats,
   reviews = [],
+  isLoading,
 }: CustomerRatingsProps) => {
+  if (isLoading) return <RatingsSkeleton />
+
   const averageRating = stats?.average_rating || 0
   const totalReviews = reviews.length
 

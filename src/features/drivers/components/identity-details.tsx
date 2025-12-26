@@ -1,14 +1,17 @@
-import { ErrorState, LoadingState } from '@/components/ui/loading-error-states'
+import { ErrorState } from '@/components/ui/loading-error-states'
 import { Avatar } from '@mui/material'
 import { ArrowRightUp } from '@solar-icons/react'
-import { useKycDetails } from '@/features/shared/api/use-users'
 import { useDriverStats } from '../api/use-drivers'
 import type { Driver } from '../types'
 import { StatsCard } from '@/features/customers/components/stats-card'
 import type { StatusVariant } from '@/components/ui/status-badge'
+import type { KycDetails } from '@/features/shared/types'
+import { IdentitySkeleton } from '@/components/ui/tab-skeletons'
 
 interface IdentityDetailsProps {
   driver: Driver
+  kycDetails: KycDetails | undefined
+  isLoading?: boolean
 }
 
 const InfoRow = ({
@@ -41,13 +44,15 @@ const InfoRow = ({
   )
 }
 
-export const IdentityDetails = ({ driver }: IdentityDetailsProps) => {
-  const { data: kycDetails, isLoading, error } = useKycDetails(driver.id)
+export const IdentityDetails = ({
+  driver,
+  kycDetails,
+  isLoading,
+}: IdentityDetailsProps) => {
   const { data: rideStats } = useDriverStats(driver.id)
 
-  if (isLoading) return <LoadingState />
-  if (error || !kycDetails)
-    return <ErrorState message="Failed to load KYC details" />
+  if (isLoading) return <IdentitySkeleton />
+  if (!kycDetails) return <ErrorState message="Failed to load KYC details" />
 
   const ninData = kycDetails.meta_data?.nin_verification || ({} as any)
 

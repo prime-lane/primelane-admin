@@ -61,12 +61,14 @@ TODO:
 - [x] driver license from kyc
 - [x] paginate from backend
 - [x] trip status for trips/rides
-- [ ] Finance
-- [ ] Admin
 - [ ] all reviews page
 - [ ] Home page (pending endpoint, dont' use this `/analytics/my-ride-stats`)
+- [x] new endpoint for managing vehcile activation status (kycDetails.is_vehicle_set)
+- [x] use kyc.is vehicle set to conditionally render vehicle details
+- [x] update category dropdown , (list of categories)
+- [x] add remaining summary card
 - [ ] filter button
-
+- [ ] updating vehicle category endpoint (dependent on chijiooke)
 
 
 BACKEND

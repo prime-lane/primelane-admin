@@ -1,6 +1,6 @@
 import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
-import { LoadingState, ErrorState } from '@/components/ui/loading-error-states'
+import { ErrorState } from '@/components/ui/loading-error-states'
 import { Button, InputAdornment, TextField } from '@mui/material'
 import { useEffect } from 'react'
 import { useForm, type Resolver } from 'react-hook-form'
@@ -13,6 +13,7 @@ import {
   pricingConfigSchema,
 } from './schemas/pricing-config-schema'
 import { useVehicleCategory } from './api/use-vehicle-categories'
+import { PricingConfigDetailsSkeleton } from './components/skeletons'
 
 export const PricingConfigDetails = () => {
   const { id } = useParams<{ id: string }>()
@@ -76,7 +77,7 @@ export const PricingConfigDetails = () => {
     navigate(path.DASHBOARD.PRICING_CONFIG)
   }
 
-  if (isLoading) return <LoadingState />
+  if (isLoading) return <PricingConfigDetailsSkeleton />
   if (error)
     return (
       <ErrorState

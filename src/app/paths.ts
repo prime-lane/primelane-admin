@@ -28,5 +28,6 @@ export const path = {
       REFUND: '/dashboard/finance/refund',
     },
     ADMIN_MANAGEMENT: '/dashboard/admin-management',
+    ROLES_PERMISSIONS: '/dashboard/roles-permissions',
   },
 } as const

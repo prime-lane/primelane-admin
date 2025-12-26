@@ -1,6 +1,7 @@
 import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
-import { ErrorState, LoadingState } from '@/components/ui/loading-error-states'
+import { DetailsSkeleton } from '@/components/ui/details-skeleton'
+import { ErrorState } from '@/components/ui/loading-error-states'
 import { StatusBadge } from '@/components/ui/status-badge'
 import {
   CustomTabPanel as TabPanel,
@@ -37,7 +38,7 @@ export const CustomerDetails = () => {
   const { data: customerResp, isLoading, error } = useCustomer(id!)
   const customer = customerResp?.user
   const { data: stats } = useCustomerStats(id!)
-  const { data: reviews } = useCustomerReviews(id!)
+  const { data: reviews, isLoading: isReviewsLoading } = useCustomerReviews(id!)
   const { mutate: manageUserStatus, isPending: isUpdating } =
     useManageUserStatus(id)
   const navigate = useNavigate()
@@ -108,7 +109,7 @@ export const CustomerDetails = () => {
 
   const customerName = `${customer?.first_name} ${customer?.last_name}`
 
-  if (isLoading) return <LoadingState />
+  if (isLoading) return <DetailsSkeleton />
   if (error || !customer)
     return <ErrorState message="Failed to load customer details" />
 
@@ -277,7 +278,11 @@ export const CustomerDetails = () => {
         <IdentityDetails customer={customer} />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
-        <CustomerRatings stats={stats} reviews={reviews?.items} />
+        <CustomerRatings
+          stats={stats}
+          reviews={reviews?.items}
+          isLoading={isReviewsLoading}
+        />
       </TabPanel>
     </>
   )

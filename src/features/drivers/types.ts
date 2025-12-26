@@ -1,5 +1,6 @@
 export type AccountStatus = 'active' | 'pending' | 'inactive'
 
+
 export interface Driver {
     id: string
     created_at: string
