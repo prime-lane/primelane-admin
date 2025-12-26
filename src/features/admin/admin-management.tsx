@@ -24,7 +24,7 @@ export const AdminManagement = () => {
 
   const { data, isLoading } = useAdmins({
     page,
-    limit: pageSize,
+    page_size: pageSize,
     search: debouncedSearch,
   })
 

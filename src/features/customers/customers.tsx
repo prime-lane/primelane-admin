@@ -29,7 +29,7 @@ export const Customers = () => {
   const { data, isLoading, error } = useCustomers({
     search: debouncedSearch,
     page,
-    limit,
+    page_size: limit,
     user_type: 'customer',
     ...filters,
   })

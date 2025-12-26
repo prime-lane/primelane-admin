@@ -28,7 +28,7 @@ export const Drivers = () => {
   const { data, isLoading, error } = useDrivers({
     search: debouncedSearch,
     page,
-    limit,
+    page_size: limit,
     ...filters,
   })
 
