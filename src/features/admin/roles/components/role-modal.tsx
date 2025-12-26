@@ -21,18 +21,7 @@ interface RoleModalProps {
 
 import { useRoles } from '../../api/use-admins'
 
-// Helper to format permission strings into readable labels
-const formatPermissionLabel = (permission: string) => {
-  const parts = permission.split('.')
-  if (parts.length > 1) {
-    // e.g. driver.manage_status -> Activate/Deactivate driver
-    // This is a rough heuristic since we don't have a mapping.
-    // We try to make it readable: "Manage status"
-    const action = parts[parts.length - 1].replace(/_/g, ' ')
-    return action.charAt(0).toUpperCase() + action.slice(1)
-  }
-  return permission
-}
+import { getPermissionCategory, getPermissionLabel } from '../utils'
 
 export const RoleModal = ({
   open,
@@ -48,56 +37,17 @@ export const RoleModal = ({
   // Dynamic permission aggregation
   const permissionGroups = useMemo(() => {
     const allPermissions = new Set<string>()
-    // Assuming 'Super Admin' or similar roles have comprehensive permissions
     roles.forEach((role) => {
       role.permissions.forEach((p) => allPermissions.add(p))
     })
 
-    // If no permissions found from roles (e.g. empty DB), fallback to basic known set or empty
-    // But per requirement we must fetch. If empty, the UI will be empty.
-
-    const groups: {
-      category: string
-      permissions: { label: string; value: string }[]
-    }[] = []
     const categoryMap = new Map<string, { label: string; value: string }[]>()
 
     Array.from(allPermissions)
       .sort()
       .forEach((perm) => {
-        const parts = perm.split('.')
-        const categoryKey = parts[0]
-        const categoryLabel =
-          categoryKey.charAt(0).toUpperCase() +
-          categoryKey.slice(1) +
-          ' Management' // Heuristic
-
-        let label = formatPermissionLabel(perm)
-
-        // Manual overrides for specific known keys to match desired UI if they exist in DB
-        if (perm === 'driver.view') label = 'View only'
-        if (perm === 'driver.manage_status')
-          label = 'Activate/Deactivate driver'
-        if (perm === 'driver.verify') label = 'Trigger Verification'
-        if (perm === 'driver.edit') label = 'Edit driver'
-
-        if (perm === 'customer.view') label = 'View only'
-        if (perm === 'customer.manage_status')
-          label = 'Re-activate/Deactivate customer'
-        if (perm === 'customer.verify') label = 'Trigger verification'
-        if (perm === 'customer.edit') label = 'Edit customer'
-
-        if (perm === 'pricing.view') label = 'View only'
-        if (perm === 'pricing.edit') label = 'Edit'
-
-        if (perm === 'trip.view') label = 'View Trips'
-
-        if (perm === 'finance.commissions.view') label = 'View commissions'
-        if (perm === 'finance.earnings.view') label = 'View Earnings'
-        if (perm === 'finance.driver_wallet.view') label = 'View Driver Wallet'
-        if (perm === 'finance.customer_wallet.view')
-          label = 'View Customer Wallet'
-        if (perm === 'finance.refunds.view') label = 'View Refunds'
+        const categoryLabel = getPermissionCategory(perm)
+        const label = getPermissionLabel(perm)
 
         if (!categoryMap.has(categoryLabel)) {
           categoryMap.set(categoryLabel, [])
@@ -155,6 +105,7 @@ export const RoleModal = ({
 
   const handleSubmit = () => {
     onSubmit({ name, permissions: selectedPermissions })
+    // onSubmit({ name, permissions: selectedPermissions })
   }
 
   return (
@@ -192,7 +143,7 @@ export const RoleModal = ({
             {permissionGroups.map((group) => (
               <div key={group.category} className="space-y-2">
                 <h4 className="text-sm font-semibold text-neutral-900 border-b border-neutral-100 pb-2">
-                  {group.category}
+                  {group.category.split(':')[0]}
                 </h4>
                 <div className="flex flex-col gap-1 pl-1">
                   {group.permissions.map((permission) => (

@@ -87,7 +87,7 @@ export const useUpdateRole = () => {
 
     return useMutation({
         mutationFn: async ({ id, data }: { id: string; data: { name: string; permissions: string[] } }) => {
-            const response = await apiClient.put<{ message: string }>(`${e.ROLES}/${id}`, data)
+            const response = await apiClient.patch<{ message: string }>(`${e.ROLES}/${id}`, data)
             return response.data
         },
         onSuccess: (response) => {
