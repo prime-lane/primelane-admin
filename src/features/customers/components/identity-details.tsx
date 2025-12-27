@@ -1,45 +1,14 @@
+import { InfoRow } from '@/components/ui/info-row'
 import { ErrorState } from '@/components/ui/loading-error-states'
+import type { StatusVariant } from '@/components/ui/status-badge'
 import { IdentitySkeleton } from '@/components/ui/tab-skeletons'
-import { Avatar } from '@mui/material'
-import { ArrowRightUp } from '@solar-icons/react'
 import { useKycDetails } from '@/features/shared/api/use-users'
 import { useUserRideStats } from '../api/use-customers'
 import type { Customer } from '../types'
 import { StatsCard } from './stats-card'
-import type { StatusVariant } from '@/components/ui/status-badge'
 
 interface IdentityDetailsProps {
   customer: Customer
-}
-
-const InfoRow = ({
-  index,
-  label,
-  value,
-  isImage = false,
-}: {
-  index: number
-  label: string
-  value: string | React.ReactNode
-  isImage?: boolean
-}) => {
-  return (
-    <div className="flex items-center py-3 gap-4">
-      <span className="text-neutral-500 text-sm w-4">{index}.</span>
-      <span className="text-neutral-500 text-sm w-40">{label}</span>
-      <span className="text-neutral-500 text-sm font-semibold">-</span>
-      {isImage && typeof value === 'string' ? (
-        <div className="flex items-end">
-          <Avatar src={value} sx={{ width: 20, height: 20 }} />
-          <ArrowRightUp size={11} className="text-neutral-500 cursor-pointer" />
-        </div>
-      ) : (
-        <span className="text-neutral-900 text-sm font-semibold">
-          {value as React.ReactNode}
-        </span>
-      )}
-    </div>
-  )
 }
 
 export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
@@ -58,7 +27,7 @@ export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <StatsCard
           label="NIN"
-          value={ninData.nin || kycDetails.id_number || 'N/A'}
+          value={ninData.nin || 'N/A'}
         />
         <StatsCard
           label="ID Verification Status"
@@ -100,14 +69,14 @@ export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
             index={1}
             label="First Name"
             value={
-              ninData.first_name || kycDetails.first_name || customer.first_name
+              ninData.first_name || 'N/A'
             }
           />
           <InfoRow
             index={2}
             label="Last Name"
             value={
-              ninData.last_name || kycDetails.last_name || customer.last_name
+              ninData.last_name || 'N/A'
             }
           />
           <InfoRow
@@ -119,19 +88,19 @@ export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
           <InfoRow
             index={5}
             label="Photo"
-            value={ninData.image || kycDetails.selfie_image || ''}
+            value={ninData.image || 'N/A'}
             isImage
           />
           <InfoRow
             index={6}
             label="Date of Birth"
-            value={ninData.dob || kycDetails.dob}
+            value={ninData.dob || 'N/A'}
           />
-          <InfoRow index={7} label="Email Address" value={customer.email} />
+          {/* <InfoRow index={7} label="Email Address" value={customer.email} /> */}
           <InfoRow
             index={8}
             label="Phone Number"
-            value={ninData.mobile || customer.phone_number}
+            value={ninData.mobile || 'N/A'}
           />
           <InfoRow
             index={9}
