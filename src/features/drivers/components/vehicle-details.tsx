@@ -18,7 +18,6 @@ export const VehicleDetails = ({
     isLoading,
     error,
   } = useDriverVehicle(driverId, { enabled: isVehicleSet })
-  console.log({ isVehicleSet })
 
   if (!isVehicleSet) return <ErrorState message="No vehicle found." />
 
@@ -67,12 +66,12 @@ export const VehicleDetails = ({
           />
           <FileCard
             label="Road Worthiness"
-            url={vehicle.road_worthiness.doc}
+            url={vehicle?.road_worthiness?.doc}
             onUpload={(files) => console.log('Upload Road Worthiness', files)}
           />
           <FileCard
             label="Vehicle Insurance"
-            url={vehicle.vehicle_insurance.doc}
+            url={vehicle?.vehicle_insurance?.doc}
             onUpload={(files) => console.log('Upload Vehicle Insurance', files)}
           />
         </div>

@@ -42,7 +42,7 @@ export const API_ENDPOINTS = {
     DRIVERS: {
         ROOT: '/users',
         BY_ID: (id: string) => `/users/${id}`,
-        
+
     },
     ANALYTICS: {
         MY_RIDE_STATS: '/analytics/my-ride-stats',
@@ -66,6 +66,7 @@ export const API_ENDPOINTS = {
         BY_ID: (id: string) => `/vehicle-categories/${id}`,
         CONFIGURE_PRICING: (categoryId: string, type: string) =>
             `/vehicle-categories/configure-pricing/${categoryId}/${type}`,
+        UPDATE_CATEGORY: (vehicleId: string) => `/vehicles/update-category/${vehicleId}`,
     },
     VEHICLES: {
         BY_DRIVER_ID: (id: string) => `/vehicles/driver/${id}`,

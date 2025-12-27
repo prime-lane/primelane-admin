@@ -5,12 +5,13 @@ import type { ManageUserStatusRequest, PaginatedResponse, PaginationParams } fro
 import { transformPaginatedResponse } from '@/utils/api-utils'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import type { Driver, Review, Transaction, UserRideStats, Wallet } from '../types'
+import type { Driver, Review, Transaction, UserRideStats, Vehicle, Wallet } from '../types'
 
 interface UseDriversParams extends PaginationParams {
     status?: string
     start_date?: string
     end_date?: string
+    vehicle_category_id?: string
 }
 
 interface UseDriverTransactionsParams extends PaginationParams {
@@ -98,7 +99,7 @@ export const useDriverVehicle = (driverId: string, options?: { enabled?: boolean
     return useQuery({
         queryKey: ['driver-vehicle', driverId],
         queryFn: async () => {
-            const response = await apiClient.get<import('../types').Vehicle>(e.VEHICLES.BY_DRIVER_ID(driverId))
+            const response = await apiClient.get<Vehicle>(e.VEHICLES.BY_DRIVER_ID(driverId))
             return response.data
         },
         enabled: !!driverId && (options?.enabled ?? true),

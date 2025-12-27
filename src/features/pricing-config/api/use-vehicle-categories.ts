@@ -1,6 +1,7 @@
 import { API_ENDPOINTS } from '@/services/api-endpoints'
 import { apiClient } from '@/services/api-client'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 export interface VehicleCategoryExample {
     name: string
@@ -51,5 +52,28 @@ export const useVehicleCategory = (id: string) => {
             return response.data
         },
         enabled: !!id,
+    })
+}
+
+type VehicleCategoryRequest = {
+    category_ids: string[]
+}
+export const useUpdateVehicleCategory = (id?: string) => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (data: VehicleCategoryRequest) => {
+            if (!id) throw new Error('Vehicle Category ID is required')
+            const response = await apiClient.patch<{ vehicle: VehicleCategory; message: string }>(
+                API_ENDPOINTS.VEHICLE_CATEGORIES.UPDATE_CATEGORY(id),
+                data,
+            )
+            return response.data
+        },
+        onSuccess: (response) => {
+            toast.success(response.message || 'Vehicle Category updated successfully')
+            queryClient.invalidateQueries({ queryKey: ['driver-vehicle', id] })
+            queryClient.invalidateQueries({ queryKey: ['vehicle-categories'] })
+        },
     })
 }

@@ -35,3 +35,38 @@ export const MuiDatePicker: Components<Theme>['MuiDatePicker'] = {
         },
     },
 }
+
+export const MuiPickersDay: Components<Theme>['MuiPickersDay'] = {
+    styleOverrides: {
+        root: {
+            fontSize: '14px',
+            '&.Mui-selected': {
+                backgroundColor: 'black !important',
+                color: 'white',
+                '&:hover': {
+                    backgroundColor: '#333 !important',
+                },
+                '&:focus': {
+                    backgroundColor: 'black !important',
+                },
+            },
+        },
+    },
+}
+
+export const MuiDayCalendar: Components<Theme>['MuiDayCalendar'] = {
+    styleOverrides: {
+        weekDayLabel: {
+            fontSize: '12px !important',
+            color: 'neutral.400 !important'
+        },
+    },
+}
+
+export const MuiPickersCalendarHeader: Components<Theme>['MuiPickersCalendarHeader'] = {
+    styleOverrides: {
+        label: {
+            fontSize: '16px !important',
+        },
+    },
+}

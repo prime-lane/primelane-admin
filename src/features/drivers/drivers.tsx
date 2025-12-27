@@ -9,6 +9,7 @@ import { Box } from '@mui/material'
 
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useVehicleCategories } from '../pricing-config/api/use-vehicle-categories'
 import { useDrivers } from './api/use-drivers'
 import { driverColumns } from './components/columns'
 import type { Driver } from './types'
@@ -21,9 +22,12 @@ export const Drivers = () => {
     status?: string
     start_date?: string
     end_date?: string
+    vehicle_category_id?: string
   }>({})
   const debouncedSearch = useDebounce(searchTerm, 500)
   const navigate = useNavigate()
+
+  const { data: vehicleCategories } = useVehicleCategories()
 
   const { data, isLoading, error } = useDrivers({
     search: debouncedSearch,
@@ -51,6 +55,11 @@ export const Drivers = () => {
         start_date: value.start ? value.start.toISOString() : undefined,
         end_date: value.end ? value.end.toISOString() : undefined,
       }))
+    } else if (key === 'vehicle_category') {
+      setFilters((prev) => ({
+        ...prev,
+        vehicle_category_id: value,
+      }))
     }
   }
 
@@ -66,9 +75,19 @@ export const Drivers = () => {
         { label: 'Pending', value: 'pending' },
         { label: 'Active', value: 'active' },
         { label: 'Deactivated', value: 'deactivated' },
-        { label: 'Onboarded', value: 'onboarded' },
-        { label: 'Unonboarded', value: 'unonboarded' },
+        // { label: 'Onboarded', value: 'onboarded' },
+        // { label: 'Unonboarded', value: 'unonboarded' },
       ],
+    },
+    {
+      label: 'Vehicle category',
+      key: 'vehicle_category',
+      type: 'select',
+      options:
+        (vehicleCategories?.categories || [])?.map((cat) => ({
+          label: cat.name,
+          value: cat.id,
+        })) || [],
     },
     {
       label: 'Date joined',
@@ -94,6 +113,7 @@ export const Drivers = () => {
           onFilterChange={handleFilterChange}
           activeFilters={{
             status: filters.status || 'all',
+            vehicle_category: filters.vehicle_category_id,
           }}
         />
       </Box>

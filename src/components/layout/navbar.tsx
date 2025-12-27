@@ -93,11 +93,8 @@ export const Navbar = () => {
               mt: 1,
             }}
           >
-            <MenuItem onClick={handleClose}>
-              <span className="text-base">Profile</span>
-            </MenuItem>
             <MenuItem onClick={handleLogout}>
-              <span className="text-base">Logout</span>
+              <span className="text-sm text-neutral-500">Logout</span>
             </MenuItem>
           </Menu>
         </div>

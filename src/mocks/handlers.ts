@@ -335,48 +335,86 @@ export const handlers = [
     })
   }),
 
-  // get users
-  http.get(`${API_BASE_URL}/users`, () => {
+  // get users (admins, customers, drivers)
+  http.get(`${API_BASE_URL}/users`, ({ request }) => {
+    const url = new URL(request.url)
+    const userType = url.searchParams.get('user_type')
+
+    let users = []
+
+    if (userType === 'admin') {
+      users = [
+        {
+          "id": "admin-1",
+          "first_name": "Admin",
+          "last_name": "User",
+          "email": "admin@example.com",
+          "user_type": "admin",
+          "status": "active",
+          "created_at": "2025-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "admin-2",
+          "first_name": "Support",
+          "last_name": "Staff",
+          "email": "support@example.com",
+          "user_type": "admin",
+          "status": "pending",
+          "created_at": "2025-01-02T00:00:00.000Z"
+        }
+      ]
+    } else if (userType === 'customer') {
+      users = [
+        {
+          "id": "e41cb0e6-21bb-46c4-a948-6009c89ee6f4",
+          "email": "john.osaze@example.com",
+          "first_name": "John",
+          "last_name": "Osaze",
+          "phone_number": "2348012345671",
+          "image_url": "https://res.cloudinary.com/deolwnm9f/image/upload/v1745092694/chat_files/1745092688414-mentee.png.png",
+          "nin": "12345678901",
+          "user_type": "customer",
+          "status": "active",
+          "is_email_verified": true,
+          "created_at": "2025-10-05T02:12:53.233Z",
+          "updated_at": "2025-10-05T02:12:53.233Z"
+        },
+        {
+          "id": "f5049a9e-63fd-41bd-b24b-bf8e4c5c5a12",
+          "email": "chinedu.okafor@example.com",
+          "first_name": "Chinedu",
+          "last_name": "Okafor",
+          "phone_number": "2348012345678",
+          "image_url": "https://res.cloudinary.com/deolwnm9f/image/upload/v1745092694/chat_files/1745092688414-mentee.png.png",
+          "nin": "98765432109",
+          "user_type": "customer",
+          "status": "active",
+          "is_email_verified": true,
+          "created_at": "2025-10-05T01:53:54.313Z",
+          "updated_at": "2025-10-05T01:53:54.313Z"
+        }
+      ]
+    } else {
+      // Default / Driver or mixed
+      users = [
+        {
+          "id": "e41cb0e6-21bb-46c4-a948-6009c89ee6f4",
+          "email": "john.osaze@example.com",
+          "first_name": "John",
+          "last_name": "Osaze",
+          "phone_number": "2348012345671",
+          "user_type": "customer",
+          "status": "active",
+          "created_at": "2025-10-05T02:12:53.233Z"
+        }
+      ]
+    }
+
     return HttpResponse.json({
       "data": {
-        "users": [
-          {
-            "id": "e41cb0e6-21bb-46c4-a948-6009c89ee6f4",
-            "email": "john.osaze@example.com",
-            "password": "$2b$10$LAflxFl0e.BZlYO6LPRt3e1jx2cxPFxyXV9MnsqCqzMB0A5e4t9EO",
-            "first_name": "John",
-            "last_name": "Osaze",
-            "phone_number": "2348012345671",
-            "image_url": "https://res.cloudinary.com/deolwnm9f/image/upload/v1745092694/chat_files/1745092688414-mentee.png.png",
-            "gender": "male",
-            "apple_id": null,
-            "kyc_id": null,
-            "has_completed_kyc": false,
-            "user_type": "customer",
-            "status": "active",
-            "created_at": "2025-10-05T02:12:53.233Z",
-            "updated_at": "2025-10-05T02:12:53.233Z"
-          },
-          {
-            "id": "f5049a9e-63fd-41bd-b24b-bf8e4c5c5a12",
-            "email": "chinedu.okafor@example.com",
-            "password": "$2b$10$o3c4wX8tM.HTwV/fULxK5e0CNX/ZiUuCg3ys0TFj08h.7ypcEkPyG",
-            "first_name": "Chinedu",
-            "last_name": "Okafor",
-            "phone_number": "2348012345678",
-            "image_url": "https://res.cloudinary.com/deolwnm9f/image/upload/v1745092694/chat_files/1745092688414-mentee.png.png",
-            "gender": "male",
-            "apple_id": null,
-            "kyc_id": null,
-            "has_completed_kyc": false,
-            "user_type": "customer",
-            "status": "active",
-            "created_at": "2025-10-05T01:53:54.313Z",
-            "updated_at": "2025-10-05T01:53:54.313Z"
-          }
-        ],
+        "users": users,
         "pagination": {
-          "total_items": 2,
+          "total_items": users.length,
           "total_pages": 1,
           "current_page": 1,
           "limit": 10
@@ -386,29 +424,89 @@ export const handlers = [
     })
   }),
 
+  // invite admin
+  http.post(`${API_BASE_URL}/auth/admin-invite`, () => {
+    return HttpResponse.json({
+      "message": "Admin invited successfully",
+      "success": true
+    })
+  }),
+
   // get user by ID
-  http.get(`${API_BASE_URL}/users/:id`, () => {
+  http.get(`${API_BASE_URL}/users/:id`, ({ params }) => {
+    const { id } = params
+    // Return mock data based on ID or default to a rich customer object
     return HttpResponse.json({
       "data": {
         "user": {
-          "id": "587f88e6-1a09-4e93-affd-0324cf61ffb6",
-          "email": null,
-          "first_name": "John",
-          "last_name": "Mark",
-          "phone_number": "2342340099998",
+          "id": id,
+          "email": "user@example.com",
+          "first_name": "Test",
+          "last_name": "User",
+          "phone_number": "2348012345678",
           "image_url": "https://res.cloudinary.com/deolwnm9f/image/upload/v1762085060/user_selfies/1762085056758-base64.png",
-          "gender": null,
-          "apple_id": null,
-          "kyc_id": null,
+          "gender": "male",
+          "nin": "12345678901",
           "is_kyc_complete": true,
           "is_phone_number_verified": true,
-          "is_preference_set": false,
-          "is_online": false,
-          "user_type": "driver",
-          "status": "inactive",
+          "is_preference_set": true,
+          "is_email_verified": true,
+          "is_online": true,
+          "user_type": "customer",
+          "status": "active",
           "created_at": "2025-11-02T11:02:41.703Z",
           "updated_at": "2025-11-04T13:37:41.120Z",
-          "average_rating": 0
+          "average_rating": 4.5
+        }
+      },
+      "success": true
+    })
+  }),
+
+  // get user ride stats
+  http.get(`${API_BASE_URL}/analytics/user-ride-stats/:id`, () => {
+    return HttpResponse.json({
+      "data": {
+        "total_rides": 50,
+        "total_cancelled_rides": 2,
+        "cancellation_rate": 4.0,
+        "total_accepted_rides": 48,
+        "acceptance_rate": 96.0,
+        "average_rating": 4.8
+      },
+      "success": true
+    })
+  }),
+
+  // get customer reviews
+  http.get(`${API_BASE_URL}/reviews/:userId`, () => {
+    return HttpResponse.json({
+      "data": {
+        "reviews": [
+          {
+            "id": "review-1",
+            "ride_id": "ride-1",
+            "reviewed_user_id": "customer-1",
+            "reviewer_user_id": "driver-1",
+            "feedback": "Great passenger!",
+            "rating": 5,
+            "reviewer": {
+              "first_name": "John",
+              "last_name": "Driver"
+            },
+            "reviewed": {
+              "first_name": "Alice",
+              "last_name": "Customer"
+            },
+            "created_at": "2025-12-01T10:00:00Z",
+            "updated_at": "2025-12-01T10:00:00Z"
+          }
+        ],
+        "pagination": {
+          "total_items": 1,
+          "total_pages": 1,
+          "current_page": 1,
+          "limit": 10
         }
       },
       "success": true
@@ -2619,30 +2717,7 @@ export const handlers = [
     })
   }),
 
-  // get my wallet
-  http.get(`${API_BASE_URL}/wallets/my-wallet`, () => {
-    return HttpResponse.json({
-      "data": {
-        "id": "a99fa5be-f3c8-44c4-a096-ab5e3ae69764",
-        "user_id": "3f6c464c-a389-4ac5-bb8a-0a541afd0dde",
-        "virtual_bank_account_number": "1110031495",
-        "virtual_bank_account_name": "Jack Lamar",
-        "virtual_bank_code": "000",
-        "virtual_bank_name": "Test Bank",
-        "outflow_bank_account_number": null,
-        "outflow_bank_code": null,
-        "outflow_bank_name": null,
-        "current_balance": 100,
-        "last_balance": 0,
-        "currency": "NGN",
-        "pin": null,
-        "is_pin_set": false,
-        "created_at": "2025-11-19T01:53:49.223Z",
-        "updated_at": "2025-11-19T01:53:49.223Z"
-      },
-      "success": true
-    })
-  }),
+
 
   // get bank list
   http.get(`${API_BASE_URL}/wallets/list-banks`, () => {
@@ -2768,132 +2843,7 @@ export const handlers = [
     })
   }),
 
-  // my transactions
-  http.get(`${API_BASE_URL}/transactions/my-transactions`, () => {
-    return HttpResponse.json({
-      "data": {
-        "transactions": [
-          {
-            "id": "44eb1d85-f0c0-4d87-a6a2-42648a8f4e35",
-            "user_id": "c77b6f3c-5b86-40ed-8e6a-2649cb592a62",
-            "transaction_type": "DR",
-            "description": "Ride cancellation charge",
-            "reference": "",
-            "ride_id": "496a436a-bc81-4a9d-9a78-42d1fb1b3848",
-            "amount": 2200000,
-            "created_at": "2025-11-27T18:44:17.356Z",
-            "updated_at": "2025-11-27T18:44:17.356Z"
-          },
-          {
-            "id": "c34d6624-a8cf-4fd6-81bf-15be354487bc",
-            "user_id": "c77b6f3c-5b86-40ed-8e6a-2649cb592a62",
-            "transaction_type": "DR",
-            "description": "ride commission",
-            "reference": "",
-            "ride_id": "496a436a-bc81-4a9d-9a78-42d1fb1b3848",
-            "amount": 2372,
-            "created_at": "2025-11-27T18:19:54.553Z",
-            "updated_at": "2025-11-27T18:19:54.553Z"
-          },
-          {
-            "id": "8122ff95-cedb-46d7-88d3-431bb35dd25a",
-            "user_id": "c77b6f3c-5b86-40ed-8e6a-2649cb592a62",
-            "transaction_type": "DR",
-            "description": "ride commission",
-            "reference": "",
-            "ride_id": "496a436a-bc81-4a9d-9a78-42d1fb1b3848",
-            "amount": 2372,
-            "created_at": "2025-11-27T18:19:54.298Z",
-            "updated_at": "2025-11-27T18:19:54.298Z"
-          },
-          {
-            "id": "e6abf0c8-22c7-424b-8562-3b304150adee",
-            "user_id": "c77b6f3c-5b86-40ed-8e6a-2649cb592a62",
-            "transaction_type": "DR",
-            "description": "ride commission",
-            "reference": "",
-            "ride_id": "d6221fcb-88a0-4b27-8d76-c771f164890e",
-            "amount": 2372,
-            "created_at": "2025-11-27T17:44:50.057Z",
-            "updated_at": "2025-11-27T17:44:50.057Z"
-          },
-          {
-            "id": "68ad23f8-6774-49cb-a94c-ffe7ca9a1c5f",
-            "user_id": "c77b6f3c-5b86-40ed-8e6a-2649cb592a62",
-            "transaction_type": "DR",
-            "description": "ride commission",
-            "reference": "",
-            "ride_id": "d6221fcb-88a0-4b27-8d76-c771f164890e",
-            "amount": 2372,
-            "created_at": "2025-11-27T17:44:49.976Z",
-            "updated_at": "2025-11-27T17:44:49.976Z"
-          },
-          {
-            "id": "2264f6b0-6d45-4c32-a5cf-2c87ce944655",
-            "user_id": "c77b6f3c-5b86-40ed-8e6a-2649cb592a62",
-            "transaction_type": "DR",
-            "description": "wallet withdrawal",
-            "reference": null,
-            "ride_id": null,
-            "amount": 1000,
-            "created_at": "2025-11-27T11:58:11.458Z",
-            "updated_at": "2025-11-27T11:58:11.458Z"
-          },
-          {
-            "id": "0e84bd07-34cf-4b8f-a098-90e002e6277f",
-            "user_id": "c77b6f3c-5b86-40ed-8e6a-2649cb592a62",
-            "transaction_type": "DR",
-            "description": "wallet withdrawal",
-            "reference": null,
-            "ride_id": null,
-            "amount": 2000,
-            "created_at": "2025-11-27T10:34:25.801Z",
-            "updated_at": "2025-11-27T10:34:25.801Z"
-          },
-          {
-            "id": "98f43f4c-48bf-48e5-8d9e-ec02b6cd09a6",
-            "user_id": "c77b6f3c-5b86-40ed-8e6a-2649cb592a62",
-            "transaction_type": "DR",
-            "description": "ride commission",
-            "reference": "",
-            "ride_id": "a2e18666-a70f-43e5-ba6b-41ce7fe9fedf",
-            "amount": 3815,
-            "created_at": "2025-11-26T21:49:49.819Z",
-            "updated_at": "2025-11-26T21:49:49.819Z"
-          },
-          {
-            "id": "63722927-a1a1-40e5-a585-48b8c54ed779",
-            "user_id": "c77b6f3c-5b86-40ed-8e6a-2649cb592a62",
-            "transaction_type": "DR",
-            "description": "ride commission",
-            "reference": "",
-            "ride_id": "a2e18666-a70f-43e5-ba6b-41ce7fe9fedf",
-            "amount": 3815,
-            "created_at": "2025-11-26T21:47:55.239Z",
-            "updated_at": "2025-11-26T21:47:55.239Z"
-          },
-          {
-            "id": "aa114a1d-8702-4fe4-9633-4534efabf0f5",
-            "user_id": "c77b6f3c-5b86-40ed-8e6a-2649cb592a62",
-            "transaction_type": "DR",
-            "description": "ride commission",
-            "reference": "",
-            "ride_id": "a2e18666-a70f-43e5-ba6b-41ce7fe9fedf",
-            "amount": 3815,
-            "created_at": "2025-11-26T21:47:52.546Z",
-            "updated_at": "2025-11-26T21:47:52.546Z"
-          }
-        ],
-        "pagination": {
-          "total_items": 39,
-          "total_pages": 4,
-          "current_page": "1",
-          "limit": "10"
-        }
-      },
-      "success": true
-    })
-  }),
+
 
   // Get issues
   http.get(`${API_BASE_URL}/issues`, () => {
@@ -2943,13 +2893,14 @@ export const handlers = [
 
   // get roles
   http.get(`${API_BASE_URL}/roles`, () => {
+    // Return a list or paginated structure depending on query. Use paginated structure as super-set.
     return HttpResponse.json({
       "data": {
         "roles": [
           {
             "id": "b0d4149a-634a-4d63-acad-69698101708d",
             "name": "Compliance",
-            "permissions": [],
+            "permissions": ["dashboard:view", "users:view"],
             "type": "admin",
             "isDefaultRole": false,
             "slug": "COMPLIANCE",
@@ -2959,7 +2910,7 @@ export const handlers = [
           {
             "id": "01cf5567-d6c2-4c3b-99c0-262343bebf8e",
             "name": "Super Admin",
-            "permissions": [],
+            "permissions": ["*"],
             "type": "admin",
             "isDefaultRole": false,
             "slug": "SUPER_ADMIN",
@@ -2978,13 +2929,21 @@ export const handlers = [
     })
   }),
 
+  // create role
+  http.post(`${API_BASE_URL}/roles`, () => {
+    return HttpResponse.json({
+      "message": "Role created successfully",
+      "success": true
+    })
+  }),
+
   // get role by id
   http.get(`${API_BASE_URL}/roles/:id`, () => {
     return HttpResponse.json({
       "data": {
         "id": "b0d4149a-634a-4d63-acad-69698101708d",
         "name": "Compliance",
-        "permissions": [],
+        "permissions": ["dashboard:view", "users:view"],
         "type": "admin",
         "isDefaultRole": false,
         "slug": "COMPLIANCE",
@@ -2998,18 +2957,15 @@ export const handlers = [
   // update role
   http.patch(`${API_BASE_URL}/roles/:id`, () => {
     return HttpResponse.json({
-      "data": {
-        "id": "b0d4149a-634a-4d63-acad-69698101708d",
-        "name": "Compliance",
-        "permissions": [
-          "dashboard:view"
-        ],
-        "type": "admin",
-        "isDefaultRole": false,
-        "slug": "COMPLIANCE",
-        "createdAt": "2025-12-11T16:08:36.182Z",
-        "updatedAt": "2025-12-11T17:09:43.973Z"
-      },
+      "message": "Role updated successfully",
+      "success": true
+    })
+  }),
+
+  // delete role
+  http.delete(`${API_BASE_URL}/roles/:id`, () => {
+    return HttpResponse.json({
+      "message": "Role deleted successfully",
       "success": true
     })
   }),
@@ -3024,8 +2980,9 @@ export const handlers = [
     })
   }),
 
-  // get driver wallet
+  // get wallet (unified)
   http.get(`${API_BASE_URL}/wallets/my-wallet`, () => {
+    // Returns full wallet structure
     return HttpResponse.json({
       "data": {
         "id": "a99fa5be-f3c8-44c4-a096-ab5e3ae69764",
@@ -3034,9 +2991,9 @@ export const handlers = [
         "virtual_bank_account_name": "John Mark",
         "virtual_bank_code": "000",
         "virtual_bank_name": "GTBank",
-        "outflow_bank_account_number": null,
-        "outflow_bank_code": null,
-        "outflow_bank_name": null,
+        "outflow_bank_account_number": "1234567890",
+        "outflow_bank_code": "057",
+        "outflow_bank_name": "Zenith Bank",
         "current_balance": 45000,
         "last_balance": 38000,
         "currency": "NGN",
@@ -3049,19 +3006,24 @@ export const handlers = [
     })
   }),
 
-  // get driver transactions
+  // get transactions (unified)
   http.get(`${API_BASE_URL}/transactions/my-transactions`, () => {
+    // Supports both 'type' and 'transaction_type', and extra finance fields
     return HttpResponse.json({
       "data": {
         "transactions": [
           {
             "id": "txn-001",
             "user_id": "587f88e6-1a09-4e93-affd-0324cf61ffb6",
+            "user_name": "John Mark",
             "transaction_type": "CR",
+            "type": "credit",
             "description": "Ride payment - Lagos to Ikeja",
             "reference": "REF-2025-001",
             "ride_id": "ride-123",
             "amount": 5000,
+            "wallet_balance": 45000,
+            "transaction_date": "2025-12-20T10:30:00.000Z",
             "created_at": "2025-12-20T10:30:00.000Z",
             "updated_at": "2025-12-20T10:30:00.000Z",
             "status": "completed"
@@ -3069,11 +3031,15 @@ export const handlers = [
           {
             "id": "txn-002",
             "user_id": "587f88e6-1a09-4e93-affd-0324cf61ffb6",
+            "user_name": "John Mark",
             "transaction_type": "CR",
+            "type": "credit",
             "description": "Ride payment - Victoria Island to Lekki",
             "reference": "REF-2025-002",
             "ride_id": "ride-124",
             "amount": 7500,
+            "wallet_balance": 40000,
+            "transaction_date": "2025-12-19T15:45:00.000Z",
             "created_at": "2025-12-19T15:45:00.000Z",
             "updated_at": "2025-12-19T15:45:00.000Z",
             "status": "completed"
@@ -3081,30 +3047,22 @@ export const handlers = [
           {
             "id": "txn-003",
             "user_id": "587f88e6-1a09-4e93-affd-0324cf61ffb6",
+            "user_name": "John Mark",
             "transaction_type": "DR",
+            "type": "debit",
             "description": "Withdrawal to bank account",
             "reference": "REF-2025-003",
             "ride_id": null,
             "amount": 10000,
+            "wallet_balance": 32500,
+            "transaction_date": "2025-12-18T09:20:00.000Z",
             "created_at": "2025-12-18T09:20:00.000Z",
             "updated_at": "2025-12-18T09:20:00.000Z",
-            "status": "completed"
-          },
-          {
-            "id": "txn-004",
-            "user_id": "587f88e6-1a09-4e93-affd-0324cf61ffb6",
-            "transaction_type": "CR",
-            "description": "Ride payment - Surulere to Yaba",
-            "reference": "REF-2025-004",
-            "ride_id": "ride-125",
-            "amount": 3500,
-            "created_at": "2025-12-17T12:10:00.000Z",
-            "updated_at": "2025-12-17T12:10:00.000Z",
             "status": "completed"
           }
         ],
         "pagination": {
-          "total_items": 4,
+          "total_items": 3,
           "total_pages": 1,
           "current_page": 1,
           "limit": 10

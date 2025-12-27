@@ -1,4 +1,4 @@
-import { Eye, FileCheck, Upload } from '@solar-icons/react'
+import { Eye, FileCheck } from '@solar-icons/react'
 import { useDropzone } from 'react-dropzone'
 
 interface FileCardProps {
@@ -8,7 +8,7 @@ interface FileCardProps {
 }
 
 export const FileCard = ({ label, url, onUpload }: FileCardProps) => {
-  const { getRootProps, getInputProps, open } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop: onUpload,
     noClick: true,
     noKeyboard: true,
@@ -30,14 +30,14 @@ export const FileCard = ({ label, url, onUpload }: FileCardProps) => {
         </span>
       </div>
       <div className="flex items-center gap-2">
-        <button
+        {/* <button
           type="button"
           onClick={open}
           className="p-2 text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 rounded-full transition-colors cursor-pointer"
           title="Upload"
         >
           <Upload size={20} />
-        </button>
+        </button> */}
         <a
           href={url}
           target="_blank"
