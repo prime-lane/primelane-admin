@@ -1,6 +1,7 @@
 import { ErrorState } from '@/components/ui/loading-error-states'
-import { Avatar } from '@mui/material'
-import { ArrowRightUp } from '@solar-icons/react'
+import { Avatar, Dialog, DialogContent, IconButton } from '@mui/material'
+import { ArrowRightUp, CloseCircle } from '@solar-icons/react'
+import { useState } from 'react'
 import { useDriverStats } from '../api/use-drivers'
 import type { Driver } from '../types'
 import { StatsCard } from '@/features/customers/components/stats-card'
@@ -25,22 +26,63 @@ const InfoRow = ({
   value: string | React.ReactNode
   isImage?: boolean
 }) => {
+  const [isOpen, setIsOpen] = useState(false)
+
   return (
-    <div className="flex items-center py-3 gap-4">
-      <span className="text-neutral-500 text-sm w-4">{index}.</span>
-      <span className="text-neutral-500 text-sm w-40">{label}</span>
-      <span className="text-neutral-500 text-sm font-semibold">-</span>
-      {isImage && typeof value === 'string' ? (
-        <div className="flex items-end">
-          <Avatar src={value} sx={{ width: 20, height: 20 }} />
-          <ArrowRightUp size={11} className="text-neutral-500 cursor-pointer" />
-        </div>
-      ) : (
-        <span className="text-neutral-900 text-sm font-semibold">
-          {value as React.ReactNode}
-        </span>
+    <>
+      <div className="flex items-center py-3 gap-4">
+        <span className="text-neutral-500 text-sm w-4">{index}.</span>
+        <span className="text-neutral-500 text-sm w-40">{label}</span>
+        <span className="text-neutral-500 text-sm font-semibold">-</span>
+        {isImage && typeof value === 'string' ? (
+          <div
+            className="flex items-end cursor-pointer"
+            onClick={() => setIsOpen(true)}
+          >
+            <Avatar src={value} sx={{ width: 20, height: 20 }} />
+            <ArrowRightUp
+              size={11}
+              className="text-neutral-500 cursor-pointer"
+            />
+          </div>
+        ) : (
+          <span className="text-neutral-900 text-sm font-semibold">
+            {value as React.ReactNode}
+          </span>
+        )}
+      </div>
+
+      {isImage && typeof value === 'string' && (
+        <Dialog
+          open={isOpen}
+          onClose={() => setIsOpen(false)}
+          maxWidth="sm"
+          fullWidth
+        >
+          <DialogContent>
+            <div className="relative">
+              <IconButton
+                onClick={() => setIsOpen(false)}
+                sx={{
+                  position: 'absolute',
+                  top: -7,
+                  right: 8,
+                  zIndex: 10,
+                }}
+              >
+                <CloseCircle size={20} />
+              </IconButton>
+              <img
+                src={value}
+                alt={label}
+                className="w-fit mx-auto h-auto rounded-lg"
+                style={{ maxHeight: '85vh', objectFit: 'contain' }}
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
       )}
-    </div>
+    </>
   )
 }
 
@@ -59,10 +101,7 @@ export const IdentityDetails = ({
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <StatsCard
-          label="NIN"
-          value={ninData.nin || 'N/A'}
-        />
+        <StatsCard label="NIN" value={ninData.nin || 'N/A'} />
         <StatsCard
           label="ID Verification Status"
           status={kycDetails.id_verification_status as StatusVariant}
@@ -100,16 +139,12 @@ export const IdentityDetails = ({
           <InfoRow
             index={1}
             label="First Name"
-            value={
-              ninData.first_name || driver.first_name
-            }
+            value={ninData.first_name || driver.first_name}
           />
           <InfoRow
             index={2}
             label="Last Name"
-            value={
-              ninData.last_name || driver.last_name
-            }
+            value={ninData.last_name || driver.last_name}
           />
           <InfoRow
             index={3}
