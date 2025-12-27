@@ -2,7 +2,6 @@ import { API_ENDPOINTS } from '@/services/api-endpoints'
 import { apiClient } from '@/services/api-client'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import type { DriverVehicle } from '@/features/trips/types'
 
 export interface VehicleCategoryExample {
     name: string
