@@ -1,14 +1,11 @@
+import { InfoRow } from '@/components/ui/info-row'
 import { ErrorState } from '@/components/ui/loading-error-states'
-import { Avatar, Dialog, DialogContent, IconButton } from '@mui/material'
-import { ArrowRightUp, CloseCircle } from '@solar-icons/react'
-import { useState } from 'react'
+import type { StatusVariant } from '@/components/ui/status-badge'
+import { IdentitySkeleton } from '@/components/ui/tab-skeletons'
+import { StatsCard } from '@/features/customers/components/stats-card'
+import type { KycDetails } from '@/features/shared/types'
 import { useDriverStats } from '../api/use-drivers'
 import type { Driver } from '../types'
-import { StatsCard } from '@/features/customers/components/stats-card'
-import type { StatusVariant } from '@/components/ui/status-badge'
-import type { KycDetails } from '@/features/shared/types'
-import { IdentitySkeleton } from '@/components/ui/tab-skeletons'
-import { InfoRow } from '@/components/ui/info-row'
 
 interface IdentityDetailsProps {
   driver: Driver
