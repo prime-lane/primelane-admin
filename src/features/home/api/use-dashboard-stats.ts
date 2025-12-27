@@ -7,7 +7,7 @@ export const useDashboardStats = () => {
     return useQuery({
         queryKey: ['dashboard-stats'],
         queryFn: async () => {
-            const response = await apiClient.get<DashboardStats>(e.ANALYTICS.MY_RIDE_STATS)
+            const response = await apiClient.get<DashboardStats>(e.ANALYTICS.SUMMARY)
             return response.data
         },
         staleTime: 5 * 60 * 1000, // 5 minutes

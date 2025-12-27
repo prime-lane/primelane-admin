@@ -45,6 +45,7 @@ export const API_ENDPOINTS = {
 
     },
     ANALYTICS: {
+        SUMMARY: '/analytics',
         MY_RIDE_STATS: '/analytics/my-ride-stats',
         USER_RIDE_STATS: (id: string) => `/analytics/user-ride-stats/${id}`,
     },

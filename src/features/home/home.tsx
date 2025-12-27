@@ -65,62 +65,62 @@ export const Home = () => {
         {
           icon: <Bill size={24} color="black" />,
           label: 'Total trip revenue',
-          value: formatNumber(0),
+          value: formatCurrency(dashboardData.total_trip_revenue),
         },
         {
           icon: <Banknote2 size={24} color="black" />,
           label: 'Total commission',
-          value: formatNumber(0),
+          value: formatCurrency(dashboardData.total_trip_commission),
         },
         {
           icon: <Bill2 size={24} color="black" />,
           label: 'Driver earning',
-          value: formatCurrency(0),
+          value: formatCurrency(dashboardData.total_trip_driver_earning),
         },
         {
           icon: <Rocket size={24} color="black" />,
           label: 'Completed trips',
-          value: formatNumber(0),
+          value: formatNumber(dashboardData.total_completed_trip_count),
         },
         {
           icon: <Rocket size={24} color="black" />,
           label: 'Total one-way trips',
-          value: formatNumber(0),
+          value: formatNumber(dashboardData.total_one_off_trip_count),
         },
         {
           icon: <Rocket size={24} color="black" />,
           label: 'Total hourly trips',
-          value: formatNumber(0),
+          value: formatNumber(dashboardData.total_hourly_trip_count),
         },
         {
           icon: <UsersGroupTwoRounded size={24} color="black" />,
           label: 'Total Customers',
-          value: formatNumber(0),
+          value: formatNumber(dashboardData.total_customer_count),
         },
         {
           icon: <UserCross size={24} color="black" />,
           label: 'Unverified Customers',
-          value: formatNumber(0),
+          value: formatNumber(dashboardData.total_unverified_customer_count),
         },
         {
           icon: <UserCheck size={24} color="black" />,
           label: 'Verified Customers',
-          value: formatNumber(0),
+          value: formatNumber(dashboardData.total_verified_customer_count),
         },
         {
           icon: <Shield size={24} color="black" />,
           label: 'Total Drivers',
-          value: formatNumber(0),
+          value: formatNumber(dashboardData.total_driver_count),
         },
         {
           icon: <ShieldCheck size={24} color="black" />,
           label: 'Verified Drivers',
-          value: formatNumber(0),
+          value: formatNumber(dashboardData.total_verified_driver_count),
         },
         {
           icon: <ShieldCross size={24} color="black" />,
           label: 'Pending Drivers',
-          value: formatNumber(0),
+          value: formatNumber(dashboardData.total_unverified_driver_count),
         },
       ]
     : []
