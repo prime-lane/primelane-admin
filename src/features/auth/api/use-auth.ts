@@ -220,3 +220,23 @@ export const useGoogleLogin = () => {
     })
 }
 
+export const useAcceptAdminInvite = () => {
+    const navigate = useNavigate()
+
+    return useMutation({
+        mutationFn: async (data: any) => {
+            const response = await apiClient.post<any>(
+                e.AUTH.ADMIN_INVITE_ACCEPT,
+                data
+            )
+            return response
+        },
+        onSuccess: (response) => {
+            toast.success(response.message || 'Invite accepted successfully')
+            navigate(path.AUTH.SIGN_IN)
+        },
+        onError: (error: any) => {
+            toast.error(error.message || 'Failed to accept invite')
+        }
+    })
+}

@@ -36,7 +36,7 @@ export const AdminManagement = () => {
           <Button
             variant="contained"
             onClick={() => setIsInviteModalOpen(true)}
-            endIcon={<UserPlus />}
+            endIcon={<UserPlus className="text-white" />}
           >
             Invite
           </Button>
