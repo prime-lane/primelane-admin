@@ -8,6 +8,8 @@ export const MuiOutlinedInput: Components<Theme>['MuiOutlinedInput'] = {
             },
         },
         root: {
+            fontSize: '1rem',
+            color: 'neutral.500',
             '& legend': {
                 width: 0,
             },

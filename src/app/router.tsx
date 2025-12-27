@@ -270,6 +270,20 @@ export const router = createBrowserRouter([
     ],
   },
   {
+    element: <AuthLayout />,
+    errorElement: <ErrorBoundary />,
+    children: [
+      {
+        path: path.AUTH.INVITE,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Invite />
+          </Suspense>
+        ),
+      },
+    ],
+  },
+  {
     path: path.AUTH.ROOT,
     element: (
       <PublicRoute>
@@ -286,15 +300,6 @@ export const router = createBrowserRouter([
           </Suspense>
         ),
       },
-      {
-        path: path.AUTH.INVITE,
-        element: (
-          <Suspense fallback={<Loading />}>
-            <Invite />
-          </Suspense>
-        ),
-      },
-
       {
         path: path.AUTH.OTP,
         element: (

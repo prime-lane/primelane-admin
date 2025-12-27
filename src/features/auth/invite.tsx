@@ -1,8 +1,59 @@
 import { Button, InputAdornment, TextField, Typography } from '@mui/material'
 import { PasswordInput } from '@/components/ui/password-input'
 import { Letter, LockPassword } from '@solar-icons/react'
+import { useSearchParams } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { inviteSchema, type InviteFormValues } from './schemas/invite-schema'
+import { useAcceptAdminInvite } from './api/use-auth'
+import { toast } from 'sonner'
+import { useNavigate } from 'react-router-dom'
+import { path } from '@/app/paths'
 
 export const Invite = () => {
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const inviteKey = searchParams.get('id')
+
+  const { mutate: acceptInvite, isPending } = useAcceptAdminInvite()
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<InviteFormValues>({
+    resolver: zodResolver(inviteSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
+  })
+
+  const onSubmit = (data: InviteFormValues) => {
+    if (!inviteKey) {
+      toast.error('Invalid invite link')
+      return
+    }
+
+    acceptInvite(
+      {
+        email: data.email,
+        key: inviteKey,
+        password: data.password,
+      },
+      {
+        onSuccess: (response) => {
+          toast.success(response?.message || 'Invite accepted successfully')
+          navigate(path.AUTH.SIGN_IN)
+        },
+        onError: (error) => {
+          toast.error(error?.message || 'Failed to accept invite')
+        },
+      },
+    )
+  }
+
   return (
     <div className="flex flex-col gap-8">
       <Typography
@@ -16,13 +67,16 @@ export const Invite = () => {
         INVITE ACCEPTED
       </Typography>
 
-      <div className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <TextField
           hiddenLabel
           fullWidth
           size="medium"
           label="Email"
           placeholder="exodustimothy@gmail.com"
+          error={!!errors.email}
+          helperText={errors.email?.message}
+          {...register('email')}
           slotProps={{
             input: {
               startAdornment: (
@@ -44,6 +98,9 @@ export const Invite = () => {
               size="medium"
               placeholder="******"
               label="Enter New Password"
+              error={!!errors.password}
+              helperText={errors.password?.message}
+              {...register('password')}
               slotProps={{
                 input: {
                   startAdornment: (
@@ -57,6 +114,13 @@ export const Invite = () => {
 
             <PasswordInput
               hiddenLabel
+              fullWidth
+              size="medium"
+              placeholder="******"
+              label="Confirm New Password"
+              error={!!errors.confirmPassword}
+              helperText={errors.confirmPassword?.message}
+              {...register('confirmPassword')}
               slotProps={{
                 input: {
                   startAdornment: (
@@ -66,18 +130,21 @@ export const Invite = () => {
                   ),
                 },
               }}
-              fullWidth
-              size="medium"
-              placeholder="******"
-              label="Confirm New Password"
             />
           </div>
         </div>
 
-        <Button variant="contained" color="primary" fullWidth size="large">
-          Proceed
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          size="large"
+          type="submit"
+          disabled={isPending}
+        >
+          {isPending ? 'Processing...' : 'Proceed'}
         </Button>
-      </div>
+      </form>
     </div>
   )
 }

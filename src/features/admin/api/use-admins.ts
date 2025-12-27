@@ -53,7 +53,7 @@ export const useInviteAdmin = () => {
     return useMutation({
         mutationFn: async (data: InviteAdminRequest) => {
             const response = await apiClient.post<{ message: string }>(e.AUTH.ADMIN_INVITE, data)
-            return response.data
+            return response
         },
         onSuccess: (response) => {
             toast.success(response.message || 'Admin invited successfully')
@@ -64,6 +64,7 @@ export const useInviteAdmin = () => {
         }
     })
 }
+
 export const useCreateRole = () => {
     const queryClient = useQueryClient()
 

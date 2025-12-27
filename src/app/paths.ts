@@ -5,7 +5,7 @@ export const path = {
     ROOT: '/auth',
     SIGN_IN: '/auth/signin',
     OTP: '/auth/otp',
-    INVITE: '/auth/invite',
+    INVITE: '/auth/accept-invite',
   },
   DASHBOARD: {
     ROOT: '/dashboard',
