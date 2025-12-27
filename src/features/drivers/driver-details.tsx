@@ -43,7 +43,10 @@ import { DriverOverview } from './components/driver-overview'
 import { DriverRatings } from './components/driver-ratings'
 import { IdentityDetails } from './components/identity-details'
 import { VehicleDetails } from './components/vehicle-details'
-import { useVehicleCategories } from '../pricing-config/api/use-vehicle-categories'
+import {
+  useUpdateVehicleCategory,
+  useVehicleCategories,
+} from '../pricing-config/api/use-vehicle-categories'
 
 export const DriverDetails = () => {
   const { id } = useParams<{ id: string }>()
@@ -56,6 +59,11 @@ export const DriverDetails = () => {
     useManageVehicleStatus(id)
   const { data: vehicleCategories } = useVehicleCategories()
   const navigate = useNavigate()
+
+  const {
+    mutate: updateVehicleCategory,
+    isPending: isUpdatingVehicleCategory,
+  } = useUpdateVehicleCategory(id)
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const openMenu = Boolean(anchorEl)
@@ -101,9 +109,21 @@ export const DriverDetails = () => {
         return
       }
 
-      // TODO: Implement actual API call when endpoint is ready
-      toast.success('Vehicle category updated successfully')
-      handleCloseDialog()
+      updateVehicleCategory(
+        {
+          category_ids: selectedCategories,
+        },
+        {
+          onSuccess: () => {
+            toast.success('Vehicle category updated successfully')
+            handleCloseDialog()
+          },
+          onError: () => {
+            toast.error('Failed to update vehicle category')
+            handleCloseDialog()
+          },
+        },
+      )
       return
     }
 
@@ -343,7 +363,7 @@ export const DriverDetails = () => {
               onClick={handleConfirmStatusChange}
               variant="outlined"
               fullWidth
-              disabled={isUpdating}
+              disabled={isUpdating || isUpdatingVehicleCategory}
               sx={{
                 bgcolor: 'black',
                 color: 'white',

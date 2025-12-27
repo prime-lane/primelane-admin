@@ -35,7 +35,9 @@ export const adminColumns: ColumnDef<Admin>[] = [
         <span className="text-sm font-medium text-neutral-900">
           {row.original.first_name} {row.original.last_name}
         </span>
-        <span className="text-xs text-neutral-500">{row.original.user_type}</span>
+        <span className="text-xs text-neutral-500">
+          {row.original.user_type}
+        </span>
       </div>
     ),
   },
@@ -43,12 +45,13 @@ export const adminColumns: ColumnDef<Admin>[] = [
     accessorKey: 'email',
     header: 'Email Address',
     cell: (info) => (
-      <div className="flex items-center gap-1 cursor-pointer">
+      <a href={`mailto:${info.getValue() as string}`} className="flex items-center gap-1 cursor-pointer">
         <span className="text-sm font-medium text-neutral-900">
           {info.getValue() as string}
         </span>
+
         <ArrowRightUp size={16} color="#9095A1" />
-      </div>
+      </a>
     ),
   },
   {

@@ -61,7 +61,7 @@ export const IdentityDetails = ({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <StatsCard
           label="NIN"
-          value={ninData.nin || kycDetails.id_number || 'N/A'}
+          value={ninData.nin || 'N/A'}
         />
         <StatsCard
           label="ID Verification Status"
@@ -101,14 +101,14 @@ export const IdentityDetails = ({
             index={1}
             label="First Name"
             value={
-              ninData.first_name || kycDetails.first_name || driver.first_name
+              ninData.first_name || driver.first_name
             }
           />
           <InfoRow
             index={2}
             label="Last Name"
             value={
-              ninData.last_name || kycDetails.last_name || driver.last_name
+              ninData.last_name || driver.last_name
             }
           />
           <InfoRow
@@ -120,19 +120,19 @@ export const IdentityDetails = ({
           <InfoRow
             index={5}
             label="Photo"
-            value={ninData.image || kycDetails.selfie_image || ''}
+            value={ninData.image || 'N/A'}
             isImage
           />
           <InfoRow
             index={6}
             label="Date of Birth"
-            value={ninData.dob || kycDetails.dob}
+            value={ninData.dob || 'N/A'}
           />
-          <InfoRow index={7} label="Email Address" value={driver.email} />
+          {/* <InfoRow index={7} label="Email Address" value={"N/A"} /> */}
           <InfoRow
             index={8}
             label="Phone Number"
-            value={ninData.mobile || driver.phone_number}
+            value={ninData.mobile || 'N/A'}
           />
           <InfoRow
             index={9}
