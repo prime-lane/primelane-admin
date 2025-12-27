@@ -1,17 +1,15 @@
-import { Button, Card, CardContent } from '@mui/material'
+import { RatingsSkeleton } from '@/components/ui/tab-skeletons'
+import { StatsCard } from '@/features/customers/components/stats-card'
+import { Card, CardContent } from '@mui/material'
 import { Star } from '@solar-icons/react'
 import { format } from 'date-fns'
-import type { UserRideStats, Review } from '../types'
-import { StatsCard } from '@/features/customers/components/stats-card'
-import { RatingsSkeleton } from '@/components/ui/tab-skeletons'
+import type { Review, UserRideStats } from '../types'
 
 interface DriverRatingsProps {
   stats?: UserRideStats
   reviews?: Review[]
   isLoading?: boolean
 }
-
-// ... helper components remain same
 
 const RatingBreakdownRow = ({
   star,
@@ -131,7 +129,7 @@ export const DriverRatings = ({
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h3 className="text-sm font-semibold">Recent Reviews</h3>
-          <Button
+          {/* <Button
             variant="text"
             sx={{
               bgcolor: 'neutral.100',
@@ -149,7 +147,7 @@ export const DriverRatings = ({
             }}
           >
             View more
-          </Button>
+          </Button> */}
         </div>
         {reviews.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

@@ -12,7 +12,6 @@ interface CustomerRatingsProps {
   isLoading?: boolean
 }
 
-// ... helper components remain same
 
 const RatingBreakdownRow = ({
   star,
