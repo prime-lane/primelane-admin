@@ -96,6 +96,8 @@ export const DashboardLayout = () => {
           flexGrow: 1,
           display: 'flex',
           flexDirection: 'column',
+          width: '100%',
+          overflowX: 'hidden',
         }}
       >
         <Navbar onSidebarOpen={handleDrawerToggle} />

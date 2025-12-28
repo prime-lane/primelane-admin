@@ -79,8 +79,12 @@ export function DataTable<T>({
 
   return (
     <div>
-      <TableContainer component={Paper} elevation={0} sx={{ overflowX:'auto !important', width:'100% !important' }}>
-        <Table sx={{ overflowX:'auto !important', width:'100% !important' }}>
+      <TableContainer
+        component={Paper}
+        elevation={0}
+        sx={{ overflowX: 'auto', width: '100%' }}
+      >
+        <Table sx={{ minWidth: 800 }}>
           <TableHead sx={{ bgcolor: 'neutral.50' }}>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
