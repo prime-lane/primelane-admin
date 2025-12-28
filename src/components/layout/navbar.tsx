@@ -66,7 +66,7 @@ export const Navbar = ({ onSidebarOpen }: NavbarProps) => {
           onClick={onSidebarOpen}
           sx={{ mr: 2, display: { md: 'none' } }}
         >
-          <HamburgerMenu />
+          <HamburgerMenu size={30} />
         </IconButton>
         <div className="flex items-center">
           <IconButton
