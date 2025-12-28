@@ -11,6 +11,7 @@ interface SidebarNavItemProps {
   onClick?: () => void
   variant?: 'nav' | 'button'
   children?: { label: string; to: string }[]
+  onLinkClick?: () => void
 }
 
 export const SidebarNavItem = ({
@@ -21,6 +22,7 @@ export const SidebarNavItem = ({
   onClick,
   variant = 'nav',
   children,
+  onLinkClick,
 }: SidebarNavItemProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const location = useLocation()
@@ -87,6 +89,7 @@ export const SidebarNavItem = ({
               <NavLink
                 key={child.label}
                 to={child.to}
+                onClick={onLinkClick}
                 className={({ isActive }) =>
                   cn(
                     'pl-12 pr-4 py-2.5 text-sm transition-colors',
@@ -108,6 +111,7 @@ export const SidebarNavItem = ({
   return (
     <NavLink
       to={to!}
+      onClick={onLinkClick}
       end={to === '/dashboard'}
       className={({ isActive }) =>
         cn(

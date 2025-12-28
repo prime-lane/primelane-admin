@@ -6,12 +6,19 @@ import {
   MenuItem,
   Toolbar,
 } from '@mui/material'
-import { AltArrowDown } from '@solar-icons/react'
+import { AltArrowDown, HamburgerMenu } from '@solar-icons/react'
 import { useState } from 'react'
-import { useCurrentUser, useLogout } from '@/features/auth/hooks/use-current-user'
+import {
+  useCurrentUser,
+  useLogout,
+} from '@/features/auth/hooks/use-current-user'
 import { getInitials } from '@/lib/utils'
 
-export const Navbar = () => {
+interface NavbarProps {
+  onSidebarOpen?: () => void
+}
+
+export const Navbar = ({ onSidebarOpen }: NavbarProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const { data: user } = useCurrentUser()
@@ -31,7 +38,9 @@ export const Navbar = () => {
   }
 
   const displayName = user ? user.first_name : 'User'
-  const avatarInitials = user ? getInitials(user.first_name, user.last_name) : 'U'
+  const avatarInitials = user
+    ? getInitials(user.first_name, user.last_name)
+    : 'U'
 
   return (
     <AppBar
@@ -46,10 +55,19 @@ export const Navbar = () => {
     >
       <Toolbar
         sx={{
-          justifyContent: 'flex-end',
+          justifyContent: { md: 'flex-end', xs: 'space-between' },
           minHeight: '80px !important',
         }}
       >
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          edge="start"
+          onClick={onSidebarOpen}
+          sx={{ mr: 2, display: { md: 'none' } }}
+        >
+          <HamburgerMenu />
+        </IconButton>
         <div className="flex items-center">
           <IconButton
             onClick={handleClick}
@@ -102,4 +120,3 @@ export const Navbar = () => {
     </AppBar>
   )
 }
-
