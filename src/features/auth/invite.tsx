@@ -45,7 +45,7 @@ export const Invite = () => {
       {
         onSuccess: (response) => {
           toast.success(response?.message || 'Invite accepted successfully')
-          navigate(path.AUTH.SIGN_IN)
+          navigate(path.AUTH.OTP, { state: { email: data.email } })
         },
         onError: (error) => {
           toast.error(error?.message || 'Failed to accept invite')

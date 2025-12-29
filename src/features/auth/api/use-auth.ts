@@ -26,17 +26,17 @@ export const useSignIn = () => {
                 e.AUTH.LOGIN.ADMIN,
                 data
             )
-            return response.data
+            return response
         },
-        onSuccess: (data) => {
+        onSuccess: ({ data, message }, payload) => {
             localStorage.setItem('access_token', data.access_token)
             localStorage.setItem('refresh_token', data.refresh_token)
             localStorage.setItem('user', JSON.stringify(data.user))
 
             queryClient.setQueryData(['user'], data.user)
 
-            toast.success('Login successful!')
-            navigate(path.DASHBOARD.ROOT)
+            toast.success(message || 'OTP sent')
+            navigate(path.AUTH.OTP, { state: { email: payload.email } })
         },
     })
 }
@@ -73,6 +73,7 @@ export const useRefreshToken = () => {
 
 // Forgot Password
 export const useForgotPassword = () => {
+    const navigate = useNavigate()
     return useMutation({
         mutationFn: async (data: ForgotPasswordRequest) => {
             const response = await apiClient.post<Record<string, never>>(
@@ -81,8 +82,9 @@ export const useForgotPassword = () => {
             )
             return response
         },
-        onSuccess: (response) => {
+        onSuccess: (response, variables) => {
             toast.success(response.message || 'OTP sent to your email')
+            navigate(path.AUTH.OTP, { state: { email: variables.email } })
         },
     })
 }
@@ -237,6 +239,40 @@ export const useAcceptAdminInvite = () => {
         },
         onError: (error: any) => {
             toast.error(error.message || 'Failed to accept invite')
+        }
+
+    })
+}
+
+export const useVerifyAdminOtp = (action: 'verify-phone' | 'login' = 'login') => {
+    const navigate = useNavigate()
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (data: VerifyOTPRequest) => {
+            const response = await apiClient.post<AuthResponse>(
+                e.AUTH.ADMIN_OTP(action),
+                data
+            )
+            return response.data
+        },
+        onSuccess: (data) => {
+            if (data.access_token) {
+                localStorage.setItem('access_token', data.access_token)
+                localStorage.setItem('refresh_token', data.refresh_token)
+                localStorage.setItem('user', JSON.stringify(data.user))
+
+                queryClient.setQueryData(['user'], data.user)
+
+                toast.success('Verification successful!')
+                navigate(path.DASHBOARD.ROOT)
+            } else {
+                toast.success('Verification successful!')
+                navigate(path.DASHBOARD.ROOT)
+            }
+        },
+        onError: (error: any) => {
+            toast.error(error.message || 'Failed to verify OTP')
         }
     })
 }

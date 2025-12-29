@@ -6,6 +6,7 @@ export const path = {
     SIGN_IN: '/auth/signin',
     OTP: '/auth/otp',
     INVITE: '/auth/accept-invite',
+    FORGOT_PASSWORD: '/auth/forgot-password',
   },
   DASHBOARD: {
     ROOT: '/dashboard',

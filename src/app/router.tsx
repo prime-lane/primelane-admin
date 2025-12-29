@@ -11,6 +11,7 @@ import { PublicRoute } from '../components/public-route'
 import { Invite } from '@/features/auth/invite'
 import { Otp } from '@/features/auth/otp'
 import { SignIn } from '@/features/auth/sign-in'
+import { ForgotPassword } from '@/features/auth/forgot-password'
 import { path } from './paths'
 
 const Home = lazy(() =>
@@ -292,6 +293,14 @@ export const router = createBrowserRouter([
     ),
     errorElement: <ErrorBoundary />,
     children: [
+      {
+        path: path.AUTH.FORGOT_PASSWORD,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <ForgotPassword />
+          </Suspense>
+        ),
+      },
       {
         path: path.AUTH.SIGN_IN,
         element: (

@@ -13,6 +13,7 @@ export const API_ENDPOINTS = {
         CHANGE_PASSWORD: '/auth/change-password',
         CHANGE_EMAIL: '/auth/change-email',
         CHANGE_PHONE_NUMBER: '/auth/change-phone-number',
+        ADMIN_OTP: (action: 'verify-phone' | 'login' = 'login') => `/auth/admin-otp/${action}`,
         VERIFY_OTP: (action: 'verify-phone' | 'login') => `/auth/verify-otp/${action}`,
         CONFIRM_OTP: (action: 'reset-password' | 'change-email' | 'change-phone') =>
             `/auth/confirm-otp/${action}`,

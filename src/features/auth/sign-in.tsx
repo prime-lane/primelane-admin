@@ -1,10 +1,12 @@
 import { Button, InputAdornment, TextField, Typography } from '@mui/material'
+import { Link } from 'react-router-dom'
 import { Letter, LockPassword } from '@solar-icons/react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PasswordInput } from '@/components/ui/password-input'
 import { signInSchema, type SignInFormData } from './schemas/sign-in-schema'
 import { useSignIn } from './api/use-auth'
+import { path } from '@/app/paths'
 
 export const SignIn = () => {
   const signIn = useSignIn()
@@ -45,7 +47,7 @@ export const SignIn = () => {
           fullWidth
           size="medium"
           label="Email"
-          placeholder="exodustimothy@gmail.com"
+          placeholder="johndoe@mail.com"
           error={!!errors.email}
           helperText={errors.email?.message}
           disabled={isSubmitting || signIn.isPending}
@@ -80,9 +82,12 @@ export const SignIn = () => {
               },
             }}
           />
-          <a className="text-base text-right text-black underline" href="#">
+          <Link
+            to={path.AUTH.FORGOT_PASSWORD}
+            className="text-base text-right text-black underline"
+          >
             Forgot Password?
-          </a>
+          </Link>
         </div>
 
         <Button
