@@ -1,32 +1,49 @@
-import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
 import { ExportButton, SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
+import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
 import { exportToCSV } from '@/utils/export-utils'
 import { Box } from '@mui/material'
 
-import { useState } from 'react'
+import { parseAsString, useQueryState } from 'nuqs'
+import { useNavigate } from 'react-router-dom'
 import * as useTrips from './api/use-trips'
 import { columns } from './components/columns'
 
 import { path } from '@/app/paths'
-import { useNavigate } from 'react-router-dom'
-import type { Trip } from './types'
 import { useVehicleCategories } from '../pricing-config/api/use-vehicle-categories'
+import type { Trip } from './types'
+import { useTableParams } from '@/hooks/use-table-params'
 
 export const Trips = () => {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(10)
-  const [filters, setFilters] = useState<{
-    status?: string
-    start_date?: string
-    end_date?: string
-    vehicle_category_id?: string
-  }>({})
+  const {
+    page,
+    setPage,
+    pageSize: limit,
+    setPageSize: setLimit,
+    search: searchTerm,
+    setSearch: setSearchTerm,
+  } = useTableParams()
+
+  const [status, setStatus] = useQueryState('status', parseAsString)
+  const [startDate, setStartDate] = useQueryState('start_date', parseAsString)
+  const [endDate, setEndDate] = useQueryState('end_date', parseAsString)
+  const [vehicleCategoryId, setVehicleCategoryId] = useQueryState(
+    'vehicle_category_id',
+    parseAsString,
+  )
+
   const debouncedSearch = useDebounce(searchTerm, 500)
   const navigate = useNavigate()
+
+  // Sync state to filters object for API hook
+  const filters = {
+    status: status || undefined,
+    start_date: startDate || undefined,
+    end_date: endDate || undefined,
+    vehicle_category_id: vehicleCategoryId || undefined,
+  }
 
   const { data: vehicleCategories } = useVehicleCategories()
 
@@ -40,21 +57,12 @@ export const Trips = () => {
   const handleFilterChange = (key: string, value: any) => {
     setPage(1)
     if (key === 'status') {
-      setFilters((prev) => ({
-        ...prev,
-        status: value.toLowerCase() === 'all' ? undefined : value.toLowerCase(),
-      }))
+      setStatus(value.toLowerCase() === 'all' ? null : value.toLowerCase())
     } else if (key === 'date') {
-      setFilters((prev) => ({
-        ...prev,
-        start_date: value.start ? value.start.toISOString() : undefined,
-        end_date: value.end ? value.end.toISOString() : undefined,
-      }))
+      setStartDate(value.start ? value.start.toISOString() : null)
+      setEndDate(value.end ? value.end.toISOString() : null)
     } else if (key === 'vehicle_category') {
-      setFilters((prev) => ({
-        ...prev,
-        vehicle_category_id: value,
-      }))
+      setVehicleCategoryId(value)
     }
   }
 
@@ -116,8 +124,8 @@ export const Trips = () => {
             options={filterOptions}
             onFilterChange={handleFilterChange}
             activeFilters={{
-              status: filters.status || 'all',
-              vehicle_category: filters.vehicle_category_id,
+              status: status || 'all',
+              vehicle_category: vehicleCategoryId || undefined,
             }}
           />
           <ExportButton onClick={handleExport} />

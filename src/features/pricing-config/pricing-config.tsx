@@ -45,7 +45,6 @@ export const PricingConfig = () => {
 
   if (isLoading) return <PricingConfigSkeleton />
   if (error) return <ErrorState message="Failed to load vehicle categories" />
-  console.log(categoriesData)
 
   return (
     <>

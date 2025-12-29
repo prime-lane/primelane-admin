@@ -14,7 +14,7 @@ import {
   UserCross,
   UsersGroupTwoRounded,
 } from '@solar-icons/react'
-import { useState } from 'react'
+import { useQueryState, parseAsString } from 'nuqs'
 import { useDashboardStats } from './api/use-dashboard-stats'
 
 interface StatCardProps {
@@ -56,20 +56,20 @@ const SkeletonStatCard = () => {
 }
 
 export const Home = () => {
-  const [filters, setFilters] = useState<{
-    start_date?: string
-    end_date?: string
-  }>({})
+  const [startDate, setStartDate] = useQueryState('start_date', parseAsString)
+  const [endDate, setEndDate] = useQueryState('end_date', parseAsString)
+
+  const filters = {
+    start_date: startDate || undefined,
+    end_date: endDate || undefined,
+  }
 
   const { data: dashboardData, isLoading, error } = useDashboardStats(filters)
 
   const handleFilterChange = (key: string, value: any) => {
     if (key === 'date_joined') {
-      setFilters((prev) => ({
-        ...prev,
-        start_date: value.start ? value.start.toISOString() : undefined,
-        end_date: value.end ? value.end.toISOString() : undefined,
-      }))
+      setStartDate(value.start ? value.start.toISOString() : null)
+      setEndDate(value.end ? value.end.toISOString() : null)
     }
   }
 

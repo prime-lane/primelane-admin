@@ -6,6 +6,7 @@ import { useDebounce } from '@/hooks/use-debounce'
 import { Box, Button } from '@mui/material'
 import { UserCross } from '@solar-icons/react'
 import { useMemo, useState } from 'react'
+
 import {
   useCreateRole,
   useDeleteRole,
@@ -16,11 +17,11 @@ import type { Role } from '../types'
 import { getRoleColumns } from './components/columns'
 import { DeleteRoleModal } from './components/delete-role-modal'
 import { RoleModal } from './components/role-modal'
+import { useTableParams } from '@/hooks/use-table-params'
 
 export const RolesManagement = () => {
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
-  const [search, setSearch] = useState('')
+  const { page, setPage, pageSize, setPageSize, search, setSearch } =
+    useTableParams()
 
   const [roleModalOpen, setRoleModalOpen] = useState(false)
   const [editingRole, setEditingRole] = useState<Role | null>(null)

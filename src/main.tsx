@@ -9,7 +9,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import App from './App.tsx'
-
+import { NuqsAdapter } from 'nuqs/adapters/react'
 import { theme } from './theme'
 
 async function enableMocking() {
@@ -31,7 +31,9 @@ enableMocking().then(() => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <ErrorBoundary fallback={<div>something went wrong</div>}>
-          <App />
+          <NuqsAdapter>
+            <App />
+          </NuqsAdapter>
         </ErrorBoundary>
       </ThemeProvider>
     </StrictMode>,

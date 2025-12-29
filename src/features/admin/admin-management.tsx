@@ -6,25 +6,32 @@ import { exportToCSV } from '@/utils/export-utils'
 import { Box, Button } from '@mui/material'
 import { UserPlus } from '@solar-icons/react'
 import { useState } from 'react'
+import { useQueryState, parseAsString } from 'nuqs'
 import { useAdmins } from './api/use-admins'
 import { adminColumns } from './components/columns'
 import { InviteAdminModal } from './components/invite-admin-modal'
 
 import { useDebounce } from '@/hooks/use-debounce'
+import { useTableParams } from '@/hooks/use-table-params'
 
 export const AdminManagement = () => {
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
-  const [search, setSearch] = useState('')
+  const { page, setPage, pageSize, setPageSize, search, setSearch } =
+    useTableParams()
+
+  const [status, setStatus] = useQueryState('status', parseAsString)
+  const [startDate, setStartDate] = useQueryState('start_date', parseAsString)
+  const [endDate, setEndDate] = useQueryState('end_date', parseAsString)
+
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false)
 
-  const [filters, setFilters] = useState<{
-    status?: string
-    start_date?: string
-    end_date?: string
-  }>({})
-
   const debouncedSearch = useDebounce(search, 500)
+
+  // Sync state to filters object for API hook
+  const filters = {
+    status: status || undefined,
+    start_date: startDate || undefined,
+    end_date: endDate || undefined,
+  }
 
   const { data, isLoading } = useAdmins({
     page,
@@ -33,19 +40,14 @@ export const AdminManagement = () => {
     ...filters,
   })
 
+  // Handle filter changes via URL updates
   const handleFilterChange = (key: string, value: any) => {
     setPage(1)
     if (key === 'status') {
-      setFilters((prev) => ({
-        ...prev,
-        status: value.toLowerCase() === 'all' ? undefined : value.toLowerCase(),
-      }))
+      setStatus(value.toLowerCase() === 'all' ? null : value.toLowerCase())
     } else if (key === 'date_joined') {
-      setFilters((prev) => ({
-        ...prev,
-        start_date: value.start ? value.start.toISOString() : undefined,
-        end_date: value.end ? value.end.toISOString() : undefined,
-      }))
+      setStartDate(value.start ? value.start.toISOString() : null)
+      setEndDate(value.end ? value.end.toISOString() : null)
     }
   }
 
@@ -104,7 +106,7 @@ export const AdminManagement = () => {
             ]}
             onFilterChange={handleFilterChange}
             activeFilters={{
-              status: filters.status || 'all',
+              status: status || 'all',
             }}
           />
           <ExportButton onClick={handleExport} />
