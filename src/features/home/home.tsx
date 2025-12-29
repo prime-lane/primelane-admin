@@ -1,9 +1,8 @@
-import { FilterButton } from '@/components/ui/data-controls'
+import { FilterMenu } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { formatCurrency, formatNumber } from '@/lib/utils'
 import { Box, Card, CardContent, Grid, Skeleton } from '@mui/material'
 import {
-  AltArrowDown,
   Banknote2,
   Bill,
   Bill2,
@@ -15,6 +14,7 @@ import {
   UserCross,
   UsersGroupTwoRounded,
 } from '@solar-icons/react'
+import { useState } from 'react'
 import { useDashboardStats } from './api/use-dashboard-stats'
 
 interface StatCardProps {
@@ -56,7 +56,22 @@ const SkeletonStatCard = () => {
 }
 
 export const Home = () => {
-  const { data: dashboardData, isLoading, error } = useDashboardStats()
+  const [filters, setFilters] = useState<{
+    start_date?: string
+    end_date?: string
+  }>({})
+
+  const { data: dashboardData, isLoading, error } = useDashboardStats(filters)
+
+  const handleFilterChange = (key: string, value: any) => {
+    if (key === 'date_joined') {
+      setFilters((prev) => ({
+        ...prev,
+        start_date: value.start ? value.start.toISOString() : undefined,
+        end_date: value.end ? value.end.toISOString() : undefined,
+      }))
+    }
+  }
 
   if (error) return <ErrorState message="Failed to load dashboard statistics" />
 
@@ -136,10 +151,17 @@ export const Home = () => {
         }}
       >
         <h1 className="text-4xl">Summary</h1>
-        <FilterButton className="space-x-2">
-          <span>Filter By</span>
-          <AltArrowDown size={16} color="#000" />
-        </FilterButton>
+        <FilterMenu
+          options={[
+            {
+              label: 'Date',
+              key: 'date_joined',
+              type: 'date-range',
+            },
+          ]}
+          onFilterChange={handleFilterChange}
+          activeFilters={{}}
+        />
       </Box>
 
       <Grid container spacing={4}>

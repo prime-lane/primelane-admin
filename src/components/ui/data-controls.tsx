@@ -9,7 +9,12 @@ import {
   MenuItem,
   InputAdornment,
 } from '@mui/material'
-import { Magnifer, AltArrowLeft, AltArrowRight } from '@solar-icons/react'
+import {
+  Magnifer,
+  AltArrowLeft,
+  AltArrowRight,
+  FileDownload,
+} from '@solar-icons/react'
 
 interface FilterButtonProps extends Omit<ButtonProps, 'variant'> {
   variant?: 'outlined' | 'contained' | 'text'
@@ -62,10 +67,14 @@ export const ExportButton = ({
         color: 'neutral.500',
         fontWeight: 400,
         ...sx,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 2,
       }}
       {...props}
     >
       {label}
+      <FileDownload />
     </Button>
   )
 }

@@ -1,8 +1,9 @@
 import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
-import { SearchInput } from '@/components/ui/data-controls'
+import { ExportButton, SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
+import { exportToCSV } from '@/utils/export-utils'
 import { Box } from '@mui/material'
 
 import { useState } from 'react'
@@ -57,6 +58,15 @@ export const Trips = () => {
     }
   }
 
+  const handleExport = () => {
+    if (!data?.items) return
+    exportToCSV(data.items, 'trips-export', [
+      { key: 'id', label: 'Trip ID' },
+      { key: 'status', label: 'Status' },
+      { key: 'created_at', label: 'Date' },
+    ])
+  }
+
   if (error) return <ErrorState message="Failed to load trips" />
 
   const trips = data?.items || []
@@ -101,14 +111,17 @@ export const Trips = () => {
         <Box sx={{ flex: 1 }}>
           <SearchInput value={searchTerm} onChange={setSearchTerm} />
         </Box>
-        <FilterMenu
-          options={filterOptions}
-          onFilterChange={handleFilterChange}
-          activeFilters={{
-            status: filters.status || 'all',
-            vehicle_category: filters.vehicle_category_id,
-          }}
-        />
+        <div className="flex gap-3">
+          <FilterMenu
+            options={filterOptions}
+            onFilterChange={handleFilterChange}
+            activeFilters={{
+              status: filters.status || 'all',
+              vehicle_category: filters.vehicle_category_id,
+            }}
+          />
+          <ExportButton onClick={handleExport} />
+        </div>
       </Box>
 
       <DataTable

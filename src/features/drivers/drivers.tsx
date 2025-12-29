@@ -1,10 +1,11 @@
 import { path } from '@/app/paths'
 import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
-import { SearchInput } from '@/components/ui/data-controls'
+import { ExportButton, SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
 import { PageHeader } from '@/components/ui/page-header'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
+import { exportToCSV } from '@/utils/export-utils'
 import { Box } from '@mui/material'
 
 import { useState } from 'react'
@@ -63,6 +64,18 @@ export const Drivers = () => {
     }
   }
 
+  const handleExport = () => {
+    if (!data?.items) return
+    exportToCSV(data.items, 'drivers-export', [
+      { key: 'first_name', label: 'First Name' },
+      { key: 'last_name', label: 'Last Name' },
+      { key: 'email', label: 'Email' },
+      { key: 'phone_number', label: 'Phone Number' },
+      { key: 'status', label: 'Status' },
+      { key: 'created_at', label: 'Date Joined' },
+    ])
+  }
+
   if (error) return <ErrorState message="Failed to load drivers" />
 
   const filterOptions: FilterOption[] = [
@@ -108,14 +121,17 @@ export const Drivers = () => {
             placeholder="Search by name, phone number, email address, driver ID"
           />
         </Box>
-        <FilterMenu
-          options={filterOptions}
-          onFilterChange={handleFilterChange}
-          activeFilters={{
-            status: filters.status || 'all',
-            vehicle_category: filters.vehicle_category_id,
-          }}
-        />
+        <div className="flex gap-3">
+          <FilterMenu
+            options={filterOptions}
+            onFilterChange={handleFilterChange}
+            activeFilters={{
+              status: filters.status || 'all',
+              vehicle_category: filters.vehicle_category_id,
+            }}
+          />
+          <ExportButton onClick={handleExport} />
+        </div>
       </Box>
 
       <DataTable

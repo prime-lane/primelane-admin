@@ -1,6 +1,7 @@
-import { FilterButton, SearchInput } from '@/components/ui/data-controls'
+import { ExportButton, SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
 import { PageHeader } from '@/components/ui/page-header'
+import { exportToCSV } from '@/utils/export-utils'
 import { useDebounce } from '@/hooks/use-debounce'
 import { Box, Button } from '@mui/material'
 import { UserCross } from '@solar-icons/react'
@@ -74,6 +75,15 @@ export const RolesManagement = () => {
     }
   }
 
+  const handleExport = () => {
+    if (!data?.items) return
+    exportToCSV(data.items, 'roles-export', [
+      { key: 'name', label: 'Role Name' },
+      { key: 'permissions', label: 'Number of Permissions' },
+      { key: 'createdAt', label: 'Created At' },
+    ])
+  }
+
   const columns = useMemo(
     () => getRoleColumns(handleEdit, handleDeleteClick),
     [],
@@ -110,7 +120,7 @@ export const RolesManagement = () => {
           />
         </Box>
         <div className="flex gap-3">
-          <FilterButton>Filter</FilterButton>
+          <ExportButton onClick={handleExport} />
         </div>
       </Box>
 

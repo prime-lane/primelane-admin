@@ -1,10 +1,11 @@
 import { path } from '@/app/paths'
 import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
-import { SearchInput } from '@/components/ui/data-controls'
+import { ExportButton, SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
 import { PageHeader } from '@/components/ui/page-header'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
+import { exportToCSV } from '@/utils/export-utils'
 import { Box } from '@mui/material'
 
 import { useState } from 'react'
@@ -50,6 +51,18 @@ export const Customers = () => {
     }
   }
 
+  const handleExport = () => {
+    if (!data?.items) return
+    exportToCSV(data.items, 'customers-export', [
+      { key: 'first_name', label: 'First Name' },
+      { key: 'last_name', label: 'Last Name' },
+      { key: 'email', label: 'Email' },
+      { key: 'phone_number', label: 'Phone Number' },
+      { key: 'status', label: 'Status' },
+      { key: 'created_at', label: 'Date Joined' },
+    ])
+  }
+
   if (error) return <ErrorState message="Failed to load customers" />
 
   const customers = data?.items || []
@@ -82,13 +95,16 @@ export const Customers = () => {
         <Box sx={{ flex: 1 }}>
           <SearchInput value={searchTerm} onChange={setSearchTerm} />
         </Box>
-        <FilterMenu
-          options={filterOptions}
-          onFilterChange={handleFilterChange}
-          activeFilters={{
-            status: filters.status || 'all',
-          }}
-        />
+        <div className="flex gap-3">
+          <FilterMenu
+            options={filterOptions}
+            onFilterChange={handleFilterChange}
+            activeFilters={{
+              status: filters.status || 'all',
+            }}
+          />
+          <ExportButton onClick={handleExport} />
+        </div>
       </Box>
 
       <DataTable
