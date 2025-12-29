@@ -62,23 +62,23 @@ TODO:
 - [x] paginate from backend
 - [x] trip status for trips/rides
 - [ ] all reviews page
-- [ ] Home page (pending endpoint, dont' use this `/analytics/my-ride-stats`)
+- [x] Home page (pending endpoint, dont' use this `/analytics/my-ride-stats`)
 - [x] new endpoint for managing vehcile activation status (kycDetails.is_vehicle_set)
 - [x] use kyc.is vehicle set to conditionally render vehicle details
 - [x] update category dropdown , (list of categories)
 - [x] add remaining summary card
-- [ ] filter button
-- [ ] updating vehicle category endpoint (dependent on chijiooke)
+- [x] filter button
+- [x] updating vehicle category endpoint (dependent on chijiooke)
 
 
 BACKEND
-- [ ] update driver/vehicle (pending, awaiting for chijiooke response)
-- [ ] Home/summary page (pending endpoint)
-- [ ] identity details - (pending endpoint) /kyc/my-kyc is not for admin
-- [ ] endpoint for admin to view customer ratings by id
-- [ ] fetch wallet by id
-- [ ] update user endpoint should allow intl passport
-- [ ] disable nin on edit customer; submit empty string
-- [ ] update vehicle category
+- [x] update driver/vehicle (pending, awaiting for chijiooke response)
+- [x] Home/summary page (pending endpoint)
+- [x] identity details - (pending endpoint) /kyc/my-kyc is not for admin
+- [x] endpoint for admin to view customer ratings by id
+- [x] fetch wallet by id
+- [x] update user endpoint should allow intl passport
+- [x] disable nin on edit customer; submit empty string
+- [x] update vehicle category
 - [ ] trip cancellation fee (pending)
 - [ ] settlements
