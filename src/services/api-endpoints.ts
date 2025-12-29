@@ -79,5 +79,8 @@ export const API_ENDPOINTS = {
         VERIFY: (idType: 'nin' | 'dl' | 'ip') => `/kyc/verify/${idType}`,
         BY_ID: (userId: string) => `/kyc/${userId}`,
     },
-    ROLES: '/roles',
+    ROLES: {
+        ROOT: '/roles',
+        PERMISSIONS: '/roles/permissions',
+    },
 } as const

@@ -19,7 +19,7 @@ interface RoleModalProps {
   isLoading?: boolean
 }
 
-import { useRoles } from '../../api/use-admins'
+import { usePermissions } from '../../api/use-admins'
 
 import { getPermissionCategory, getPermissionLabel } from '../utils'
 
@@ -32,28 +32,21 @@ export const RoleModal = ({
 }: RoleModalProps) => {
   const [name, setName] = useState('')
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([])
-  const { data: roles = [] } = useRoles()
+  const { data: permissions = [] } = usePermissions()
 
   // Dynamic permission aggregation
   const permissionGroups = useMemo(() => {
-    const allPermissions = new Set<string>()
-    roles.forEach((role) => {
-      role.permissions.forEach((p) => allPermissions.add(p))
-    })
-
     const categoryMap = new Map<string, { label: string; value: string }[]>()
 
-    Array.from(allPermissions)
-      .sort()
-      .forEach((perm) => {
-        const categoryLabel = getPermissionCategory(perm)
-        const label = getPermissionLabel(perm)
+    permissions.sort().forEach((perm) => {
+      const categoryLabel = getPermissionCategory(perm)
+      const label = getPermissionLabel(perm)
 
-        if (!categoryMap.has(categoryLabel)) {
-          categoryMap.set(categoryLabel, [])
-        }
-        categoryMap.get(categoryLabel)?.push({ label, value: perm })
-      })
+      if (!categoryMap.has(categoryLabel)) {
+        categoryMap.set(categoryLabel, [])
+      }
+      categoryMap.get(categoryLabel)?.push({ label, value: perm })
+    })
 
     // Sort categories: specific order if possible, else alphabetical
     const preferredOrder = [
@@ -83,7 +76,7 @@ export const RoleModal = ({
     })
 
     return sortedGroups
-  }, [roles])
+  }, [permissions])
 
   useEffect(() => {
     if (open) {

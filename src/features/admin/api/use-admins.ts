@@ -29,7 +29,7 @@ export const useRoles = () => {
     return useQuery({
         queryKey: ['roles'],
         queryFn: async () => {
-            const response = await apiClient.get<{ roles: Role[] }>(e.ROLES)
+            const response = await apiClient.get<{ roles: Role[] }>(e.ROLES.ROOT)
             return response.data?.roles
         }
     })
@@ -40,7 +40,7 @@ export const usePaginatedRoles = (params?: PaginationParams) => {
         queryKey: ['roles-paginated', params],
         queryFn: async () => {
             const searchParams = buildQueryParams(params)
-            const endpoint = `${e.ROLES}?${searchParams.toString()}`
+            const endpoint = `${e.ROLES.ROOT}?${searchParams.toString()}`
             const response = await apiClient.get<{ roles: Role[]; pagination: PaginatedResponse<unknown>['pagination'] }>(endpoint)
             return transformPaginatedResponse(response.data, 'roles')
         }
@@ -70,7 +70,7 @@ export const useCreateRole = () => {
 
     return useMutation({
         mutationFn: async (data: { name: string; permissions: string[] }) => {
-            const response = await apiClient.post<{ message: string }>(e.ROLES, data)
+            const response = await apiClient.post<{ message: string }>(e.ROLES.ROOT, data)
             return response.data
         },
         onSuccess: (response) => {
@@ -88,7 +88,7 @@ export const useUpdateRole = () => {
 
     return useMutation({
         mutationFn: async ({ id, data }: { id: string; data: { name: string; permissions: string[] } }) => {
-            const response = await apiClient.patch<{ message: string }>(`${e.ROLES}/${id}`, data)
+            const response = await apiClient.patch<{ message: string }>(`${e.ROLES.ROOT}/${id}`, data)
             return response.data
         },
         onSuccess: (response) => {
@@ -106,7 +106,7 @@ export const useDeleteRole = () => {
 
     return useMutation({
         mutationFn: async (id: string) => {
-            const response = await apiClient.delete<{ message: string }>(`${e.ROLES}/${id}`)
+            const response = await apiClient.delete<{ message: string }>(`${e.ROLES.ROOT}/${id}`)
             return response.data
         },
         onSuccess: (response) => {
@@ -115,6 +115,16 @@ export const useDeleteRole = () => {
         },
         onError: (error: any) => {
             toast.error(error.message || 'Failed to delete role')
+        }
+    })
+}
+
+export const usePermissions = () => {
+    return useQuery({
+        queryKey: ['permissions'],
+        queryFn: async () => {
+            const response = await apiClient.get<{ permissions: string[] }>(e.ROLES.PERMISSIONS)
+            return response.data?.permissions
         }
     })
 }

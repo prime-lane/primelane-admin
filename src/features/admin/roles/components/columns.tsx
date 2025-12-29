@@ -7,7 +7,7 @@ import type { Role } from '../../types'
 const ActionMenu = ({
   role,
   onEdit,
-  onDelete,
+  // onDelete,
 }: {
   role: Role
   onEdit: (role: Role) => void
@@ -28,10 +28,10 @@ const ActionMenu = ({
     handleClose()
   }
 
-  const handleDelete = () => {
-    onDelete(role)
-    handleClose()
-  }
+  // const handleDelete = () => {
+  //   onDelete(role)
+  //   handleClose()
+  // }
 
   return (
     <>
@@ -50,9 +50,9 @@ const ActionMenu = ({
             Edit Permissions
           </span>
         </MenuItem>
-        <MenuItem onClick={handleDelete}>
+        {/* <MenuItem onClick={handleDelete}>
           <span className="text-sm font-medium text-[red]">Delete Role</span>
-        </MenuItem>
+        </MenuItem> */}
       </Menu>
     </>
   )
@@ -67,6 +67,13 @@ export const getRoleColumns = (
     header: 'Role',
     cell: ({ row }) => (
       <span className="font-medium text-neutral-900">{row.original.name}</span>
+    ),
+  },
+  {
+    accessorKey: 'permissions',
+    header: 'Number of Permissions',
+    cell: ({ row }) => (
+      <span className="font-medium text-neutral-900">{row.original.permissions.length}</span>
     ),
   },
   {
