@@ -61,7 +61,6 @@ TODO:
 - [x] driver license from kyc
 - [x] paginate from backend
 - [x] trip status for trips/rides
-- [ ] all reviews page
 - [x] Home page (pending endpoint, dont' use this `/analytics/my-ride-stats`)
 - [x] new endpoint for managing vehcile activation status (kycDetails.is_vehicle_set)
 - [x] use kyc.is vehicle set to conditionally render vehicle details
