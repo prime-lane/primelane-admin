@@ -1,5 +1,6 @@
 import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
+import { AvatarImageDialog } from '@/components/ui/avatar-image-dialog'
 import { DetailsSkeleton } from '@/components/ui/details-skeleton'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { StatusBadge } from '@/components/ui/status-badge'
@@ -30,6 +31,7 @@ import {
 import { AltArrowDown } from '@solar-icons/react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useQueryState } from 'nuqs'
 import { toast } from 'sonner'
 import { useKycDetails } from '../shared/api/use-users'
 import {
@@ -73,6 +75,9 @@ export const DriverDetails = () => {
   >(null)
   const [reason, setReason] = useState('')
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+
+  // Avatar dialog state
+  const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false)
 
   const handleActionClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -158,10 +163,14 @@ export const DriverDetails = () => {
     )
   }
 
-  const [tabValue, setTabValue] = useState(0)
+  const [tabValue, setTabValue] = useQueryState('tab', {
+    defaultValue: '0',
+    parse: (value) => value,
+    serialize: (value) => value,
+  })
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(newValue)
+    setTabValue(newValue.toString())
   }
 
   const avatarInitials = getInitials(
@@ -189,6 +198,7 @@ export const DriverDetails = () => {
         <div className="flex gap-4 items-center">
           <Avatar
             src={driver?.image_url || undefined}
+            onClick={() => driver?.image_url && setIsAvatarDialogOpen(true)}
             sx={{
               width: 51,
               height: 51,
@@ -196,6 +206,8 @@ export const DriverDetails = () => {
               color: 'neutral.700',
               fontSize: '0.875rem',
               fontWeight: 500,
+              cursor: driver?.image_url ? 'pointer' : 'default',
+              '&:hover': driver?.image_url ? { opacity: 0.8 } : {},
             }}
           >
             {avatarInitials}
@@ -365,10 +377,18 @@ export const DriverDetails = () => {
             </Button>
           </DialogActions>
         </Dialog>
+
+        {/* Avatar Image Dialog */}
+        <AvatarImageDialog
+          open={isAvatarDialogOpen}
+          onClose={() => setIsAvatarDialogOpen(false)}
+          imageUrl={driver?.image_url || ''}
+          altText={driverName}
+        />
       </div>
       <div className="my-6">
         <Tabs
-          value={tabValue}
+          value={parseInt(tabValue)}
           onChange={handleTabChange}
           aria-label="driver details tabs"
         >
@@ -380,11 +400,11 @@ export const DriverDetails = () => {
         </Tabs>
       </div>
 
-      <TabPanel value={tabValue} index={0}>
+      <TabPanel value={parseInt(tabValue)} index={0}>
         <DriverOverview driver={driver} stats={stats} />
       </TabPanel>
 
-      <TabPanel value={tabValue} index={1}>
+      <TabPanel value={parseInt(tabValue)} index={1}>
         <IdentityDetails
           driver={driver}
           kycDetails={kycDetails}
@@ -392,18 +412,18 @@ export const DriverDetails = () => {
         />
       </TabPanel>
 
-      <TabPanel value={tabValue} index={2}>
+      <TabPanel value={parseInt(tabValue)} index={2}>
         <DriverLicense />
       </TabPanel>
 
-      <TabPanel value={tabValue} index={3}>
+      <TabPanel value={parseInt(tabValue)} index={3}>
         <VehicleDetails
           driverId={id!}
           isVehicleSet={!!kycDetails?.is_vehicle_set}
         />
       </TabPanel>
 
-      <TabPanel value={tabValue} index={4}>
+      <TabPanel value={parseInt(tabValue)} index={4}>
         <DriverRatings
           stats={stats}
           reviews={reviews?.items}

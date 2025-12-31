@@ -12,6 +12,7 @@ export interface Customer {
     nin: string
     status: AccountStatus
     is_email_verified: boolean
+    image_url?: string
 }
 
 export type { NinVerification, Meta, KycDetails } from "../shared/types"
