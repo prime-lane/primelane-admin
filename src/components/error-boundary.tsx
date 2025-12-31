@@ -14,7 +14,7 @@ export const ErrorBoundary = () => {
   let errorStatus: number | string = 'Error'
   let errorTitle: string = 'Something went wrong'
 
-  // Check if it's a Response object (thrown by NotFoundRoute)
+  // Check if it's a Response object (thrown by NotFoundRoute) - test
   if (error instanceof Response) {
     errorStatus = error.status
     errorTitle = error.status === 404 ? 'Page Not Found' : 'Oops!'
