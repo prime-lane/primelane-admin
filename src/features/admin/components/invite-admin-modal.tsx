@@ -14,6 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useInviteAdmin, useRoles } from '../api/use-admins'
+import { colors } from '@/theme/colors'
 
 const inviteAdminSchema = z.object({
   first_name: z.string().min(1, 'First name is required'),
@@ -155,13 +156,18 @@ export const InviteAdminModal = ({ open, onClose }: InviteAdminModalProps) => {
                         const role = roles?.find((r) => r.id === selected)
                         return role ? role.name : selected
                       }}
+                      sx={{
+                        color: `${colors.neutral[500]} !important`,
+                      }}
                     >
                       {isLoadingRoles ? (
                         <MenuItem disabled>Loading roles...</MenuItem>
                       ) : (
                         roles?.map((role) => (
                           <MenuItem key={role.id} value={role.id}>
-                            {role.name}
+                            <span className="text-sm text-neutral-500">
+                              {role.name}
+                            </span>
                           </MenuItem>
                         ))
                       )}
