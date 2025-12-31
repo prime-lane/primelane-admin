@@ -8,7 +8,7 @@ export function getMockCustomers(): Customer[] {
         last_name: 'Exodus',
         email: 'customer@example.com',
         phone_number: '08123834250',
-        image_url: null,
+        image_url: '',
         status: (i === 0 ? 'pending' : i === 1 ? 'deactivated' : 'active') as any, // Cast to avoid inference issues for now, or just rely on Customer type
         is_email_verified: i > 0,
         nin: '1234567890',

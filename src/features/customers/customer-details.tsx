@@ -1,5 +1,6 @@
 import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
+import { AvatarImageDialog } from '@/components/ui/avatar-image-dialog'
 import { DetailsSkeleton } from '@/components/ui/details-skeleton'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { StatusBadge } from '@/components/ui/status-badge'
@@ -7,8 +8,10 @@ import {
   CustomTabPanel as TabPanel,
   a11yProps,
 } from '@/components/ui/tab-panel'
+import { getInitials } from '@/lib/utils'
 import { colors } from '@/theme/colors'
 import {
+  Avatar,
   Button,
   Dialog,
   DialogActions,
@@ -25,6 +28,7 @@ import {
 import { AltArrowDown } from '@solar-icons/react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useQueryState } from 'nuqs'
 import { toast } from 'sonner'
 import { useCustomerStats } from './api/use-customer-stats'
 import { useCustomer, useCustomerReviews } from './api/use-customers'
@@ -52,6 +56,9 @@ export const CustomerDetails = () => {
     'inactive' | 'reactivate' | null
   >(null)
   const [reason, setReason] = useState('')
+
+  // Avatar dialog state
+  const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false)
 
   const handleActionClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -101,13 +108,21 @@ export const CustomerDetails = () => {
     )
   }
 
-  const [tabValue, setTabValue] = useState(0)
+  const [tabValue, setTabValue] = useQueryState('tab', {
+    defaultValue: '0',
+    parse: (value) => value,
+    serialize: (value) => value,
+  })
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(newValue)
+    setTabValue(newValue.toString())
   }
 
   const customerName = `${customer?.first_name} ${customer?.last_name}`
+  const avatarInitials = getInitials(
+    `${customer?.first_name}` || '',
+    `${customer?.last_name}` || '',
+  )
 
   if (isLoading) return <DetailsSkeleton />
   if (error || !customer)
@@ -126,6 +141,22 @@ export const CustomerDetails = () => {
       />
       <div className="flex justify-between items-center">
         <div className="flex gap-4 items-center">
+          <Avatar
+            src={customer?.image_url || undefined}
+            onClick={() => customer?.image_url && setIsAvatarDialogOpen(true)}
+            sx={{
+              width: 51,
+              height: 51,
+              bgcolor: 'orange.100',
+              color: 'neutral.700',
+              fontSize: '0.875rem',
+              fontWeight: 500,
+              cursor: customer?.image_url ? 'pointer' : 'default',
+              '&:hover': customer?.image_url ? { opacity: 0.8 } : {},
+            }}
+          >
+            {avatarInitials}
+          </Avatar>
           <div className="flex flex-col gap-[2px]">
             <span className="text-xl text-black font-semibold">
               {customerName}
@@ -256,10 +287,18 @@ export const CustomerDetails = () => {
             </Button>
           </DialogActions>
         </Dialog>
+
+        {/* Avatar Image Dialog */}
+        <AvatarImageDialog
+          open={isAvatarDialogOpen}
+          onClose={() => setIsAvatarDialogOpen(false)}
+          imageUrl={customer?.image_url || ''}
+          altText={customerName}
+        />
       </div>
       <div className="my-6">
         <Tabs
-          value={tabValue}
+          value={parseInt(tabValue)}
           onChange={handleTabChange}
           aria-label="customer details tabs"
         >
@@ -270,14 +309,14 @@ export const CustomerDetails = () => {
       </div>
 
       {/* Overview Tab Content */}
-      <TabPanel value={tabValue} index={0}>
+      <TabPanel value={parseInt(tabValue)} index={0}>
         <CustomerOverview customer={customer} stats={stats} />
       </TabPanel>
 
-      <TabPanel value={tabValue} index={1}>
+      <TabPanel value={parseInt(tabValue)} index={1}>
         <IdentityDetails customer={customer} />
       </TabPanel>
-      <TabPanel value={tabValue} index={2}>
+      <TabPanel value={parseInt(tabValue)} index={2}>
         <CustomerRatings
           stats={stats}
           reviews={reviews?.items}
