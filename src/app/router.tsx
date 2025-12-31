@@ -7,6 +7,7 @@ import { DashboardLayout } from '../components/layout/dashboard-layout'
 import { NotFound } from '../components/not-found'
 import { ProtectedRoute } from '../components/protected-route'
 import { PublicRoute } from '../components/public-route'
+import { PermissionsProvider } from '../hooks/permissions-context'
 
 import { Invite } from '@/features/auth/invite'
 import { Otp } from '@/features/auth/otp'
@@ -115,7 +116,9 @@ export const router = createBrowserRouter([
     path: path.DASHBOARD.ROOT,
     element: (
       <ProtectedRoute>
-        <DashboardLayout />
+        <PermissionsProvider>
+          <DashboardLayout />
+        </PermissionsProvider>
       </ProtectedRoute>
     ),
     errorElement: <ErrorBoundary />,
