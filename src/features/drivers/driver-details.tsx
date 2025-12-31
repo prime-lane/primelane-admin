@@ -127,8 +127,13 @@ export const DriverDetails = () => {
       return
     }
 
-    if (!reason) {
+    if (dialogType === 'inactive' && !reason) {
       toast.error('Please select a reason')
+      return
+    }
+
+    if (dialogType === 'reactivate' && selectedCategories.length === 0) {
+      toast.error('Please select at least one vehicle category')
       return
     }
 
@@ -137,7 +142,10 @@ export const DriverDetails = () => {
     manageVehicleStatus(
       {
         action,
-        reason,
+        ...(dialogType === 'inactive' && { reason }),
+        ...(dialogType === 'reactivate' && {
+          category_ids: selectedCategories,
+        }),
       },
       {
         onSuccess: () => {
@@ -242,9 +250,7 @@ export const DriverDetails = () => {
               sx={{ color: 'success.main' }}
               disabled={!kycDetails?.is_vehicle_set}
             >
-              <span className="text-base text-green-500">
-                Re-activate Account
-              </span>
+              <span className="text-base text-green-500">Activate Account</span>
             </MenuItem>
           )}
         </Menu>
@@ -260,7 +266,7 @@ export const DriverDetails = () => {
               {dialogType === 'inactive'
                 ? 'Deactivate'
                 : dialogType === 'reactivate'
-                  ? 'Re-activate'
+                  ? 'Activate'
                   : 'Update vehicle category'}
             </span>
           </DialogTitle>
@@ -270,86 +276,71 @@ export const DriverDetails = () => {
                 {dialogType === 'inactive'
                   ? 'Please confirm the reason for deactivating this account. The driver will lose access until the account is activated.'
                   : dialogType === 'reactivate'
-                    ? 'Provide a reason for re-activate this account. The driver will regain access immediately.'
-                    : 'Provide a reason for activating this account. The user will regain access immediately.'}
+                    ? 'Provide a reason for activating this account. The driver will regain access immediately.'
+                    : 'Update the vehicle categories for this driver.'}
               </p>
 
-              {dialogType === 'vehicle_category' ? (
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-neutral-700">
-                    Vehicle Category
-                  </p>
-                  <FormControl fullWidth>
-                    <FormGroup>
-                      {(vehicleCategories?.categories || []).map((category) => (
-                        <FormControlLabel
-                          key={category.id}
-                          control={
-                            <Checkbox
-                              checked={selectedCategories.includes(category.id)}
-                              onChange={(e) => {
-                                if (e.target.checked) {
-                                  setSelectedCategories((prev) => [
-                                    ...prev,
+              {dialogType === 'vehicle_category' ||
+              dialogType === 'reactivate' ? (
+                <>
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-neutral-700">
+                      Vehicle Category
+                    </p>
+                    <FormControl fullWidth>
+                      <FormGroup>
+                        {(vehicleCategories?.categories || []).map(
+                          (category) => (
+                            <FormControlLabel
+                              key={category.id}
+                              control={
+                                <Checkbox
+                                  checked={selectedCategories.includes(
                                     category.id,
-                                  ])
-                                } else {
-                                  setSelectedCategories((prev) =>
-                                    prev.filter((c) => c !== category.id),
-                                  )
-                                }
-                              }}
+                                  )}
+                                  onChange={(e) => {
+                                    if (e.target.checked) {
+                                      setSelectedCategories((prev) => [
+                                        ...prev,
+                                        category.id,
+                                      ])
+                                    } else {
+                                      setSelectedCategories((prev) =>
+                                        prev.filter((c) => c !== category.id),
+                                      )
+                                    }
+                                  }}
+                                />
+                              }
+                              label={category.name}
                             />
-                          }
-                          label={category.name}
-                        />
-                      ))}
-                    </FormGroup>
-                  </FormControl>
-                </div>
+                          ),
+                        )}
+                      </FormGroup>
+                    </FormControl>
+                  </div>
+                </>
               ) : (
                 <FormControl fullWidth>
                   <InputLabel id="reason-label">
-                    {dialogType === 'inactive'
-                      ? 'Reason for Deactivation'
-                      : 'Reason for activation'}
+                    Reason for Deactivation
                   </InputLabel>
                   <Select
                     labelId="reason-label"
                     value={reason}
-                    label={
-                      dialogType === 'inactive'
-                        ? 'Reason for Deactivation'
-                        : 'Reason for activation'
-                    }
+                    label="Reason for Deactivation"
                     onChange={(e) => setReason(e.target.value)}
                   >
                     <MenuItem value="" disabled>
                       Select a reason
                     </MenuItem>
-                    {dialogType === 'inactive'
-                      ? [
-                          <MenuItem key="1" value="Policy Violation">
-                            Policy Violation
-                          </MenuItem>,
-                          <MenuItem key="2" value="Fraud suspicion">
-                            Fraud suspicion
-                          </MenuItem>,
-                          <MenuItem key="3" value="Incomplete document">
-                            Incomplete document
-                          </MenuItem>,
-                        ]
-                      : [
-                          <MenuItem key="1" value="Issue resolved">
-                            Issue resolved
-                          </MenuItem>,
-                          <MenuItem key="2" value="Documents verified">
-                            Documents verified
-                          </MenuItem>,
-                          <MenuItem key="3" value="Account review completed">
-                            Account review completed
-                          </MenuItem>,
-                        ]}
+                    <MenuItem value="Policy Violation">
+                      Policy Violation
+                    </MenuItem>
+                    <MenuItem value="Fraud suspicion">Fraud suspicion</MenuItem>
+                    <MenuItem value="Incomplete document">
+                      Incomplete document
+                    </MenuItem>
                   </Select>
                 </FormControl>
               )}

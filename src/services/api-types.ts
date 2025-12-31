@@ -30,7 +30,7 @@ export type UserType = 'driver' | 'customer' | 'admin'
 
 export interface ManageUserStatusRequest {
     action: ActivationStatus
-    reason: string
+    reason?: string
 }
 
 export type ActivationStatus = 'activate' | 'deactivate'
