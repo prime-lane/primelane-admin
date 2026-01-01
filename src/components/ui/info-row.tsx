@@ -1,3 +1,4 @@
+import { formatImageSrc } from '@/lib/utils'
 import { Avatar } from '@mui/material'
 import { Dialog, DialogContent } from '@mui/material'
 import { IconButton } from '@mui/material'
@@ -18,6 +19,11 @@ export const InfoRow = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false)
 
+  const imageSrc =
+    isImage && typeof value === 'string'
+      ? formatImageSrc(value)
+      : (value as string)
+
   return (
     <>
       <div className="flex items-center py-3 gap-4">
@@ -29,7 +35,7 @@ export const InfoRow = ({
             className="flex items-end cursor-pointer"
             onClick={() => setIsOpen(true)}
           >
-            <Avatar src={value} sx={{ width: 20, height: 20 }} />
+            <Avatar src={imageSrc} sx={{ width: 20, height: 20 }} />
             <ArrowRightUp
               size={11}
               className="text-neutral-500 cursor-pointer"
@@ -63,7 +69,7 @@ export const InfoRow = ({
                 <CloseCircle size={20} />
               </IconButton>
               <img
-                src={value}
+                src={imageSrc}
                 alt={label}
                 className="w-fit mx-auto h-auto rounded-lg"
                 style={{ maxHeight: '85vh', objectFit: 'contain' }}
