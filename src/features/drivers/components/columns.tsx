@@ -27,7 +27,7 @@ export const driverColumns: ColumnDef<Driver>[] = [
         <span className="text-sm font-medium">
           {row.original.first_name} {row.original.last_name}
         </span>
-        <span className="text-sm text-neutral-500">{row.original.email}</span>
+        {/* <span className="text-sm text-neutral-500">{row.original.email}</span> */}
       </div>
     ),
   },
@@ -36,6 +36,20 @@ export const driverColumns: ColumnDef<Driver>[] = [
     header: 'Phone number',
     cell: ({ row }) => (
       <span className="text-sm">{row.original.phone_number || 'N/A'}</span>
+    ),
+  },
+  {
+    accessorKey: 'email',
+    header: 'Email',
+    cell: ({ row }) => (
+      <span className="text-sm">{row.original.email || 'N/A'}</span>
+    ),
+  },
+  {
+    accessorKey: 'category',
+    header: 'Vehicle Category',
+    cell: ({ row }) => (
+      <span className="text-sm">{row.original.category || 'N/A'}</span>
     ),
   },
   /*
