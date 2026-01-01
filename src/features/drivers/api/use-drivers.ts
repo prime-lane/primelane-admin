@@ -130,11 +130,11 @@ export const useManageVehicleStatus = (id?: string) => {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: async ({ action, reason }: ManageUserStatusRequest) => {
+        mutationFn: async ({ action, reason, category_ids }: ManageUserStatusRequest & { category_ids?: string[] }) => {
             if (!id) throw new Error('User ID is required')
             const response = await apiClient.patch(
                 e.VEHICLES.MANAGE_STATUS(id, action),
-                { reason },
+                { reason, ...(category_ids && { category_ids }) },
             )
             return response.data
         },

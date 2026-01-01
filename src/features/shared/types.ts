@@ -7,10 +7,10 @@ export interface NinVerification {
     last_name?: string;
     middle_name?: string;
     gender?: string;
-    mobile?: string;
+    phone_number?: string;
     employment_status?: string;
     marital_status?: string;
-    dob?: string;
+    date_of_birth?: string;
     [key: string]: any;
 }
 

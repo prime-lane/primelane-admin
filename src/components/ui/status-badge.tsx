@@ -12,8 +12,8 @@ export type StatusVariant =
   | 'verified'
 
   // driver status
-  | 'PENDING_VERIFICATION' | TripStatus
-
+  | 'PENDING_VERIFICATION'
+  | TripStatus
 
 interface StatusBadgeProps {
   status: StatusVariant
@@ -85,7 +85,7 @@ const getStatusConfig = (status: string) => {
       }
     default:
       return {
-        label: 'N/A',
+        label: status || 'N/A',
         color: 'neutral.500',
         bgcolor: 'neutral.100',
       }

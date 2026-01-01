@@ -52,3 +52,13 @@ export const formatNumber = (num?: number) => {
   if (num === undefined || num === null) return '0'
   return num.toLocaleString()
 }
+
+
+export const formatImageSrc = (src: string): string => {
+  // If it's already a data URL or HTTP URL, return as is
+  if (src.startsWith('data:') || src.startsWith('http')) {
+    return src
+  }
+  // Otherwise, assume it's raw base64 and append the data URL prefix
+  return `data:image/jpeg;base64,${src}`
+}

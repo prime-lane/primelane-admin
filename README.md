@@ -32,15 +32,8 @@ npm run dev
 npm run storybook
 ```
 
-## AI Guidance
-
-For automated code generation and AI assistance:
-
-- See `/ai/ai-instructions.md`
-- Follow `/ai/prd.md`
-
-TODO:
-
+## TODO:
+### FE
 - [x] Design system
 - [x] Components
 - [x] Auth page
@@ -69,8 +62,7 @@ TODO:
 - [x] filter button
 - [x] updating vehicle category endpoint (dependent on chijiooke)
 
-
-BACKEND
+### BACKEND
 - [x] update driver/vehicle (pending, awaiting for chijiooke response)
 - [x] Home/summary page (pending endpoint)
 - [x] identity details - (pending endpoint) /kyc/my-kyc is not for admin
@@ -81,3 +73,10 @@ BACKEND
 - [x] update vehicle category
 - [ ] trip cancellation fee (pending)
 - [ ] settlements
+
+## AI Guidance
+
+For automated code generation and AI assistance:
+
+- See `/ai/frontend-architecture.md`
+- Follow `/ai/prd.md`
