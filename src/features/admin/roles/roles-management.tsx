@@ -1,12 +1,14 @@
 import { ExportButton, SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
 import { PageHeader } from '@/components/ui/page-header'
-import { exportToCSV } from '@/utils/export-utils'
 import { useDebounce } from '@/hooks/use-debounce'
+import { exportToCSV } from '@/utils/export-utils'
 import { Box, Button } from '@mui/material'
-import { UserCross } from '@solar-icons/react'
+import { UserPlus } from '@solar-icons/react'
 import { useMemo, useState } from 'react'
 
+import { PermissionGate } from '@/components/ui/permission-gate'
+import { useTableParams } from '@/hooks/use-table-params'
 import {
   useCreateRole,
   useDeleteRole,
@@ -17,8 +19,6 @@ import type { Role } from '../types'
 import { getRoleColumns } from './components/columns'
 import { DeleteRoleModal } from './components/delete-role-modal'
 import { RoleModal } from './components/role-modal'
-import { useTableParams } from '@/hooks/use-table-params'
-import { PermissionGate } from '@/components/ui/permission-gate'
 
 export const RolesManagement = () => {
   const { page, setPage, pageSize, setPageSize, search, setSearch } =
@@ -102,7 +102,7 @@ export const RolesManagement = () => {
             <Button
               variant="contained"
               onClick={handleCreate}
-              endIcon={<UserCross className="text-white" />}
+              endIcon={<UserPlus className="text-white" />}
               sx={{
                 bgcolor: 'black',
                 color: 'white',
