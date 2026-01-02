@@ -49,7 +49,6 @@ import {
   useUpdateVehicleCategory,
   useVehicleCategories,
 } from '../pricing-config/api/use-vehicle-categories'
-import { PermissionGate } from '@/components/ui/permission-gate'
 import { usePermissionsContext } from '@/hooks/permissions-context'
 import { useMemo } from 'react'
 
