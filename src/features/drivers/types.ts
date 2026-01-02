@@ -8,6 +8,7 @@ export interface Driver {
     last_name: string
     email: string
     phone_number: string
+    nin?: string
     status: AccountStatus
     is_email_verified: boolean
     image_url?: string
