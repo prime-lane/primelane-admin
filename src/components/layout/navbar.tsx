@@ -1,20 +1,19 @@
 import {
+  useCurrentUser,
+  useLogout,
+} from '@/features/auth/hooks/use-current-user'
+import { useTour } from '@/hooks/use-tour'
+import { getInitials } from '@/lib/utils'
+import {
   AppBar,
   Avatar,
   IconButton,
   Menu,
   MenuItem,
   Toolbar,
-  Button,
 } from '@mui/material'
 import { AltArrowDown, HamburgerMenu, InfoCircle } from '@solar-icons/react'
 import { useState } from 'react'
-import {
-  useCurrentUser,
-  useLogout,
-} from '@/features/auth/hooks/use-current-user'
-import { getInitials } from '@/lib/utils'
-import { useTour } from '@/hooks/use-tour'
 
 interface NavbarProps {
   onSidebarOpen?: () => void
