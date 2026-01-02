@@ -2,6 +2,7 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { AltArrowRight } from '@solar-icons/react'
 import { cn } from '@/lib/utils'
 import { useState, type ElementType, useLayoutEffect } from 'react'
+import { PermissionGate } from '@/components/ui/permission-gate'
 
 interface SidebarNavItemProps {
   label: string
@@ -10,8 +11,9 @@ interface SidebarNavItemProps {
   hasSubmenu?: boolean
   onClick?: () => void
   variant?: 'nav' | 'button'
-  children?: { label: string; to: string }[]
+  children?: { label: string; to: string; permission?: string }[]
   onLinkClick?: () => void
+  permission?: string
 }
 
 export const SidebarNavItem = ({
@@ -23,6 +25,7 @@ export const SidebarNavItem = ({
   variant = 'nav',
   children,
   onLinkClick,
+  permission,
 }: SidebarNavItemProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const location = useLocation()
@@ -86,21 +89,22 @@ export const SidebarNavItem = ({
         {isOpen && children && (
           <div className="flex flex-col bg-neutral-50/50">
             {children.map((child) => (
-              <NavLink
-                key={child.label}
-                to={child.to}
-                onClick={onLinkClick}
-                className={({ isActive }) =>
-                  cn(
-                    'pl-12 pr-4 py-2.5 text-sm transition-colors',
-                    isActive
-                      ? 'text-white bg-black font-medium'
-                      : 'text-neutral-500 hover:text-neutral-900',
-                  )
-                }
-              >
-                {child.label}
-              </NavLink>
+              <PermissionGate key={child.label} permission={child.permission}>
+                <NavLink
+                  to={child.to}
+                  onClick={onLinkClick}
+                  className={({ isActive }) =>
+                    cn(
+                      'pl-12 pr-4 py-2.5 text-sm transition-colors',
+                      isActive
+                        ? 'text-white bg-black font-medium'
+                        : 'text-neutral-500 hover:text-neutral-900',
+                    )
+                  }
+                >
+                  {child.label}
+                </NavLink>
+              </PermissionGate>
             ))}
           </div>
         )}
@@ -108,7 +112,7 @@ export const SidebarNavItem = ({
     )
   }
 
-  return (
+  const content = (
     <NavLink
       to={to!}
       onClick={onLinkClick}
@@ -145,4 +149,8 @@ export const SidebarNavItem = ({
       )}
     </NavLink>
   )
+
+  if (!permission) return content
+
+  return <PermissionGate permission={permission}>{content}</PermissionGate>
 }

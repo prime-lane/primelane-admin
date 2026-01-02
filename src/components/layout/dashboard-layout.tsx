@@ -36,6 +36,7 @@ export const DashboardLayout = () => {
             hasSubmenu={item.hasSubmenu}
             children={item.children}
             onLinkClick={handleDrawerClose}
+            permission={item.permission}
           />
         ))}
       </nav>

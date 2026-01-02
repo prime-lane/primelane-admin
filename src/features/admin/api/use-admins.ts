@@ -76,6 +76,9 @@ export const useCreateRole = () => {
         onSuccess: (response) => {
             toast.success(response.message || 'Role created successfully')
             queryClient.invalidateQueries({ queryKey: ['roles-paginated'] })
+            queryClient.invalidateQueries({ queryKey: ['admins'] })
+            queryClient.invalidateQueries({ queryKey: ['permissions'] })
+            queryClient.invalidateQueries({ queryKey: ['me'] })
         },
         onError: (error: any) => {
             toast.error(error.message || 'Failed to create role')
@@ -94,6 +97,9 @@ export const useUpdateRole = () => {
         onSuccess: (response) => {
             toast.success(response.message || 'Role updated successfully')
             queryClient.invalidateQueries({ queryKey: ['roles-paginated'] })
+            queryClient.invalidateQueries({ queryKey: ['admins'] })
+            queryClient.invalidateQueries({ queryKey: ['permissions'] })
+            queryClient.invalidateQueries({ queryKey: ['me'] })
         },
         onError: (error: any) => {
             toast.error(error.message || 'Failed to update role')
@@ -112,6 +118,7 @@ export const useDeleteRole = () => {
         onSuccess: (response) => {
             toast.success(response.message || 'Role deleted successfully')
             queryClient.invalidateQueries({ queryKey: ['roles-paginated'] })
+            queryClient.invalidateQueries({ queryKey: ['me'] })
         },
         onError: (error: any) => {
             toast.error(error.message || 'Failed to delete role')
