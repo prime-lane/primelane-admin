@@ -17,14 +17,23 @@ npm install
 ```
 
 ### Run the app
+```bash
+npm run dev
+```
+
+### Run tests
+```bash
+npm run test
+```
+
+### Run build
+```bash
+npm run build
+```
 
 ## Storybook
 
 The design system is available in Storybook at `http://localhost:6006`.
-
-```bash
-npm run dev
-```
 
 ### Run Storybook
 
