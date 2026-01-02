@@ -1,5 +1,6 @@
 import { FilterMenu } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
+import { CountUp } from '@/components/ui/count-up'
 import { formatCurrency, formatNumber } from '@/lib/utils'
 import { Box, Card, CardContent, Grid, Skeleton } from '@mui/material'
 import {
@@ -21,7 +22,7 @@ import { PermissionGate } from '@/components/ui/permission-gate'
 interface StatCardProps {
   icon: React.ReactNode
   label: string
-  value: string
+  value: React.ReactNode
 }
 
 const StatCard = ({ icon, label, value }: StatCardProps) => {
@@ -96,47 +97,53 @@ export const Home = () => {
         {
           icon: <Rocket size={24} color="black" />,
           label: 'Completed trips',
-          value: formatNumber(dashboardData.total_completed_trip_count),
+          value: <CountUp value={dashboardData.total_completed_trip_count} />,
         },
         {
           icon: <Rocket size={24} color="black" />,
           label: 'Total one-way trips',
-          value: formatNumber(dashboardData.total_one_off_trip_count),
+          value: <CountUp value={dashboardData.total_one_off_trip_count} />,
         },
         {
           icon: <Rocket size={24} color="black" />,
           label: 'Total hourly trips',
-          value: formatNumber(dashboardData.total_hourly_trip_count),
+          value: <CountUp value={dashboardData.total_hourly_trip_count} />,
         },
         {
           icon: <UsersGroupTwoRounded size={24} color="black" />,
           label: 'Total Customers',
-          value: formatNumber(dashboardData.total_customer_count),
+          value: <CountUp value={dashboardData.total_customer_count} />,
         },
         {
           icon: <UserCross size={24} color="black" />,
           label: 'Unverified Customers',
-          value: formatNumber(dashboardData.total_unverified_customer_count),
+          value: (
+            <CountUp value={dashboardData.total_unverified_customer_count} />
+          ),
         },
         {
           icon: <UserCheck size={24} color="black" />,
           label: 'Verified Customers',
-          value: formatNumber(dashboardData.total_verified_customer_count),
+          value: (
+            <CountUp value={dashboardData.total_verified_customer_count} />
+          ),
         },
         {
           icon: <Shield size={24} color="black" />,
           label: 'Total Drivers',
-          value: formatNumber(dashboardData.total_driver_count),
+          value: <CountUp value={dashboardData.total_driver_count} />,
         },
         {
           icon: <ShieldCheck size={24} color="black" />,
           label: 'Verified Drivers',
-          value: formatNumber(dashboardData.total_verified_driver_count),
+          value: <CountUp value={dashboardData.total_verified_driver_count} />,
         },
         {
           icon: <ShieldCross size={24} color="black" />,
           label: 'Pending Drivers',
-          value: formatNumber(dashboardData.total_unverified_driver_count),
+          value: (
+            <CountUp value={dashboardData.total_unverified_driver_count} />
+          ),
         },
       ]
     : []

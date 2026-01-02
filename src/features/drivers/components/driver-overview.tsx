@@ -1,6 +1,7 @@
 import { Card, CardContent } from '@mui/material'
 import type { Driver } from '../types'
 import type { UserRideStats } from '../types'
+import { CountUp } from '@/components/ui/count-up'
 
 const DetailItem = ({
   label,
@@ -22,16 +23,20 @@ const DetailItem = ({
 const TripSummaryCard = ({
   label,
   value,
+  isValue = true,
 }: {
   label: string
   value: string | number
+  isValue?: boolean
 }) => {
   return (
     <Card>
       <CardContent>
         <div className="flex flex-col items-center gap-1">
           <p className="text-sm text-neutral-500 text-center">{label}</p>
-          <p className="text-xl font-semibold text-center">{value}</p>
+          <div className="text-xl font-semibold text-center text-neutral-900">
+            {isValue ? <CountUp value={value} /> : value}
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -74,6 +79,7 @@ export const DriverOverview = ({ driver, stats }: DriverOverviewProps) => {
           <TripSummaryCard
             label="Acceptance Rate"
             value={stats?.acceptance_rate ? `${stats.acceptance_rate}%` : 'N/A'}
+            isValue={!!stats?.acceptance_rate}
           />
         </div>
       </div>

@@ -171,27 +171,27 @@ export const DriverDetails = () => {
       {
         id: 'overview',
         label: 'Overview',
-        permission: 'drivers:view_details:overview',
+        permission: 'drivers:view_details',
       },
       {
         id: 'identity',
         label: 'Identity Details',
-        permission: 'drivers:view_details:identity_details',
+        permission: 'drivers:view_details',
       },
       {
         id: 'license',
-        label: 'Driver License',
-        permission: 'drivers:view_details:driver_license_details',
+        label: 'Driver License Details',
+        permission: 'drivers:view_details',
       },
       {
         id: 'vehicle',
         label: 'Vehicle Details',
-        permission: 'drivers:view_details:vehicle_details',
+        permission: 'drivers:view_details',
       },
       {
         id: 'ratings',
         label: 'Ratings',
-        permission: 'drivers:view_details:ratings_reviews',
+        permission: 'drivers:view_details',
       },
     ],
     [],

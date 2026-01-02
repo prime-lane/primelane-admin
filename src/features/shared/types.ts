@@ -18,6 +18,7 @@ export interface Meta {
     nin?: string;
     image?: string;
     nin_verification?: NinVerification;
+    driver_license_verification?: DriverLicenseVerification;
     [key: string]: any;
 }
 
@@ -44,4 +45,18 @@ export interface KycDetails {
     selfie_confidence: string;
     selfie_image: string;
     meta_data: Meta
+}
+
+interface DriverLicenseVerification {
+    photo: string
+    message: string
+    lastname: string
+    birthdate: string
+    firstname: string
+    middlename: string
+    expiry_date: string
+    issued_date: string
+    driversLicense: string
+    state_of_issue: string
+    gender: string
 }
