@@ -1,7 +1,8 @@
+import { CountUp } from '@/components/ui/count-up'
 import { FilterMenu } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
-import { CountUp } from '@/components/ui/count-up'
-import { formatCurrency, formatNumber } from '@/lib/utils'
+import { PermissionGate } from '@/components/ui/permission-gate'
+import { formatCurrency } from '@/lib/utils'
 import { Box, Card, CardContent, Grid, Skeleton } from '@mui/material'
 import {
   Banknote2,
@@ -15,9 +16,8 @@ import {
   UserCross,
   UsersGroupTwoRounded,
 } from '@solar-icons/react'
-import { useQueryState, parseAsString } from 'nuqs'
+import { parseAsString, useQueryState } from 'nuqs'
 import { useDashboardStats } from './api/use-dashboard-stats'
-import { PermissionGate } from '@/components/ui/permission-gate'
 
 interface StatCardProps {
   icon: React.ReactNode
