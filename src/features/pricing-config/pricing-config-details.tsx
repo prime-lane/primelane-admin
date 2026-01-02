@@ -1,9 +1,18 @@
 import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
 import { ErrorState } from '@/components/ui/loading-error-states'
-import { Button, InputAdornment, TextField } from '@mui/material'
+import {
+  Button,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  InputAdornment,
+  Radio,
+  RadioGroup,
+  TextField,
+} from '@mui/material'
 import { useEffect } from 'react'
-import { useForm, type Resolver } from 'react-hook-form'
+import { Controller, useForm, type Resolver } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
@@ -16,9 +25,8 @@ import { useVehicleCategory } from './api/use-vehicle-categories'
 import { PricingConfigDetailsSkeleton } from './components/skeletons'
 
 export const PricingConfigDetails = () => {
-  const { id } = useParams<{ id: string }>()
+  const { id, type } = useParams<{ id: string; type: 'one_off' | 'hourly' }>()
   const navigate = useNavigate()
-  const type = 'hourly'
   const categoryId = id
 
   const {
@@ -28,12 +36,13 @@ export const PricingConfigDetails = () => {
   } = useVehicleCategory(categoryId || '')
 
   const { mutate: updateConfig, isPending: isUpdating } =
-    useUpdatePricingConfig(categoryId || '', type)
+    useUpdatePricingConfig(categoryId || '', type || 'one_off')
 
   const {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<PricingConfigFormData>({
     resolver: zodResolver(
@@ -91,8 +100,11 @@ export const PricingConfigDetails = () => {
         items={[
           { label: 'Price Configuration', to: path.DASHBOARD.PRICING_CONFIG },
           {
-            label: `${categoryData?.name}`,
-            to: path.DASHBOARD.PRICING_CONFIG_DETAILS.replace(':id', id!),
+            label: `${categoryData?.name} - ${type === 'one_off' ? 'One-way' : 'Hourly'}`,
+            to: path.DASHBOARD.PRICING_CONFIG_DETAILS.replace(
+              ':id',
+              id!,
+            ).replace(':type', type!),
           },
         ]}
       />
@@ -223,6 +235,38 @@ export const PricingConfigDetails = () => {
             <h2 className="text-lg font-semibold text-neutral-900">
               Cancellation fee
             </h2>
+
+            <div className="space-y-1">
+              <FormControl
+                component="fieldset"
+                error={!!errors.cancellation_fee_type}
+              >
+                <FormLabel component="legend">Cancellation fee type</FormLabel>
+                <Controller
+                  name="cancellation_fee_type"
+                  control={control}
+                  render={({ field }) => (
+                    <RadioGroup row {...field}>
+                      <FormControlLabel
+                        value="percentage"
+                        control={<Radio size="small" />}
+                        label="Percentage"
+                      />
+                      <FormControlLabel
+                        value="fixed"
+                        control={<Radio size="small" />}
+                        label="Fixed"
+                      />
+                    </RadioGroup>
+                  )}
+                />
+                {errors.cancellation_fee_type && (
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors.cancellation_fee_type.message}
+                  </p>
+                )}
+              </FormControl>
+            </div>
 
             <div className="space-y-1">
               <label className="text-sm font-medium text-neutral-900 block">
