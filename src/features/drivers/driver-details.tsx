@@ -1,5 +1,6 @@
 import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
+import { AvatarImageDialog } from '@/components/ui/avatar-image-dialog'
 import { DetailsSkeleton } from '@/components/ui/details-skeleton'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { StatusBadge } from '@/components/ui/status-badge'
@@ -30,6 +31,7 @@ import {
 import { AltArrowDown } from '@solar-icons/react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useQueryState } from 'nuqs'
 import { toast } from 'sonner'
 import { useKycDetails } from '../shared/api/use-users'
 import {
@@ -47,6 +49,8 @@ import {
   useUpdateVehicleCategory,
   useVehicleCategories,
 } from '../pricing-config/api/use-vehicle-categories'
+import { usePermissionsContext } from '@/hooks/permissions-context'
+import { useMemo } from 'react'
 
 export const DriverDetails = () => {
   const { id } = useParams<{ id: string }>()
@@ -59,6 +63,7 @@ export const DriverDetails = () => {
     useManageVehicleStatus(id)
   const { data: vehicleCategories } = useVehicleCategories()
   const navigate = useNavigate()
+  const { hasPermission, permissions } = usePermissionsContext()
 
   const {
     mutate: updateVehicleCategory,
@@ -73,6 +78,9 @@ export const DriverDetails = () => {
   >(null)
   const [reason, setReason] = useState('')
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+
+  // Avatar dialog state
+  const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false)
 
   const handleActionClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -158,10 +166,53 @@ export const DriverDetails = () => {
     )
   }
 
-  const [tabValue, setTabValue] = useState(0)
+  const tabConfig = useMemo(
+    () => [
+      {
+        id: 'overview',
+        label: 'Overview',
+        permission: 'drivers:view_details:overview',
+      },
+      {
+        id: 'identity',
+        label: 'Identity Details',
+        permission: 'drivers:view_details:identity_details',
+      },
+      {
+        id: 'license',
+        label: 'Driver License',
+        permission: 'drivers:view_details:driver_license_details',
+      },
+      {
+        id: 'vehicle',
+        label: 'Vehicle Details',
+        permission: 'drivers:view_details:vehicle_details',
+      },
+      {
+        id: 'ratings',
+        label: 'Ratings',
+        permission: 'drivers:view_details:ratings_reviews',
+      },
+    ],
+    [],
+  )
+
+  const visibleTabs = useMemo(
+    () => tabConfig.filter((tab) => hasPermission(tab.permission)),
+    [tabConfig, permissions],
+  )
+
+  const [tabValue, setTabValue] = useQueryState('tab', {
+    defaultValue: visibleTabs[0]?.id || 'overview',
+    parse: (value) => value,
+    serialize: (value) => value,
+  })
+
+  const currentTabIndex = visibleTabs.findIndex((tab) => tab.id === tabValue)
+  const activeIndex = currentTabIndex === -1 ? 0 : currentTabIndex
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(newValue)
+    setTabValue(visibleTabs[newValue]?.id || visibleTabs[0]?.id)
   }
 
   const avatarInitials = getInitials(
@@ -189,6 +240,7 @@ export const DriverDetails = () => {
         <div className="flex gap-4 items-center">
           <Avatar
             src={driver?.image_url || undefined}
+            onClick={() => driver?.image_url && setIsAvatarDialogOpen(true)}
             sx={{
               width: 51,
               height: 51,
@@ -196,6 +248,8 @@ export const DriverDetails = () => {
               color: 'neutral.700',
               fontSize: '0.875rem',
               fontWeight: 500,
+              cursor: driver?.image_url ? 'pointer' : 'default',
+              '&:hover': driver?.image_url ? { opacity: 0.8 } : {},
             }}
           >
             {avatarInitials}
@@ -334,13 +388,12 @@ export const DriverDetails = () => {
                     <MenuItem value="" disabled>
                       Select a reason
                     </MenuItem>
-                    <MenuItem value="Policy Violation">
-                      Policy Violation
+                    <MenuItem value="Repeated cancellations or no-shows disrupting driver schedules">
+                      Repeated cancellations or no-shows disrupting driver schedules
                     </MenuItem>
-                    <MenuItem value="Fraud suspicion">Fraud suspicion</MenuItem>
-                    <MenuItem value="Incomplete document">
-                      Incomplete document
-                    </MenuItem>
+                    <MenuItem value="Reported misconduct or inappropriate behavior toward drivers">Reported misconduct or inappropriate behavior toward drivers</MenuItem>
+                    <MenuItem value="Outstanding unpaid trip fares or unresolved disputes">Outstanding unpaid trip fares or unresolved disputes</MenuItem>
+                    <MenuItem value="Violation of Primelane&apos;s community or safety policies">Violation of Primelane&apos;s community or safety policies</MenuItem>
                   </Select>
                 </FormControl>
               )}
@@ -365,51 +418,55 @@ export const DriverDetails = () => {
             </Button>
           </DialogActions>
         </Dialog>
+
+        {/* Avatar Image Dialog */}
+        <AvatarImageDialog
+          open={isAvatarDialogOpen}
+          onClose={() => setIsAvatarDialogOpen(false)}
+          imageUrl={driver?.image_url || ''}
+          altText={driverName}
+        />
       </div>
       <div className="my-6">
         <Tabs
-          value={tabValue}
+          value={activeIndex}
           onChange={handleTabChange}
           aria-label="driver details tabs"
         >
-          <Tab label="Overview" {...a11yProps(0)} />
-          <Tab label="Identity Details" {...a11yProps(1)} />
-          <Tab label="Driver License" {...a11yProps(2)} />
-          <Tab label="Vehicle Details" {...a11yProps(3)} />
-          <Tab label="Ratings" {...a11yProps(4)} />
+          {visibleTabs.map((tab, index) => (
+            <Tab key={tab.id} label={tab.label} {...a11yProps(index)} />
+          ))}
         </Tabs>
       </div>
 
-      <TabPanel value={tabValue} index={0}>
-        <DriverOverview driver={driver} stats={stats} />
-      </TabPanel>
-
-      <TabPanel value={tabValue} index={1}>
-        <IdentityDetails
-          driver={driver}
-          kycDetails={kycDetails}
-          isLoading={isKycLoading}
-        />
-      </TabPanel>
-
-      <TabPanel value={tabValue} index={2}>
-        <DriverLicense />
-      </TabPanel>
-
-      <TabPanel value={tabValue} index={3}>
-        <VehicleDetails
-          driverId={id!}
-          isVehicleSet={!!kycDetails?.is_vehicle_set}
-        />
-      </TabPanel>
-
-      <TabPanel value={tabValue} index={4}>
-        <DriverRatings
-          stats={stats}
-          reviews={reviews?.items}
-          isLoading={isReviewsLoading}
-        />
-      </TabPanel>
+      {visibleTabs.map((tab, index) => (
+        <TabPanel key={tab.id} value={activeIndex} index={index}>
+          {tab.id === 'overview' && (
+            <DriverOverview driver={driver} stats={stats} />
+          )}
+          {tab.id === 'identity' && (
+            <IdentityDetails
+              driver={driver}
+              kycDetails={kycDetails}
+              isLoading={isKycLoading}
+            />
+          )}
+          {tab.id === 'license' && <DriverLicense />}
+          {tab.id === 'vehicle' && (
+            <VehicleDetails
+              driverId={id!}
+              isVehicleSet={!!kycDetails?.is_vehicle_set}
+            />
+          )}
+          {tab.id === 'ratings' && (
+            <DriverRatings
+              stats={stats}
+              reviews={reviews?.items}
+              isLoading={isReviewsLoading}
+            />
+          )}
+        </TabPanel>
+      ))}
     </>
   )
 }

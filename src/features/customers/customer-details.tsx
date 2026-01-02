@@ -1,5 +1,6 @@
 import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
+import { AvatarImageDialog } from '@/components/ui/avatar-image-dialog'
 import { DetailsSkeleton } from '@/components/ui/details-skeleton'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { StatusBadge } from '@/components/ui/status-badge'
@@ -7,8 +8,10 @@ import {
   CustomTabPanel as TabPanel,
   a11yProps,
 } from '@/components/ui/tab-panel'
+import { getInitials } from '@/lib/utils'
 import { colors } from '@/theme/colors'
 import {
+  Avatar,
   Button,
   Dialog,
   DialogActions,
@@ -25,6 +28,7 @@ import {
 import { AltArrowDown } from '@solar-icons/react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useQueryState } from 'nuqs'
 import { toast } from 'sonner'
 import { useCustomerStats } from './api/use-customer-stats'
 import { useCustomer, useCustomerReviews } from './api/use-customers'
@@ -32,6 +36,8 @@ import { useManageUserStatus } from '../shared/api/use-users'
 import { CustomerOverview } from './components/customer-overview'
 import { CustomerRatings } from './components/customer-ratings'
 import { IdentityDetails } from './components/identity-details'
+import { usePermissionsContext } from '@/hooks/permissions-context'
+import { useMemo } from 'react'
 
 export const CustomerDetails = () => {
   const { id } = useParams<{ id: string }>()
@@ -42,6 +48,7 @@ export const CustomerDetails = () => {
   const { mutate: manageUserStatus, isPending: isUpdating } =
     useManageUserStatus(id)
   const navigate = useNavigate()
+  const { hasPermission, permissions } = usePermissionsContext()
 
   // Menu State
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -52,6 +59,9 @@ export const CustomerDetails = () => {
     'inactive' | 'reactivate' | null
   >(null)
   const [reason, setReason] = useState('')
+
+  // Avatar dialog state
+  const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false)
 
   const handleActionClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -101,13 +111,50 @@ export const CustomerDetails = () => {
     )
   }
 
-  const [tabValue, setTabValue] = useState(0)
+  const tabConfig = useMemo(
+    () => [
+      {
+        id: 'overview',
+        label: 'Overview',
+        permission: 'customers:view_details:overview',
+      },
+      {
+        id: 'identity',
+        label: 'Identity Details',
+        permission: 'customers:view_details:identity_details',
+      },
+      {
+        id: 'ratings',
+        label: 'Ratings',
+        permission: 'customers:view_details:ratings_reviews',
+      },
+    ],
+    [],
+  )
+
+  const visibleTabs = useMemo(
+    () => tabConfig.filter((tab) => hasPermission(tab.permission)),
+    [tabConfig, permissions],
+  )
+
+  const [tabValue, setTabValue] = useQueryState('tab', {
+    defaultValue: visibleTabs[0]?.id || 'overview',
+    parse: (value) => value,
+    serialize: (value) => value,
+  })
+
+  const currentTabIndex = visibleTabs.findIndex((tab) => tab.id === tabValue)
+  const activeIndex = currentTabIndex === -1 ? 0 : currentTabIndex
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(newValue)
+    setTabValue(visibleTabs[newValue]?.id || visibleTabs[0]?.id)
   }
 
   const customerName = `${customer?.first_name} ${customer?.last_name}`
+  const avatarInitials = getInitials(
+    `${customer?.first_name}` || '',
+    `${customer?.last_name}` || '',
+  )
 
   if (isLoading) return <DetailsSkeleton />
   if (error || !customer)
@@ -126,6 +173,22 @@ export const CustomerDetails = () => {
       />
       <div className="flex justify-between items-center">
         <div className="flex gap-4 items-center">
+          <Avatar
+            src={customer?.image_url || undefined}
+            onClick={() => customer?.image_url && setIsAvatarDialogOpen(true)}
+            sx={{
+              width: 51,
+              height: 51,
+              bgcolor: 'orange.100',
+              color: 'neutral.700',
+              fontSize: '0.875rem',
+              fontWeight: 500,
+              cursor: customer?.image_url ? 'pointer' : 'default',
+              '&:hover': customer?.image_url ? { opacity: 0.8 } : {},
+            }}
+          >
+            {avatarInitials}
+          </Avatar>
           <div className="flex flex-col gap-[2px]">
             <span className="text-xl text-black font-semibold">
               {customerName}
@@ -171,7 +234,7 @@ export const CustomerDetails = () => {
               sx={{ color: 'success.main' }}
             >
               <span className="text-base text-green-500">
-                Re-activate Account
+                Activate Account
               </span>
             </MenuItem>
           )}
@@ -185,7 +248,7 @@ export const CustomerDetails = () => {
         >
           <DialogTitle className="font-sans!">
             <span className="text-2xl font-medium">
-              {dialogType === 'inactive' ? 'Deactivate' : 'Re-activate'}
+              {dialogType === 'inactive' ? 'Deactivate' : 'Activate'}
             </span>
           </DialogTitle>
           <DialogContent>
@@ -256,34 +319,42 @@ export const CustomerDetails = () => {
             </Button>
           </DialogActions>
         </Dialog>
+
+        {/* Avatar Image Dialog */}
+        <AvatarImageDialog
+          open={isAvatarDialogOpen}
+          onClose={() => setIsAvatarDialogOpen(false)}
+          imageUrl={customer?.image_url || ''}
+          altText={customerName}
+        />
       </div>
       <div className="my-6">
         <Tabs
-          value={tabValue}
+          value={activeIndex}
           onChange={handleTabChange}
           aria-label="customer details tabs"
         >
-          <Tab label="Overview" {...a11yProps(0)} />
-          <Tab label="Identity Details" {...a11yProps(1)} />
-          <Tab label="Ratings" {...a11yProps(2)} />
+          {visibleTabs.map((tab, index) => (
+            <Tab key={tab.id} label={tab.label} {...a11yProps(index)} />
+          ))}
         </Tabs>
       </div>
 
-      {/* Overview Tab Content */}
-      <TabPanel value={tabValue} index={0}>
-        <CustomerOverview customer={customer} stats={stats} />
-      </TabPanel>
-
-      <TabPanel value={tabValue} index={1}>
-        <IdentityDetails customer={customer} />
-      </TabPanel>
-      <TabPanel value={tabValue} index={2}>
-        <CustomerRatings
-          stats={stats}
-          reviews={reviews?.items}
-          isLoading={isReviewsLoading}
-        />
-      </TabPanel>
+      {visibleTabs.map((tab, index) => (
+        <TabPanel key={tab.id} value={activeIndex} index={index}>
+          {tab.id === 'overview' && (
+            <CustomerOverview customer={customer} stats={stats} />
+          )}
+          {tab.id === 'identity' && <IdentityDetails customer={customer} />}
+          {tab.id === 'ratings' && (
+            <CustomerRatings
+              stats={stats}
+              reviews={reviews?.items}
+              isLoading={isReviewsLoading}
+            />
+          )}
+        </TabPanel>
+      ))}
     </>
   )
 }

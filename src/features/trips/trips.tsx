@@ -1,5 +1,10 @@
 import { ExportButton, SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
+import {
+  FilterChips,
+  formatDateRange,
+  type ActiveFilter,
+} from '@/components/ui/filter-chips'
 import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
@@ -9,12 +14,13 @@ import { Box } from '@mui/material'
 import { parseAsString, useQueryState } from 'nuqs'
 import { useNavigate } from 'react-router-dom'
 import * as useTrips from './api/use-trips'
-import { columns } from './components/columns'
+import { useTripColumns } from './components/columns'
 
 import { path } from '@/app/paths'
 import { useVehicleCategories } from '../pricing-config/api/use-vehicle-categories'
 import type { Trip } from './types'
 import { useTableParams } from '@/hooks/use-table-params'
+import { PermissionGate } from '@/components/ui/permission-gate'
 
 export const Trips = () => {
   const {
@@ -25,6 +31,8 @@ export const Trips = () => {
     search: searchTerm,
     setSearch: setSearchTerm,
   } = useTableParams()
+
+  const tripColumns = useTripColumns()
 
   const [status, setStatus] = useQueryState('status', parseAsString)
   const [startDate, setStartDate] = useQueryState('start_date', parseAsString)
@@ -75,6 +83,46 @@ export const Trips = () => {
     ])
   }
 
+  const handleRemoveFilter = (key: string) => {
+    setPage(1)
+    if (key === 'status') {
+      setStatus(null)
+    } else if (key === 'date') {
+      setStartDate(null)
+      setEndDate(null)
+    } else if (key === 'vehicle_category') {
+      setVehicleCategoryId(null)
+    }
+  }
+
+  const activeFilterChips: ActiveFilter[] = []
+  if (status && status !== 'all') {
+    activeFilterChips.push({
+      key: 'status',
+      label: 'Trip Status',
+      displayValue: status.charAt(0).toUpperCase() + status.slice(1),
+    })
+  }
+  if (startDate && endDate) {
+    activeFilterChips.push({
+      key: 'date',
+      label: 'Date',
+      displayValue: formatDateRange(startDate, endDate),
+    })
+  }
+  if (vehicleCategoryId) {
+    const categoryName = vehicleCategories?.categories.find(
+      (cat) => cat.id === vehicleCategoryId,
+    )?.name
+    if (categoryName) {
+      activeFilterChips.push({
+        key: 'vehicle_category',
+        label: 'Vehicle category',
+        displayValue: categoryName,
+      })
+    }
+  }
+
   if (error) return <ErrorState message="Failed to load trips" />
 
   const trips = data?.items || []
@@ -120,21 +168,28 @@ export const Trips = () => {
           <SearchInput value={searchTerm} onChange={setSearchTerm} />
         </Box>
         <div className="flex gap-3">
-          <FilterMenu
-            options={filterOptions}
-            onFilterChange={handleFilterChange}
-            activeFilters={{
-              status: status || 'all',
-              vehicle_category: vehicleCategoryId || undefined,
-            }}
-          />
+          <PermissionGate permission="trips:filter">
+            <FilterMenu
+              options={filterOptions}
+              onFilterChange={handleFilterChange}
+              activeFilters={{
+                status: status || 'all',
+                vehicle_category: vehicleCategoryId || undefined,
+              }}
+            />
+          </PermissionGate>
           <ExportButton onClick={handleExport} />
         </div>
       </Box>
 
+      <FilterChips
+        activeFilters={activeFilterChips}
+        onRemove={handleRemoveFilter}
+      />
+
       <DataTable
         data={trips}
-        columns={columns}
+        columns={tripColumns}
         onRowClick={(row: Trip) =>
           navigate(path.DASHBOARD.TRIP_DETAILS.replace(':id', row.id))
         }

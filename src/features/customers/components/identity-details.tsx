@@ -19,7 +19,7 @@ export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
   if (error || !kycDetails)
     return <ErrorState message="Failed to load KYC details" />
 
-  const ninData = kycDetails.meta_data?.nin_verification || ({} as any)
+  const ninData = kycDetails.meta_data?.nin_verification
 
   return (
     <div className="space-y-8">
@@ -27,7 +27,7 @@ export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <StatsCard
           label="NIN"
-          value={ninData.nin || 'N/A'}
+          value={ninData?.nin || 'N/A'}
         />
         <StatsCard
           label="ID Verification Status"
@@ -69,48 +69,48 @@ export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
             index={1}
             label="First Name"
             value={
-              ninData.first_name || 'N/A'
+              ninData?.first_name || 'N/A'
             }
           />
           <InfoRow
             index={2}
             label="Last Name"
             value={
-              ninData.last_name || 'N/A'
+              ninData?.last_name || 'N/A'
             }
           />
           <InfoRow
             index={3}
             label="Middle Name"
-            value={ninData.middle_name || 'N/A'}
+            value={ninData?.middle_name || 'N/A'}
           />
-          <InfoRow index={4} label="Gender" value={ninData.gender || 'N/A'} />
+          <InfoRow index={4} label="Gender" value={ninData?.gender || 'N/A'} />
           <InfoRow
             index={5}
             label="Photo"
-            value={ninData.image || 'N/A'}
+            value={ninData?.image || 'N/A'}
             isImage
           />
           <InfoRow
             index={6}
             label="Date of Birth"
-            value={ninData.dob || 'N/A'}
+            value={ninData?.date_of_birth || 'N/A'}
           />
           {/* <InfoRow index={7} label="Email Address" value={customer.email} /> */}
           <InfoRow
             index={8}
             label="Phone Number"
-            value={ninData.mobile || 'N/A'}
+            value={ninData?.phone_number || 'N/A'}
           />
           <InfoRow
             index={9}
             label="Employment Status"
-            value={ninData.employment_status || 'N/A'}
+            value={ninData?.employment_status || 'N/A'}
           />
           <InfoRow
             index={10}
             label="Marital Status"
-            value={ninData.marital_status || 'N/A'}
+            value={ninData?.marital_status || 'N/A'}
           />
         </div>
       </div>

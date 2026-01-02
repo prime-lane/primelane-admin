@@ -16,6 +16,7 @@ import {
 } from '@solar-icons/react'
 import { useQueryState, parseAsString } from 'nuqs'
 import { useDashboardStats } from './api/use-dashboard-stats'
+import { PermissionGate } from '@/components/ui/permission-gate'
 
 interface StatCardProps {
   icon: React.ReactNode
@@ -151,17 +152,19 @@ export const Home = () => {
         }}
       >
         <h1 className="text-4xl">Summary</h1>
-        <FilterMenu
-          options={[
-            {
-              label: 'Date',
-              key: 'date_joined',
-              type: 'date-range',
-            },
-          ]}
-          onFilterChange={handleFilterChange}
-          activeFilters={{}}
-        />
+        <PermissionGate permission="dashboard:filter">
+          <FilterMenu
+            options={[
+              {
+                label: 'Date',
+                key: 'date_joined',
+                type: 'date-range',
+              },
+            ]}
+            onFilterChange={handleFilterChange}
+            activeFilters={{}}
+          />
+        </PermissionGate>
       </Box>
 
       <Grid container spacing={4}>

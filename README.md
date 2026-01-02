@@ -17,14 +17,23 @@ npm install
 ```
 
 ### Run the app
+```bash
+npm run dev
+```
+
+### Run tests
+```bash
+npm run test
+```
+
+### Run build
+```bash
+npm run build
+```
 
 ## Storybook
 
 The design system is available in Storybook at `http://localhost:6006`.
-
-```bash
-npm run dev
-```
 
 ### Run Storybook
 
@@ -32,15 +41,8 @@ npm run dev
 npm run storybook
 ```
 
-## AI Guidance
-
-For automated code generation and AI assistance:
-
-- See `/ai/ai-instructions.md`
-- Follow `/ai/prd.md`
-
-TODO:
-
+## TODO:
+### FE
 - [x] Design system
 - [x] Components
 - [x] Auth page
@@ -69,8 +71,7 @@ TODO:
 - [x] filter button
 - [x] updating vehicle category endpoint (dependent on chijiooke)
 
-
-BACKEND
+### BACKEND
 - [x] update driver/vehicle (pending, awaiting for chijiooke response)
 - [x] Home/summary page (pending endpoint)
 - [x] identity details - (pending endpoint) /kyc/my-kyc is not for admin
@@ -79,5 +80,13 @@ BACKEND
 - [x] update user endpoint should allow intl passport
 - [x] disable nin on edit customer; submit empty string
 - [x] update vehicle category
+- [x] map the category id to the vehicle-category name (vehicle category column under driver)
 - [ ] trip cancellation fee (pending)
 - [ ] settlements
+
+## AI Guidance
+
+For automated code generation and AI assistance:
+
+- See `/ai/frontend-architecture.md`
+- Follow `/ai/prd.md`
