@@ -16,6 +16,7 @@ export interface Driver {
     is_phone_number_verified?: boolean
     is_preference_set?: boolean
     is_kyc_complete?: boolean
+    vehicle: Vehicle
 }
 
 export interface UserRideStats {
@@ -93,6 +94,7 @@ export interface Vehicle {
     driver_id: string
     status: AccountStatus
     category_id: string | null
+    category_ids: string[] | null
     front_image: string
     back_image: string
     side_image: string

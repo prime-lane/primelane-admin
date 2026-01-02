@@ -49,6 +49,8 @@ import {
   useUpdateVehicleCategory,
   useVehicleCategories,
 } from '../pricing-config/api/use-vehicle-categories'
+import { usePermissionsContext } from '@/hooks/permissions-context'
+import { useMemo } from 'react'
 
 export const DriverDetails = () => {
   const { id } = useParams<{ id: string }>()
@@ -61,6 +63,7 @@ export const DriverDetails = () => {
     useManageVehicleStatus(id)
   const { data: vehicleCategories } = useVehicleCategories()
   const navigate = useNavigate()
+  const { hasPermission, permissions } = usePermissionsContext()
 
   const {
     mutate: updateVehicleCategory,
@@ -163,14 +166,53 @@ export const DriverDetails = () => {
     )
   }
 
+  const tabConfig = useMemo(
+    () => [
+      {
+        id: 'overview',
+        label: 'Overview',
+        permission: 'drivers:view_details:overview',
+      },
+      {
+        id: 'identity',
+        label: 'Identity Details',
+        permission: 'drivers:view_details:identity_details',
+      },
+      {
+        id: 'license',
+        label: 'Driver License',
+        permission: 'drivers:view_details:driver_license_details',
+      },
+      {
+        id: 'vehicle',
+        label: 'Vehicle Details',
+        permission: 'drivers:view_details:vehicle_details',
+      },
+      {
+        id: 'ratings',
+        label: 'Ratings',
+        permission: 'drivers:view_details:ratings_reviews',
+      },
+    ],
+    [],
+  )
+
+  const visibleTabs = useMemo(
+    () => tabConfig.filter((tab) => hasPermission(tab.permission)),
+    [tabConfig, permissions],
+  )
+
   const [tabValue, setTabValue] = useQueryState('tab', {
-    defaultValue: '0',
+    defaultValue: visibleTabs[0]?.id || 'overview',
     parse: (value) => value,
     serialize: (value) => value,
   })
 
+  const currentTabIndex = visibleTabs.findIndex((tab) => tab.id === tabValue)
+  const activeIndex = currentTabIndex === -1 ? 0 : currentTabIndex
+
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(newValue.toString())
+    setTabValue(visibleTabs[newValue]?.id || visibleTabs[0]?.id)
   }
 
   const avatarInitials = getInitials(
@@ -388,48 +430,44 @@ export const DriverDetails = () => {
       </div>
       <div className="my-6">
         <Tabs
-          value={parseInt(tabValue)}
+          value={activeIndex}
           onChange={handleTabChange}
           aria-label="driver details tabs"
         >
-          <Tab label="Overview" {...a11yProps(0)} />
-          <Tab label="Identity Details" {...a11yProps(1)} />
-          <Tab label="Driver License" {...a11yProps(2)} />
-          <Tab label="Vehicle Details" {...a11yProps(3)} />
-          <Tab label="Ratings" {...a11yProps(4)} />
+          {visibleTabs.map((tab, index) => (
+            <Tab key={tab.id} label={tab.label} {...a11yProps(index)} />
+          ))}
         </Tabs>
       </div>
 
-      <TabPanel value={parseInt(tabValue)} index={0}>
-        <DriverOverview driver={driver} stats={stats} />
-      </TabPanel>
-
-      <TabPanel value={parseInt(tabValue)} index={1}>
-        <IdentityDetails
-          driver={driver}
-          kycDetails={kycDetails}
-          isLoading={isKycLoading}
-        />
-      </TabPanel>
-
-      <TabPanel value={parseInt(tabValue)} index={2}>
-        <DriverLicense />
-      </TabPanel>
-
-      <TabPanel value={parseInt(tabValue)} index={3}>
-        <VehicleDetails
-          driverId={id!}
-          isVehicleSet={!!kycDetails?.is_vehicle_set}
-        />
-      </TabPanel>
-
-      <TabPanel value={parseInt(tabValue)} index={4}>
-        <DriverRatings
-          stats={stats}
-          reviews={reviews?.items}
-          isLoading={isReviewsLoading}
-        />
-      </TabPanel>
+      {visibleTabs.map((tab, index) => (
+        <TabPanel key={tab.id} value={activeIndex} index={index}>
+          {tab.id === 'overview' && (
+            <DriverOverview driver={driver} stats={stats} />
+          )}
+          {tab.id === 'identity' && (
+            <IdentityDetails
+              driver={driver}
+              kycDetails={kycDetails}
+              isLoading={isKycLoading}
+            />
+          )}
+          {tab.id === 'license' && <DriverLicense />}
+          {tab.id === 'vehicle' && (
+            <VehicleDetails
+              driverId={id!}
+              isVehicleSet={!!kycDetails?.is_vehicle_set}
+            />
+          )}
+          {tab.id === 'ratings' && (
+            <DriverRatings
+              stats={stats}
+              reviews={reviews?.items}
+              isLoading={isReviewsLoading}
+            />
+          )}
+        </TabPanel>
+      ))}
     </>
   )
 }

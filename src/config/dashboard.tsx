@@ -15,28 +15,56 @@ export type NavItem = {
   to: string
   hasSubmenu?: boolean
   children?: NavItem[]
+  permission?: string
 }
 
 export const NAV_ITEMS: NavItem[] = [
-  { label: 'Home', icon: Home, to: path.DASHBOARD.ROOT },
-  { label: 'Customers', icon: UsersGroupRounded, to: path.DASHBOARD.CUSTOMERS },
-  { label: 'Drivers', icon: UserRounded, to: path.DASHBOARD.DRIVERS },
+  {
+    label: 'Home',
+    icon: Home,
+    to: path.DASHBOARD.ROOT,
+    permission: 'dashboard:view',
+  },
+  {
+    label: 'Customers',
+    icon: UsersGroupRounded,
+    to: path.DASHBOARD.CUSTOMERS,
+    permission: 'customers:view',
+  },
+  {
+    label: 'Drivers',
+    icon: UserRounded,
+    to: path.DASHBOARD.DRIVERS,
+    permission: 'drivers:view',
+  },
   {
     label: 'Pricing Config.',
     icon: SettingsMinimalistic,
     to: path.DASHBOARD.PRICING_CONFIG,
+    permission: 'price_configurations:view',
   },
-  { label: 'Trips', icon: BillList, to: path.DASHBOARD.TRIPS },
+  {
+    label: 'Trips',
+    icon: BillList,
+    to: path.DASHBOARD.TRIPS,
+    permission: 'trips:view',
+  },
   {
     label: 'Admin Mgmt.',
     icon: ShieldUser,
     to: path.DASHBOARD.ADMIN_MANAGEMENT,
     hasSubmenu: true,
+    permission: 'admin_management:view',
     children: [
-      { label: 'Admin', to: path.DASHBOARD.ADMIN_MANAGEMENT },
+      {
+        label: 'Admin',
+        to: path.DASHBOARD.ADMIN_MANAGEMENT,
+        permission: 'admin_management:view',
+      },
       {
         label: 'Roles & Permissions',
         to: path.DASHBOARD.ROLES_PERMISSIONS,
+        permission: 'rbac:view',
       },
     ],
   },
