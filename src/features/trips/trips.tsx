@@ -9,7 +9,7 @@ import { Box } from '@mui/material'
 import { parseAsString, useQueryState } from 'nuqs'
 import { useNavigate } from 'react-router-dom'
 import * as useTrips from './api/use-trips'
-import { columns } from './components/columns'
+import { useTripColumns } from './components/columns'
 
 import { path } from '@/app/paths'
 import { useVehicleCategories } from '../pricing-config/api/use-vehicle-categories'
@@ -26,6 +26,8 @@ export const Trips = () => {
     search: searchTerm,
     setSearch: setSearchTerm,
   } = useTableParams()
+
+  const tripColumns = useTripColumns()
 
   const [status, setStatus] = useQueryState('status', parseAsString)
   const [startDate, setStartDate] = useQueryState('start_date', parseAsString)
@@ -137,7 +139,7 @@ export const Trips = () => {
 
       <DataTable
         data={trips}
-        columns={columns}
+        columns={tripColumns}
         onRowClick={(row: Trip) =>
           navigate(path.DASHBOARD.TRIP_DETAILS.replace(':id', row.id))
         }
