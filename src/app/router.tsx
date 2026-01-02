@@ -14,6 +14,7 @@ import { Otp } from '@/features/auth/otp'
 import { SignIn } from '@/features/auth/sign-in'
 import { ForgotPassword } from '@/features/auth/forgot-password'
 import { path } from './paths'
+import { RoutePermissionGate } from '@/components/ui/route-permission-gate'
 
 const Home = lazy(() =>
   import('@/features/home/home').then((module) => ({ default: module.Home })),
@@ -126,25 +127,31 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: (
-          <Suspense fallback={<Loading />}>
-            <Home />
-          </Suspense>
+          <RoutePermissionGate permission="dashboard:view">
+            <Suspense fallback={<Loading />}>
+              <Home />
+            </Suspense>
+          </RoutePermissionGate>
         ),
       },
       {
         path: path.DASHBOARD.CUSTOMERS,
         element: (
-          <Suspense fallback={<Loading />}>
-            <Customers />
-          </Suspense>
+          <RoutePermissionGate permission="customers:view">
+            <Suspense fallback={<Loading />}>
+              <Customers />
+            </Suspense>
+          </RoutePermissionGate>
         ),
       },
       {
         path: path.DASHBOARD.CUSTOMER_DETAILS,
         element: (
-          <Suspense fallback={<Loading />}>
-            <CustomerDetails />
-          </Suspense>
+          <RoutePermissionGate permission="customers:view_details">
+            <Suspense fallback={<Loading />}>
+              <CustomerDetails />
+            </Suspense>
+          </RoutePermissionGate>
         ),
       },
       {
@@ -158,17 +165,21 @@ export const router = createBrowserRouter([
       {
         path: path.DASHBOARD.DRIVERS,
         element: (
-          <Suspense fallback={<Loading />}>
-            <Drivers />
-          </Suspense>
+          <RoutePermissionGate permission="drivers:view">
+            <Suspense fallback={<Loading />}>
+              <Drivers />
+            </Suspense>
+          </RoutePermissionGate>
         ),
       },
       {
         path: path.DASHBOARD.DRIVER_DETAILS,
         element: (
-          <Suspense fallback={<Loading />}>
-            <DriverDetails />
-          </Suspense>
+          <RoutePermissionGate permission="drivers:view_details">
+            <Suspense fallback={<Loading />}>
+              <DriverDetails />
+            </Suspense>
+          </RoutePermissionGate>
         ),
       },
       {
@@ -182,9 +193,11 @@ export const router = createBrowserRouter([
       {
         path: path.DASHBOARD.PRICING_CONFIG,
         element: (
-          <Suspense fallback={<Loading />}>
-            <PricingConfig />
-          </Suspense>
+          <RoutePermissionGate permission="price_configurations:view">
+            <Suspense fallback={<Loading />}>
+              <PricingConfig />
+            </Suspense>
+          </RoutePermissionGate>
         ),
       },
       {
@@ -198,17 +211,21 @@ export const router = createBrowserRouter([
       {
         path: path.DASHBOARD.TRIPS,
         element: (
-          <Suspense fallback={<Loading />}>
-            <Trips />
-          </Suspense>
+          <RoutePermissionGate permission="trips:view">
+            <Suspense fallback={<Loading />}>
+              <Trips />
+            </Suspense>
+          </RoutePermissionGate>
         ),
       },
       {
         path: path.DASHBOARD.TRIP_DETAILS,
         element: (
-          <Suspense fallback={<Loading />}>
-            <TripDetails />
-          </Suspense>
+          <RoutePermissionGate permission="trips:view_details">
+            <Suspense fallback={<Loading />}>
+              <TripDetails />
+            </Suspense>
+          </RoutePermissionGate>
         ),
       },
       // {
@@ -258,17 +275,21 @@ export const router = createBrowserRouter([
       {
         path: path.DASHBOARD.ADMIN_MANAGEMENT,
         element: (
-          <Suspense fallback={<Loading />}>
-            <AdminManagement />
-          </Suspense>
+          <RoutePermissionGate permission="admin_management:view">
+            <Suspense fallback={<Loading />}>
+              <AdminManagement />
+            </Suspense>
+          </RoutePermissionGate>
         ),
       },
       {
         path: path.DASHBOARD.ROLES_PERMISSIONS,
         element: (
-          <Suspense fallback={<Loading />}>
-            <RolesManagement />
-          </Suspense>
+          <RoutePermissionGate permission="rbac:view">
+            <Suspense fallback={<Loading />}>
+              <RolesManagement />
+            </Suspense>
+          </RoutePermissionGate>
         ),
       },
     ],
