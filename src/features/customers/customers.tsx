@@ -127,7 +127,7 @@ export const Customers = () => {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Customer" />
+      <PageHeader title="Customers" />
 
       <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
         <Box sx={{ flex: 1 }}>
