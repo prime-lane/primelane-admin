@@ -145,7 +145,7 @@ export const Drivers = () => {
               }}
             />
           </PermissionGate>
-          <PermissionGate permission="drivers:export">
+          <PermissionGate permission="drivers:view">
             <ExportButton onClick={handleExport} />
           </PermissionGate>
         </div>
