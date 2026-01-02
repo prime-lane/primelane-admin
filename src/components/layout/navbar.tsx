@@ -5,14 +5,16 @@ import {
   Menu,
   MenuItem,
   Toolbar,
+  Button,
 } from '@mui/material'
-import { AltArrowDown, HamburgerMenu } from '@solar-icons/react'
+import { AltArrowDown, HamburgerMenu, InfoCircle } from '@solar-icons/react'
 import { useState } from 'react'
 import {
   useCurrentUser,
   useLogout,
 } from '@/features/auth/hooks/use-current-user'
 import { getInitials } from '@/lib/utils'
+import { useTour } from '@/hooks/use-tour'
 
 interface NavbarProps {
   onSidebarOpen?: () => void
@@ -23,6 +25,7 @@ export const Navbar = ({ onSidebarOpen }: NavbarProps) => {
   const open = Boolean(anchorEl)
   const { data: user } = useCurrentUser()
   const logout = useLogout()
+  const { startTour } = useTour()
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -67,6 +70,15 @@ export const Navbar = ({ onSidebarOpen }: NavbarProps) => {
           sx={{ mr: 2, display: { md: 'none' } }}
         >
           <HamburgerMenu size={30} />
+        </IconButton>
+        <IconButton
+          onClick={startTour}
+          sx={{
+            fontSize: '14px',
+          }}
+          title="Take Tour"
+        >
+          <InfoCircle size={14} />
         </IconButton>
         <div className="flex items-center">
           <IconButton

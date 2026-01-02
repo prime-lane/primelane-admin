@@ -14,6 +14,7 @@ interface SidebarNavItemProps {
   children?: { label: string; to: string; permission?: string }[]
   onLinkClick?: () => void
   permission?: string
+  dataTour?: string
 }
 
 export const SidebarNavItem = ({
@@ -26,6 +27,7 @@ export const SidebarNavItem = ({
   children,
   onLinkClick,
   permission,
+  dataTour,
 }: SidebarNavItemProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const location = useLocation()
@@ -51,7 +53,7 @@ export const SidebarNavItem = ({
 
   if (hasSubmenu) {
     return (
-      <div className="flex flex-col">
+      <div className="flex flex-col" data-tour={dataTour}>
         <button
           onClick={() => setIsOpen(!isOpen)}
           className={cn(
@@ -117,6 +119,7 @@ export const SidebarNavItem = ({
       to={to!}
       onClick={onLinkClick}
       end={to === '/dashboard'}
+      data-tour={dataTour}
       className={({ isActive }) =>
         cn(
           'flex items-center justify-between px-4 py-3 transition-all duration-200 group',
