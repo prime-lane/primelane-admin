@@ -16,6 +16,7 @@ export type NavItem = {
   hasSubmenu?: boolean
   children?: NavItem[]
   permission?: string
+  description?: string
 }
 
 export const NAV_ITEMS: NavItem[] = [
@@ -24,30 +25,35 @@ export const NAV_ITEMS: NavItem[] = [
     icon: Home,
     to: path.DASHBOARD.ROOT,
     permission: 'dashboard:view',
+    description: 'View dashboard',
   },
   {
     label: 'Customers',
     icon: UsersGroupRounded,
     to: path.DASHBOARD.CUSTOMERS,
     permission: 'customers:view',
+    description: 'View customers',
   },
   {
     label: 'Drivers',
     icon: UserRounded,
     to: path.DASHBOARD.DRIVERS,
     permission: 'drivers:view',
+    description: 'View drivers',
   },
   {
     label: 'Pricing Config.',
     icon: SettingsMinimalistic,
     to: path.DASHBOARD.PRICING_CONFIG,
     permission: 'price_configurations:view',
+    description: 'Manage pricing configurations',
   },
   {
     label: 'Trips',
     icon: BillList,
     to: path.DASHBOARD.TRIPS,
     permission: 'trips:view',
+    description: 'View trips',
   },
   {
     label: 'Admin Mgmt.',
@@ -55,16 +61,19 @@ export const NAV_ITEMS: NavItem[] = [
     to: path.DASHBOARD.ADMIN_MANAGEMENT,
     hasSubmenu: true,
     permission: 'admin_management:view',
+    description: 'Manage admin',
     children: [
       {
         label: 'Admin',
         to: path.DASHBOARD.ADMIN_MANAGEMENT,
         permission: 'admin_management:view',
+        description: 'Invite admin',
       },
       {
         label: 'Roles & Permissions',
         to: path.DASHBOARD.ROLES_PERMISSIONS,
         permission: 'rbac:view',
+        description: 'Manage roles and permissions',
       },
     ],
   },

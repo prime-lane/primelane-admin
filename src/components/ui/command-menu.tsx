@@ -34,7 +34,7 @@ export const CommandMenu = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-neutral-900/20 backdrop-blur-sm"
+            className="fixed inset-0 bg-white/40"
             onClick={() => setOpen(false)}
           />
 
@@ -79,9 +79,9 @@ export const CommandMenu = () => {
                       <item.icon size={20} className="opacity-70" />
                     )}
                     <span>{item.label}</span>
-                    {item.permission && (
+                    {item.description && (
                       <span className="ml-auto text-[10px] bg-neutral-100 text-neutral-400 px-1.5 py-0.5 rounded">
-                        {item.permission}
+                        {item?.description}
                       </span>
                     )}
                   </Command.Item>
