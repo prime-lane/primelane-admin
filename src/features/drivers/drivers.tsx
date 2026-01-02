@@ -1,6 +1,11 @@
 import { path } from '@/app/paths'
 import { ExportButton, SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
+import {
+  FilterChips,
+  formatDateRange,
+  type ActiveFilter,
+} from '@/components/ui/filter-chips'
 import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { PageHeader } from '@/components/ui/page-header'
@@ -87,6 +92,46 @@ export const Drivers = () => {
     ])
   }
 
+  const handleRemoveFilter = (key: string) => {
+    setPage(1)
+    if (key === 'status') {
+      setStatus(null)
+    } else if (key === 'date_joined') {
+      setStartDate(null)
+      setEndDate(null)
+    } else if (key === 'vehicle_category') {
+      setVehicleCategoryId(null)
+    }
+  }
+
+  const activeFilterChips: ActiveFilter[] = []
+  if (status && status !== 'all') {
+    activeFilterChips.push({
+      key: 'status',
+      label: 'Status',
+      displayValue: status.charAt(0).toUpperCase() + status.slice(1),
+    })
+  }
+  if (startDate && endDate) {
+    activeFilterChips.push({
+      key: 'date_joined',
+      label: 'Date joined',
+      displayValue: formatDateRange(startDate, endDate),
+    })
+  }
+  if (vehicleCategoryId) {
+    const categoryName = vehicleCategories?.categories.find(
+      (cat) => cat.id === vehicleCategoryId,
+    )?.name
+    if (categoryName) {
+      activeFilterChips.push({
+        key: 'vehicle_category',
+        label: 'Vehicle category',
+        displayValue: categoryName,
+      })
+    }
+  }
+
   if (error) return <ErrorState message="Failed to load drivers" />
 
   const filterOptions: FilterOption[] = [
@@ -150,6 +195,11 @@ export const Drivers = () => {
           </PermissionGate>
         </div>
       </Box>
+
+      <FilterChips
+        activeFilters={activeFilterChips}
+        onRemove={handleRemoveFilter}
+      />
 
       <DataTable
         data={drivers}
