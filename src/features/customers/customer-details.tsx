@@ -234,7 +234,7 @@ export const CustomerDetails = () => {
               sx={{ color: 'success.main' }}
             >
               <span className="text-base text-green-500">
-                Re-activate Account
+                Activate Account
               </span>
             </MenuItem>
           )}
@@ -248,7 +248,7 @@ export const CustomerDetails = () => {
         >
           <DialogTitle className="font-sans!">
             <span className="text-2xl font-medium">
-              {dialogType === 'inactive' ? 'Deactivate' : 'Re-activate'}
+              {dialogType === 'inactive' ? 'Deactivate' : 'Activate'}
             </span>
           </DialogTitle>
           <DialogContent>
