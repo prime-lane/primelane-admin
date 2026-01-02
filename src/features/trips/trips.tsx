@@ -15,6 +15,7 @@ import { path } from '@/app/paths'
 import { useVehicleCategories } from '../pricing-config/api/use-vehicle-categories'
 import type { Trip } from './types'
 import { useTableParams } from '@/hooks/use-table-params'
+import { PermissionGate } from '@/components/ui/permission-gate'
 
 export const Trips = () => {
   const {
@@ -120,14 +121,16 @@ export const Trips = () => {
           <SearchInput value={searchTerm} onChange={setSearchTerm} />
         </Box>
         <div className="flex gap-3">
-          <FilterMenu
-            options={filterOptions}
-            onFilterChange={handleFilterChange}
-            activeFilters={{
-              status: status || 'all',
-              vehicle_category: vehicleCategoryId || undefined,
-            }}
-          />
+          <PermissionGate permission="trips:filter">
+            <FilterMenu
+              options={filterOptions}
+              onFilterChange={handleFilterChange}
+              activeFilters={{
+                status: status || 'all',
+                vehicle_category: vehicleCategoryId || undefined,
+              }}
+            />
+          </PermissionGate>
           <ExportButton onClick={handleExport} />
         </div>
       </Box>

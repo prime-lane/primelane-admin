@@ -71,6 +71,7 @@ npm run storybook
 - [x] update user endpoint should allow intl passport
 - [x] disable nin on edit customer; submit empty string
 - [x] update vehicle category
+- [ ] map the category id to the vehicle-category name (vehicle category column under driver)
 - [ ] trip cancellation fee (pending)
 - [ ] settlements
 

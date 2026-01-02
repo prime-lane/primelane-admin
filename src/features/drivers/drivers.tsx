@@ -12,9 +12,10 @@ import { parseAsString, useQueryState } from 'nuqs'
 import { useNavigate } from 'react-router-dom'
 import { useVehicleCategories } from '../pricing-config/api/use-vehicle-categories'
 import { useDrivers } from './api/use-drivers'
-import { driverColumns } from './components/columns'
+import { useDriverColumns } from './components/columns'
 import type { Driver } from './types'
 import { useTableParams } from '@/hooks/use-table-params'
+import { PermissionGate } from '@/components/ui/permission-gate'
 
 export const Drivers = () => {
   const {
@@ -25,6 +26,8 @@ export const Drivers = () => {
     search: searchTerm,
     setSearch: setSearchTerm,
   } = useTableParams()
+
+  const driverColumns = useDriverColumns()
 
   const [status, setStatus] = useQueryState('status', parseAsString)
   const [startDate, setStartDate] = useQueryState('start_date', parseAsString)
@@ -123,22 +126,28 @@ export const Drivers = () => {
 
       <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
         <Box sx={{ flex: 1 }}>
-          <SearchInput
-            value={searchTerm}
-            onChange={setSearchTerm}
-            placeholder="Search by name, phone number, email address, driver ID"
-          />
+          <PermissionGate permission="drivers:filter">
+            <SearchInput
+              value={searchTerm}
+              onChange={setSearchTerm}
+              placeholder="Search by name, phone number, email address, driver ID"
+            />
+          </PermissionGate>
         </Box>
         <div className="flex gap-3">
-          <FilterMenu
-            options={filterOptions}
-            onFilterChange={handleFilterChange}
-            activeFilters={{
-              status: status || 'all',
-              vehicle_category: vehicleCategoryId || undefined,
-            }}
-          />
-          <ExportButton onClick={handleExport} />
+          <PermissionGate permission="drivers:filter">
+            <FilterMenu
+              options={filterOptions}
+              onFilterChange={handleFilterChange}
+              activeFilters={{
+                status: status || 'all',
+                vehicle_category: vehicleCategoryId || undefined,
+              }}
+            />
+          </PermissionGate>
+          <PermissionGate permission="drivers:export">
+            <ExportButton onClick={handleExport} />
+          </PermissionGate>
         </div>
       </Box>
 

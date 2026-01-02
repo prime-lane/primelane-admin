@@ -18,6 +18,7 @@ import { getRoleColumns } from './components/columns'
 import { DeleteRoleModal } from './components/delete-role-modal'
 import { RoleModal } from './components/role-modal'
 import { useTableParams } from '@/hooks/use-table-params'
+import { PermissionGate } from '@/components/ui/permission-gate'
 
 export const RolesManagement = () => {
   const { page, setPage, pageSize, setPageSize, search, setSearch } =
@@ -97,18 +98,20 @@ export const RolesManagement = () => {
       <PageHeader
         title="Roles & Permissions"
         action={
-          <Button
-            variant="contained"
-            onClick={handleCreate}
-            endIcon={<UserCross className="text-white" />}
-            sx={{
-              bgcolor: 'black',
-              color: 'white',
-              '&:hover': { bgcolor: 'neutral.800' },
-            }}
-          >
-            Create
-          </Button>
+          <PermissionGate permission="rbac:create_role">
+            <Button
+              variant="contained"
+              onClick={handleCreate}
+              endIcon={<UserCross className="text-white" />}
+              sx={{
+                bgcolor: 'black',
+                color: 'white',
+                '&:hover': { bgcolor: 'neutral.800' },
+              }}
+            >
+              Create
+            </Button>
+          </PermissionGate>
         }
       />
 

@@ -14,6 +14,7 @@ import { useCustomers } from './api/use-customers'
 import { customerColumns } from './components/columns'
 import type { Customer } from './types'
 import { useTableParams } from '@/hooks/use-table-params'
+import { PermissionGate } from '@/components/ui/permission-gate'
 
 export const Customers = () => {
   const navigate = useNavigate()
@@ -102,13 +103,15 @@ export const Customers = () => {
           <SearchInput value={searchTerm} onChange={setSearchTerm} />
         </Box>
         <div className="flex gap-3">
-          <FilterMenu
-            options={filterOptions}
-            onFilterChange={handleFilterChange}
-            activeFilters={{
-              status: status || 'all',
-            }}
-          />
+          <PermissionGate permission="customers:filter">
+            <FilterMenu
+              options={filterOptions}
+              onFilterChange={handleFilterChange}
+              activeFilters={{
+                status: status || 'all',
+              }}
+            />
+          </PermissionGate>
           <ExportButton onClick={handleExport} />
         </div>
       </Box>

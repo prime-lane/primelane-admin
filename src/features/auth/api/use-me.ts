@@ -18,22 +18,20 @@ export const useMe = () => {
             const user: User = JSON.parse(userStr)
 
             if (!user.role_id) {
-                return {
-                    ...user,
-                    role_id: '00c3af79-0907-426d-9dea-60c2ece17f65',
-                }
+                return user
             }
 
-            const roleResponse = await apiClient.get<{ role: Role }>(
+            const roleResponse = await apiClient.get<Role>(
                 e.ROLES.BY_ID(user.role_id),
             )
 
             return {
                 ...user,
-                role: roleResponse.data.role,
+                role: roleResponse.data,
             }
         },
         staleTime: Infinity,
         retry: false,
+        refetchOnWindowFocus: 'always',
     })
 }
