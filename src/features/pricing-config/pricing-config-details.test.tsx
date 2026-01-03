@@ -88,6 +88,10 @@ describe('PricingConfigDetails', () => {
       const user = userEvent.setup()
       render(<PricingConfigDetails />)
 
+      await waitFor(() => {
+        expect(screen.getByPlaceholderText('200000')).toHaveValue(50)
+      })
+
       const baseFareInput = screen.getByPlaceholderText('200000')
       const perKmInput = screen.getByPlaceholderText('1500')
       const submitButton = screen.getByRole('button', { name: /save changes/i })
@@ -113,6 +117,10 @@ describe('PricingConfigDetails', () => {
     it('validates one-way pricing fields', async () => {
       const user = userEvent.setup()
       render(<PricingConfigDetails />)
+
+      await waitFor(() => {
+        expect(screen.getByPlaceholderText('200000')).toHaveValue(50)
+      })
 
       const baseFareInput = screen.getByPlaceholderText('200000')
       const submitButton = screen.getByRole('button', { name: /save changes/i })
@@ -150,6 +158,10 @@ describe('PricingConfigDetails', () => {
       const user = userEvent.setup()
       render(<PricingConfigDetails />)
 
+      await waitFor(() => {
+        expect(screen.getByPlaceholderText('200000')).toHaveValue(30)
+      })
+
       const baseFareInput = screen.getByPlaceholderText('200000')
       const perMinInput = screen.getByPlaceholderText('1000')
       const submitButton = screen.getByRole('button', { name: /save changes/i })
@@ -175,6 +187,10 @@ describe('PricingConfigDetails', () => {
     it('validates hourly pricing fields', async () => {
       const user = userEvent.setup()
       render(<PricingConfigDetails />)
+
+      await waitFor(() => {
+        expect(screen.getAllByPlaceholderText('10')[0]).toHaveValue(10)
+      })
 
       const inputs = screen.getAllByPlaceholderText('10')
       const cancelPercentageInput = inputs[0]

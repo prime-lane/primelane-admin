@@ -38,7 +38,7 @@ export const RoutePermissionGate = ({
   const hasShownToast = useRef(false)
 
   useEffect(() => {
-    if (!isLoading && !hasPermission(permission) && !hasShownToast.current) {
+    if (!isLoading && !hasPermission(permission)) {
       toast.error('Access Restricted', {
         description: `You do not have sufficient permission to access this page (${location.pathname}).`,
       })
