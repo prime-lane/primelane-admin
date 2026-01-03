@@ -68,10 +68,10 @@ export const PricingConfigDetails = () => {
       const data = categoryData as any
 
       reset({
-        base_price: data[`${prefix}base_price`] ?? 0,
-        per_km: data[`${prefix}per_km`] ?? 0,
-        per_min: data[`${prefix}per_min`] ?? 0,
-        cancellation_base: data[`${prefix}cancellation_base`] ?? 0,
+        base_price: (data[`${prefix}base_price`] ?? 0) / 100,
+        per_km: (data[`${prefix}per_km`] ?? 0) / 100,
+        per_min: (data[`${prefix}per_min`] ?? 0) / 100,
+        cancellation_base: (data[`${prefix}cancellation_base`] ?? 0) / 100,
         cancellation_percentage: data[`${prefix}cancellation_percentage`] ?? 0,
         cancellation_fee_type:
           data[`${prefix}cancellation_fee_type`] ?? 'percentage',
@@ -82,7 +82,14 @@ export const PricingConfigDetails = () => {
   }, [categoryData, reset, type])
 
   const onSubmit = (data: PricingConfigFormData) => {
-    updateConfig(data)
+    const payload = {
+      ...data,
+      base_price: Number(data.base_price) * 100,
+      per_km: Number(data.per_km) * 100,
+      per_min: Number(data.per_min) * 100,
+      cancellation_base: Number(data.cancellation_base) * 100,
+    }
+    updateConfig(payload)
     navigate(path.DASHBOARD.PRICING_CONFIG)
   }
 

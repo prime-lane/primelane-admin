@@ -74,12 +74,14 @@ describe('PricingConfigDetails', () => {
       mockUseParams.mockReturnValue({ id: 'category-1', type: 'one_off' })
     })
 
-    it('loads one-way pricing data', () => {
+    it('loads one-way pricing data', async () => {
       render(<PricingConfigDetails />)
 
-      expect(screen.getByPlaceholderText('200000')).toHaveValue(5000)
-      expect(screen.getByPlaceholderText('1500')).toHaveValue(100)
-      expect(screen.getByPlaceholderText('1000')).toHaveValue(50)
+      await waitFor(() => {
+        expect(screen.getByPlaceholderText('200000')).toHaveValue(50)
+      })
+      expect(screen.getByPlaceholderText('1500')).toHaveValue(1)
+      expect(screen.getByPlaceholderText('1000')).toHaveValue(0.5)
     })
 
     it('submits updated one-way pricing', async () => {
@@ -101,8 +103,8 @@ describe('PricingConfigDetails', () => {
       await waitFor(() => {
         expect(mockUpdateConfig).toHaveBeenCalledWith(
           expect.objectContaining({
-            base_price: 6000,
-            per_km: 120,
+            base_price: 600000,
+            per_km: 12000,
           }),
         )
       })
@@ -134,12 +136,14 @@ describe('PricingConfigDetails', () => {
       mockUseParams.mockReturnValue({ id: 'category-1', type: 'hourly' })
     })
 
-    it('loads hourly pricing data', () => {
+    it('loads hourly pricing data', async () => {
       render(<PricingConfigDetails />)
 
-      expect(screen.getByPlaceholderText('200000')).toHaveValue(3000)
-      expect(screen.getByPlaceholderText('1500')).toHaveValue(80)
-      expect(screen.getByPlaceholderText('1000')).toHaveValue(40)
+      await waitFor(() => {
+        expect(screen.getByPlaceholderText('200000')).toHaveValue(30)
+      })
+      expect(screen.getByPlaceholderText('1500')).toHaveValue(0.8)
+      expect(screen.getByPlaceholderText('1000')).toHaveValue(0.4)
     })
 
     it('submits updated hourly pricing', async () => {
@@ -161,8 +165,8 @@ describe('PricingConfigDetails', () => {
       await waitFor(() => {
         expect(mockUpdateConfig).toHaveBeenCalledWith(
           expect.objectContaining({
-            base_price: 3500,
-            per_min: 45,
+            base_price: 350000,
+            per_min: 4500,
           }),
         )
       })
