@@ -26,6 +26,9 @@ import { PricingConfigDetailsSkeleton } from './components/skeletons'
 
 export const PricingConfigDetails = () => {
   const { id, type } = useParams<{ id: string; type: 'one_off' | 'hourly' }>()
+  const isOneWay = type === 'one_off'
+  const isHourly = type === 'hourly'
+
   const navigate = useNavigate()
   const categoryId = id
 
@@ -67,28 +70,53 @@ export const PricingConfigDetails = () => {
       const prefix = type === 'hourly' ? 'hourly_' : 'one_way_'
       const data = categoryData as any
 
-      reset({
-        base_price: (data[`${prefix}base_price`] ?? 0) / 100,
-        per_km: (data[`${prefix}per_km`] ?? 0) / 100,
-        per_min: (data[`${prefix}per_min`] ?? 0) / 100,
-        cancellation_base: (data[`${prefix}cancellation_base`] ?? 0) / 100,
-        cancellation_percentage: data[`${prefix}cancellation_percentage`] ?? 0,
-        cancellation_fee_type:
-          data[`${prefix}cancellation_fee_type`] ?? 'percentage',
-        trip_commission_percentage:
-          data[`${prefix}trip_commission_percentage`] ?? 0,
-      })
+      if (type === 'hourly') {
+        reset({
+          base_price: (data[`${prefix}base_price`] ?? 0) / 100,
+          per_hour: (data[`${prefix}per_hour`] ?? 0) / 100,
+          min_hour: data[`${prefix}min_hour`] ?? 0,
+          cancellation_base: (data[`${prefix}cancellation_base`] ?? 0) / 100,
+          cancellation_percentage:
+            data[`${prefix}cancellation_percentage`] ?? 0,
+          cancellation_fee_type:
+            data[`${prefix}cancellation_fee_type`] ?? 'percentage',
+          trip_commission_percentage:
+            data[`${prefix}trip_commission_percentage`] ?? 0,
+        })
+      } else {
+        reset({
+          base_price: (data[`${prefix}base_price`] ?? 0) / 100,
+          per_km: (data[`${prefix}per_km`] ?? 0) / 100,
+          per_min: (data[`${prefix}per_min`] ?? 0) / 100,
+          cancellation_base: (data[`${prefix}cancellation_base`] ?? 0) / 100,
+          cancellation_percentage:
+            data[`${prefix}cancellation_percentage`] ?? 0,
+          cancellation_fee_type:
+            data[`${prefix}cancellation_fee_type`] ?? 'percentage',
+          trip_commission_percentage:
+            data[`${prefix}trip_commission_percentage`] ?? 0,
+        })
+      }
     }
   }, [categoryData, reset, type])
 
   const onSubmit = (data: PricingConfigFormData) => {
-    const payload = {
-      ...data,
+    const payload: any = {
       base_price: Number(data.base_price) * 100,
-      per_km: Number(data.per_km) * 100,
-      per_min: Number(data.per_min) * 100,
       cancellation_base: Number(data.cancellation_base) * 100,
+      cancellation_percentage: Number(data.cancellation_percentage),
+      cancellation_fee_type: data.cancellation_fee_type,
+      trip_commission_percentage: Number(data.trip_commission_percentage),
     }
+
+    if (type === 'hourly') {
+      payload.per_hour = Number(data.per_hour) * 100
+      payload.min_hour = Number(data.min_hour)
+    } else {
+      payload.per_km = Number(data.per_km) * 100
+      payload.per_min = Number(data.per_min) * 100
+    }
+
     updateConfig(payload)
     navigate(path.DASHBOARD.PRICING_CONFIG)
   }
@@ -181,19 +209,24 @@ export const PricingConfigDetails = () => {
 
               <div className="space-y-1">
                 <label className="text-sm font-medium text-neutral-900 block">
-                  Price per kilometer
+                  Price per {isOneWay ? 'kilometer' : 'hour'}
                 </label>
                 <p className="text-xs text-neutral-500 mb-2">
-                  Rate charged based on total trip distance
+                  Rate charged based on{' '}
+                  {isOneWay
+                    ? 'total trip distance'
+                    : 'total trip hour duration'}
                 </p>
                 <TextField
                   fullWidth
                   placeholder="1500"
                   type="number"
                   size="medium"
-                  {...register('per_km')}
-                  error={!!errors.per_km}
-                  helperText={errors.per_km?.message}
+                  {...register(isOneWay ? 'per_km' : 'per_hour')}
+                  error={isOneWay ? !!errors.per_km : !!errors.per_hour}
+                  helperText={
+                    isOneWay ? errors.per_km?.message : errors.per_hour?.message
+                  }
                   variant="outlined"
                   sx={{
                     '& .MuiOutlinedInput-root': {
@@ -212,25 +245,31 @@ export const PricingConfigDetails = () => {
 
               <div className="space-y-1">
                 <label className="text-sm font-medium text-neutral-900 block">
-                  Price per minute
+                  {isOneWay ? 'Price per minute' : 'Minimum hour'}
                 </label>
                 <p className="text-xs text-neutral-500 mb-2">
-                  Rate charged based on total trip duration.
+                  {isOneWay
+                    ? 'Rate charged based on total trip duration.'
+                    : 'Lowest no. Of hours that can be booked.'}
                 </p>
                 <TextField
                   fullWidth
-                  placeholder="1000"
+                  placeholder={isOneWay ? '1000' : '5'}
                   type="number"
                   size="medium"
-                  {...register('per_min')}
-                  error={!!errors.per_min}
-                  helperText={errors.per_min?.message}
+                  {...register(isOneWay ? 'per_min' : 'min_hour')}
+                  error={isOneWay ? !!errors.per_min : !!errors.min_hour}
+                  helperText={
+                    isOneWay
+                      ? errors.per_min?.message
+                      : errors.min_hour?.message
+                  }
                   variant="outlined"
                   slotProps={{
                     input: {
-                      startAdornment: (
+                      startAdornment: isOneWay ? (
                         <InputAdornment position="start">₦</InputAdornment>
-                      ),
+                      ) : undefined,
                     },
                   }}
                 />
