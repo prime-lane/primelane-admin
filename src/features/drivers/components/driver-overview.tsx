@@ -2,20 +2,26 @@ import { Card, CardContent } from '@mui/material'
 import type { Driver } from '../types'
 import type { UserRideStats } from '../types'
 import { CountUp } from '@/components/ui/count-up'
+import { CopyButton } from '@/components/ui/copy-button'
 
 const DetailItem = ({
   label,
   value,
+  copyable = false,
 }: {
   label: string
   value: string | number | undefined | null
+  copyable?: boolean
 }) => {
   return (
     <div className="flex flex-col gap-[2px]">
       <p className="text-sm text-neutral-500">{label}</p>
-      <p className="text-base font-semibold text-neutral-900">
-        {value || 'N/A'}
-      </p>
+      <div className="flex items-center gap-1">
+        <p className="text-base font-semibold text-neutral-900">
+          {value || 'N/A'}
+        </p>
+        {copyable && value && <CopyButton textToCopy={String(value)} />}
+      </div>
     </div>
   )
 }
@@ -56,7 +62,11 @@ export const DriverOverview = ({ driver, stats }: DriverOverviewProps) => {
         <div className="grid md:grid-cols-3 grid-cols-1 gap-8">
           <DetailItem label="First Name" value={driver.first_name} />
           <DetailItem label="Last Name" value={driver.last_name} />
-          <DetailItem label="Driver ID" value={driver.id} />
+          <DetailItem
+            label="Driver ID"
+            value={driver.custom_user_id}
+            copyable
+          />
           <DetailItem label="Email Address" value={driver.email} />
           <DetailItem label="Phone Number" value={driver.phone_number} />
         </div>

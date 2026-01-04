@@ -4,6 +4,7 @@ import { StatusBadge } from '@/components/ui/status-badge'
 import { VerificationBadge } from '@/components/ui/verification-badge'
 import { formatDate } from '@/utils/table-utils'
 import { useVehicleCategories } from '@/features/pricing-config/api/use-vehicle-categories'
+import { CopyButton } from '@/components/ui/copy-button'
 
 export const useDriverColumns = (): ColumnDef<Driver>[] => {
   const { data: categoriesData } = useVehicleCategories()
@@ -21,10 +22,13 @@ export const useDriverColumns = (): ColumnDef<Driver>[] => {
 
   return [
     {
-      accessorKey: 'id',
+      accessorKey: 'custom_user_id',
       header: 'ID',
       cell: ({ row }) => (
-        <span className="text-sm">{row.original?.id?.substring(0, 8)}...</span>
+        <div className="flex gap-[2px]">
+          <span className="text-sm">{row.original?.custom_user_id?.substring(0, 8)}...</span>
+          <CopyButton textToCopy={row.original?.custom_user_id}/>
+        </div>
       ),
     },
     {

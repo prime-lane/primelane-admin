@@ -3,6 +3,7 @@ export type AccountStatus = 'active' | 'pending' | 'inactive'
 
 export interface Driver {
     id: string
+    custom_user_id: string
     created_at: string
     first_name: string
     last_name: string

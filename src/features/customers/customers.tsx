@@ -13,13 +13,13 @@ import { useDebounce } from '@/hooks/use-debounce'
 import { exportToCSV } from '@/utils/export-utils'
 import { Box } from '@mui/material'
 
+import { PermissionGate } from '@/components/ui/permission-gate'
+import { useTableParams } from '@/hooks/use-table-params'
 import { parseAsString, useQueryState } from 'nuqs'
 import { useNavigate } from 'react-router-dom'
 import { useCustomers } from './api/use-customers'
 import { customerColumns } from './components/columns'
 import type { Customer } from './types'
-import { useTableParams } from '@/hooks/use-table-params'
-import { PermissionGate } from '@/components/ui/permission-gate'
 
 export const Customers = () => {
   const navigate = useNavigate()

@@ -4,6 +4,7 @@ export type AccountStatus = 'active' | 'pending' | 'inactive'
 
 export interface Customer {
     id: string
+    custom_user_id: string
     created_at: string
     first_name: string
     last_name: string
