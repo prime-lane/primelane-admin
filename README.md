@@ -13,22 +13,22 @@ gh repo clone primelane/primelane
 ### Install dependencies
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Run the app
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 ### Run tests
 ```bash
-npm run test
+pnpm run test
 ```
 
 ### Run build
 ```bash
-npm run build
+pnpm run build
 ```
 
 ## Storybook
@@ -38,7 +38,7 @@ The design system is available in Storybook at `http://localhost:6006`.
 ### Run Storybook
 
 ```bash
-npm run storybook
+pnpm run storybook
 ```
 
 ## TODO:
