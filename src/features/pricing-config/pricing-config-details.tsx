@@ -27,7 +27,7 @@ import { PricingConfigDetailsSkeleton } from './components/skeletons'
 export const PricingConfigDetails = () => {
   const { id, type } = useParams<{ id: string; type: 'one_off' | 'hourly' }>()
   const isOneWay = type === 'one_off'
-  const isHourly = type === 'hourly'
+  // const isHourly = type === 'hourly'
 
   const navigate = useNavigate()
   const categoryId = id

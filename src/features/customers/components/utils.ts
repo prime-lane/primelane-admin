@@ -3,6 +3,7 @@ import type { Customer } from '../types'
 export function getMockCustomers(): Customer[] {
     return Array(10).fill(null).map((_, i) => ({
         id: `customer-${i + 1}`,
+        custom_user_id: `custom_user-${i + 1}`,
         created_at: '2025-02-19',
         first_name: 'Timothy',
         last_name: 'Exodus',
