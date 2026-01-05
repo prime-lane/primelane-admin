@@ -14,6 +14,7 @@ import { InviteAdminModal } from './components/invite-admin-modal'
 import { useDebounce } from '@/hooks/use-debounce'
 import { useTableParams } from '@/hooks/use-table-params'
 import { PermissionGate } from '@/components/ui/permission-gate'
+import { formatDateToLocal } from '@/lib/utils'
 
 export const AdminManagement = () => {
   const { page, setPage, pageSize, setPageSize, search, setSearch } =
@@ -47,8 +48,8 @@ export const AdminManagement = () => {
     if (key === 'status') {
       setStatus(value.toLowerCase() === 'all' ? null : value.toLowerCase())
     } else if (key === 'date_joined') {
-      setStartDate(value.start ? value.start.toISOString() : null)
-      setEndDate(value.end ? value.end.toISOString() : null)
+      setStartDate(value.start ? formatDateToLocal(value.start) : null)
+      setEndDate(value.end ? formatDateToLocal(value.end) : null)
     }
   }
 

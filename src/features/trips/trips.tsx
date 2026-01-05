@@ -21,6 +21,7 @@ import { useVehicleCategories } from '../pricing-config/api/use-vehicle-categori
 import type { Trip } from './types'
 import { useTableParams } from '@/hooks/use-table-params'
 import { PermissionGate } from '@/components/ui/permission-gate'
+import { formatDateToLocal } from '@/lib/utils'
 
 export const Trips = () => {
   const {
@@ -67,8 +68,8 @@ export const Trips = () => {
     if (key === 'status') {
       setStatus(value.toLowerCase() === 'all' ? null : value.toLowerCase())
     } else if (key === 'date') {
-      setStartDate(value.start ? value.start.toISOString() : null)
-      setEndDate(value.end ? value.end.toISOString() : null)
+      setStartDate(value.start ? formatDateToLocal(value.start) : null)
+      setEndDate(value.end ? formatDateToLocal(value.end) : null)
     } else if (key === 'vehicle_category') {
       setVehicleCategoryId(value)
     }

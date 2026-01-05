@@ -2,7 +2,7 @@ import { CountUp } from '@/components/ui/count-up'
 import { FilterMenu } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { PermissionGate } from '@/components/ui/permission-gate'
-import { formatCurrency, fromKobo } from '@/lib/utils'
+import { formatCurrency, formatDateToLocal, fromKobo } from '@/lib/utils'
 import { Box, Card, CardContent, Grid, Skeleton } from '@mui/material'
 import {
   Banknote2,
@@ -70,8 +70,8 @@ export const Home = () => {
 
   const handleFilterChange = (key: string, value: any) => {
     if (key === 'date_joined') {
-      setStartDate(value.start ? value.start.toISOString() : null)
-      setEndDate(value.end ? value.end.toISOString() : null)
+      setStartDate(value.start ? formatDateToLocal(value.start) : null)
+      setEndDate(value.end ? formatDateToLocal(value.end) : null)
     }
   }
 
@@ -92,7 +92,9 @@ export const Home = () => {
         {
           icon: <Bill2 size={24} color="black" />,
           label: 'Driver earning',
-          value: formatCurrency(fromKobo(dashboardData.total_trip_driver_earning)),
+          value: formatCurrency(
+            fromKobo(dashboardData.total_trip_driver_earning),
+          ),
         },
         {
           icon: <Rocket size={24} color="black" />,

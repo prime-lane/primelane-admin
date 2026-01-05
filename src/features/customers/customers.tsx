@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router-dom'
 import { useCustomers } from './api/use-customers'
 import { customerColumns } from './components/columns'
 import type { Customer } from './types'
+import { formatDateToLocal } from '@/lib/utils'
 
 export const Customers = () => {
   const navigate = useNavigate()
@@ -58,8 +59,8 @@ export const Customers = () => {
     if (key === 'status') {
       setStatus(value.toLowerCase() === 'all' ? null : value.toLowerCase())
     } else if (key === 'date_joined') {
-      setStartDate(value.start ? value.start.toISOString() : null)
-      setEndDate(value.end ? value.end.toISOString() : null)
+      setStartDate(value.start ? formatDateToLocal(value.start) : null)
+      setEndDate(value.end ? formatDateToLocal(value.end) : null)
     }
   }
 

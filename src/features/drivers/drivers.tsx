@@ -21,6 +21,7 @@ import { useDriverColumns } from './components/columns'
 import type { Driver } from './types'
 import { useTableParams } from '@/hooks/use-table-params'
 import { PermissionGate } from '@/components/ui/permission-gate'
+import { formatDateToLocal } from '@/lib/utils'
 
 export const Drivers = () => {
   const {
@@ -73,8 +74,8 @@ export const Drivers = () => {
     if (key === 'status') {
       setStatus(value.toLowerCase() === 'all' ? null : value.toLowerCase())
     } else if (key === 'date_joined') {
-      setStartDate(value.start ? value.start.toISOString() : null)
-      setEndDate(value.end ? value.end.toISOString() : null)
+      setStartDate(value.start ? formatDateToLocal(value.start) : null)
+      setEndDate(value.end ? formatDateToLocal(value.end) : null)
     } else if (key === 'vehicle_category') {
       setVehicleCategoryId(value)
     }
