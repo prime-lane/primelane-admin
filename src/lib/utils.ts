@@ -33,7 +33,7 @@ export function formatCurrency(amount: number | string | null | undefined) {
 
 export const formatDuration = (minutes: string | number | null | undefined) => {
   if (!minutes) return '-'
-  const mins = Math.abs(typeof minutes === 'string' ? parseInt(minutes, 10) : minutes)
+  const mins = Math.abs(typeof minutes === 'string' ? parseFloat(minutes) : minutes)
   if (isNaN(mins)) return '-'
 
   const duration = intervalToDuration({ start: 0, end: mins * 60 * 1000 })
@@ -41,8 +41,9 @@ export const formatDuration = (minutes: string | number | null | undefined) => {
   const parts: string[] = []
   if (duration.hours) parts.push(`${duration.hours} hour${duration.hours > 1 ? 's' : ''}`)
   if (duration.minutes) parts.push(`${duration.minutes} minute${duration.minutes > 1 ? 's' : ''}`)
+  if (duration.seconds) parts.push(`${duration.seconds} second${duration.seconds > 1 ? 's' : ''}`)
 
-  return parts.length > 0 ? parts.join(' ') : '0 minutes'
+  return parts.length > 0 ? parts.join(' ') : '0 seconds'
 }
 
 export const formatTitle = (id: string) => {
