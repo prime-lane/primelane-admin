@@ -38,6 +38,7 @@ import { CustomerRatings } from './components/customer-ratings'
 import { IdentityDetails } from './components/identity-details'
 import { usePermissionsContext } from '@/hooks/permissions-context'
 import { useMemo } from 'react'
+import { formatDate } from '@/utils/table-utils'
 
 export const CustomerDetails = () => {
   const { id } = useParams<{ id: string }>()
@@ -193,7 +194,7 @@ export const CustomerDetails = () => {
             <span className="text-xl text-black font-semibold">
               {customerName}
             </span>
-            <span className="text-sm text-neutral-500">{customer.email}</span>
+            <span className="text-sm text-neutral-500">Date Joined: {formatDate(customer.created_at)}</span>
           </div>
           <StatusBadge status={customer.status as any} />
         </div>
