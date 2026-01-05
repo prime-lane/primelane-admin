@@ -1,10 +1,8 @@
-import { Card, CardContent } from '@mui/material'
-import type { Driver } from '../types'
-import type { UserRideStats } from '../types'
-import { CountUp } from '@/components/ui/count-up'
 import { CopyButton } from '@/components/ui/copy-button'
+import { CountUp } from '@/components/ui/count-up'
 import type { KycDetails } from '@/features/shared/types'
-import { getCategoryNames } from '@/lib/utils'
+import { Card, CardContent } from '@mui/material'
+import type { Driver, UserRideStats } from '../types'
 
 const DetailItem = ({
   label,
@@ -58,6 +56,7 @@ interface DriverOverviewProps {
 }
 
 export const DriverOverview = ({ driver, stats, kyc }: DriverOverviewProps) => {
+  console.log(driver)
   return (
     <div className="space-y-8">
       <div className="space-y-4">
@@ -79,7 +78,9 @@ export const DriverOverview = ({ driver, stats, kyc }: DriverOverviewProps) => {
           />
           <DetailItem
             label="Vehicle Categories"
-            value={getCategoryNames(driver.category_ids)}
+            value={driver?.vehicle.categories
+              ?.map((category) => category.name)
+              .join(', ')}
           />
         </div>
       </div>

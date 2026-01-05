@@ -1,5 +1,11 @@
 export type AccountStatus = 'active' | 'pending' | 'inactive'
 
+type Category = {
+    id: string
+    slug: string
+    name: string
+}
+
 
 export interface Driver {
     id: string
@@ -99,6 +105,7 @@ export interface Vehicle {
     status: AccountStatus
     category_id: string | null
     category_ids: string[] | null
+    categories: Category[]
     front_image: string
     back_image: string
     side_image: string
