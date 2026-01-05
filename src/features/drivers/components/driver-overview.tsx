@@ -78,8 +78,8 @@ export const DriverOverview = ({ driver, stats, kyc }: DriverOverviewProps) => {
           />
           <DetailItem
             label="Vehicle Categories"
-            value={driver?.vehicle.categories
-              ?.map((category) => category.name)
+            value={driver?.vehicle?.categories
+              ?.map((category) => category?.name)
               .join(', ')}
           />
         </div>
