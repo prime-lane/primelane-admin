@@ -51,6 +51,7 @@ import {
 } from '../pricing-config/api/use-vehicle-categories'
 import { usePermissionsContext } from '@/hooks/permissions-context'
 import { useMemo } from 'react'
+import { formatDate } from '@/utils/table-utils'
 
 export const DriverDetails = () => {
   const { id } = useParams<{ id: string }>()
@@ -258,7 +259,7 @@ export const DriverDetails = () => {
             <span className="text-xl text-black font-semibold">
               {driverName}
             </span>
-            <span className="text-sm text-neutral-500">{driver.email}</span>
+            <span className="text-sm text-neutral-500">{formatDate(driver.created_at)}</span>
           </div>
           <StatusBadge status={driver.status as any} />
         </div>
@@ -389,11 +390,19 @@ export const DriverDetails = () => {
                       Select a reason
                     </MenuItem>
                     <MenuItem value="Repeated cancellations or no-shows disrupting driver schedules">
-                      Repeated cancellations or no-shows disrupting driver schedules
+                      Repeated cancellations or no-shows disrupting driver
+                      schedules
                     </MenuItem>
-                    <MenuItem value="Reported misconduct or inappropriate behavior toward drivers">Reported misconduct or inappropriate behavior toward drivers</MenuItem>
-                    <MenuItem value="Outstanding unpaid trip fares or unresolved disputes">Outstanding unpaid trip fares or unresolved disputes</MenuItem>
-                    <MenuItem value="Violation of Primelane&apos;s community or safety policies">Violation of Primelane&apos;s community or safety policies</MenuItem>
+                    <MenuItem value="Reported misconduct or inappropriate behavior toward drivers">
+                      Reported misconduct or inappropriate behavior toward
+                      drivers
+                    </MenuItem>
+                    <MenuItem value="Outstanding unpaid trip fares or unresolved disputes">
+                      Outstanding unpaid trip fares or unresolved disputes
+                    </MenuItem>
+                    <MenuItem value="Violation of Primelane's community or safety policies">
+                      Violation of Primelane&apos;s community or safety policies
+                    </MenuItem>
                   </Select>
                 </FormControl>
               )}
@@ -442,7 +451,7 @@ export const DriverDetails = () => {
       {visibleTabs.map((tab, index) => (
         <TabPanel key={tab.id} value={activeIndex} index={index}>
           {tab.id === 'overview' && (
-            <DriverOverview driver={driver} stats={stats} />
+            <DriverOverview driver={driver} stats={stats} kyc={kycDetails} />
           )}
           {tab.id === 'identity' && (
             <IdentityDetails

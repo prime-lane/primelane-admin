@@ -5,20 +5,10 @@ import { VerificationBadge } from '@/components/ui/verification-badge'
 import { formatDate } from '@/utils/table-utils'
 import { useVehicleCategories } from '@/features/pricing-config/api/use-vehicle-categories'
 import { CopyButton } from '@/components/ui/copy-button'
+import { getCategoryNames } from '@/lib/utils'
 
 export const useDriverColumns = (): ColumnDef<Driver>[] => {
   const { data: categoriesData } = useVehicleCategories()
-
-  const getCategoryNames = (categoryIds?: string[] | null): string => {
-    if (!categoryIds || categoryIds.length === 0) return 'N/A'
-    if (!categoriesData?.categories) return categoryIds.join(', ')
-
-    const names = categoryIds
-      .map((id) => categoriesData.categories.find((cat) => cat.id === id)?.name)
-      .filter(Boolean)
-
-    return names.length > 0 ? names.join(', ') : 'N/A'
-  }
 
   return [
     {
@@ -27,7 +17,7 @@ export const useDriverColumns = (): ColumnDef<Driver>[] => {
       cell: ({ row }) => (
         <div className="flex items-center gap-[2px]">
           <span className="text-sm">{row.original?.custom_user_id}</span>
-          <CopyButton textToCopy={row.original?.custom_user_id}/>
+          <CopyButton textToCopy={row.original?.custom_user_id} />
         </div>
       ),
     },
@@ -69,7 +59,10 @@ export const useDriverColumns = (): ColumnDef<Driver>[] => {
       header: 'Vehicle Category',
       cell: ({ row }) => (
         <span className="text-sm">
-          {getCategoryNames(row.original.vehicle?.category_ids)}
+          {getCategoryNames(
+            row.original.vehicle?.category_ids,
+            categoriesData?.categories,
+          )}
         </span>
       ),
     },

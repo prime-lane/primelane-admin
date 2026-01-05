@@ -43,7 +43,21 @@ export const formatDuration = (minutes: string | number | null | undefined) => {
   if (duration.minutes) parts.push(`${duration.minutes} minute${duration.minutes > 1 ? 's' : ''}`)
   if (duration.seconds) parts.push(`${duration.seconds} second${duration.seconds > 1 ? 's' : ''}`)
 
-  return parts.length > 0 ? parts.join(' ') : '0 seconds'
+  return parts.length > 0 ? parts.join(' ') : '0 second'
+}
+
+export const getCategoryNames = (
+  categoryIds?: string[] | null,
+  categories?: Array<{ id: string; name: string }>
+): string => {
+  if (!categoryIds || categoryIds.length === 0) return 'N/A'
+  if (!categories) return categoryIds.join(', ')
+
+  const names = categoryIds
+    .map((id) => categories.find((cat) => cat.id === id)?.name)
+    .filter(Boolean)
+
+  return names.length > 0 ? names.join(', ') : 'N/A'
 }
 
 export const formatTitle = (id: string) => {

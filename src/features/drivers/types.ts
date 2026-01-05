@@ -8,6 +8,7 @@ export interface Driver {
     first_name: string
     last_name: string
     email: string
+    category_ids: string[]
     phone_number: string
     nin?: string
     status: AccountStatus
@@ -17,6 +18,8 @@ export interface Driver {
     is_phone_number_verified?: boolean
     is_preference_set?: boolean
     is_kyc_complete?: boolean
+    dob?: string
+    residential_address?: string
     vehicle: Vehicle
 }
 

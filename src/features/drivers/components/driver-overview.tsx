@@ -3,6 +3,8 @@ import type { Driver } from '../types'
 import type { UserRideStats } from '../types'
 import { CountUp } from '@/components/ui/count-up'
 import { CopyButton } from '@/components/ui/copy-button'
+import type { KycDetails } from '@/features/shared/types'
+import { getCategoryNames } from '@/lib/utils'
 
 const DetailItem = ({
   label,
@@ -52,9 +54,10 @@ const TripSummaryCard = ({
 interface DriverOverviewProps {
   driver: Driver
   stats?: UserRideStats
+  kyc?: KycDetails
 }
 
-export const DriverOverview = ({ driver, stats }: DriverOverviewProps) => {
+export const DriverOverview = ({ driver, stats, kyc }: DriverOverviewProps) => {
   return (
     <div className="space-y-8">
       <div className="space-y-4">
@@ -62,13 +65,22 @@ export const DriverOverview = ({ driver, stats }: DriverOverviewProps) => {
         <div className="grid md:grid-cols-3 grid-cols-1 gap-8">
           <DetailItem label="First Name" value={driver.first_name} />
           <DetailItem label="Last Name" value={driver.last_name} />
+          <DetailItem label="Date of Birth" value={driver.dob} />
+          <DetailItem label="Email Address" value={driver.email} />
+          <DetailItem label="Phone Number" value={driver.phone_number} />
+          <DetailItem
+            label="Residential address"
+            value={kyc?.residential_address}
+          />
           <DetailItem
             label="Driver ID"
             value={driver.custom_user_id}
             copyable
           />
-          <DetailItem label="Email Address" value={driver.email} />
-          <DetailItem label="Phone Number" value={driver.phone_number} />
+          <DetailItem
+            label="Vehicle Categories"
+            value={getCategoryNames(driver.category_ids)}
+          />
         </div>
       </div>
       <div className="space-y-4">
