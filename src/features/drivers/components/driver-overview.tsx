@@ -65,7 +65,7 @@ export const DriverOverview = ({ driver, stats, kyc }: DriverOverviewProps) => {
         <div className="grid md:grid-cols-3 grid-cols-1 gap-8">
           <DetailItem label="First Name" value={driver.first_name} />
           <DetailItem label="Last Name" value={driver.last_name} />
-          <DetailItem label="Date of Birth" value={kyc.dob} />
+          <DetailItem label="Date of Birth" value={kyc?.dob || 'N/A'} />
           <DetailItem label="Email Address" value={driver.email} />
           <DetailItem label="Phone Number" value={driver.phone_number} />
           <DetailItem
