@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { intervalToDuration } from "date-fns"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -32,19 +33,16 @@ export function formatCurrency(amount: number | string | null | undefined) {
 
 export const formatDuration = (minutes: string | number | null | undefined) => {
   if (!minutes) return '-'
-  const mins = typeof minutes === 'string' ? parseInt(minutes, 10) : minutes
+  const mins = Math.abs(typeof minutes === 'string' ? parseInt(minutes, 10) : minutes)
   if (isNaN(mins)) return '-'
 
-  const hours = Math.floor(mins / 60)
-  const remainingMins = mins % 60
+  const duration = intervalToDuration({ start: 0, end: mins * 60 * 1000 })
 
-  if (hours > 0 && remainingMins > 0) {
-    return `${hours} hour${hours > 1 ? 's' : ''} ${remainingMins} minute${remainingMins > 1 ? 's' : ''}`
-  } else if (hours > 0) {
-    return `${hours} hour${hours > 1 ? 's' : ''}`
-  } else {
-    return `${remainingMins} minute${remainingMins > 1 ? 's' : ''}`
-  }
+  const parts: string[] = []
+  if (duration.hours) parts.push(`${duration.hours} hour${duration.hours > 1 ? 's' : ''}`)
+  if (duration.minutes) parts.push(`${duration.minutes} minute${duration.minutes > 1 ? 's' : ''}`)
+
+  return parts.length > 0 ? parts.join(' ') : '0 minutes'
 }
 
 export const formatTitle = (id: string) => {
