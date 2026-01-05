@@ -62,3 +62,14 @@ export const formatImageSrc = (src: string): string => {
   // Otherwise, assume it's raw base64 and append the data URL prefix
   return `data:image/jpeg;base64,${src}`
 }
+
+export const toKobo = (naira: number | string): number => {
+  const amount = typeof naira === 'string' ? parseFloat(naira) : naira
+  return Math.round(amount * 100)
+}
+
+export const fromKobo = (kobo: number | string | null | undefined): number => {
+  if (kobo === null || kobo === undefined) return 0
+  const amount = typeof kobo === 'string' ? parseFloat(kobo) : kobo
+  return amount / 100
+}

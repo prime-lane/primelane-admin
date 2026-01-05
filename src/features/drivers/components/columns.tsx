@@ -25,8 +25,8 @@ export const useDriverColumns = (): ColumnDef<Driver>[] => {
       accessorKey: 'custom_user_id',
       header: 'ID',
       cell: ({ row }) => (
-        <div className="flex gap-[2px]">
-          <span className="text-sm">{row.original?.custom_user_id?.substring(0, 8)}...</span>
+        <div className="flex items-center gap-[2px]">
+          <span className="text-sm">{row.original?.custom_user_id}</span>
           <CopyButton textToCopy={row.original?.custom_user_id}/>
         </div>
       ),

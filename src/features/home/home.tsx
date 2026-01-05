@@ -2,7 +2,7 @@ import { CountUp } from '@/components/ui/count-up'
 import { FilterMenu } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { PermissionGate } from '@/components/ui/permission-gate'
-import { formatCurrency } from '@/lib/utils'
+import { formatCurrency, fromKobo } from '@/lib/utils'
 import { Box, Card, CardContent, Grid, Skeleton } from '@mui/material'
 import {
   Banknote2,
@@ -82,17 +82,17 @@ export const Home = () => {
         {
           icon: <Bill size={24} color="black" />,
           label: 'Total trip revenue',
-          value: formatCurrency(dashboardData.total_trip_revenue),
+          value: formatCurrency(fromKobo(dashboardData.total_trip_revenue)),
         },
         {
           icon: <Banknote2 size={24} color="black" />,
           label: 'Total commission',
-          value: formatCurrency(dashboardData.total_trip_commission),
+          value: formatCurrency(fromKobo(dashboardData.total_trip_commission)),
         },
         {
           icon: <Bill2 size={24} color="black" />,
           label: 'Driver earning',
-          value: formatCurrency(dashboardData.total_trip_driver_earning),
+          value: formatCurrency(fromKobo(dashboardData.total_trip_driver_earning)),
         },
         {
           icon: <Rocket size={24} color="black" />,

@@ -16,6 +16,7 @@ import { Controller, useForm, type Resolver } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
+import { fromKobo, toKobo } from '@/lib/utils'
 import { useUpdatePricingConfig } from './api/use-pricing-config'
 import {
   type PricingConfigFormData,
@@ -72,10 +73,10 @@ export const PricingConfigDetails = () => {
 
       if (type === 'hourly') {
         reset({
-          base_price: (data[`${prefix}base_price`] ?? 0) / 100,
-          per_hour: (data[`${prefix}per_hour`] ?? 0) / 100,
+          base_price: fromKobo(data[`${prefix}base_price`]),
+          per_hour: fromKobo(data[`${prefix}per_hour`]),
           min_hour: data[`${prefix}min_hour`] ?? 0,
-          cancellation_base: (data[`${prefix}cancellation_base`] ?? 0) / 100,
+          cancellation_base: fromKobo(data[`${prefix}cancellation_base`]),
           cancellation_percentage:
             data[`${prefix}cancellation_percentage`] ?? 0,
           cancellation_fee_type:
@@ -85,10 +86,10 @@ export const PricingConfigDetails = () => {
         })
       } else {
         reset({
-          base_price: (data[`${prefix}base_price`] ?? 0) / 100,
-          per_km: (data[`${prefix}per_km`] ?? 0) / 100,
-          per_min: (data[`${prefix}per_min`] ?? 0) / 100,
-          cancellation_base: (data[`${prefix}cancellation_base`] ?? 0) / 100,
+          base_price: fromKobo(data[`${prefix}base_price`]),
+          per_km: fromKobo(data[`${prefix}per_km`]),
+          per_min: fromKobo(data[`${prefix}per_min`]),
+          cancellation_base: fromKobo(data[`${prefix}cancellation_base`]),
           cancellation_percentage:
             data[`${prefix}cancellation_percentage`] ?? 0,
           cancellation_fee_type:
@@ -102,19 +103,19 @@ export const PricingConfigDetails = () => {
 
   const onSubmit = (data: PricingConfigFormData) => {
     const payload: any = {
-      base_price: Number(data.base_price) * 100,
-      cancellation_base: Number(data.cancellation_base) * 100,
+      base_price: toKobo(data.base_price),
+      cancellation_base: toKobo(data.cancellation_base),
       cancellation_percentage: Number(data.cancellation_percentage),
       cancellation_fee_type: data.cancellation_fee_type,
       trip_commission_percentage: Number(data.trip_commission_percentage),
     }
 
     if (type === 'hourly') {
-      payload.per_hour = Number(data.per_hour) * 100
+      payload.per_hour = toKobo(data.per_hour!)
       payload.min_hour = Number(data.min_hour)
     } else {
-      payload.per_km = Number(data.per_km) * 100
-      payload.per_min = Number(data.per_min) * 100
+      payload.per_km = toKobo(data.per_km!)
+      payload.per_min = toKobo(data.per_min!)
     }
 
     updateConfig(payload)

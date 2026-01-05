@@ -2,8 +2,9 @@ import { type ColumnDef } from '@tanstack/react-table'
 import { type Trip } from '../types'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { formatDate } from '@/utils/table-utils'
-import { formatCurrency } from '@/lib/utils'
+import { formatCurrency, fromKobo } from '@/lib/utils'
 import { useVehicleCategories } from '@/features/pricing-config/api/use-vehicle-categories'
+import { CopyButton } from '@/components/ui/copy-button'
 
 export const useTripColumns = (): ColumnDef<Trip>[] => {
   const { data: categoriesData } = useVehicleCategories()
@@ -23,9 +24,10 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
       accessorKey: 'id',
       header: 'Trip ID',
       cell: ({ row }) => (
-        <span className="text-sm">
-          #{row.original?.id?.substring(0, 8).toUpperCase()}
-        </span>
+        <div className="flex items-center gap-[2px]">
+          <span className="text-sm">{row.original?.custom_ride_id}</span>
+          <CopyButton textToCopy={row.original?.custom_ride_id} />
+        </div>
       ),
     },
     {
@@ -91,18 +93,18 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
       cell: ({ row }) => (
         <span className="text-sm">
           {row.original.actual_fare
-            ? `${formatCurrency(row.original.actual_fare)}`
+            ? `${formatCurrency(fromKobo(row.original.actual_fare))}`
             : 'N/A'}
         </span>
       ),
     },
     {
-      accessorKey: 'drivers_earning',
+      accessorKey: 'driver_commission',
       header: "Driver's Earning",
       cell: ({ row }) => (
         <span className="text-sm">
-          {row.original.drivers_earning
-            ? `${formatCurrency(row.original.drivers_earning)}`
+          {row.original.driver_commission
+            ? `${formatCurrency(fromKobo(row.original.driver_commission))}`
             : 'N/A'}
         </span>
       ),
@@ -113,7 +115,7 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
       cell: ({ row }) => (
         <span className="text-sm">
           {row.original.commission
-            ? `${formatCurrency(row.original.commission)}`
+            ? `${formatCurrency(fromKobo(row.original.commission))}`
             : 'N/A'}
         </span>
       ),
@@ -124,7 +126,7 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
       cell: ({ row }) => (
         <span className="text-sm">
           {row.original.cancellation_fee
-            ? `${formatCurrency(row.original.cancellation_fee)}`
+            ? `${formatCurrency(fromKobo(row.original.cancellation_fee))}`
             : 'N/A'}
         </span>
       ),

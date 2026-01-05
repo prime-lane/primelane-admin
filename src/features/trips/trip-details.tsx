@@ -6,7 +6,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useTrip } from './api/use-trips'
 import { format } from 'date-fns'
 import { ArrowRightUp as ExternalLink } from '@solar-icons/react'
-import { formatCurrency, formatDuration } from '@/lib/utils'
+import { formatCurrency, formatDuration, fromKobo } from '@/lib/utils'
 import { useEffect } from 'react'
 import { CAR_CURSOR } from '@/config/dashboard'
 import { TripDetailsSkeleton } from './components/skeletons'
@@ -157,7 +157,7 @@ export const TripDetails = () => {
           <div className="flex flex-col gap-6">
             <DetailRow
               label="Estimated fare"
-              value={formatCurrency(trip.estimated_fare)}
+              value={formatCurrency(fromKobo(trip.estimated_fare))}
             />
             <DetailRow
               label="Total trip time"
@@ -167,7 +167,7 @@ export const TripDetails = () => {
             />
             <DetailRow
               label="Actual Fare"
-              value={formatCurrency(trip.actual_fare)}
+              value={formatCurrency(fromKobo(trip.actual_fare))}
             />
           </div>
         </div>

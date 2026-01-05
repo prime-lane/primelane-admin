@@ -1,7 +1,7 @@
 import { Card, CardContent } from '@mui/material'
 import type { Customer } from '../types'
 import type { CustomerStats } from '../api/use-customer-stats'
-import { formatCurrency } from '@/lib/utils'
+import { formatCurrency, fromKobo } from '@/lib/utils'
 import { CopyButton } from '@/components/ui/copy-button'
 
 const DetailItem = ({
@@ -79,7 +79,7 @@ export const CustomerOverview = ({
           />
           <TripSummaryCard
             label="Wallet Balance"
-            value={formatCurrency(stats?.wallet_balance || 0)}
+            value={formatCurrency(fromKobo(stats?.wallet_balance || 0))}
           />
           <TripSummaryCard
             label="Average Rating"
