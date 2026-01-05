@@ -30,12 +30,21 @@ export function formatCurrency(amount: number | string | null | undefined) {
   }).format(numericAmount)
 }
 
-export const formatDuration = (seconds: string | number | null | undefined) => {
-  if (!seconds) return '-'
-  const secs = typeof seconds === 'string' ? parseInt(seconds, 10) : seconds
-  if (isNaN(secs)) return '-'
-  const mins = Math.floor(secs / 60)
-  return `${mins} minutes`
+export const formatDuration = (minutes: string | number | null | undefined) => {
+  if (!minutes) return '-'
+  const mins = typeof minutes === 'string' ? parseInt(minutes, 10) : minutes
+  if (isNaN(mins)) return '-'
+
+  const hours = Math.floor(mins / 60)
+  const remainingMins = mins % 60
+
+  if (hours > 0 && remainingMins > 0) {
+    return `${hours} hour${hours > 1 ? 's' : ''} ${remainingMins} minute${remainingMins > 1 ? 's' : ''}`
+  } else if (hours > 0) {
+    return `${hours} hour${hours > 1 ? 's' : ''}`
+  } else {
+    return `${remainingMins} minute${remainingMins > 1 ? 's' : ''}`
+  }
 }
 
 export const formatTitle = (id: string) => {

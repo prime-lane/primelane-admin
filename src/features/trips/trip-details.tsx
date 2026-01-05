@@ -162,7 +162,7 @@ export const TripDetails = () => {
             <DetailRow
               label="Total trip time"
               value={formatDuration(
-                trip.actual_duration || trip.estimated_duration,
+                trip.actual_duration,
               )}
             />
             <DetailRow
