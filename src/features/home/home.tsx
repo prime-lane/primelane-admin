@@ -1,6 +1,8 @@
+import { CountUp } from '@/components/ui/count-up'
 import { FilterMenu } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
-import { formatCurrency, formatNumber } from '@/lib/utils'
+import { PermissionGate } from '@/components/ui/permission-gate'
+import { formatCurrency, formatDateToLocal, fromKobo } from '@/lib/utils'
 import { Box, Card, CardContent, Grid, Skeleton } from '@mui/material'
 import {
   Banknote2,
@@ -14,13 +16,13 @@ import {
   UserCross,
   UsersGroupTwoRounded,
 } from '@solar-icons/react'
-import { useQueryState, parseAsString } from 'nuqs'
+import { parseAsString, useQueryState } from 'nuqs'
 import { useDashboardStats } from './api/use-dashboard-stats'
 
 interface StatCardProps {
   icon: React.ReactNode
   label: string
-  value: string
+  value: React.ReactNode
 }
 
 const StatCard = ({ icon, label, value }: StatCardProps) => {
@@ -68,8 +70,8 @@ export const Home = () => {
 
   const handleFilterChange = (key: string, value: any) => {
     if (key === 'date_joined') {
-      setStartDate(value.start ? value.start.toISOString() : null)
-      setEndDate(value.end ? value.end.toISOString() : null)
+      setStartDate(value.start ? formatDateToLocal(value.start) : null)
+      setEndDate(value.end ? formatDateToLocal(value.end) : null)
     }
   }
 
@@ -80,62 +82,70 @@ export const Home = () => {
         {
           icon: <Bill size={24} color="black" />,
           label: 'Total trip revenue',
-          value: formatCurrency(dashboardData.total_trip_revenue),
+          value: formatCurrency(fromKobo(dashboardData.total_trip_revenue)),
         },
         {
           icon: <Banknote2 size={24} color="black" />,
           label: 'Total commission',
-          value: formatCurrency(dashboardData.total_trip_commission),
+          value: formatCurrency(fromKobo(dashboardData.total_trip_commission)),
         },
         {
           icon: <Bill2 size={24} color="black" />,
           label: 'Driver earning',
-          value: formatCurrency(dashboardData.total_trip_driver_earning),
+          value: formatCurrency(
+            fromKobo(dashboardData.total_trip_driver_earning),
+          ),
         },
         {
           icon: <Rocket size={24} color="black" />,
           label: 'Completed trips',
-          value: formatNumber(dashboardData.total_completed_trip_count),
+          value: <CountUp value={dashboardData.total_completed_trip_count} />,
         },
         {
           icon: <Rocket size={24} color="black" />,
           label: 'Total one-way trips',
-          value: formatNumber(dashboardData.total_one_off_trip_count),
+          value: <CountUp value={dashboardData.total_one_off_trip_count} />,
         },
         {
           icon: <Rocket size={24} color="black" />,
           label: 'Total hourly trips',
-          value: formatNumber(dashboardData.total_hourly_trip_count),
+          value: <CountUp value={dashboardData.total_hourly_trip_count} />,
         },
         {
           icon: <UsersGroupTwoRounded size={24} color="black" />,
           label: 'Total Customers',
-          value: formatNumber(dashboardData.total_customer_count),
+          value: <CountUp value={dashboardData.total_customer_count} />,
         },
         {
           icon: <UserCross size={24} color="black" />,
           label: 'Unverified Customers',
-          value: formatNumber(dashboardData.total_unverified_customer_count),
+          value: (
+            <CountUp value={dashboardData.total_unverified_customer_count} />
+          ),
         },
         {
           icon: <UserCheck size={24} color="black" />,
           label: 'Verified Customers',
-          value: formatNumber(dashboardData.total_verified_customer_count),
+          value: (
+            <CountUp value={dashboardData.total_verified_customer_count} />
+          ),
         },
         {
           icon: <Shield size={24} color="black" />,
           label: 'Total Drivers',
-          value: formatNumber(dashboardData.total_driver_count),
+          value: <CountUp value={dashboardData.total_driver_count} />,
         },
         {
           icon: <ShieldCheck size={24} color="black" />,
           label: 'Verified Drivers',
-          value: formatNumber(dashboardData.total_verified_driver_count),
+          value: <CountUp value={dashboardData.total_verified_driver_count} />,
         },
         {
           icon: <ShieldCross size={24} color="black" />,
           label: 'Pending Drivers',
-          value: formatNumber(dashboardData.total_unverified_driver_count),
+          value: (
+            <CountUp value={dashboardData.total_unverified_driver_count} />
+          ),
         },
       ]
     : []
@@ -151,17 +161,19 @@ export const Home = () => {
         }}
       >
         <h1 className="text-4xl">Summary</h1>
-        <FilterMenu
-          options={[
-            {
-              label: 'Date',
-              key: 'date_joined',
-              type: 'date-range',
-            },
-          ]}
-          onFilterChange={handleFilterChange}
-          activeFilters={{}}
-        />
+        <PermissionGate permission="dashboard:filter">
+          <FilterMenu
+            options={[
+              {
+                label: 'Date',
+                key: 'date_joined',
+                type: 'date-range',
+              },
+            ]}
+            onFilterChange={handleFilterChange}
+            activeFilters={{}}
+          />
+        </PermissionGate>
       </Box>
 
       <Grid container spacing={4}>

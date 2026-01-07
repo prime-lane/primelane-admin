@@ -1,6 +1,5 @@
 import { InfoRow } from '@/components/ui/info-row'
 import { ErrorState } from '@/components/ui/loading-error-states'
-import type { StatusVariant } from '@/components/ui/status-badge'
 import { IdentitySkeleton } from '@/components/ui/tab-skeletons'
 import { StatsCard } from '@/features/customers/components/stats-card'
 import type { KycDetails } from '@/features/shared/types'
@@ -31,7 +30,7 @@ export const IdentityDetails = ({
         <StatsCard label="NIN" value={ninData?.nin || 'N/A'} />
         <StatsCard
           label="ID Verification Status"
-          status={kycDetails.id_verification_status as StatusVariant}
+          status={driver.is_kyc_complete ? 'true' : 'false'}
         />
         <StatsCard
           label="Face Match Score"

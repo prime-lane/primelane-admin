@@ -1,20 +1,27 @@
+import { CopyButton } from '@/components/ui/copy-button'
+import { CountUp } from '@/components/ui/count-up'
+import type { KycDetails } from '@/features/shared/types'
 import { Card, CardContent } from '@mui/material'
-import type { Driver } from '../types'
-import type { UserRideStats } from '../types'
+import type { Driver, UserRideStats } from '../types'
 
 const DetailItem = ({
   label,
   value,
+  copyable = false,
 }: {
   label: string
   value: string | number | undefined | null
+  copyable?: boolean
 }) => {
   return (
     <div className="flex flex-col gap-[2px]">
       <p className="text-sm text-neutral-500">{label}</p>
-      <p className="text-base font-semibold text-neutral-900">
-        {value || 'N/A'}
-      </p>
+      <div className="flex items-center gap-1">
+        <p className="text-base font-semibold text-neutral-900">
+          {value || 'N/A'}
+        </p>
+        {copyable && value && <CopyButton textToCopy={String(value)} />}
+      </div>
     </div>
   )
 }
@@ -22,16 +29,20 @@ const DetailItem = ({
 const TripSummaryCard = ({
   label,
   value,
+  isValue = true,
 }: {
   label: string
   value: string | number
+  isValue?: boolean
 }) => {
   return (
     <Card>
       <CardContent>
         <div className="flex flex-col items-center gap-1">
           <p className="text-sm text-neutral-500 text-center">{label}</p>
-          <p className="text-xl font-semibold text-center">{value}</p>
+          <div className="text-xl font-semibold text-center text-neutral-900">
+            {isValue ? <CountUp value={value} /> : value}
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -41,9 +52,11 @@ const TripSummaryCard = ({
 interface DriverOverviewProps {
   driver: Driver
   stats?: UserRideStats
+  kyc?: KycDetails
 }
 
-export const DriverOverview = ({ driver, stats }: DriverOverviewProps) => {
+export const DriverOverview = ({ driver, stats, kyc }: DriverOverviewProps) => {
+  console.log(driver)
   return (
     <div className="space-y-8">
       <div className="space-y-4">
@@ -51,9 +64,24 @@ export const DriverOverview = ({ driver, stats }: DriverOverviewProps) => {
         <div className="grid md:grid-cols-3 grid-cols-1 gap-8">
           <DetailItem label="First Name" value={driver.first_name} />
           <DetailItem label="Last Name" value={driver.last_name} />
-          <DetailItem label="Driver ID" value={driver.id} />
+          <DetailItem label="Date of Birth" value={kyc?.dob || 'N/A'} />
           <DetailItem label="Email Address" value={driver.email} />
           <DetailItem label="Phone Number" value={driver.phone_number} />
+          <DetailItem
+            label="Residential address"
+            value={kyc?.residential_address}
+          />
+          <DetailItem
+            label="Driver ID"
+            value={driver.custom_user_id}
+            copyable
+          />
+          <DetailItem
+            label="Vehicle Categories"
+            value={driver?.vehicle?.categories
+              ?.map((category) => category?.name)
+              .join(', ')}
+          />
         </div>
       </div>
       <div className="space-y-4">
@@ -74,6 +102,7 @@ export const DriverOverview = ({ driver, stats }: DriverOverviewProps) => {
           <TripSummaryCard
             label="Acceptance Rate"
             value={stats?.acceptance_rate ? `${stats.acceptance_rate}%` : 'N/A'}
+            isValue={!!stats?.acceptance_rate}
           />
         </div>
       </div>

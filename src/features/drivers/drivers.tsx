@@ -1,6 +1,11 @@
 import { path } from '@/app/paths'
 import { ExportButton, SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
+import {
+  FilterChips,
+  formatDateRange,
+  type ActiveFilter,
+} from '@/components/ui/filter-chips'
 import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { PageHeader } from '@/components/ui/page-header'
@@ -12,9 +17,11 @@ import { parseAsString, useQueryState } from 'nuqs'
 import { useNavigate } from 'react-router-dom'
 import { useVehicleCategories } from '../pricing-config/api/use-vehicle-categories'
 import { useDrivers } from './api/use-drivers'
-import { driverColumns } from './components/columns'
+import { useDriverColumns } from './components/columns'
 import type { Driver } from './types'
 import { useTableParams } from '@/hooks/use-table-params'
+import { PermissionGate } from '@/components/ui/permission-gate'
+import { formatDateToLocal } from '@/lib/utils'
 
 export const Drivers = () => {
   const {
@@ -25,6 +32,8 @@ export const Drivers = () => {
     search: searchTerm,
     setSearch: setSearchTerm,
   } = useTableParams()
+
+  const driverColumns = useDriverColumns()
 
   const [status, setStatus] = useQueryState('status', parseAsString)
   const [startDate, setStartDate] = useQueryState('start_date', parseAsString)
@@ -65,8 +74,8 @@ export const Drivers = () => {
     if (key === 'status') {
       setStatus(value.toLowerCase() === 'all' ? null : value.toLowerCase())
     } else if (key === 'date_joined') {
-      setStartDate(value.start ? value.start.toISOString() : null)
-      setEndDate(value.end ? value.end.toISOString() : null)
+      setStartDate(value.start ? formatDateToLocal(value.start) : null)
+      setEndDate(value.end ? formatDateToLocal(value.end) : null)
     } else if (key === 'vehicle_category') {
       setVehicleCategoryId(value)
     }
@@ -82,6 +91,46 @@ export const Drivers = () => {
       { key: 'status', label: 'Status' },
       { key: 'created_at', label: 'Date Joined' },
     ])
+  }
+
+  const handleRemoveFilter = (key: string) => {
+    setPage(1)
+    if (key === 'status') {
+      setStatus(null)
+    } else if (key === 'date_joined') {
+      setStartDate(null)
+      setEndDate(null)
+    } else if (key === 'vehicle_category') {
+      setVehicleCategoryId(null)
+    }
+  }
+
+  const activeFilterChips: ActiveFilter[] = []
+  if (status && status !== 'all') {
+    activeFilterChips.push({
+      key: 'status',
+      label: 'Status',
+      displayValue: status.charAt(0).toUpperCase() + status.slice(1),
+    })
+  }
+  if (startDate && endDate) {
+    activeFilterChips.push({
+      key: 'date_joined',
+      label: 'Date joined',
+      displayValue: formatDateRange(startDate, endDate),
+    })
+  }
+  if (vehicleCategoryId) {
+    const categoryName = vehicleCategories?.categories.find(
+      (cat) => cat.id === vehicleCategoryId,
+    )?.name
+    if (categoryName) {
+      activeFilterChips.push({
+        key: 'vehicle_category',
+        label: 'Vehicle category',
+        displayValue: categoryName,
+      })
+    }
   }
 
   if (error) return <ErrorState message="Failed to load drivers" />
@@ -123,24 +172,35 @@ export const Drivers = () => {
 
       <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
         <Box sx={{ flex: 1 }}>
-          <SearchInput
-            value={searchTerm}
-            onChange={setSearchTerm}
-            placeholder="Search by name, phone number, email address, driver ID"
-          />
+          <PermissionGate permission="drivers:filter">
+            <SearchInput
+              value={searchTerm}
+              onChange={setSearchTerm}
+              placeholder="Search by name, phone number, email address, driver ID"
+            />
+          </PermissionGate>
         </Box>
         <div className="flex gap-3">
-          <FilterMenu
-            options={filterOptions}
-            onFilterChange={handleFilterChange}
-            activeFilters={{
-              status: status || 'all',
-              vehicle_category: vehicleCategoryId || undefined,
-            }}
-          />
-          <ExportButton onClick={handleExport} />
+          <PermissionGate permission="drivers:filter">
+            <FilterMenu
+              options={filterOptions}
+              onFilterChange={handleFilterChange}
+              activeFilters={{
+                status: status || 'all',
+                vehicle_category: vehicleCategoryId || undefined,
+              }}
+            />
+          </PermissionGate>
+          <PermissionGate permission="drivers:view">
+            <ExportButton onClick={handleExport} />
+          </PermissionGate>
         </div>
       </Box>
+
+      <FilterChips
+        activeFilters={activeFilterChips}
+        onRemove={handleRemoveFilter}
+      />
 
       <DataTable
         data={drivers}

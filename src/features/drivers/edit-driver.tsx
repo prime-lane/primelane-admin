@@ -1,9 +1,9 @@
-import { zodResolver } from '@hookform/resolvers/zod'
 import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
 import { LoadingState } from '@/components/ui/loading-error-states'
-import { Avatar, Button, TextField } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button, TextField } from '@mui/material'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -18,19 +18,17 @@ export const EditDriver = () => {
   const navigate = useNavigate()
   const { data: driverData, isLoading: isDriverLoading } = useDriver(id!)
   const { mutate: updateDriver, isPending: isUpdating } = useUpdateDriver(id)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
 
   const {
     register,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
   } = useForm<EditDriverFormData>({
     resolver: zodResolver(editDriverSchema),
   })
   const driver = driverData?.user
-  const watchedImage = watch('image_url')
+  // const watchedImage = watch('image_url')
 
   useEffect(() => {
     if (driver) {
@@ -38,33 +36,35 @@ export const EditDriver = () => {
       setValue('last_name', driver.last_name)
       setValue('email', driver.email)
       setValue('phone_number', driver.phone_number)
-      setValue('date_of_birth', '')
-      setValue('residential_address', '')
+      // setValue('date_of_birth', '')
       setValue('nin', '')
-      setValue('driver_license', '')
-      setValue('vehicle_model', '')
-      setValue('vehicle_make', '')
-      setValue('vehicle_color', '')
-      setValue('vehicle_plate_number', '')
-      setValue('vehicle_vin_chassis', '')
-      setValue('vehicle_year', '')
-      setValue('image_url', driver.image_url || '')
-      setImagePreview(driver.image_url || null)
+      // setValue('driver_license', '')
+      // setValue('vehicle_model', '')
+      // setValue('vehicle_make', '')
+      // setValue('vehicle_color', '')
+      // setValue('vehicle_plate_number', '')
+      // setValue('vehicle_vin_chassis', '')
+      // setValue('vehicle_year', '')
+      // setValue('image_url', driver.image_url || '')
+      // setImagePreview(driver.image_url || null)
     }
   }, [driver, setValue])
 
-  useEffect(() => {
-    if (watchedImage) {
-      setImagePreview(watchedImage)
-    }
-  }, [watchedImage])
+  // useEffect(() => {
+  //   if (watchedImage) {
+  //     setImagePreview(watchedImage)
+  //   }
+  // }, [watchedImage])
 
   const onSubmit = (data: EditDriverFormData) => {
     updateDriver(
       {
         email: data.email,
         phone_number: data.phone_number,
-        image_url: data.image_url || undefined,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        nin: data.nin,
+        // image_url: data.image_url || undefined,
       },
       {
         onSuccess: () => {
@@ -111,7 +111,7 @@ export const EditDriver = () => {
       </div>
 
       <div className="space-y-6 max-w-lg mx-auto">
-        <div className="flex justify-center mb-6">
+        {/* <div className="flex justify-center mb-6">
           <div className="relative">
             <Avatar
               src={imagePreview || undefined}
@@ -125,7 +125,7 @@ export const EditDriver = () => {
               {driver?.first_name?.[0]}
             </Avatar>
           </div>
-        </div>
+        </div> */}
 
         {/* Personal Info */}
         <div className="grid grid-cols-1 gap-4">
@@ -169,6 +169,16 @@ export const EditDriver = () => {
             helperText={errors.phone_number?.message}
           />
           <TextField
+            label="NIN"
+            hiddenLabel
+            size="medium"
+            fullWidth
+            disabled
+            {...register('nin')}
+            error={!!errors.nin}
+            helperText={errors.nin?.message}
+          />
+          {/* <TextField
             label="Date of Birth"
             size="medium"
             fullWidth
@@ -177,20 +187,11 @@ export const EditDriver = () => {
             {...register('date_of_birth')}
             error={!!errors.date_of_birth}
             helperText={errors.date_of_birth?.message}
-          />
-          <TextField
-            label="Residential Info"
-            hiddenLabel
-            size="medium"
-            fullWidth
-            {...register('residential_address')}
-            error={!!errors.residential_address}
-            helperText={errors.residential_address?.message}
-          />
+          /> */}
         </div>
 
         {/* Identity Details */}
-        <div className="grid grid-cols-1 gap-4">
+        {/* <div className="grid grid-cols-1 gap-4">
           <h3 className="text-sm font-semibold text-neutral-600">
             Identity details
           </h3>
@@ -212,10 +213,10 @@ export const EditDriver = () => {
             error={!!errors.driver_license}
             helperText={errors.driver_license?.message}
           />
-        </div>
+        </div> */}
 
         {/* Vehicle Info */}
-        <div className="grid grid-cols-1 gap-4">
+        {/* <div className="grid grid-cols-1 gap-4">
           <h3 className="text-sm font-semibold text-neutral-600">
             Vehicle Info
           </h3>
@@ -273,7 +274,7 @@ export const EditDriver = () => {
             error={!!errors.vehicle_year}
             helperText={errors.vehicle_year?.message}
           />
-        </div>
+        </div> */}
       </div>
     </form>
   )

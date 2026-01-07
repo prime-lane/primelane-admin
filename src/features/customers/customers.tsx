@@ -1,6 +1,11 @@
 import { path } from '@/app/paths'
 import { ExportButton, SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
+import {
+  FilterChips,
+  formatDateRange,
+  type ActiveFilter,
+} from '@/components/ui/filter-chips'
 import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { PageHeader } from '@/components/ui/page-header'
@@ -8,12 +13,14 @@ import { useDebounce } from '@/hooks/use-debounce'
 import { exportToCSV } from '@/utils/export-utils'
 import { Box } from '@mui/material'
 
+import { PermissionGate } from '@/components/ui/permission-gate'
+import { useTableParams } from '@/hooks/use-table-params'
 import { parseAsString, useQueryState } from 'nuqs'
 import { useNavigate } from 'react-router-dom'
 import { useCustomers } from './api/use-customers'
 import { customerColumns } from './components/columns'
 import type { Customer } from './types'
-import { useTableParams } from '@/hooks/use-table-params'
+import { formatDateToLocal } from '@/lib/utils'
 
 export const Customers = () => {
   const navigate = useNavigate()
@@ -52,8 +59,8 @@ export const Customers = () => {
     if (key === 'status') {
       setStatus(value.toLowerCase() === 'all' ? null : value.toLowerCase())
     } else if (key === 'date_joined') {
-      setStartDate(value.start ? value.start.toISOString() : null)
-      setEndDate(value.end ? value.end.toISOString() : null)
+      setStartDate(value.start ? formatDateToLocal(value.start) : null)
+      setEndDate(value.end ? formatDateToLocal(value.end) : null)
     }
   }
 
@@ -67,6 +74,32 @@ export const Customers = () => {
       { key: 'status', label: 'Status' },
       { key: 'created_at', label: 'Date Joined' },
     ])
+  }
+
+  const handleRemoveFilter = (key: string) => {
+    setPage(1)
+    if (key === 'status') {
+      setStatus(null)
+    } else if (key === 'date_joined') {
+      setStartDate(null)
+      setEndDate(null)
+    }
+  }
+
+  const activeFilterChips: ActiveFilter[] = []
+  if (status && status !== 'all') {
+    activeFilterChips.push({
+      key: 'status',
+      label: 'Status',
+      displayValue: status.charAt(0).toUpperCase() + status.slice(1),
+    })
+  }
+  if (startDate && endDate) {
+    activeFilterChips.push({
+      key: 'date_joined',
+      label: 'Date joined',
+      displayValue: formatDateRange(startDate, endDate),
+    })
   }
 
   if (error) return <ErrorState message="Failed to load customers" />
@@ -95,23 +128,30 @@ export const Customers = () => {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Customer" />
+      <PageHeader title="Customers" />
 
       <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
         <Box sx={{ flex: 1 }}>
           <SearchInput value={searchTerm} onChange={setSearchTerm} />
         </Box>
         <div className="flex gap-3">
-          <FilterMenu
-            options={filterOptions}
-            onFilterChange={handleFilterChange}
-            activeFilters={{
-              status: status || 'all',
-            }}
-          />
+          <PermissionGate permission="customers:filter">
+            <FilterMenu
+              options={filterOptions}
+              onFilterChange={handleFilterChange}
+              activeFilters={{
+                status: status || 'all',
+              }}
+            />
+          </PermissionGate>
           <ExportButton onClick={handleExport} />
         </div>
       </Box>
+
+      <FilterChips
+        activeFilters={activeFilterChips}
+        onRemove={handleRemoveFilter}
+      />
 
       <DataTable
         data={customers}

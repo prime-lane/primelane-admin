@@ -13,23 +13,32 @@ gh repo clone primelane/primelane
 ### Install dependencies
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Run the app
+```bash
+pnpm run dev
+```
+
+### Run tests
+```bash
+pnpm run test
+```
+
+### Run build
+```bash
+pnpm run build
+```
 
 ## Storybook
 
 The design system is available in Storybook at `http://localhost:6006`.
 
-```bash
-npm run dev
-```
-
 ### Run Storybook
 
 ```bash
-npm run storybook
+pnpm run storybook
 ```
 
 ## TODO:
@@ -71,6 +80,7 @@ npm run storybook
 - [x] update user endpoint should allow intl passport
 - [x] disable nin on edit customer; submit empty string
 - [x] update vehicle category
+- [x] map the category id to the vehicle-category name (vehicle category column under driver)
 - [ ] trip cancellation fee (pending)
 - [ ] settlements
 

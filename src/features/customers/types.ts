@@ -1,9 +1,10 @@
 
 
-export type AccountStatus = 'active' | 'pending' | 'inactive'
+export type AccountStatus = 'active' | 'pending' | 'inactive' | 'deactivated'
 
 export interface Customer {
     id: string
+    custom_user_id: string
     created_at: string
     first_name: string
     last_name: string
@@ -12,6 +13,7 @@ export interface Customer {
     nin: string
     status: AccountStatus
     is_email_verified: boolean
+    is_kyc_complete: boolean
     image_url?: string
 }
 

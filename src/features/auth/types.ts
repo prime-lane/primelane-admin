@@ -12,6 +12,7 @@ export interface User {
     is_preference_set: boolean
     is_kyc_complete: boolean
     is_email_verified: boolean
+    role_id?: string
 }
 
 export interface AuthResponse {

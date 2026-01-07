@@ -8,6 +8,8 @@ import { SidebarNavItem } from './sidebar-nav-item'
 import { Navbar } from './navbar'
 import { useLogout } from '@/features/auth/hooks/use-current-user'
 
+import { CommandMenu } from '@/components/ui/command-menu'
+
 export const DashboardLayout = () => {
   const logout = useLogout()
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -36,6 +38,11 @@ export const DashboardLayout = () => {
             hasSubmenu={item.hasSubmenu}
             children={item.children}
             onLinkClick={handleDrawerClose}
+            permission={item.permission}
+            dataTour={item.label
+              .toLowerCase()
+              .replace(/\s+/g, '-')
+              .replace(/\./g, '')}
           />
         ))}
       </nav>
@@ -53,6 +60,7 @@ export const DashboardLayout = () => {
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'white' }}>
+      <CommandMenu />
       <Drawer
         variant="temporary"
         open={mobileOpen}
