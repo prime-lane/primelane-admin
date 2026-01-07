@@ -1,6 +1,5 @@
 import { InfoRow } from '@/components/ui/info-row'
 import { ErrorState } from '@/components/ui/loading-error-states'
-import type { StatusVariant } from '@/components/ui/status-badge'
 import { IdentitySkeleton } from '@/components/ui/tab-skeletons'
 import { useKycDetails } from '@/features/shared/api/use-users'
 import { useUserRideStats } from '../api/use-customers'
