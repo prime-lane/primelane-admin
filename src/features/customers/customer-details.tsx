@@ -194,7 +194,9 @@ export const CustomerDetails = () => {
             <span className="text-xl text-black font-semibold">
               {customerName}
             </span>
-            <span className="text-sm text-neutral-500">Date Joined: {formatDate(customer.created_at)}</span>
+            <span className="text-sm text-neutral-500">
+              Date Joined: {formatDate(customer.created_at)}
+            </span>
           </div>
           <StatusBadge status={customer.status as any} />
         </div>
@@ -234,9 +236,7 @@ export const CustomerDetails = () => {
               onClick={() => handleStatusChangeClick('reactivate')}
               sx={{ color: 'success.main' }}
             >
-              <span className="text-base text-green-500">
-                Activate Account
-              </span>
+              <span className="text-base text-green-500">Activate Account</span>
             </MenuItem>
           )}
         </Menu>
@@ -281,14 +281,20 @@ export const CustomerDetails = () => {
                   </MenuItem>
                   {dialogType === 'inactive'
                     ? [
-                        <MenuItem key="1" value="Policy Violation">
-                          Policy Violation
+                        <MenuItem key="1" value="Repeated cancellations or no-shows disrupting driver schedules">
+                          Repeated cancellations or no-shows disrupting driver
+                          schedules
                         </MenuItem>,
-                        <MenuItem key="2" value="Fraud suspicion">
-                          Fraud suspicion
+                        <MenuItem key="2" value="Reported misconduct or inappropriate behavior toward drivers">
+                          Reported misconduct or inappropriate behavior toward
+                          drivers
                         </MenuItem>,
-                        <MenuItem key="3" value="Incomplete document">
-                          Incomplete document
+                        <MenuItem key="3" value="Outstanding unpaid trip fares or unresolved disputes">
+                          Outstanding unpaid trip fares or unresolved disputes
+                        </MenuItem>,
+                        <MenuItem key="4" value="Violation of Primelane's community or safety policies">
+                          Violation of Primelane&apos;s community or safety
+                          policies
                         </MenuItem>,
                       ]
                     : [
