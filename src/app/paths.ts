@@ -20,6 +20,7 @@ export const path = {
     PRICING_CONFIG_DETAILS: '/dashboard/pricing-config/:id/:type',
     TRIPS: '/dashboard/trips',
     TRIP_DETAILS: '/dashboard/trips/:id',
+    REVIEWS: '/dashboard/reviews',
     FINANCE: {
       ROOT: '/dashboard/finance',
       COMMISSION: '/dashboard/finance/commission',

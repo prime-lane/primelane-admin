@@ -69,6 +69,11 @@ const TripDetails = lazy(() =>
     default: module.TripDetails,
   })),
 )
+const Reviews = lazy(() =>
+  import('@/features/shared/reviews').then((module) => ({
+    default: module.Reviews,
+  })),
+)
 // const Commission = lazy(() =>
 //   import('@/features/finance/commission').then((module) => ({
 //     default: module.Commission,
@@ -226,6 +231,14 @@ export const router = createBrowserRouter([
               <TripDetails />
             </Suspense>
           </RoutePermissionGate>
+        ),
+      },
+      {
+        path: path.DASHBOARD.REVIEWS,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Reviews />
+          </Suspense>
         ),
       },
       // {
