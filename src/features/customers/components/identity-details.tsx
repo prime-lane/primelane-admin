@@ -31,7 +31,7 @@ export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
         />
         <StatsCard
           label="ID Verification Status"
-          status={kycDetails.id_verification_status as StatusVariant}
+          status={customer.is_kyc_complete ? 'true' : 'false'}
         />
         <StatsCard
           label="Face Match Score"

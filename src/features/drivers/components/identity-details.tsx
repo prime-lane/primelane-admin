@@ -31,7 +31,7 @@ export const IdentityDetails = ({
         <StatsCard label="NIN" value={ninData?.nin || 'N/A'} />
         <StatsCard
           label="ID Verification Status"
-          status={kycDetails.id_verification_status as StatusVariant}
+          status={driver.is_kyc_complete ? 'true' : 'false'}
         />
         <StatsCard
           label="Face Match Score"

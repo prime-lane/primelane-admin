@@ -13,6 +13,7 @@ export interface Customer {
     nin: string
     status: AccountStatus
     is_email_verified: boolean
+    is_kyc_complete: boolean
     image_url?: string
 }
 
