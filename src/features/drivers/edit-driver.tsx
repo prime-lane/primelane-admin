@@ -173,6 +173,7 @@ export const EditDriver = () => {
             hiddenLabel
             size="medium"
             fullWidth
+            disabled
             {...register('nin')}
             error={!!errors.nin}
             helperText={errors.nin?.message}
