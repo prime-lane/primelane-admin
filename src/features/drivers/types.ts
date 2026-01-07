@@ -48,14 +48,13 @@ type Reviewed = Reviewer
 
 export interface Review {
     id: string
-    user_id: string
-    driver_id: string
     ride_id: string
+    reviewed_user_id: string
+    reviewer_user_id: string
     feedback: string
     rating: number
     reviewer: Reviewer
     reviewed: Reviewed
-    comment: string
     created_at: string
     updated_at: string
 }
