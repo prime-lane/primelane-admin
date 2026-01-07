@@ -17,8 +17,8 @@ export const DriverRatings = ({
     id: review.id,
     rating: review.rating,
     date: format(new Date(review.created_at), 'yyyy-MM-dd'),
-    title: 'Rider Review',
-    content: review.comment,
+    title: `${review.reviewer.first_name} ${review.reviewer.last_name}`,
+    content: review.feedback,
   }))
 
   return (
