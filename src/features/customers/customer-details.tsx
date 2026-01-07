@@ -44,6 +44,10 @@ export const CustomerDetails = () => {
   const { id } = useParams<{ id: string }>()
   const { data: customerResp, isLoading, error } = useCustomer(id!)
   const customer = customerResp?.user
+  const isActive = customer?.status === 'active'
+  const isDeactivated =
+    customer?.status === 'deactivated' || customer?.status === 'inactive'
+
   const { data: stats } = useCustomerStats(id!)
   const { data: reviews, isLoading: isReviewsLoading } = useCustomerReviews(id!)
   const { mutate: manageUserStatus, isPending: isUpdating } =
@@ -224,14 +228,15 @@ export const CustomerDetails = () => {
           <MenuItem onClick={handleEdit}>
             <span className="text-base text-neutral-500">Edit Account</span>
           </MenuItem>
-          {customer.status === 'active' ? (
+          {isActive && (
             <MenuItem
               onClick={() => handleStatusChangeClick('inactive')}
               sx={{ color: colors.green[50] }}
             >
               <span className="text-base text-red-500">Deactivate Account</span>
             </MenuItem>
-          ) : (
+          )}
+          {isDeactivated && (
             <MenuItem
               onClick={() => handleStatusChangeClick('reactivate')}
               sx={{ color: 'success.main' }}
@@ -281,18 +286,30 @@ export const CustomerDetails = () => {
                   </MenuItem>
                   {dialogType === 'inactive'
                     ? [
-                        <MenuItem key="1" value="Repeated cancellations or no-shows disrupting driver schedules">
+                        <MenuItem
+                          key="1"
+                          value="Repeated cancellations or no-shows disrupting driver schedules"
+                        >
                           Repeated cancellations or no-shows disrupting driver
                           schedules
                         </MenuItem>,
-                        <MenuItem key="2" value="Reported misconduct or inappropriate behavior toward drivers">
+                        <MenuItem
+                          key="2"
+                          value="Reported misconduct or inappropriate behavior toward drivers"
+                        >
                           Reported misconduct or inappropriate behavior toward
                           drivers
                         </MenuItem>,
-                        <MenuItem key="3" value="Outstanding unpaid trip fares or unresolved disputes">
+                        <MenuItem
+                          key="3"
+                          value="Outstanding unpaid trip fares or unresolved disputes"
+                        >
                           Outstanding unpaid trip fares or unresolved disputes
                         </MenuItem>,
-                        <MenuItem key="4" value="Violation of Primelane's community or safety policies">
+                        <MenuItem
+                          key="4"
+                          value="Violation of Primelane's community or safety policies"
+                        >
                           Violation of Primelane&apos;s community or safety
                           policies
                         </MenuItem>,
