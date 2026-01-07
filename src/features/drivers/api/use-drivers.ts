@@ -62,7 +62,7 @@ export const useDriverReviews = (userId?: string) => {
         queryKey: ['driver-reviews', userId],
         queryFn: async () => {
             if (!userId) throw new Error('User ID is required')
-            const endpoint = e.REVIEWS.ROOT(userId)
+            const endpoint = e.REVIEWS.BY_ID(userId)
             const response = await apiClient.get<{ reviews: Review[]; pagination: PaginatedResponse<unknown>['pagination'] }>(endpoint)
             return transformPaginatedResponse(response.data, 'reviews')
         },
