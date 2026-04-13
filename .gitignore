@@ -28,3 +28,5 @@ dist-ssr
 *.dummy.*
 
 .env
+
+test_output*.txt

@@ -9,7 +9,15 @@ const SectionHeader = ({ title }: { title: string }) => (
   <h2 className="text-base font-semibold text-neutral-800">{title}</h2>
 )
 
-const PricingRow = ({ id, label }: { id: string; label: string }) => {
+const PricingRow = ({
+  id,
+  label,
+  type,
+}: {
+  id: string
+  label: string
+  type: 'one_off' | 'hourly'
+}) => {
   const navigate = useNavigate()
   return (
     <div className="flex items-center justify-between">
@@ -18,7 +26,12 @@ const PricingRow = ({ id, label }: { id: string; label: string }) => {
         variant="text"
         size="small"
         onClick={() =>
-          navigate(path.DASHBOARD.PRICING_CONFIG_DETAILS.replace(':id', id))
+          navigate(
+            path.DASHBOARD.PRICING_CONFIG_DETAILS.replace(':id', id).replace(
+              ':type',
+              type,
+            ),
+          )
         }
         sx={{
           bgcolor: 'neutral.100',
@@ -54,13 +67,28 @@ export const PricingConfig = () => {
 
       <div className="max-w-lg mx-auto space-y-10">
         <section className="space-y-4">
-          <SectionHeader title="Vehicle Categories" />
+          <SectionHeader title="One-way Configuration" />
           <div className="space-y-4">
             {categoriesData?.categories?.map((category) => (
               <PricingRow
                 key={category.id}
                 id={category.id}
                 label={category.name}
+                type="one_off"
+              />
+            ))}
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <SectionHeader title="Hourly Configuration" />
+          <div className="space-y-4">
+            {categoriesData?.categories?.map((category) => (
+              <PricingRow
+                key={category.id}
+                id={category.id}
+                label={category.name}
+                type="hourly"
               />
             ))}
           </div>

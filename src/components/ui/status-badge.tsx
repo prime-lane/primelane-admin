@@ -4,12 +4,15 @@ export type TripStatus = 'SCHEDULED' | 'COMPLETED'
 export type StatusVariant =
   | 'active'
   | 'pending'
+  | 'inactive'
   | 'deactivated'
   | 'completed'
   | 'cancelled'
   | 'started'
   | 'accepted'
   | 'verified'
+  | 'true'
+  | 'false'
 
   // driver status
   | 'PENDING_VERIFICATION'
@@ -34,6 +37,7 @@ const getStatusConfig = (status: string) => {
         color: 'orange.400',
         bgcolor: '#F973161A',
       }
+    case 'inactive':
     case 'deactivated':
       return {
         label: 'Deactivated',
@@ -46,6 +50,18 @@ const getStatusConfig = (status: string) => {
         label: 'Completed',
         color: 'green.400',
         bgcolor: '#22C55E1A',
+      }
+    case 'true':
+      return {
+        label: 'COMPLETE',
+        color: 'green.400',
+        bgcolor: '#22C55E1A',
+      }
+    case 'false':
+      return {
+        label: 'INCOMPLETE',
+        color: 'red.500',
+        bgcolor: '#EF44441A',
       }
     case 'cancelled':
       return {

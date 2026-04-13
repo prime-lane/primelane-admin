@@ -65,11 +65,21 @@ export const useCustomerReviews = (userId?: string) => {
         queryKey: ['reviews', userId],
         queryFn: async () => {
             if (!userId) throw new Error('User ID is required')
-            const endpoint = e.REVIEWS.ROOT(userId)
+            const endpoint = e.REVIEWS.BY_ID(userId)
             const response = await apiClient.get<{ reviews: Review[]; pagination: PaginatedResponse<unknown>['pagination'] }>(endpoint)
             return transformPaginatedResponse(response.data, 'reviews')
         },
         enabled: !!userId,
+    })
+}
+
+export const useGetAllReviews = () => {
+    return useQuery({
+        queryKey: ['reviews'],
+        queryFn: async () => {
+            const response = await apiClient.get<{ reviews: Review[]; pagination: PaginatedResponse<unknown>['pagination'] }>(e.REVIEWS.ROOT)
+            return transformPaginatedResponse(response.data, 'reviews')
+        },
     })
 }
 

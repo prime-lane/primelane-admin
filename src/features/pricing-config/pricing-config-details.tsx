@@ -1,12 +1,22 @@
 import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
 import { ErrorState } from '@/components/ui/loading-error-states'
-import { Button, InputAdornment, TextField } from '@mui/material'
+import {
+  Button,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  InputAdornment,
+  Radio,
+  RadioGroup,
+  TextField,
+} from '@mui/material'
 import { useEffect } from 'react'
-import { useForm, type Resolver } from 'react-hook-form'
+import { Controller, useForm, type Resolver } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
+import { fromKobo, toKobo } from '@/lib/utils'
 import { useUpdatePricingConfig } from './api/use-pricing-config'
 import {
   type PricingConfigFormData,
@@ -16,9 +26,11 @@ import { useVehicleCategory } from './api/use-vehicle-categories'
 import { PricingConfigDetailsSkeleton } from './components/skeletons'
 
 export const PricingConfigDetails = () => {
-  const { id } = useParams<{ id: string }>()
+  const { id, type } = useParams<{ id: string; type: 'one_off' | 'hourly' }>()
+  const isOneWay = type === 'one_off'
+  // const isHourly = type === 'hourly'
+
   const navigate = useNavigate()
-  const type = 'hourly'
   const categoryId = id
 
   const {
@@ -28,12 +40,13 @@ export const PricingConfigDetails = () => {
   } = useVehicleCategory(categoryId || '')
 
   const { mutate: updateConfig, isPending: isUpdating } =
-    useUpdatePricingConfig(categoryId || '', type)
+    useUpdatePricingConfig(categoryId || '', type || 'one_off')
 
   const {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<PricingConfigFormData>({
     resolver: zodResolver(
@@ -58,22 +71,54 @@ export const PricingConfigDetails = () => {
       const prefix = type === 'hourly' ? 'hourly_' : 'one_way_'
       const data = categoryData as any
 
-      reset({
-        base_price: data[`${prefix}base_price`] ?? 0,
-        per_km: data[`${prefix}per_km`] ?? 0,
-        per_min: data[`${prefix}per_min`] ?? 0,
-        cancellation_base: data[`${prefix}cancellation_base`] ?? 0,
-        cancellation_percentage: data[`${prefix}cancellation_percentage`] ?? 0,
-        cancellation_fee_type:
-          data[`${prefix}cancellation_fee_type`] ?? 'percentage',
-        trip_commission_percentage:
-          data[`${prefix}trip_commission_percentage`] ?? 0,
-      })
+      if (type === 'hourly') {
+        reset({
+          base_price: fromKobo(data[`${prefix}base_price`]),
+          per_hour: fromKobo(data[`${prefix}per_hour`]),
+          min_hour: data[`${prefix}min_hour`] ?? 0,
+          cancellation_base: fromKobo(data[`${prefix}cancellation_base`]),
+          cancellation_percentage:
+            data[`${prefix}cancellation_percentage`] ?? 0,
+          cancellation_fee_type:
+            data[`${prefix}cancellation_fee_type`] ?? 'percentage',
+          trip_commission_percentage:
+            data[`${prefix}trip_commission_percentage`] ?? 0,
+        })
+      } else {
+        reset({
+          base_price: fromKobo(data[`${prefix}base_price`]),
+          per_km: fromKobo(data[`${prefix}per_km`]),
+          per_min: fromKobo(data[`${prefix}per_min`]),
+          cancellation_base: fromKobo(data[`${prefix}cancellation_base`]),
+          cancellation_percentage:
+            data[`${prefix}cancellation_percentage`] ?? 0,
+          cancellation_fee_type:
+            data[`${prefix}cancellation_fee_type`] ?? 'percentage',
+          trip_commission_percentage:
+            data[`${prefix}trip_commission_percentage`] ?? 0,
+        })
+      }
     }
   }, [categoryData, reset, type])
 
   const onSubmit = (data: PricingConfigFormData) => {
-    updateConfig(data)
+    const payload: any = {
+      base_price: toKobo(data.base_price),
+      cancellation_base: toKobo(data.cancellation_base),
+      cancellation_percentage: Number(data.cancellation_percentage),
+      cancellation_fee_type: data.cancellation_fee_type,
+      trip_commission_percentage: Number(data.trip_commission_percentage),
+    }
+
+    if (type === 'hourly') {
+      payload.per_hour = toKobo(data.per_hour!)
+      payload.min_hour = Number(data.min_hour)
+    } else {
+      payload.per_km = toKobo(data.per_km!)
+      payload.per_min = toKobo(data.per_min!)
+    }
+
+    updateConfig(payload)
     navigate(path.DASHBOARD.PRICING_CONFIG)
   }
 
@@ -91,8 +136,11 @@ export const PricingConfigDetails = () => {
         items={[
           { label: 'Price Configuration', to: path.DASHBOARD.PRICING_CONFIG },
           {
-            label: `${categoryData?.name}`,
-            to: path.DASHBOARD.PRICING_CONFIG_DETAILS.replace(':id', id!),
+            label: `${categoryData?.name} - ${type === 'one_off' ? 'One-way' : 'Hourly'}`,
+            to: path.DASHBOARD.PRICING_CONFIG_DETAILS.replace(
+              ':id',
+              id!,
+            ).replace(':type', type!),
           },
         ]}
       />
@@ -162,19 +210,24 @@ export const PricingConfigDetails = () => {
 
               <div className="space-y-1">
                 <label className="text-sm font-medium text-neutral-900 block">
-                  Price per kilometer
+                  Price per {isOneWay ? 'kilometer' : 'hour'}
                 </label>
                 <p className="text-xs text-neutral-500 mb-2">
-                  Rate charged based on total trip distance
+                  Rate charged based on{' '}
+                  {isOneWay
+                    ? 'total trip distance'
+                    : 'total trip hour duration'}
                 </p>
                 <TextField
                   fullWidth
                   placeholder="1500"
                   type="number"
                   size="medium"
-                  {...register('per_km')}
-                  error={!!errors.per_km}
-                  helperText={errors.per_km?.message}
+                  {...register(isOneWay ? 'per_km' : 'per_hour')}
+                  error={isOneWay ? !!errors.per_km : !!errors.per_hour}
+                  helperText={
+                    isOneWay ? errors.per_km?.message : errors.per_hour?.message
+                  }
                   variant="outlined"
                   sx={{
                     '& .MuiOutlinedInput-root': {
@@ -193,25 +246,31 @@ export const PricingConfigDetails = () => {
 
               <div className="space-y-1">
                 <label className="text-sm font-medium text-neutral-900 block">
-                  Price per minute
+                  {isOneWay ? 'Price per minute' : 'Minimum hour'}
                 </label>
                 <p className="text-xs text-neutral-500 mb-2">
-                  Rate charged based on total trip duration.
+                  {isOneWay
+                    ? 'Rate charged based on total trip duration.'
+                    : 'Lowest no. Of hours that can be booked.'}
                 </p>
                 <TextField
                   fullWidth
-                  placeholder="1000"
+                  placeholder={isOneWay ? '1000' : '5'}
                   type="number"
                   size="medium"
-                  {...register('per_min')}
-                  error={!!errors.per_min}
-                  helperText={errors.per_min?.message}
+                  {...register(isOneWay ? 'per_min' : 'min_hour')}
+                  error={isOneWay ? !!errors.per_min : !!errors.min_hour}
+                  helperText={
+                    isOneWay
+                      ? errors.per_min?.message
+                      : errors.min_hour?.message
+                  }
                   variant="outlined"
                   slotProps={{
                     input: {
-                      startAdornment: (
+                      startAdornment: isOneWay ? (
                         <InputAdornment position="start">₦</InputAdornment>
-                      ),
+                      ) : undefined,
                     },
                   }}
                 />
@@ -223,6 +282,38 @@ export const PricingConfigDetails = () => {
             <h2 className="text-lg font-semibold text-neutral-900">
               Cancellation fee
             </h2>
+
+            <div className="space-y-1">
+              <FormControl
+                component="fieldset"
+                error={!!errors.cancellation_fee_type}
+              >
+                <FormLabel component="legend">Cancellation fee type</FormLabel>
+                <Controller
+                  name="cancellation_fee_type"
+                  control={control}
+                  render={({ field }) => (
+                    <RadioGroup row {...field}>
+                      <FormControlLabel
+                        value="percentage"
+                        control={<Radio size="small" />}
+                        label="Percentage"
+                      />
+                      <FormControlLabel
+                        value="fixed"
+                        control={<Radio size="small" />}
+                        label="Fixed"
+                      />
+                    </RadioGroup>
+                  )}
+                />
+                {errors.cancellation_fee_type && (
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors.cancellation_fee_type.message}
+                  </p>
+                )}
+              </FormControl>
+            </div>
 
             <div className="space-y-1">
               <label className="text-sm font-medium text-neutral-900 block">

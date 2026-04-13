@@ -36,16 +36,24 @@ import { useManageUserStatus } from '../shared/api/use-users'
 import { CustomerOverview } from './components/customer-overview'
 import { CustomerRatings } from './components/customer-ratings'
 import { IdentityDetails } from './components/identity-details'
+import { usePermissionsContext } from '@/hooks/permissions-context'
+import { useMemo } from 'react'
+import { formatDate } from '@/utils/table-utils'
 
 export const CustomerDetails = () => {
   const { id } = useParams<{ id: string }>()
   const { data: customerResp, isLoading, error } = useCustomer(id!)
   const customer = customerResp?.user
+  const isActive = customer?.status === 'active'
+  const isDeactivated =
+    customer?.status === 'deactivated' || customer?.status === 'inactive'
+
   const { data: stats } = useCustomerStats(id!)
   const { data: reviews, isLoading: isReviewsLoading } = useCustomerReviews(id!)
   const { mutate: manageUserStatus, isPending: isUpdating } =
     useManageUserStatus(id)
   const navigate = useNavigate()
+  const { hasPermission, permissions } = usePermissionsContext()
 
   // Menu State
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -108,14 +116,43 @@ export const CustomerDetails = () => {
     )
   }
 
+  const tabConfig = useMemo(
+    () => [
+      {
+        id: 'overview',
+        label: 'Overview',
+        permission: 'customers:view_details:overview',
+      },
+      {
+        id: 'identity',
+        label: 'Identity Details',
+        permission: 'customers:view_details:identity_details',
+      },
+      {
+        id: 'ratings',
+        label: 'Ratings',
+        permission: 'customers:view_details:ratings_reviews',
+      },
+    ],
+    [],
+  )
+
+  const visibleTabs = useMemo(
+    () => tabConfig.filter((tab) => hasPermission(tab.permission)),
+    [tabConfig, permissions],
+  )
+
   const [tabValue, setTabValue] = useQueryState('tab', {
-    defaultValue: '0',
+    defaultValue: visibleTabs[0]?.id || 'overview',
     parse: (value) => value,
     serialize: (value) => value,
   })
 
+  const currentTabIndex = visibleTabs.findIndex((tab) => tab.id === tabValue)
+  const activeIndex = currentTabIndex === -1 ? 0 : currentTabIndex
+
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(newValue.toString())
+    setTabValue(visibleTabs[newValue]?.id || visibleTabs[0]?.id)
   }
 
   const customerName = `${customer?.first_name} ${customer?.last_name}`
@@ -161,7 +198,9 @@ export const CustomerDetails = () => {
             <span className="text-xl text-black font-semibold">
               {customerName}
             </span>
-            <span className="text-sm text-neutral-500">{customer.email}</span>
+            <span className="text-sm text-neutral-500">
+              Date Joined: {formatDate(customer.created_at)}
+            </span>
           </div>
           <StatusBadge status={customer.status as any} />
         </div>
@@ -189,21 +228,20 @@ export const CustomerDetails = () => {
           <MenuItem onClick={handleEdit}>
             <span className="text-base text-neutral-500">Edit Account</span>
           </MenuItem>
-          {customer.status === 'active' ? (
+          {isActive && (
             <MenuItem
               onClick={() => handleStatusChangeClick('inactive')}
               sx={{ color: colors.green[50] }}
             >
               <span className="text-base text-red-500">Deactivate Account</span>
             </MenuItem>
-          ) : (
+          )}
+          {isDeactivated && (
             <MenuItem
               onClick={() => handleStatusChangeClick('reactivate')}
               sx={{ color: 'success.main' }}
             >
-              <span className="text-base text-green-500">
-                Re-activate Account
-              </span>
+              <span className="text-base text-green-500">Activate Account</span>
             </MenuItem>
           )}
         </Menu>
@@ -216,7 +254,7 @@ export const CustomerDetails = () => {
         >
           <DialogTitle className="font-sans!">
             <span className="text-2xl font-medium">
-              {dialogType === 'inactive' ? 'Deactivate' : 'Re-activate'}
+              {dialogType === 'inactive' ? 'Deactivate' : 'Activate'}
             </span>
           </DialogTitle>
           <DialogContent>
@@ -248,14 +286,32 @@ export const CustomerDetails = () => {
                   </MenuItem>
                   {dialogType === 'inactive'
                     ? [
-                        <MenuItem key="1" value="Policy Violation">
-                          Policy Violation
+                        <MenuItem
+                          key="1"
+                          value="Repeated cancellations or no-shows disrupting driver schedules"
+                        >
+                          Repeated cancellations or no-shows disrupting driver
+                          schedules
                         </MenuItem>,
-                        <MenuItem key="2" value="Fraud suspicion">
-                          Fraud suspicion
+                        <MenuItem
+                          key="2"
+                          value="Reported misconduct or inappropriate behavior toward drivers"
+                        >
+                          Reported misconduct or inappropriate behavior toward
+                          drivers
                         </MenuItem>,
-                        <MenuItem key="3" value="Incomplete document">
-                          Incomplete document
+                        <MenuItem
+                          key="3"
+                          value="Outstanding unpaid trip fares or unresolved disputes"
+                        >
+                          Outstanding unpaid trip fares or unresolved disputes
+                        </MenuItem>,
+                        <MenuItem
+                          key="4"
+                          value="Violation of Primelane's community or safety policies"
+                        >
+                          Violation of Primelane&apos;s community or safety
+                          policies
                         </MenuItem>,
                       ]
                     : [
@@ -298,31 +354,31 @@ export const CustomerDetails = () => {
       </div>
       <div className="my-6">
         <Tabs
-          value={parseInt(tabValue)}
+          value={activeIndex}
           onChange={handleTabChange}
           aria-label="customer details tabs"
         >
-          <Tab label="Overview" {...a11yProps(0)} />
-          <Tab label="Identity Details" {...a11yProps(1)} />
-          <Tab label="Ratings" {...a11yProps(2)} />
+          {visibleTabs.map((tab, index) => (
+            <Tab key={tab.id} label={tab.label} {...a11yProps(index)} />
+          ))}
         </Tabs>
       </div>
 
-      {/* Overview Tab Content */}
-      <TabPanel value={parseInt(tabValue)} index={0}>
-        <CustomerOverview customer={customer} stats={stats} />
-      </TabPanel>
-
-      <TabPanel value={parseInt(tabValue)} index={1}>
-        <IdentityDetails customer={customer} />
-      </TabPanel>
-      <TabPanel value={parseInt(tabValue)} index={2}>
-        <CustomerRatings
-          stats={stats}
-          reviews={reviews?.items}
-          isLoading={isReviewsLoading}
-        />
-      </TabPanel>
+      {visibleTabs.map((tab, index) => (
+        <TabPanel key={tab.id} value={activeIndex} index={index}>
+          {tab.id === 'overview' && (
+            <CustomerOverview customer={customer} stats={stats} />
+          )}
+          {tab.id === 'identity' && <IdentityDetails customer={customer} />}
+          {tab.id === 'ratings' && (
+            <CustomerRatings
+              stats={stats}
+              reviews={reviews?.items}
+              isLoading={isReviewsLoading}
+            />
+          )}
+        </TabPanel>
+      ))}
     </>
   )
 }

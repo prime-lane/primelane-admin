@@ -3,13 +3,17 @@ import type { Customer } from '../types'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { VerificationBadge } from '@/components/ui/verification-badge'
 import { formatDate } from '@/utils/table-utils'
+import { CopyButton } from '@/components/ui/copy-button'
 
 export const customerColumns: ColumnDef<Customer>[] = [
   {
-    accessorKey: 'id',
+    accessorKey: 'custom_user_id',
     header: 'ID',
     cell: ({ row }) => (
-      <span className="text-sm">{row.original?.id?.substring(0, 8)}...</span>
+      <div className="flex items-center gap-[2px]">
+        <span className="text-sm">{row.original?.custom_user_id}</span>
+        <CopyButton textToCopy={row.original?.custom_user_id}/>
+      </div>
     ),
   },
   {

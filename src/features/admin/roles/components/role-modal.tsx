@@ -135,7 +135,7 @@ export const RoleModal = ({
 
             {permissionGroups.map((group) => (
               <div key={group.category} className="space-y-2">
-                <h4 className="text-sm font-semibold text-neutral-900 border-b border-neutral-100 pb-2">
+                <h4 className="sticky top-0 z-10 bg-white text-sm font-semibold text-neutral-900 border-b border-neutral-100 pb-2">
                   {group.category.split(':')[0]}
                 </h4>
                 <div className="flex flex-col gap-1 pl-1">

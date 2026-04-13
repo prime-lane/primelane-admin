@@ -33,6 +33,7 @@ export const VehicleDetails = ({
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <StatsCard label="Make" value={vehicle?.make} />
           <StatsCard label="Model" value={vehicle?.model} />
+          <StatsCard label="Color" value={vehicle?.color} />
           <StatsCard label="Year" value={vehicle?.year.toString()} />
           <StatsCard label="Plate Number" value={vehicle?.plate_number} />
           <StatsCard label="Vehicle VIN/Chassis no." value={vehicle.vin} />

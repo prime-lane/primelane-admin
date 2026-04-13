@@ -110,6 +110,7 @@ export interface TripDetail {
 
 export interface Trip {
     id: string
+    custom_ride_id: string
     rider_id: string
     driver_id: string | null
     pickup?: Location
@@ -121,6 +122,7 @@ export interface Trip {
     estimated_fare: number | null
     actual_fare: number | null
     drivers_earning?: number | null
+    driver_commission?: number | null
     commission?: number | null
     cancellation_fee?: number | null
     estimated_distance: number | null

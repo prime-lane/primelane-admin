@@ -1,13 +1,22 @@
 export type AccountStatus = 'active' | 'pending' | 'inactive'
 
+type Category = {
+    id: string
+    slug: string
+    name: string
+}
+
 
 export interface Driver {
     id: string
+    custom_user_id: string
     created_at: string
     first_name: string
     last_name: string
     email: string
+    category_ids: string[]
     phone_number: string
+    nin?: string
     status: AccountStatus
     is_email_verified: boolean
     image_url?: string
@@ -15,6 +24,9 @@ export interface Driver {
     is_phone_number_verified?: boolean
     is_preference_set?: boolean
     is_kyc_complete?: boolean
+    dob?: string
+    residential_address?: string
+    vehicle: Vehicle
 }
 
 export interface UserRideStats {
@@ -26,13 +38,23 @@ export interface UserRideStats {
     average_rating: number
 }
 
+export interface Reviewer {
+    id: string
+    first_name: string
+    last_name: string
+}
+
+type Reviewed = Reviewer
+
 export interface Review {
     id: string
-    user_id: string
-    driver_id: string
     ride_id: string
+    reviewed_user_id: string
+    reviewer_user_id: string
+    feedback: string
     rating: number
-    comment: string
+    reviewer: Reviewer
+    reviewed: Reviewed
     created_at: string
     updated_at: string
 }
@@ -92,6 +114,8 @@ export interface Vehicle {
     driver_id: string
     status: AccountStatus
     category_id: string | null
+    category_ids: string[] | null
+    categories: Category[]
     front_image: string
     back_image: string
     side_image: string

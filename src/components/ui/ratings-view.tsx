@@ -1,20 +1,16 @@
-import { Card, CardContent } from '@mui/material'
+import { Button } from '@mui/material'
 import { Star } from '@solar-icons/react'
 import { RatingsSkeleton } from './tab-skeletons'
 import { StatsCard } from '@/features/customers/components/stats-card'
-
-export interface RatingReview {
-  id: string
-  rating: number
-  date: string
-  title: string
-  content: string
-}
+import { Link } from 'react-router-dom'
+import { path } from '@/app/paths'
+import { ReviewCard } from '@/features/shared/reviews'
+import type { Review } from '@/features/customers/types'
 
 interface RatingsViewProps {
   averageRating: number
   totalReviews: number
-  reviews: RatingReview[]
+  reviews: Review[]
   isLoading?: boolean
 }
 
@@ -37,36 +33,10 @@ const RatingBreakdownRow = ({
           />
         ))}
       </div>
-      <span className="text-sm font-semibold">{count}</span>
+      <span className="text-sm font-semibold">
+        {count} {count <= 1 ? 'review' : 'reviews'}
+      </span>
     </div>
-  )
-}
-
-const ReviewCard = ({ review }: { review: RatingReview }) => {
-  return (
-    <Card>
-      <CardContent className="space-y-3">
-        <div>
-          <h4 className="font-semibold text-neutral-900">{review.title}</h4>
-          <span className="text-xs text-neutral-500">{review.date}</span>
-        </div>
-        <div className="flex gap-1">
-          {[...Array(5)].map((_, i) => (
-            <Star
-              key={i}
-              weight={i < review.rating ? 'Bold' : 'Linear'}
-              size={14}
-              className={
-                i < review.rating ? 'text-yellow-400' : 'text-neutral-200'
-              }
-            />
-          ))}
-        </div>
-        <p className="text-sm text-neutral-600 line-clamp-3">
-          {review.content}
-        </p>
-      </CardContent>
-    </Card>
   )
 }
 
@@ -113,6 +83,28 @@ export const RatingsView = ({
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h3 className="text-sm font-semibold">Recent Reviews</h3>
+          {reviews.length > 0 && (
+            <Button
+              size="small"
+              component={Link}
+              to={path.DASHBOARD.REVIEWS}
+              variant="text"
+              sx={{
+                bgcolor: 'neutral.100',
+                fontSize: '0.875rem',
+                textTransform: 'none',
+                px: 3,
+                py: 1,
+                borderRadius: '20px',
+                height: '28px',
+                '&:hover': {
+                  bgcolor: 'neutral.200',
+                },
+              }}
+            >
+              View All
+            </Button>
+          )}
         </div>
         {reviews.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

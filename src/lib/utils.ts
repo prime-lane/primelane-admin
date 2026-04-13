@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { intervalToDuration } from "date-fns"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -30,12 +31,33 @@ export function formatCurrency(amount: number | string | null | undefined) {
   }).format(numericAmount)
 }
 
-export const formatDuration = (seconds: string | number | null | undefined) => {
-  if (!seconds) return '-'
-  const secs = typeof seconds === 'string' ? parseInt(seconds, 10) : seconds
-  if (isNaN(secs)) return '-'
-  const mins = Math.floor(secs / 60)
-  return `${mins} minutes`
+export const formatDuration = (minutes: string | number | null | undefined) => {
+  if (!minutes) return '-'
+  const mins = Math.abs(typeof minutes === 'string' ? parseFloat(minutes) : minutes)
+  if (isNaN(mins)) return '-'
+
+  const duration = intervalToDuration({ start: 0, end: mins * 60 * 1000 })
+
+  const parts: string[] = []
+  if (duration.hours) parts.push(`${duration.hours} hour${duration.hours > 1 ? 's' : ''}`)
+  if (duration.minutes) parts.push(`${duration.minutes} minute${duration.minutes > 1 ? 's' : ''}`)
+  if (duration.seconds) parts.push(`${duration.seconds} second${duration.seconds > 1 ? 's' : ''}`)
+
+  return parts.length > 0 ? parts.join(' ') : '0 second'
+}
+
+export const getCategoryNames = (
+  categoryIds?: string[] | null,
+  categories?: Array<{ id: string; name: string }>
+): string => {
+  if (!categoryIds || categoryIds.length === 0) return 'N/A'
+  if (!categories) return categoryIds.join(', ')
+
+  const names = categoryIds
+    .map((id) => categories.find((cat) => cat.id === id)?.name)
+    .filter(Boolean)
+
+  return names.length > 0 ? names.join(', ') : 'N/A'
 }
 
 export const formatTitle = (id: string) => {
@@ -62,3 +84,25 @@ export const formatImageSrc = (src: string): string => {
   // Otherwise, assume it's raw base64 and append the data URL prefix
   return `data:image/jpeg;base64,${src}`
 }
+
+export const toKobo = (naira: number | string): number => {
+  const amount = typeof naira === 'string' ? parseFloat(naira) : naira
+  return Math.round(amount * 100)
+}
+
+export const fromKobo = (kobo: number | string | null | undefined): number => {
+  if (kobo === null || kobo === undefined) return 0
+  const amount = typeof kobo === 'string' ? parseFloat(kobo) : kobo
+  return amount / 100
+}
+
+export const formatDateToLocal = (date: Date): string => {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+  const seconds = String(date.getSeconds()).padStart(2, '0')
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
+}
+

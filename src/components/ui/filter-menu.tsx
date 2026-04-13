@@ -137,8 +137,12 @@ export const FilterMenu = ({
     const newRange = { ...dateRange, [type]: date }
     setDateRange(newRange)
     if (newRange.start && newRange.end) {
-      onFilterChange(activeMenu!, newRange)
-      // perform callback but keep menu open or close? usually close or verify
+      // Format as local date string to avoid timezone conversion issues
+      const formattedRange = {
+        start: newRange.start,
+        end: newRange.end,
+      }
+      onFilterChange(activeMenu!, formattedRange)
     }
   }
 

@@ -4,6 +4,7 @@ import { MuiCard, MuiCardContent } from './card'
 import { MuiTab, MuiTabs } from './tab'
 import { MuiOutlinedInput } from './select'
 import { MuiDatePicker, MuiPickersDay, MuiPickersCalendarHeader, MuiDayCalendar } from './datepicker'
+import { MuiFormLabel, MuiRadio, MuiFormControlLabel } from './radio'
 
 export const components = {
   MuiButton,
@@ -18,4 +19,7 @@ export const components = {
   MuiPickersDay,
   MuiPickersCalendarHeader,
   MuiDayCalendar,
+  MuiFormLabel,
+  MuiRadio,
+  MuiFormControlLabel,
 }

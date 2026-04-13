@@ -13,6 +13,8 @@ import { InviteAdminModal } from './components/invite-admin-modal'
 
 import { useDebounce } from '@/hooks/use-debounce'
 import { useTableParams } from '@/hooks/use-table-params'
+import { PermissionGate } from '@/components/ui/permission-gate'
+import { formatDateToLocal } from '@/lib/utils'
 
 export const AdminManagement = () => {
   const { page, setPage, pageSize, setPageSize, search, setSearch } =
@@ -46,8 +48,8 @@ export const AdminManagement = () => {
     if (key === 'status') {
       setStatus(value.toLowerCase() === 'all' ? null : value.toLowerCase())
     } else if (key === 'date_joined') {
-      setStartDate(value.start ? value.start.toISOString() : null)
-      setEndDate(value.end ? value.end.toISOString() : null)
+      setStartDate(value.start ? formatDateToLocal(value.start) : null)
+      setEndDate(value.end ? formatDateToLocal(value.end) : null)
     }
   }
 
@@ -67,13 +69,15 @@ export const AdminManagement = () => {
       <PageHeader
         title="Admin Management"
         action={
-          <Button
-            variant="contained"
-            onClick={() => setIsInviteModalOpen(true)}
-            endIcon={<UserPlus className="text-white" />}
-          >
-            Invite
-          </Button>
+          <PermissionGate permission="admin_management:invite">
+            <Button
+              variant="contained"
+              onClick={() => setIsInviteModalOpen(true)}
+              endIcon={<UserPlus className="text-white" />}
+            >
+              Invite
+            </Button>
+          </PermissionGate>
         }
       />
 
@@ -86,30 +90,34 @@ export const AdminManagement = () => {
           />
         </Box>
         <div className="flex gap-3">
-          <FilterMenu
-            options={[
-              {
-                label: 'Status',
-                key: 'status',
-                type: 'select',
-                options: [
-                  { label: 'All', value: 'all' },
-                  { label: 'Active', value: 'active' },
-                  { label: 'Inactive', value: 'inactive' },
-                ],
-              },
-              {
-                label: 'Date Joined',
-                key: 'date_joined',
-                type: 'date-range',
-              },
-            ]}
-            onFilterChange={handleFilterChange}
-            activeFilters={{
-              status: status || 'all',
-            }}
-          />
-          <ExportButton onClick={handleExport} />
+          <PermissionGate permission="admin_management:filter">
+            <FilterMenu
+              options={[
+                {
+                  label: 'Status',
+                  key: 'status',
+                  type: 'select',
+                  options: [
+                    { label: 'All', value: 'all' },
+                    { label: 'Active', value: 'active' },
+                    { label: 'Inactive', value: 'inactive' },
+                  ],
+                },
+                {
+                  label: 'Date Joined',
+                  key: 'date_joined',
+                  type: 'date-range',
+                },
+              ]}
+              onFilterChange={handleFilterChange}
+              activeFilters={{
+                status: status || 'all',
+              }}
+            />
+          </PermissionGate>
+          <PermissionGate permission="admin_management:export">
+            <ExportButton onClick={handleExport} />
+          </PermissionGate>
         </div>
       </Box>
 

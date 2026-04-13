@@ -125,7 +125,13 @@ export function DataTable<T>({
                 <TableRow
                   key={row.id}
                   hover
-                  onClick={() => onRowClick?.(row.original)}
+                  onClick={(e) => {
+                    const target = e.target as HTMLElement
+                    if (target.closest('button, a, [role="button"]')) {
+                      return
+                    }
+                    onRowClick?.(row.original)
+                  }}
                   sx={{
                     cursor:
                       onRowClick || enableRowSelection ? 'pointer' : 'default',
