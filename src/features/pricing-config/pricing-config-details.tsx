@@ -17,7 +17,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { fromKobo, toKobo } from '@/lib/utils'
-import { useUpdatePricingConfig } from './api/use-pricing-config'
+import { useUpdatePricingConfig, type PricingConfigData } from './api/use-pricing-config'
 import {
   airportTransferSchema,
   dailySchema,
@@ -26,8 +26,8 @@ import {
   type DailyFormData,
   type FleetFormData,
 } from './schemas/pricing-config-schema'
-import { useVehicleCategory } from './api/use-vehicle-categories'
 import { PricingConfigDetailsSkeleton } from './components/skeletons'
+import { useVehicleCategory } from './api/use-vehicle-categories'
 
 const inputSx = { '& .MuiOutlinedInput-root': { bgcolor: 'white' } }
 const naira = <InputAdornment position="start">₦</InputAdornment>
@@ -48,7 +48,7 @@ const AirportTransferForm = ({
   type,
   onPendingChange,
 }: {
-  categoryData: any
+  categoryData: PricingConfigData
   categoryId: string
   type: string
   onPendingChange?: (pending: boolean) => void
@@ -63,17 +63,16 @@ const AirportTransferForm = ({
 
   useEffect(() => {
     if (categoryData) {
-      const d = categoryData as any
       reset({
-        base_price: fromKobo(d.airport_transfer_base_price),
-        per_km: fromKobo(d.airport_transfer_per_km),
-        per_min: fromKobo(d.airport_transfer_per_min),
-        free_wait_time: d.airport_transfer_free_wait_time ?? 0,
-        wait_fee_per_min: fromKobo(d.airport_transfer_wait_fee_per_min),
-        trip_commission_percentage: d.airport_transfer_trip_commission_percentage ?? 0,
-        cancellation_fee_type: d.airport_transfer_cancellation_fee_type ?? 'percentage',
-        cancellation_base: fromKobo(d.airport_transfer_cancellation_base),
-        cancellation_percentage: d.airport_transfer_cancellation_percentage ?? 0,
+        base_price: fromKobo(categoryData.airport_transfer_base_price),
+        per_km: fromKobo(categoryData.airport_transfer_per_km),
+        per_min: fromKobo(categoryData.airport_transfer_per_min),
+        free_wait_time: categoryData.airport_transfer_free_wait_time,
+        wait_fee_per_min: fromKobo(categoryData.airport_transfer_wait_fee_per_min),
+        trip_commission_percentage: categoryData.airport_transfer_trip_commission_percentage,
+        cancellation_fee_type: categoryData.airport_transfer_cancellation_fee_type,
+        cancellation_base: fromKobo(categoryData.airport_transfer_cancellation_base),
+        cancellation_percentage: categoryData.airport_transfer_cancellation_percentage,
       })
     }
   }, [categoryData, reset])
@@ -150,7 +149,7 @@ const DailyForm = ({
   type,
   onPendingChange,
 }: {
-  categoryData: any
+  categoryData: PricingConfigData
   categoryId: string
   type: string
   onPendingChange?: (pending: boolean) => void
@@ -165,21 +164,20 @@ const DailyForm = ({
 
   useEffect(() => {
     if (categoryData) {
-      const d = categoryData as any
       reset({
-        half_day_hours: d.daily_rental_half_day_hours ?? 0,
-        half_day_fare: fromKobo(d.daily_rental_half_day_fare),
-        full_day_hours: d.daily_rental_full_day_hours ?? 0,
-        full_day_fare: fromKobo(d.daily_rental_full_day_fare),
-        free_wait_time: d.daily_rental_free_wait_time ?? 0,
-        wait_fee_per_min: fromKobo(d.daily_rental_wait_fee_per_min),
-        trip_commission_percentage: d.daily_rental_trip_commission_percentage ?? 0,
-        cancellation_fee_type: d.daily_rental_cancellation_fee_type ?? 'percentage',
-        cancellation_base: fromKobo(d.daily_rental_cancellation_base),
-        cancellation_percentage: d.daily_rental_cancellation_percentage ?? 0,
-        extra_time_cost: fromKobo(d.daily_rental_extra_time_cost),
-        grace_period_mins: d.daily_rental_grace_period_mins ?? 0,
-        daily_hours: d.daily_rental_daily_hours ?? 0,
+        half_day_hours: categoryData.daily_rental_half_day_hours,
+        half_day_fare: fromKobo(categoryData.daily_rental_half_day_fare),
+        full_day_hours: categoryData.daily_rental_full_day_hours,
+        full_day_fare: fromKobo(categoryData.daily_rental_full_day_fare),
+        free_wait_time: categoryData.daily_rental_free_wait_time,
+        wait_fee_per_min: fromKobo(categoryData.daily_rental_wait_fee_per_min),
+        trip_commission_percentage: categoryData.daily_rental_trip_commission_percentage,
+        cancellation_fee_type: categoryData.daily_rental_cancellation_fee_type,
+        cancellation_base: fromKobo(categoryData.daily_rental_cancellation_base),
+        cancellation_percentage: categoryData.daily_rental_cancellation_percentage,
+        extra_time_cost: fromKobo(categoryData.daily_rental_extra_time_cost),
+        grace_period_mins: categoryData.daily_rental_grace_period_mins,
+        daily_hours: categoryData.daily_rental_daily_hours,
       })
     }
   }, [categoryData, reset])
@@ -199,7 +197,7 @@ const DailyForm = ({
       extra_time_cost: toKobo(data.extra_time_cost),
       grace_period_mins: Number(data.grace_period_mins),
       daily_hours: Number(data.daily_hours),
-    } as any)
+    })
     navigate(path.DASHBOARD.PRICING_CONFIG)
   }
 
@@ -292,7 +290,7 @@ const FleetForm = ({
   type,
   onPendingChange,
 }: {
-  categoryData: any
+  categoryData: PricingConfigData
   categoryId: string
   type: string
   onPendingChange?: (pending: boolean) => void
@@ -307,18 +305,17 @@ const FleetForm = ({
 
   useEffect(() => {
     if (categoryData) {
-      const d = categoryData as any
       reset({
-        base_price: fromKobo(d.fleet_rental_base_price),
-        free_wait_time: d.fleet_rental_free_wait_time ?? 0,
-        wait_fee_per_min: fromKobo(d.fleet_rental_wait_fee_per_min),
-        trip_commission_percentage: d.fleet_rental_trip_commission_percentage ?? 0,
-        cancellation_fee_type: d.fleet_rental_cancellation_fee_type ?? 'percentage',
-        cancellation_base: fromKobo(d.fleet_rental_cancellation_base),
-        cancellation_percentage: d.fleet_rental_cancellation_percentage ?? 0,
-        extra_time_cost: fromKobo(d.fleet_rental_extra_time_cost),
-        grace_period_mins: d.fleet_rental_grace_period_mins ?? 0,
-        daily_hours: d.fleet_rental_daily_hours ?? 0,
+        base_price: fromKobo(categoryData.fleet_rental_base_price),
+        free_wait_time: categoryData.fleet_rental_free_wait_time,
+        wait_fee_per_min: fromKobo(categoryData.fleet_rental_wait_fee_per_min),
+        trip_commission_percentage: categoryData.fleet_rental_trip_commission_percentage,
+        cancellation_fee_type: categoryData.fleet_rental_cancellation_fee_type,
+        cancellation_base: fromKobo(categoryData.fleet_rental_cancellation_base),
+        cancellation_percentage: categoryData.fleet_rental_cancellation_percentage,
+        extra_time_cost: fromKobo(categoryData.fleet_rental_extra_time_cost),
+        grace_period_mins: categoryData.fleet_rental_grace_period_mins,
+        daily_hours: categoryData.fleet_rental_daily_hours,
       })
     }
   }, [categoryData, reset])
@@ -335,7 +332,7 @@ const FleetForm = ({
       extra_time_cost: toKobo(data.extra_time_cost),
       grace_period_mins: Number(data.grace_period_mins),
       daily_hours: Number(data.daily_hours),
-    } as any)
+    })
     navigate(path.DASHBOARD.PRICING_CONFIG)
   }
 
@@ -488,8 +485,10 @@ export const PricingConfigDetails = () => {
   const navigate = useNavigate()
   const categoryId = id ?? ''
   const [isPending, setIsPending] = React.useState(false)
+  const pricingType = (type ?? 'airport_transfer') as PricingType
 
-  const { data: categoryData, isLoading, error } = useVehicleCategory(categoryId)
+  // const { data: categoryData, isLoading, error } = usePricingConfig(categoryId, pricingType)
+    const { data: categoryData, isLoading, error } = useVehicleCategory(categoryId)
 
   useEffect(() => {
     if (!id) {
@@ -500,8 +499,8 @@ export const PricingConfigDetails = () => {
 
   if (isLoading) return <PricingConfigDetailsSkeleton />
   if (error) return <ErrorState message={error?.message || 'Failed to load configuration'} />
+  if (!categoryData) return <PricingConfigDetailsSkeleton />
 
-  const pricingType = (type ?? 'airport_transfer') as PricingType
   const label = typeLabel[pricingType]
   const formId = `${pricingType}-form`
   const formProps = { categoryData, categoryId, type: pricingType, onPendingChange: setIsPending }
