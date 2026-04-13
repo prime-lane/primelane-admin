@@ -16,7 +16,7 @@ const PricingRow = ({
 }: {
   id: string
   label: string
-  type: 'one_off' | 'hourly'
+  type: 'airport_transfer' | 'daily' | 'fleet'
 }) => {
   const navigate = useNavigate()
   return (
@@ -67,28 +67,42 @@ export const PricingConfig = () => {
 
       <div className="max-w-lg mx-auto space-y-10">
         <section className="space-y-4">
-          <SectionHeader title="One-way Configuration" />
+          <SectionHeader title="Airport Transfer" />
           <div className="space-y-4">
             {categoriesData?.categories?.map((category) => (
               <PricingRow
                 key={category.id}
                 id={category.id}
                 label={category.name}
-                type="one_off"
+                type="airport_transfer"
               />
             ))}
           </div>
         </section>
 
         <section className="space-y-4">
-          <SectionHeader title="Hourly Configuration" />
+          <SectionHeader title="Daily Rental" />
           <div className="space-y-4">
             {categoriesData?.categories?.map((category) => (
               <PricingRow
                 key={category.id}
                 id={category.id}
                 label={category.name}
-                type="hourly"
+                type="daily"
+              />
+            ))}
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <SectionHeader title="Fleet Rental" />
+          <div className="space-y-4">
+            {categoriesData?.categories?.map((category) => (
+              <PricingRow
+                key={category.id}
+                id={category.id}
+                label={category.name}
+                type="fleet"
               />
             ))}
           </div>
