@@ -16,7 +16,7 @@ const PricingRow = ({
 }: {
   id: string
   label: string
-  type: 'airport_transfer' | 'daily' | 'fleet'
+  type: 'airport-transfer' | 'daily' | 'fleet'
 }) => {
   const navigate = useNavigate()
   return (
@@ -74,7 +74,7 @@ export const PricingConfig = () => {
                 key={category.id}
                 id={category.id}
                 label={category.name}
-                type="airport_transfer"
+                type="airport-transfer"
               />
             ))}
           </div>

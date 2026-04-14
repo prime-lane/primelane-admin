@@ -32,15 +32,13 @@ import { useVehicleCategory } from './api/use-vehicle-categories'
 const inputSx = { '& .MuiOutlinedInput-root': { bgcolor: 'white' } }
 const naira = <InputAdornment position="start">₦</InputAdornment>
 
-type PricingType = 'airport_transfer' | 'daily' | 'fleet'
+type PricingType = 'airport-transfer' | 'daily' | 'fleet'
 
 const typeLabel: Record<PricingType, string> = {
-  airport_transfer: 'Airport Transfer',
+  'airport-transfer': 'Airport Transfer',
   daily: 'Daily Rental',
   fleet: 'Fleet Rental',
 }
-
-// ─── Airport Transfer Form ────────────────────────────────────────────────────
 
 const AirportTransferForm = ({
   categoryData,
@@ -54,7 +52,7 @@ const AirportTransferForm = ({
   onPendingChange?: (pending: boolean) => void
 }) => {
   const navigate = useNavigate()
-  const { mutate: updateConfig, isPending } = useUpdatePricingConfig(categoryId, type)
+  const { mutate: updateConfig, isPending } = useUpdatePricingConfig(categoryId, type==='airport-transfer' ? 'airport_transfer' : type)
 
   useEffect(() => { onPendingChange?.(isPending) }, [isPending])
 
@@ -96,7 +94,7 @@ const AirportTransferForm = ({
     <form id="airport-transfer-form" onSubmit={handleSubmit(onSubmit)}>
       <div className="max-w-lg mx-auto space-y-10">
         <section className="space-y-6">
-          <h2 className="text-lg font-semibold text-neutral-900">Trip fare</h2>
+          <h2 className="text-lg font-normal text-neutral-900">Trip fare</h2>
           <div className="space-y-4">
             <Field label="Base price" hint="Starting amount per trip"
               error={errors.base_price?.message}>
@@ -120,7 +118,7 @@ const AirportTransferForm = ({
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-lg font-semibold text-neutral-900">Waiting fee (optional)</h2>
+          <h2 className="text-lg font-normal text-neutral-900">Waiting fee (optional)</h2>
           <div className="space-y-4">
             <Field label="Free wait time (minutes)" hint="The free time in minutes before wait time fees is charged"
               error={errors.free_wait_time?.message}>
@@ -205,7 +203,7 @@ const DailyForm = ({
     <form id="daily-form" onSubmit={handleSubmit(onSubmit)}>
       <div className="max-w-lg mx-auto space-y-10">
         <section className="space-y-6">
-          <h2 className="text-lg font-semibold text-neutral-900">Half-Day Fare</h2>
+          <h2 className="text-lg font-normal text-neutral-900">Half-Day Fare</h2>
           <div className="space-y-4">
             <Field label="No. of hours" hint="No. of hours for half-day"
               error={errors.half_day_hours?.message}>
@@ -222,7 +220,7 @@ const DailyForm = ({
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-lg font-semibold text-neutral-900">Full Day Fare</h2>
+          <h2 className="text-lg font-normal text-neutral-900">Full Day Fare</h2>
           <div className="space-y-4">
             <Field label="No. of hours" hint="No. of hours for full-day"
               error={errors.full_day_hours?.message}>
@@ -244,7 +242,7 @@ const DailyForm = ({
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-lg font-semibold text-neutral-900">Waiting time</h2>
+          <h2 className="text-lg font-normal text-neutral-900">Waiting time</h2>
           <div className="space-y-4">
             <Field label="Free wait time" hint="The free time in minutes before trip booking starts counting"
               error={errors.free_wait_time?.message}>
@@ -261,14 +259,14 @@ const DailyForm = ({
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-lg font-semibold text-neutral-900">Extra Time</h2>
+          <h2 className="text-lg font-normal text-neutral-900">Extra Time</h2>
           <div className="space-y-4">
             <Field label="Grace period" hint="The free time in minutes after booking time elapses"
               error={errors.grace_period_mins?.message}>
               <TextField fullWidth type="number" size="medium"
                 {...register('grace_period_mins')} error={!!errors.grace_period_mins} />
             </Field>
-            <Field label="Extra time cost" hint="Price for extra time if booking time is exceeded"
+            <Field label="Extra fare per hour" hint="Price for extra fare if booking time is exceeded"
               error={errors.extra_time_cost?.message}>
               <TextField fullWidth type="number" size="medium" sx={inputSx}
                 {...register('extra_time_cost')} error={!!errors.extra_time_cost}
@@ -340,7 +338,7 @@ const FleetForm = ({
     <form id="fleet-form" onSubmit={handleSubmit(onSubmit)}>
       <div className="max-w-lg mx-auto space-y-10">
         <section className="space-y-6">
-          <h2 className="text-lg font-semibold text-neutral-900">Trip fare</h2>
+          <h2 className="text-lg font-normal text-neutral-900">Trip fare</h2>
           <div className="space-y-4">
             <Field label="Fixed Price" hint="Price per vehicle"
               error={errors.base_price?.message}>
@@ -357,7 +355,7 @@ const FleetForm = ({
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-lg font-semibold text-neutral-900">Waiting time</h2>
+          <h2 className="text-lg font-normal text-neutral-900">Waiting time</h2>
           <div className="space-y-4">
             <Field label="Free wait time" hint="The free time in minutes before trip time starts counting"
               error={errors.free_wait_time?.message}>
@@ -374,14 +372,14 @@ const FleetForm = ({
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-lg font-semibold text-neutral-900">Extra Time</h2>
+          <h2 className="text-lg font-normal text-neutral-900">Extra Time</h2>
           <div className="space-y-4">
             <Field label="Grace period" hint="The free time in minutes after booking time elapses"
               error={errors.grace_period_mins?.message}>
               <TextField fullWidth type="number" size="medium"
                 {...register('grace_period_mins')} error={!!errors.grace_period_mins} />
             </Field>
-            <Field label="Extra time cost" hint="Price for extra time if booking time is exceeded"
+            <Field label="Extra fare per hour" hint="Price for extra fare if booking time is exceeded"
               error={errors.extra_time_cost?.message}>
               <TextField fullWidth type="number" size="medium" sx={inputSx}
                 {...register('extra_time_cost')} error={!!errors.extra_time_cost}
@@ -409,7 +407,7 @@ const Field = ({
   children: React.ReactNode
 }) => (
   <div className="space-y-1">
-    <label className="text-sm font-medium text-neutral-900 block">{label}</label>
+    <label className="text-sm font-normal text-neutral-900 block">{label}</label>
     {hint && <p className="text-xs text-neutral-500 mb-2">{hint}</p>}
     {children}
     {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
@@ -438,7 +436,7 @@ const SaveButton = ({ isPending, formId }: { isPending: boolean; formId?: string
 
 const CancellationSection = ({ errors, register, control }: any) => (
   <section className="space-y-6">
-    <h2 className="text-lg font-semibold text-neutral-900">Cancellation fee</h2>
+    <h2 className="text-lg font-normal text-neutral-900">Cancellation fee</h2>
     <div className="space-y-1">
       <FormControl component="fieldset" error={!!errors.cancellation_fee_type}>
         <FormLabel component="legend">Cancellation fee type</FormLabel>
@@ -469,7 +467,7 @@ const CancellationSection = ({ errors, register, control }: any) => (
 
 const CommissionSection = ({ errors, register }: any) => (
   <section className="space-y-6">
-    <h2 className="text-lg font-semibold text-neutral-900">Platform Commission</h2>
+    <h2 className="text-lg font-normal text-neutral-900">Platform Commission</h2>
     <Field label="Commission fee" hint="Percentage commission of the trip fare for the platform"
       error={errors.trip_commission_percentage?.message}>
       <TextField fullWidth type="number" size="medium"
@@ -485,24 +483,28 @@ export const PricingConfigDetails = () => {
   const navigate = useNavigate()
   const categoryId = id ?? ''
   const [isPending, setIsPending] = React.useState(false)
-  const pricingType = (type ?? 'airport_transfer') as PricingType
-
-    const { data: categoryData, isLoading, error } = useVehicleCategory(categoryId)
-
+  const pricingType = (type) as PricingType
+  
+  const { data: categoryData, isLoading, error } = useVehicleCategory(categoryId)
+  
   useEffect(() => {
     if (!id) {
       toast.error('Invalid configuration ID')
       setTimeout(() => navigate(path.DASHBOARD.PRICING_CONFIG), 2000)
     }
   }, [id])
-
+  
   if (isLoading) return <PricingConfigDetailsSkeleton />
   if (error) return <ErrorState message={error?.message || 'Failed to load configuration'} />
   if (!categoryData) return <PricingConfigDetailsSkeleton />
-
+  
   const label = typeLabel[pricingType]
   const formId = `${pricingType}-form`
   const formProps = { categoryData, categoryId, type: pricingType, onPendingChange: setIsPending }
+  
+  const isAirportTransferType = pricingType === 'airport-transfer';
+  const isDailyType = pricingType === 'daily';
+  const isFleetType = pricingType === 'fleet';
 
   return (
     <div className="max-w-4xl">
@@ -517,15 +519,15 @@ export const PricingConfigDetails = () => {
       />
 
       <div className="flex items-center justify-between mt-6 mb-12">
-        <h1 className="text-2xl font-bold text-neutral-900">
-          <span className="font-normal">{label}:</span> {categoryData?.name}
+        <h1 className="text-2xl font-normal text-neutral-900">
+          <span>{label}:</span> <span className="font-medium">{categoryData?.name}</span>
         </h1>
         <SaveButton isPending={isPending} formId={formId} />
       </div>
 
-      {pricingType === 'airport_transfer' && <AirportTransferForm {...formProps} />}
-      {pricingType === 'daily' && <DailyForm {...formProps} />}
-      {pricingType === 'fleet' && <FleetForm {...formProps} />}
+      {isAirportTransferType && <AirportTransferForm {...formProps} />}
+      {isDailyType && <DailyForm {...formProps} />}
+      {isFleetType && <FleetForm {...formProps} />}
     </div>
   )
 }
