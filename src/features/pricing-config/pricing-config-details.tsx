@@ -93,7 +93,7 @@ const AirportTransferForm = ({
   return (
     <form id="airport-transfer-form" onSubmit={handleSubmit(onSubmit)}>
       <div className="max-w-lg mx-auto space-y-10">
-        <section className="space-y-6">
+        <section className="space-y-4">
           <h2 className="text-lg font-normal text-neutral-900">Trip fare</h2>
           <div className="space-y-4">
             <Field label="Base price" hint="Starting amount per trip"
@@ -117,7 +117,7 @@ const AirportTransferForm = ({
           </div>
         </section>
 
-        <section className="space-y-6">
+        <section className="space-y-4">
           <h2 className="text-lg font-normal text-neutral-900">Waiting fee (optional)</h2>
           <div className="space-y-4">
             <Field label="Free wait time (minutes)" hint="The free time in minutes before wait time fees is charged"
@@ -202,7 +202,7 @@ const DailyForm = ({
   return (
     <form id="daily-form" onSubmit={handleSubmit(onSubmit)}>
       <div className="max-w-lg mx-auto space-y-10">
-        <section className="space-y-6">
+        <section className="space-y-4">
           <h2 className="text-lg font-normal text-neutral-900">Half-Day Fare</h2>
           <div className="space-y-4">
             <Field label="No. of hours" hint="No. of hours for half-day"
@@ -219,7 +219,7 @@ const DailyForm = ({
           </div>
         </section>
 
-        <section className="space-y-6">
+        <section className="space-y-4">
           <h2 className="text-lg font-normal text-neutral-900">Full Day Fare</h2>
           <div className="space-y-4">
             <Field label="No. of hours" hint="No. of hours for full-day"
@@ -241,7 +241,7 @@ const DailyForm = ({
           </div>
         </section>
 
-        <section className="space-y-6">
+        <section className="space-y-4">
           <h2 className="text-lg font-normal text-neutral-900">Waiting time</h2>
           <div className="space-y-4">
             <Field label="Free wait time" hint="The free time in minutes before trip booking starts counting"
@@ -258,7 +258,7 @@ const DailyForm = ({
           </div>
         </section>
 
-        <section className="space-y-6">
+        <section className="space-y-4">
           <h2 className="text-lg font-normal text-neutral-900">Extra Time</h2>
           <div className="space-y-4">
             <Field label="Grace period" hint="The free time in minutes after booking time elapses"
@@ -337,7 +337,7 @@ const FleetForm = ({
   return (
     <form id="fleet-form" onSubmit={handleSubmit(onSubmit)}>
       <div className="max-w-lg mx-auto space-y-10">
-        <section className="space-y-6">
+        <section className="space-y-4">
           <h2 className="text-lg font-normal text-neutral-900">Trip fare</h2>
           <div className="space-y-4">
             <Field label="Fixed Price" hint="Price per vehicle"
@@ -354,7 +354,7 @@ const FleetForm = ({
           </div>
         </section>
 
-        <section className="space-y-6">
+        <section className="space-y-4">
           <h2 className="text-lg font-normal text-neutral-900">Waiting time</h2>
           <div className="space-y-4">
             <Field label="Free wait time" hint="The free time in minutes before trip time starts counting"
@@ -371,7 +371,7 @@ const FleetForm = ({
           </div>
         </section>
 
-        <section className="space-y-6">
+        <section className="space-y-4">
           <h2 className="text-lg font-normal text-neutral-900">Extra Time</h2>
           <div className="space-y-4">
             <Field label="Grace period" hint="The free time in minutes after booking time elapses"
@@ -435,7 +435,7 @@ const SaveButton = ({ isPending, formId }: { isPending: boolean; formId?: string
 )
 
 const CancellationSection = ({ errors, register, control }: any) => (
-  <section className="space-y-6">
+  <section className="space-y-4">
     <h2 className="text-lg font-normal text-neutral-900">Cancellation fee</h2>
     <div className="space-y-1">
       <FormControl component="fieldset" error={!!errors.cancellation_fee_type}>
@@ -466,7 +466,7 @@ const CancellationSection = ({ errors, register, control }: any) => (
 )
 
 const CommissionSection = ({ errors, register }: any) => (
-  <section className="space-y-6">
+  <section className="space-y-4">
     <h2 className="text-lg font-normal text-neutral-900">Platform Commission</h2>
     <Field label="Commission fee" hint="Percentage commission of the trip fare for the platform"
       error={errors.trip_commission_percentage?.message}>
