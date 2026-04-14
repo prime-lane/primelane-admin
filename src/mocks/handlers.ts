@@ -3025,6 +3025,59 @@ export const handlers = [
   }),
 
   // get transactions (unified)
+  http.get(`${API_BASE_URL}/transactions`, () => {
+    return HttpResponse.json({
+      "data": {
+        "transactions": [
+          {
+            "id": "txn-001",
+            "user_id": "587f88e6-1a09-4e93-affd-0324cf61ffb6",
+            "transaction_type": "CR",
+            "description": "Card/Paystack",
+            "reference": "REF-2025-001",
+            "ride_id": "ride-123",
+            "amount": 500000,
+            "created_at": "2025-02-19T10:30:00.000Z",
+            "updated_at": "2025-02-19T10:30:00.000Z",
+            "status": "completed"
+          },
+          {
+            "id": "txn-002",
+            "user_id": "587f88e6-1a09-4e93-affd-0324cf61ffb6",
+            "transaction_type": "CR",
+            "description": "Card/Paystack",
+            "reference": "REF-2025-002",
+            "ride_id": "ride-124",
+            "amount": 500000,
+            "created_at": "2025-02-19T15:45:00.000Z",
+            "updated_at": "2025-02-19T15:45:00.000Z",
+            "status": "completed"
+          },
+          {
+            "id": "txn-003",
+            "user_id": "587f88e6-1a09-4e93-affd-0324cf61ffb6",
+            "transaction_type": "DR",
+            "description": "Bank Transfer/Kora",
+            "reference": "REF-2025-003",
+            "ride_id": null,
+            "amount": 500000,
+            "created_at": "2025-02-19T09:20:00.000Z",
+            "updated_at": "2025-02-19T09:20:00.000Z",
+            "status": "completed"
+          }
+        ],
+        "pagination": {
+          "total_items": 3,
+          "total_pages": 1,
+          "current_page": 1,
+          "limit": 10
+        }
+      },
+      "success": true
+    })
+  }),
+
+  // get transactions (unified)
   http.get(`${API_BASE_URL}/transactions/my-transactions`, () => {
     // Supports both 'type' and 'transaction_type', and extra finance fields
     return HttpResponse.json({

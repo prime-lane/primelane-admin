@@ -17,7 +17,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { fromKobo, toKobo } from '@/lib/utils'
-import { useUpdatePricingConfig, type PricingConfigData } from './api/use-pricing-config'
+import { useUpdatePricingConfig, usePricingConfig, type PricingConfigData } from './api/use-pricing-config'
 import {
   airportTransferSchema,
   dailySchema,
@@ -487,7 +487,6 @@ export const PricingConfigDetails = () => {
   const [isPending, setIsPending] = React.useState(false)
   const pricingType = (type ?? 'airport_transfer') as PricingType
 
-  // const { data: categoryData, isLoading, error } = usePricingConfig(categoryId, pricingType)
     const { data: categoryData, isLoading, error } = useVehicleCategory(categoryId)
 
   useEffect(() => {

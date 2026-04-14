@@ -23,6 +23,7 @@ export const path = {
     REVIEWS: '/dashboard/reviews',
     FINANCE: {
       ROOT: '/dashboard/finance',
+      TRANSACTIONS: '/dashboard/finance/transactions',
       COMMISSION: '/dashboard/finance/commission',
       DRIVER_SETTLEMENTS: '/dashboard/finance/driver-settlements',
       DRIVER_WALLET: '/dashboard/finance/driver-wallet',
