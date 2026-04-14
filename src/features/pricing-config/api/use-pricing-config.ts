@@ -77,6 +77,8 @@ export const useUpdatePricingConfig = (categoryId: string, type: string) => {
         onSuccess: () => {
             toast.success('Pricing configuration updated successfully')
             queryClient.invalidateQueries({ queryKey: ['pricing-config', categoryId] })
+            queryClient.invalidateQueries({ queryKey: ['vehicle-categories'] })
+            queryClient.invalidateQueries({ queryKey: ['vehicle-category', categoryId] })
         },
         onError: (error: { response?: { data?: { message?: string } } }) => {
             toast.error(
