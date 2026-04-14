@@ -8,6 +8,7 @@ import { format } from 'date-fns'
 import { ArrowRightUp as ExternalLink } from '@solar-icons/react'
 import { formatCurrency, formatDuration, fromKobo } from '@/lib/utils'
 import { useEffect } from 'react'
+import { useCategoryName } from '@/features/pricing-config/hooks/use-category-name'
 import { CAR_CURSOR } from '@/config/dashboard'
 import { TripDetailsSkeleton } from './components/skeletons'
 
@@ -46,6 +47,8 @@ export const TripDetails = () => {
     }
   }, [])
 
+  const { getCategoryName } = useCategoryName()
+
   if (isLoading) return <TripDetailsSkeleton />
   if (error || !trip)
     return <ErrorState message="Failed to load trip details" />
@@ -56,8 +59,15 @@ export const TripDetails = () => {
   const driverName =
     `${trip.driver?.first_name || ''} ${trip.driver?.last_name || ''}`.trim() ||
     'N/A'
+
+  const categories =
+    trip.driver_vehicle?.category_ids
+      ?.map((id) => getCategoryName(id))
+      .filter((name) => name !== 'N/A')
+      .join(', ') || ''
+
   const vehicleCategory =
-    trip.driver_vehicle?.type || trip.vehicle_category || 'N/A'
+    trip.driver_vehicle?.type || trip.vehicle_category || categories || 'N/A'
 
   return (
     <div className="space-y-9">

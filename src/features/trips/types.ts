@@ -37,6 +37,7 @@ export interface DriverVehicle {
     driver_id: string
     status: string
     category_id: string
+    category_ids?: string[] | null
     front_image: string
     back_image: string
     side_image: string
