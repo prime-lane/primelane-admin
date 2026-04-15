@@ -6,6 +6,7 @@ import {
   ShieldUser,
   UserRounded,
   UsersGroupRounded,
+  WalletMoney,
 } from '@solar-icons/react'
 import { type ElementType } from 'react'
 
@@ -54,6 +55,24 @@ export const NAV_ITEMS: NavItem[] = [
     to: path.DASHBOARD.TRIPS,
     permission: 'trips:view',
     description: 'View trips',
+  },
+  {
+    label: 'Finance',
+    icon: WalletMoney,
+    to: path.DASHBOARD.FINANCE.TRANSACTIONS,
+    hasSubmenu: true,
+    permission: 'trips:view',
+    // permission: 'finance:view',
+    description: 'Finance management',
+    children: [
+      {
+        label: 'Transactions',
+        to: path.DASHBOARD.FINANCE.TRANSACTIONS,
+        permission: 'trips:view',
+        // permission: 'finance:view',
+        description: 'View transactions',
+      },
+    ],
   },
   {
     label: 'Admin Mgmt.',

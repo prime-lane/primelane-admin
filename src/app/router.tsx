@@ -94,6 +94,11 @@ const Reviews = lazy(() =>
 //     default: module.CustomerWallet,
 //   })),
 // )
+const Transactions = lazy(() =>
+  import('@/features/finance/transactions').then((module) => ({
+    default: module.Transactions,
+  })),
+)
 const Refund = lazy(() =>
   import('@/features/finance/refund').then((module) => ({
     default: module.Refund,
@@ -277,6 +282,16 @@ export const router = createBrowserRouter([
       //     </Suspense>
       //   ),
       // },
+      {
+        path: path.DASHBOARD.FINANCE.TRANSACTIONS,
+        element: (
+          <RoutePermissionGate permission="trips:view">
+            <Suspense fallback={<Loading />}>
+              <Transactions />
+            </Suspense>
+          </RoutePermissionGate>
+        ),
+      },
       {
         path: path.DASHBOARD.FINANCE.REFUND,
         element: (
