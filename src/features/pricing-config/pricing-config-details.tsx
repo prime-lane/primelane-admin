@@ -500,6 +500,8 @@ export const PricingConfigDetails = () => {
   
   const label = typeLabel[pricingType]
   const formId = `${pricingType}-form`
+
+  // small hack to fix typing issue
   const formProps = { categoryData: categoryData as unknown as PricingConfigData, categoryId, type: pricingType, onPendingChange: setIsPending }
   
   const isAirportTransferType = pricingType === 'airport-transfer';
