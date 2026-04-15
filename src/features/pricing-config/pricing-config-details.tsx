@@ -17,7 +17,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { fromKobo, toKobo } from '@/lib/utils'
-import { useUpdatePricingConfig, usePricingConfig, type PricingConfigData } from './api/use-pricing-config'
+import { useUpdatePricingConfig, type PricingConfigData } from './api/use-pricing-config'
 import {
   airportTransferSchema,
   dailySchema,
@@ -492,7 +492,7 @@ export const PricingConfigDetails = () => {
       toast.error('Invalid configuration ID')
       setTimeout(() => navigate(path.DASHBOARD.PRICING_CONFIG), 2000)
     }
-  }, [id])
+  }, [id, navigate])
   
   if (isLoading) return <PricingConfigDetailsSkeleton />
   if (error) return <ErrorState message={error?.message || 'Failed to load configuration'} />
@@ -500,7 +500,7 @@ export const PricingConfigDetails = () => {
   
   const label = typeLabel[pricingType]
   const formId = `${pricingType}-form`
-  const formProps = { categoryData, categoryId, type: pricingType, onPendingChange: setIsPending }
+  const formProps = { categoryData: categoryData as unknown as PricingConfigData, categoryId, type: pricingType, onPendingChange: setIsPending }
   
   const isAirportTransferType = pricingType === 'airport-transfer';
   const isDailyType = pricingType === 'daily';
