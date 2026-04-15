@@ -1,6 +1,6 @@
 
 
-export type AccountStatus = 'active' | 'pending' | 'inactive' | 'deactivated'
+export type AccountStatus = 'active' | 'pending' | 'inactive'
 
 export interface Customer {
     id: string

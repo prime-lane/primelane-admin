@@ -4,7 +4,6 @@ export type TripStatus = 'SCHEDULED' | 'COMPLETED'
 export type StatusVariant =
   | 'active'
   | 'pending'
-  | 'inactive'
   | 'deactivated'
   | 'completed'
   | 'cancelled'
@@ -37,7 +36,6 @@ const getStatusConfig = (status: string) => {
         color: 'orange.400',
         bgcolor: '#F973161A',
       }
-    case 'inactive':
     case 'deactivated':
       return {
         label: 'Deactivated',
