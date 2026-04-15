@@ -3,11 +3,21 @@ import { type Trip } from '../types'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { formatDate } from '@/utils/table-utils'
 import { formatCurrency, fromKobo } from '@/lib/utils'
+import { useVehicleCategories } from '@/features/pricing-config/api/use-vehicle-categories'
 import { CopyButton } from '@/components/ui/copy-button'
-import { useCategoryName } from '@/features/pricing-config/hooks/use-category-name'
 
 export const useTripColumns = (): ColumnDef<Trip>[] => {
-  const { getCategoryName } = useCategoryName()
+  const { data: categoriesData } = useVehicleCategories()
+
+  const getCategoryName = (categoryId?: string | null): string => {
+    if (!categoryId) return 'N/A'
+    if (!categoriesData?.categories) return categoryId
+
+    const category = categoriesData.categories.find(
+      (cat) => cat.id === categoryId,
+    )
+    return category?.name || categoryId
+  }
 
   return [
     {
