@@ -518,7 +518,7 @@ export const PricingConfigDetails = () => {
         ]}
       />
 
-      <div className="flex items-center justify-between mt-6 mb-12">
+      <div className="flex items-center justify-between mt-2 mb-4">
         <h1 className="text-2xl font-normal text-neutral-900">
           <span>{label}:</span> <span className="font-medium">{categoryData?.name}</span>
         </h1>
