@@ -9,23 +9,41 @@ export const handlers = [
       success: true,
       data: {
         id: '08bd1a56-9ad1-484a-8986-bc250e8cd601',
-        slug: 'BUSINESS',
-        name: 'Business',
+        slug: 'BUSINESS_SUV',
+        name: 'Business SUV',
         description: 'Premium sedans for everyday',
-        hourly_base_price: 200000,
-        hourly_per_km: 1500,
-        hourly_per_min: 1500,
-        hourly_trip_commission_percentage: 10,
-        hourly_cancellation_base: 2200000,
-        hourly_cancellation_percentage: 10,
-        hourly_cancellation_fee_type: 'fixed',
-        one_way_base_price: 150000,
-        one_way_per_km: 1000,
-        one_way_per_min: 800,
-        one_way_trip_commission_percentage: 10,
-        one_way_cancellation_base: 1500000,
-        one_way_cancellation_percentage: 10,
-        one_way_cancellation_fee_type: 'percentage',
+        airport_transfer_base_price: 150000,
+        airport_transfer_per_km: 5000,
+        airport_transfer_per_min: 1500,
+        airport_transfer_free_wait_time: 10,
+        airport_transfer_wait_fee_per_min: 500,
+        airport_transfer_trip_commission_percentage: 15,
+        airport_transfer_cancellation_base: 0,
+        airport_transfer_cancellation_percentage: 10,
+        airport_transfer_cancellation_fee_type: 'percentage',
+        daily_rental_half_day_hours: 4,
+        daily_rental_half_day_fare: 250000,
+        daily_rental_full_day_hours: 8,
+        daily_rental_full_day_fare: 450000,
+        daily_rental_free_wait_time: 20,
+        daily_rental_wait_fee_per_min: 500,
+        daily_rental_trip_commission_percentage: 15,
+        daily_rental_cancellation_base: 0,
+        daily_rental_cancellation_percentage: 10,
+        daily_rental_cancellation_fee_type: 'percentage',
+        daily_rental_extra_time_cost: 100000,
+        daily_rental_grace_period_mins: 10,
+        daily_rental_daily_hours: 8,
+        fleet_rental_base_price: 350000,
+        fleet_rental_free_wait_time: 20,
+        fleet_rental_wait_fee_per_min: 500,
+        fleet_rental_trip_commission_percentage: 15,
+        fleet_rental_cancellation_base: 50000,
+        fleet_rental_cancellation_percentage: 0,
+        fleet_rental_cancellation_fee_type: 'fixed',
+        fleet_rental_extra_time_cost: 100000,
+        fleet_rental_grace_period_mins: 10,
+        fleet_rental_daily_hours: 8,
       },
     })
   }),
@@ -36,6 +54,25 @@ export const handlers = [
       data: {
         id: '08bd1a56-9ad1-484a-8986-bc250e8cd601',
       },
+    })
+  }),
+
+  // my ride analytics
+  http.get(`${API_BASE_URL}/analytics`, () => {
+    return HttpResponse.json({
+      "data": {
+        "total_trip_revenue": 12500000,
+        "total_ride_payments": 25000000,
+        "total_refunds": 12500000,
+        "total_completed_trip_count": 7,
+        "total_airport_transfer_count": 48,
+        "total_daily_rental_count": 10,
+        "total_fleet_rental_count": 8,
+        "total_customer_count": 6,
+        "total_driver_count": 11,
+        "active_driver_count": 5
+      },
+      "success": true
     })
   }),
 
@@ -3001,6 +3038,59 @@ export const handlers = [
         "is_pin_set": false,
         "created_at": "2025-01-15T10:30:00.000Z",
         "updated_at": "2025-12-20T14:20:00.000Z"
+      },
+      "success": true
+    })
+  }),
+
+  // get transactions (unified)
+  http.get(`${API_BASE_URL}/transactions`, () => {
+    return HttpResponse.json({
+      "data": {
+        "transactions": [
+          {
+            "id": "txn-001",
+            "user_id": "587f88e6-1a09-4e93-affd-0324cf61ffb6",
+            "transaction_type": "CR",
+            "description": "Card/Paystack",
+            "reference": "REF-2025-001",
+            "ride_id": "ride-123",
+            "amount": 500000,
+            "created_at": "2025-02-19T10:30:00.000Z",
+            "updated_at": "2025-02-19T10:30:00.000Z",
+            "status": "completed"
+          },
+          {
+            "id": "txn-002",
+            "user_id": "587f88e6-1a09-4e93-affd-0324cf61ffb6",
+            "transaction_type": "CR",
+            "description": "Card/Paystack",
+            "reference": "REF-2025-002",
+            "ride_id": "ride-124",
+            "amount": 500000,
+            "created_at": "2025-02-19T15:45:00.000Z",
+            "updated_at": "2025-02-19T15:45:00.000Z",
+            "status": "completed"
+          },
+          {
+            "id": "txn-003",
+            "user_id": "587f88e6-1a09-4e93-affd-0324cf61ffb6",
+            "transaction_type": "DR",
+            "description": "Bank Transfer/Kora",
+            "reference": "REF-2025-003",
+            "ride_id": null,
+            "amount": 500000,
+            "created_at": "2025-02-19T09:20:00.000Z",
+            "updated_at": "2025-02-19T09:20:00.000Z",
+            "status": "completed"
+          }
+        ],
+        "pagination": {
+          "total_items": 3,
+          "total_pages": 1,
+          "current_page": 1,
+          "limit": 10
+        }
       },
       "success": true
     })
