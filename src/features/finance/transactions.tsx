@@ -5,7 +5,6 @@ import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
 import { exportToCSV } from '@/utils/export-utils'
-import { formatDateToLocal } from '@/lib/utils'
 import { Box } from '@mui/material'
 import { parseAsString, useQueryState } from 'nuqs'
 import { useTransactions } from './api/use-transactions'
@@ -38,14 +37,14 @@ export const Transactions = () => {
     end_date: endDate || undefined,
   })
 
-  const handleFilterChange = (key: string, value: string | { start?: string; end?: string }) => {
+  const handleFilterChange = (key: string, value: string | { start: Date | null; end: Date | null }) => {
     setPage(1)
     if (key === 'transaction_type') {
       setTransactionType((value as string).toLowerCase() === 'all' ? null : (value as string))
     } else if (key === 'date') {
-      const dateVal = value as { start?: string; end?: string }
-      setStartDate(dateVal.start ? formatDateToLocal(dateVal.start) : null)
-      setEndDate(dateVal.end ? formatDateToLocal(dateVal.end) : null)
+      const dateVal = value as { start: Date | null; end: Date | null }
+      setStartDate(dateVal.start ? dateVal.start.toISOString() : null)
+      setEndDate(dateVal.end ? dateVal.end.toISOString() : null)
     }
   }
 
