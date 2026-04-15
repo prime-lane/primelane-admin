@@ -17,6 +17,7 @@ export interface Rider {
 
 export interface Driver {
     id: string
+    custom_user_id?: string
     first_name: string
     last_name: string
     image_url: string
@@ -69,15 +70,30 @@ export interface RiderPreference {
     dnd: boolean
 }
 
+export interface Slot {
+    id: string
+    ride_id: string
+    slot_index: number
+    driver_id: string
+    category_id: string
+    status: string
+    driver: Driver
+    driver_vehicle: Partial<DriverVehicle>
+}
+
 export interface TripDetail {
     id: string
+    custom_ride_id: string
     rider_id: string
     driver_id: string | null
     pickup: Location
-    dropoff: Location
+    dropoff: Location | null
     status: StatusVariant
     ride_type: string
+    hourly_ride_type?: string | null
     booked_hours: number | null
+    no_of_days?: number | null
+    no_of_vehicles?: number | null
     is_scheduled: boolean
     scheduled_at: string | null
     vehicle_category?: string
@@ -89,6 +105,8 @@ export interface TripDetail {
     actual_duration: string | number | null
     created_at: string
     requested_at: string
+    pickup_time?: string | null
+    end_time?: string | null
     offered_at: string | null
     accepted_at: string | null
     arrived_pickup_at: string | null
@@ -97,15 +115,20 @@ export interface TripDetail {
     cancelled_at: string | null
     updated_at: string
     cancellation_reason: string | null
+    cancellation_fee?: number | null
+    commission?: number | null
     canceller_name: string | null
     cancelled_by: string | null
     rating: number | null
     feedback: string | null
+    payment_method?: string | null
+    payment_reference?: string | null
     rider?: Rider
     driver?: Driver
     rider_preference?: RiderPreference
     driver_vehicle?: DriverVehicle
     stops?: Location[]
+    slots?: Slot[]
 }
 
 
@@ -135,8 +158,6 @@ export interface Trip {
     rider?: Rider
     driver?: Driver
 }
-
-
 
 export interface VehicleCategory {
     id: string
