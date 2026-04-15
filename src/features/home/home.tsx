@@ -5,16 +5,12 @@ import { PermissionGate } from '@/components/ui/permission-gate'
 import { formatCurrency, formatDateToLocal, fromKobo } from '@/lib/utils'
 import { Box, Card, CardContent, Grid, Skeleton } from '@mui/material'
 import {
-  Banknote2,
   Bill,
-  Bill2,
   Rocket,
   Shield,
   ShieldCheck,
-  ShieldCross,
-  UserCheck,
-  UserCross,
   UsersGroupTwoRounded,
+  WalletMoney,
 } from '@solar-icons/react'
 import { parseAsString, useQueryState } from 'nuqs'
 import { useDashboardStats } from './api/use-dashboard-stats'
@@ -85,31 +81,29 @@ export const Home = () => {
           value: formatCurrency(fromKobo(dashboardData.total_trip_revenue)),
         },
         {
-          icon: <Banknote2 size={24} color="black" />,
-          label: 'Total commission',
-          value: formatCurrency(fromKobo(dashboardData.total_trip_commission)),
-        },
-        {
-          icon: <Bill2 size={24} color="black" />,
-          label: 'Driver earning',
-          value: formatCurrency(
-            fromKobo(dashboardData.total_trip_driver_earning),
-          ),
+          icon: <WalletMoney size={24} color="black" />,
+          label: 'Total refunds',
+          value: formatCurrency(fromKobo(dashboardData.total_refunds)),
         },
         {
           icon: <Rocket size={24} color="black" />,
-          label: 'Completed trips',
+          label: 'Completed bookings',
           value: <CountUp value={dashboardData.total_completed_trip_count} />,
         },
         {
           icon: <Rocket size={24} color="black" />,
-          label: 'Total one-way trips',
-          value: <CountUp value={dashboardData.total_one_off_trip_count} />,
+          label: 'Total airport transfers',
+          value: <CountUp value={dashboardData.total_airport_transfer_count} />,
         },
         {
           icon: <Rocket size={24} color="black" />,
-          label: 'Total hourly trips',
-          value: <CountUp value={dashboardData.total_hourly_trip_count} />,
+          label: 'Total daily rentals',
+          value: <CountUp value={dashboardData.total_daily_rental_count} />,
+        },
+        {
+          icon: <Rocket size={24} color="black" />,
+          label: 'Total fleet rentals',
+          value: <CountUp value={dashboardData.total_fleet_rental_count} />,
         },
         {
           icon: <UsersGroupTwoRounded size={24} color="black" />,
@@ -117,35 +111,14 @@ export const Home = () => {
           value: <CountUp value={dashboardData.total_customer_count} />,
         },
         {
-          icon: <UserCross size={24} color="black" />,
-          label: 'Unverified Customers',
-          value: (
-            <CountUp value={dashboardData.total_unverified_customer_count} />
-          ),
-        },
-        {
-          icon: <UserCheck size={24} color="black" />,
-          label: 'Verified Customers',
-          value: (
-            <CountUp value={dashboardData.total_verified_customer_count} />
-          ),
-        },
-        {
           icon: <Shield size={24} color="black" />,
-          label: 'Total Drivers',
+          label: 'Total drivers',
           value: <CountUp value={dashboardData.total_driver_count} />,
         },
         {
           icon: <ShieldCheck size={24} color="black" />,
-          label: 'Verified Drivers',
-          value: <CountUp value={dashboardData.total_verified_driver_count} />,
-        },
-        {
-          icon: <ShieldCross size={24} color="black" />,
-          label: 'Pending Drivers',
-          value: (
-            <CountUp value={dashboardData.total_unverified_driver_count} />
-          ),
+          label: 'Active drivers',
+          value: <CountUp value={dashboardData.active_driver_count} />,
         },
       ]
     : []

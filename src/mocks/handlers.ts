@@ -58,6 +58,25 @@ export const handlers = [
   }),
 
   // my ride analytics
+  http.get(`${API_BASE_URL}/analytics`, () => {
+    return HttpResponse.json({
+      "data": {
+        "total_trip_revenue": 12500000,
+        "total_ride_payments": 25000000,
+        "total_refunds": 12500000,
+        "total_completed_trip_count": 7,
+        "total_airport_transfer_count": 48,
+        "total_daily_rental_count": 10,
+        "total_fleet_rental_count": 8,
+        "total_customer_count": 6,
+        "total_driver_count": 11,
+        "active_driver_count": 5
+      },
+      "success": true
+    })
+  }),
+
+  // my ride analytics
   http.get(`${API_BASE_URL}/analytics/my-ride-stats`, () => {
     return HttpResponse.json({
       "data": {
