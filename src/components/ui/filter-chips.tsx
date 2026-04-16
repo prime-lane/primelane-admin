@@ -29,7 +29,7 @@ export const FilterChips = ({ activeFilters, onRemove }: FilterChipsProps) => {
           sx={{
             borderRadius: 1,
             px: '12px',
-            height:'44px',
+            height: '44px',
             fontSize: 14,
             bgcolor: 'neutral.100',
             color: 'neutral.500',

@@ -63,7 +63,7 @@ export const ErrorBoundary = () => {
             sx={{
               color: 'text.secondary',
               maxWidth: '500px',
-              fontFamily:'monospace'
+              fontFamily: 'monospace',
             }}
           >
             {errorMessage}

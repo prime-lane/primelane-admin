@@ -74,26 +74,11 @@ const Reviews = lazy(() =>
     default: module.Reviews,
   })),
 )
-// const Commission = lazy(() =>
-//   import('@/features/finance/commission').then((module) => ({
-//     default: module.Commission,
-//   })),
-// )
-// const DriverSettlements = lazy(() =>
-//   import('@/features/finance/driver-settlements').then((module) => ({
-//     default: module.DriverSettlements,
-//   })),
-// )
-// const DriverWallet = lazy(() =>
-//   import('@/features/finance/driver-wallet').then((module) => ({
-//     default: module.DriverWallet,
-//   })),
-// )
-// const CustomerWallet = lazy(() =>
-//   import('@/features/finance/customer-wallet').then((module) => ({
-//     default: module.CustomerWallet,
-//   })),
-// )
+const CustomerWallet = lazy(() =>
+  import('@/features/finance/customer-wallet').then((module) => ({
+    default: module.CustomerWallet,
+  })),
+)
 const Transactions = lazy(() =>
   import('@/features/finance/transactions').then((module) => ({
     default: module.Transactions,
@@ -283,9 +268,19 @@ export const router = createBrowserRouter([
       //   ),
       // },
       {
+        path: path.DASHBOARD.FINANCE.CUSTOMER_WALLET,
+        element: (
+          <RoutePermissionGate permission="wallet:view">
+            <Suspense fallback={<Loading />}>
+              <CustomerWallet />
+            </Suspense>
+          </RoutePermissionGate>
+        ),
+      },
+      {
         path: path.DASHBOARD.FINANCE.TRANSACTIONS,
         element: (
-          <RoutePermissionGate permission="trips:view">
+          <RoutePermissionGate permission="transaction:view">
             <Suspense fallback={<Loading />}>
               <Transactions />
             </Suspense>
@@ -295,9 +290,11 @@ export const router = createBrowserRouter([
       {
         path: path.DASHBOARD.FINANCE.REFUND,
         element: (
-          <Suspense fallback={<Loading />}>
-            <Refund />
-          </Suspense>
+          <RoutePermissionGate permission="refund:view">
+            <Suspense fallback={<Loading />}>
+              <Refund />
+            </Suspense>
+          </RoutePermissionGate>
         ),
       },
       {

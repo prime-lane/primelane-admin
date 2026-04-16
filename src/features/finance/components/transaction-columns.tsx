@@ -8,7 +8,9 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
     accessorKey: 'id',
     header: 'Transaction ID',
     cell: ({ row }) => (
-      <span className="text-sm text-neutral-800">{row.original.id.substring(0, 8).toUpperCase()}</span>
+      <span className="text-sm text-neutral-800">
+        {row.original.id.substring(0, 8).toUpperCase()}
+      </span>
     ),
   },
   {
@@ -30,22 +32,132 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
     ),
   },
   {
-    accessorKey: 'description',
+    accessorKey: 'provider',
     header: 'Payment method/Partner',
-    cell: ({ row }) => (
-      <span className="text-sm text-neutral-600">{row.original.description || '—'}</span>
-    ),
+    cell: ({ row }) => {
+      const parts = [row.original.channel, row.original.provider].filter(
+        Boolean,
+      )
+      return (
+        <span className="text-sm text-neutral-600">
+          {parts.length ? parts.join('/') : '—'}
+        </span>
+      )
+    },
   },
   {
     accessorKey: 'reference',
     header: 'Reference no.',
     cell: ({ row }) => (
-      <span className="text-sm text-neutral-600">{row.original.reference || '—'}</span>
+      <span className="text-sm text-neutral-600">
+        {row.original.reference || '—'}
+      </span>
     ),
   },
   {
     accessorKey: 'amount',
     header: 'Amount Paid',
+    cell: ({ row }) => (
+      <span className="text-sm text-neutral-800">
+        {formatCurrency(fromKobo(row.original.amount))}
+      </span>
+    ),
+  },
+]
+
+export const refundColumns: ColumnDef<Transaction>[] = [
+  {
+    accessorKey: 'id',
+    header: 'Transaction ID',
+    cell: ({ row }) => (
+      <span className="text-sm text-neutral-800">
+        {row.original.id.substring(0, 8).toUpperCase()}
+      </span>
+    ),
+  },
+  {
+    accessorKey: 'created_at',
+    header: 'Transaction Date',
+    cell: ({ row }) => (
+      <span className="text-sm text-neutral-600">
+        {format(new Date(row.original.created_at), 'dd/MM/yyyy')}
+      </span>
+    ),
+  },
+  {
+    accessorKey: 'ride_id',
+    header: 'Trip ID / Category',
+    cell: ({ row }) => {
+      const tripId = row.original.ride_id || '—'
+      const category = row.original.category || '—'
+      return (
+        <div className="flex flex-col gap-[2px]">
+          <span className="text-sm font-medium text-neutral-800">{tripId}</span>
+          <span className="text-xs text-gray-500">{category}</span>
+        </div>
+      )
+    },
+  },
+  {
+    accessorKey: 'description',
+    header: 'Description',
+    cell: ({ row }) => (
+      <span className="text-sm text-neutral-600">
+        {row.original.narration || row.original.description || '—'}
+      </span>
+    ),
+  },
+  {
+    accessorKey: 'amount',
+    header: 'Amount Refunded',
+    cell: ({ row }) => (
+      <span className="text-sm text-neutral-800">
+        {formatCurrency(fromKobo(row.original.amount))}
+      </span>
+    ),
+  },
+]
+
+export const customerWalletColumns: ColumnDef<Transaction>[] = [
+  {
+    accessorKey: 'id',
+    header: 'Transaction ID',
+    cell: ({ row }) => (
+      <span className="text-sm text-neutral-800">
+        {row.original.id.substring(0, 8).toUpperCase()}
+      </span>
+    ),
+  },
+  {
+    accessorKey: 'created_at',
+    header: 'Transaction Date',
+    cell: ({ row }) => (
+      <span className="text-sm text-neutral-600">
+        {format(new Date(row.original.created_at), 'dd/MM/yyyy')}
+      </span>
+    ),
+  },
+  {
+    accessorKey: 'user_id',
+    header: 'Customer ID',
+    cell: ({ row }) => (
+      <span className="text-sm text-neutral-800">
+        {row.original.user_id.substring(0, 8).toUpperCase()}
+      </span>
+    ),
+  },
+  {
+    accessorKey: 'description',
+    header: 'Description',
+    cell: ({ row }) => (
+      <span className="text-sm text-neutral-600">
+        {row.original.narration || row.original.description || '—'}
+      </span>
+    ),
+  },
+  {
+    accessorKey: 'amount',
+    header: 'Amount',
     cell: ({ row }) => (
       <span className="text-sm text-neutral-800">
         {formatCurrency(fromKobo(row.original.amount))}

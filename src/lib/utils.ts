@@ -1,6 +1,6 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-import { intervalToDuration } from "date-fns"
+import { clsx, type ClassValue } from 'clsx'
+import { twMerge } from 'tailwind-merge'
+import { intervalToDuration } from 'date-fns'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -33,22 +33,27 @@ export function formatCurrency(amount: number | string | null | undefined) {
 
 export const formatDuration = (minutes: string | number | null | undefined) => {
   if (!minutes) return '-'
-  const mins = Math.abs(typeof minutes === 'string' ? parseFloat(minutes) : minutes)
+  const mins = Math.abs(
+    typeof minutes === 'string' ? parseFloat(minutes) : minutes,
+  )
   if (isNaN(mins)) return '-'
 
   const duration = intervalToDuration({ start: 0, end: mins * 60 * 1000 })
 
   const parts: string[] = []
-  if (duration.hours) parts.push(`${duration.hours} hour${duration.hours > 1 ? 's' : ''}`)
-  if (duration.minutes) parts.push(`${duration.minutes} minute${duration.minutes > 1 ? 's' : ''}`)
-  if (duration.seconds) parts.push(`${duration.seconds} second${duration.seconds > 1 ? 's' : ''}`)
+  if (duration.hours)
+    parts.push(`${duration.hours} hour${duration.hours > 1 ? 's' : ''}`)
+  if (duration.minutes)
+    parts.push(`${duration.minutes} minute${duration.minutes > 1 ? 's' : ''}`)
+  if (duration.seconds)
+    parts.push(`${duration.seconds} second${duration.seconds > 1 ? 's' : ''}`)
 
   return parts.length > 0 ? parts.join(' ') : '0 second'
 }
 
 export const getCategoryNames = (
   categoryIds?: string[] | null,
-  categories?: Array<{ id: string; name: string }>
+  categories?: Array<{ id: string; name: string }>,
 ): string => {
   if (!categoryIds || categoryIds.length === 0) return 'N/A'
   if (!categories) return categoryIds.join(', ')
@@ -74,7 +79,6 @@ export const formatNumber = (num?: number) => {
   if (num === undefined || num === null) return '0'
   return num.toLocaleString()
 }
-
 
 export const formatImageSrc = (src: string): string => {
   // If it's already a data URL or HTTP URL, return as is
@@ -105,4 +109,3 @@ export const formatDateToLocal = (date: Date): string => {
   const seconds = String(date.getSeconds()).padStart(2, '0')
   return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
 }
-

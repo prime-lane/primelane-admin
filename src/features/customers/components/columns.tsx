@@ -12,7 +12,7 @@ export const customerColumns: ColumnDef<Customer>[] = [
     cell: ({ row }) => (
       <div className="flex items-center gap-[2px]">
         <span className="text-sm">{row.original?.custom_user_id}</span>
-        <CopyButton textToCopy={row.original?.custom_user_id}/>
+        <CopyButton textToCopy={row.original?.custom_user_id} />
       </div>
     ),
   },

@@ -17,16 +17,19 @@ pnpm install
 ```
 
 ### Run the app
+
 ```bash
 pnpm run dev
 ```
 
 ### Run tests
+
 ```bash
 pnpm run test
 ```
 
 ### Run build
+
 ```bash
 pnpm run build
 ```
@@ -42,7 +45,9 @@ pnpm run storybook
 ```
 
 ## TODO:
+
 ### FE
+
 - [x] Design system
 - [x] Components
 - [x] Auth page
@@ -69,9 +74,14 @@ pnpm run storybook
 - [x] update category dropdown , (list of categories)
 - [x] add remaining summary card
 - [x] filter button
-- [x] updating vehicle category endpoint (dependent on chijiooke)
+- [x] updating vehicle category endpoint (dependent on chijiooke)]
+- [ ] delimit currency with commas
+- [ ] fix input padding with naira symbol
+- [ ] has_provider to filter refunds
+- [ ] customer_wallet to filter customer wallet
 
 ### BACKEND
+
 - [x] update driver/vehicle (pending, awaiting for chijiooke response)
 - [x] Home/summary page (pending endpoint)
 - [x] identity details - (pending endpoint) /kyc/my-kyc is not for admin
@@ -81,8 +91,8 @@ pnpm run storybook
 - [x] disable nin on edit customer; submit empty string
 - [x] update vehicle category
 - [x] map the category id to the vehicle-category name (vehicle category column under driver)
-- [ ] trip cancellation fee (pending)
-- [ ] settlements
+- [x] trip cancellation fee (pending)
+- [x] settlements
 
 ## AI Guidance
 

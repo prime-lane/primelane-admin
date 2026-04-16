@@ -259,7 +259,9 @@ export const DriverDetails = () => {
             <span className="text-xl text-black font-semibold">
               {driverName}
             </span>
-            <span className="text-sm text-neutral-500">Date Joined: {formatDate(driver.created_at)}</span>
+            <span className="text-sm text-neutral-500">
+              Date Joined: {formatDate(driver.created_at)}
+            </span>
           </div>
           <StatusBadge status={driver.status as any} />
         </div>

@@ -45,7 +45,10 @@ export const adminColumns: ColumnDef<Admin>[] = [
     accessorKey: 'email',
     header: 'Email Address',
     cell: (info) => (
-      <a href={`mailto:${info.getValue() as string}`} className="flex items-center gap-1 cursor-pointer">
+      <a
+        href={`mailto:${info.getValue() as string}`}
+        className="flex items-center gap-1 cursor-pointer"
+      >
         <span className="text-sm font-medium text-neutral-900">
           {info.getValue() as string}
         </span>

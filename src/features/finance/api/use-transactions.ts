@@ -7,23 +7,25 @@ import { buildQueryParams } from '@/lib/utils'
 import type { Transaction } from '@/features/customers/types'
 
 interface UseTransactionsParams extends PaginationParams {
-    search?: string
-    transaction_type?: 'CR' | 'DR'
-    start_date?: string
-    end_date?: string
+  search?: string
+  transaction_type?: 'CR' | 'DR'
+  start_date?: string
+  end_date?: string
+  is_refund?: 'true'
+  customer_wallet?: 'true'
 }
 
 export const useTransactions = (params?: UseTransactionsParams) => {
-    return useQuery({
-        queryKey: ['transactions', params],
-        queryFn: async () => {
-            const searchParams = buildQueryParams(params)
-            const endpoint = `${e.TRANSACTIONS.MY_TRANSACTIONS}?${searchParams.toString()}`
-            const response = await apiClient.get<{
-                transactions: Transaction[]
-                pagination: PaginatedResponse<unknown>['pagination']
-            }>(endpoint)
-            return transformPaginatedResponse(response.data, 'transactions')
-        },
-    })
+  return useQuery({
+    queryKey: ['transactions', params],
+    queryFn: async () => {
+      const searchParams = buildQueryParams(params)
+      const endpoint = `${e.TRANSACTIONS.MY_TRANSACTIONS}?${searchParams.toString()}`
+      const response = await apiClient.get<{
+        transactions: Transaction[]
+        pagination: PaginatedResponse<unknown>['pagination']
+      }>(endpoint)
+      return transformPaginatedResponse(response.data, 'transactions')
+    },
+  })
 }

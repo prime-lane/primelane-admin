@@ -1,6 +1,10 @@
 import { ExportButton, SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
-import { FilterChips, formatDateRange, type ActiveFilter } from '@/components/ui/filter-chips'
+import {
+  FilterChips,
+  formatDateRange,
+  type ActiveFilter,
+} from '@/components/ui/filter-chips'
 import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
@@ -22,7 +26,10 @@ export const Transactions = () => {
     setSearch: setSearchTerm,
   } = useTableParams()
 
-  const [transactionType, setTransactionType] = useQueryState('transaction_type', parseAsString)
+  const [transactionType, setTransactionType] = useQueryState(
+    'transaction_type',
+    parseAsString,
+  )
   const [startDate, setStartDate] = useQueryState('start_date', parseAsString)
   const [endDate, setEndDate] = useQueryState('end_date', parseAsString)
 
@@ -37,10 +44,15 @@ export const Transactions = () => {
     end_date: endDate || undefined,
   })
 
-  const handleFilterChange = (key: string, value: string | { start: Date | null; end: Date | null }) => {
+  const handleFilterChange = (
+    key: string,
+    value: string | { start: Date | null; end: Date | null },
+  ) => {
     setPage(1)
     if (key === 'transaction_type') {
-      setTransactionType((value as string).toLowerCase() === 'all' ? null : (value as string))
+      setTransactionType(
+        (value as string).toLowerCase() === 'all' ? null : (value as string),
+      )
     } else if (key === 'date') {
       const dateVal = value as { start: Date | null; end: Date | null }
       setStartDate(dateVal.start ? dateVal.start.toISOString() : null)
@@ -51,7 +63,10 @@ export const Transactions = () => {
   const handleRemoveFilter = (key: string) => {
     setPage(1)
     if (key === 'transaction_type') setTransactionType(null)
-    else if (key === 'date') { setStartDate(null); setEndDate(null) }
+    else if (key === 'date') {
+      setStartDate(null)
+      setEndDate(null)
+    }
   }
 
   const handleExport = () => {
@@ -130,7 +145,10 @@ export const Transactions = () => {
         </div>
       </Box>
 
-      <FilterChips activeFilters={activeFilterChips} onRemove={handleRemoveFilter} />
+      <FilterChips
+        activeFilters={activeFilterChips}
+        onRemove={handleRemoveFilter}
+      />
 
       <DataTable
         data={data?.items || []}
@@ -146,7 +164,10 @@ export const Transactions = () => {
             : undefined
         }
         onPageChange={setPage}
-        onPageSizeChange={(size) => { setLimit(size); setPage(1) }}
+        onPageSizeChange={(size) => {
+          setLimit(size)
+          setPage(1)
+        }}
       />
     </div>
   )

@@ -1,4 +1,3 @@
-
 export const path = {
   HOME: '/',
   AUTH: {

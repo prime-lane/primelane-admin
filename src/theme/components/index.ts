@@ -3,7 +3,12 @@ import { MuiTextField, MuiInputLabel } from './text-input'
 import { MuiCard, MuiCardContent } from './card'
 import { MuiTab, MuiTabs } from './tab'
 import { MuiOutlinedInput } from './select'
-import { MuiDatePicker, MuiPickersDay, MuiPickersCalendarHeader, MuiDayCalendar } from './datepicker'
+import {
+  MuiDatePicker,
+  MuiPickersDay,
+  MuiPickersCalendarHeader,
+  MuiDayCalendar,
+} from './datepicker'
 import { MuiFormLabel, MuiRadio, MuiFormControlLabel } from './radio'
 
 export const components = {

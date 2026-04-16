@@ -1,8 +1,9 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @font-face {
   font-family: 'Helvetica Neue';
-  src: url('./assets/fonts/helvetica-neue/HelveticaNeueUltraLight.otf') format('opentype');
+  src: url('./assets/fonts/helvetica-neue/HelveticaNeueUltraLight.otf')
+    format('opentype');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
@@ -10,7 +11,8 @@
 
 @font-face {
   font-family: 'Helvetica Neue';
-  src: url('./assets/fonts/helvetica-neue/HelveticaNeueUltraLightItalic.otf') format('opentype');
+  src: url('./assets/fonts/helvetica-neue/HelveticaNeueUltraLightItalic.otf')
+    format('opentype');
   font-weight: 100;
   font-style: italic;
   font-display: swap;
@@ -18,7 +20,8 @@
 
 @font-face {
   font-family: 'Helvetica Neue';
-  src: url('./assets/fonts/helvetica-neue/HelveticaNeueLight.otf') format('opentype');
+  src: url('./assets/fonts/helvetica-neue/HelveticaNeueLight.otf')
+    format('opentype');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -26,7 +29,8 @@
 
 @font-face {
   font-family: 'Helvetica Neue';
-  src: url('./assets/fonts/helvetica-neue/HelveticaNeueLightItalic.otf') format('opentype');
+  src: url('./assets/fonts/helvetica-neue/HelveticaNeueLightItalic.otf')
+    format('opentype');
   font-weight: 300;
   font-style: italic;
   font-display: swap;
@@ -34,7 +38,8 @@
 
 @font-face {
   font-family: 'Helvetica Neue';
-  src: url('./assets/fonts/helvetica-neue/HelveticaNeueRoman.otf') format('opentype');
+  src: url('./assets/fonts/helvetica-neue/HelveticaNeueRoman.otf')
+    format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -42,7 +47,8 @@
 
 @font-face {
   font-family: 'Helvetica Neue';
-  src: url('./assets/fonts/helvetica-neue/HelveticaNeueItalic.ttf') format('truetype');
+  src: url('./assets/fonts/helvetica-neue/HelveticaNeueItalic.ttf')
+    format('truetype');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -50,7 +56,8 @@
 
 @font-face {
   font-family: 'Helvetica Neue';
-  src: url('./assets/fonts/helvetica-neue/HelveticaNeueMedium.otf') format('opentype');
+  src: url('./assets/fonts/helvetica-neue/HelveticaNeueMedium.otf')
+    format('opentype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -58,7 +65,8 @@
 
 @font-face {
   font-family: 'Helvetica Neue';
-  src: url('./assets/fonts/helvetica-neue/HelveticaNeueMediumItalic.otf') format('opentype');
+  src: url('./assets/fonts/helvetica-neue/HelveticaNeueMediumItalic.otf')
+    format('opentype');
   font-weight: 500;
   font-style: italic;
   font-display: swap;
@@ -66,7 +74,8 @@
 
 @font-face {
   font-family: 'Helvetica Neue';
-  src: url('./assets/fonts/helvetica-neue/HelveticaNeueBold.otf') format('opentype');
+  src: url('./assets/fonts/helvetica-neue/HelveticaNeueBold.otf')
+    format('opentype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -74,7 +83,8 @@
 
 @font-face {
   font-family: 'Helvetica Neue';
-  src: url('./assets/fonts/helvetica-neue/HelveticaNeueBoldItalic.otf') format('opentype');
+  src: url('./assets/fonts/helvetica-neue/HelveticaNeueBoldItalic.otf')
+    format('opentype');
   font-weight: 700;
   font-style: italic;
   font-display: swap;
@@ -412,21 +422,21 @@
   /* Almond */
   --almond-50: #fffaf0;
 
-   --text-9xl: 8rem;
-   --text-8xl: 6rem;
-   --text-7xl: 4.5rem;
-   --text-6xl: 3.75rem;
-   --text-5xl: 3rem;
-   --text-4xl: 2.25rem;
-   --text-3xl: 1.875rem;
-   --text-2xl: 1.5rem;
-   --text-xl: 1.25rem;
-   --text-lg: 1.125rem;
-   --text-base: 1rem;
-   --text-sm: .875rem;
-   --text-xs: .75rem;
+  --text-9xl: 8rem;
+  --text-8xl: 6rem;
+  --text-7xl: 4.5rem;
+  --text-6xl: 3.75rem;
+  --text-5xl: 3rem;
+  --text-4xl: 2.25rem;
+  --text-3xl: 1.875rem;
+  --text-2xl: 1.5rem;
+  --text-xl: 1.25rem;
+  --text-lg: 1.125rem;
+  --text-base: 1rem;
+  --text-sm: 0.875rem;
+  --text-xs: 0.75rem;
 
-   --text-xs-line-height: -18px !important;
+  --text-xs-line-height: -18px !important;
 
   --font-body: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-heading: 'Kento', sans-serif;
@@ -434,7 +444,6 @@
   font-family: 'Kento', sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

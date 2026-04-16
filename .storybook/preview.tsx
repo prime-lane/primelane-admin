@@ -14,12 +14,12 @@ const preview: Preview = {
   },
   decorators: [
     (Story) => (
-      <ThemeProvider theme= { theme } >
-      <CssBaseline />
-      < Story />
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Story />
       </ThemeProvider>
     ),
   ],
-};
+}
 
-export default preview;
+export default preview

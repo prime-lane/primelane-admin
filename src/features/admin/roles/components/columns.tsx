@@ -73,7 +73,9 @@ export const getRoleColumns = (
     accessorKey: 'permissions',
     header: 'Number of Permissions',
     cell: ({ row }) => (
-      <span className="font-medium text-neutral-900">{row.original.permissions.length}</span>
+      <span className="font-medium text-neutral-900">
+        {row.original.permissions.length}
+      </span>
     ),
   },
   {

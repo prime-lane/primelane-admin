@@ -1,178 +1,177 @@
-import type { StatusVariant } from "@/components/ui/status-badge"
+import type { StatusVariant } from '@/components/ui/status-badge'
 
 export interface Location {
-    lat: number
-    lng: number
-    address: string
+  lat: number
+  lng: number
+  address: string
 }
 
 export interface Rider {
-    id: string
-    first_name: string
-    last_name: string
-    image_url: string | null
-    email: string | null
-    phone_number: string
+  id: string
+  first_name: string
+  last_name: string
+  image_url: string | null
+  email: string | null
+  phone_number: string
 }
 
 export interface Driver {
-    id: string
-    custom_user_id?: string
-    first_name: string
-    last_name: string
-    image_url: string
-    email: string
-    phone_number: string
+  id: string
+  custom_user_id?: string
+  first_name: string
+  last_name: string
+  image_url: string
+  email: string
+  phone_number: string
 }
 
 export interface DriverVehicle {
-    id: string
-    vin: string
-    make: string
-    model: string
-    year: number
-    color: string
-    plate_number: string
-    type: string
-    mileage: string | number
-    driver_id: string
-    status: string
-    category_id: string
-    category_ids?: string[] | null
-    front_image: string
-    back_image: string
-    side_image: string
-    road_worthiness: {
-        doc: string
-        expiry_date: string
-    }
-    vehicle_insurance: {
-        doc: string
-        expiry_date: string
-    }
-    created_at: string
-    updated_at: string
+  id: string
+  vin: string
+  make: string
+  model: string
+  year: number
+  color: string
+  plate_number: string
+  type: string
+  mileage: string | number
+  driver_id: string
+  status: string
+  category_id: string
+  category_ids?: string[] | null
+  front_image: string
+  back_image: string
+  side_image: string
+  road_worthiness: {
+    doc: string
+    expiry_date: string
+  }
+  vehicle_insurance: {
+    doc: string
+    expiry_date: string
+  }
+  created_at: string
+  updated_at: string
 }
 
 export interface RiderPreference {
-    id: string
-    user_id: string
-    occupation: string
-    chat_with_driver: boolean
-    play_music: boolean
-    allow_location_access: boolean
-    notify_via_sms: boolean
-    notify_via_email: boolean
-    notify_via_push_notification: boolean
-    allow_marketing_ads: boolean
-    is_device_location_on: boolean
-    preffered_temperature: string
-    dnd: boolean
+  id: string
+  user_id: string
+  occupation: string
+  chat_with_driver: boolean
+  play_music: boolean
+  allow_location_access: boolean
+  notify_via_sms: boolean
+  notify_via_email: boolean
+  notify_via_push_notification: boolean
+  allow_marketing_ads: boolean
+  is_device_location_on: boolean
+  preffered_temperature: string
+  dnd: boolean
 }
 
 export interface Slot {
-    id: string
-    ride_id: string
-    slot_index: number
-    driver_id: string
-    category_id: string
-    status: string
-    driver: Driver
-    driver_vehicle: Partial<DriverVehicle>
+  id: string
+  ride_id: string
+  slot_index: number
+  driver_id: string
+  category_id: string
+  status: string
+  driver: Driver
+  driver_vehicle: Partial<DriverVehicle>
 }
 
 export interface TripDetail {
-    id: string
-    custom_ride_id: string
-    rider_id: string
-    driver_id: string | null
-    pickup: Location
-    dropoff: Location | null
-    status: StatusVariant
-    ride_type: string
-    hourly_ride_type?: string | null
-    booked_hours: number | null
-    no_of_days?: number | null
-    no_of_vehicles?: number | null
-    is_scheduled: boolean
-    scheduled_at: string | null
-    vehicle_category?: string
-    estimated_fare: string | number | null
-    actual_fare: string | number | null
-    estimated_distance: string | number | null
-    actual_distance: string | number | null
-    estimated_duration: string | number | null
-    actual_duration: string | number | null
-    created_at: string
-    requested_at: string
-    pickup_time?: string | null
-    end_time?: string | null
-    offered_at: string | null
-    accepted_at: string | null
-    arrived_pickup_at: string | null
-    started_at: string | null
-    completed_at: string | null
-    cancelled_at: string | null
-    updated_at: string
-    cancellation_reason: string | null
-    cancellation_fee?: number | null
-    commission?: number | null
-    canceller_name: string | null
-    cancelled_by: string | null
-    rating: number | null
-    feedback: string | null
-    payment_method?: string | null
-    payment_reference?: string | null
-    rider?: Rider
-    driver?: Driver
-    rider_preference?: RiderPreference
-    driver_vehicle?: DriverVehicle
-    stops?: Location[]
-    slots?: Slot[]
+  id: string
+  custom_ride_id: string
+  rider_id: string
+  driver_id: string | null
+  pickup: Location
+  dropoff: Location | null
+  status: StatusVariant
+  ride_type: string
+  hourly_ride_type?: string | null
+  booked_hours: number | null
+  no_of_days?: number | null
+  no_of_vehicles?: number | null
+  is_scheduled: boolean
+  scheduled_at: string | null
+  vehicle_category?: string
+  estimated_fare: string | number | null
+  actual_fare: string | number | null
+  estimated_distance: string | number | null
+  actual_distance: string | number | null
+  estimated_duration: string | number | null
+  actual_duration: string | number | null
+  created_at: string
+  requested_at: string
+  pickup_time?: string | null
+  end_time?: string | null
+  offered_at: string | null
+  accepted_at: string | null
+  arrived_pickup_at: string | null
+  started_at: string | null
+  completed_at: string | null
+  cancelled_at: string | null
+  updated_at: string
+  cancellation_reason: string | null
+  cancellation_fee?: number | null
+  commission?: number | null
+  canceller_name: string | null
+  cancelled_by: string | null
+  rating: number | null
+  feedback: string | null
+  payment_method?: string | null
+  payment_reference?: string | null
+  rider?: Rider
+  driver?: Driver
+  rider_preference?: RiderPreference
+  driver_vehicle?: DriverVehicle
+  stops?: Location[]
+  slots?: Slot[]
 }
 
-
 export interface Trip {
-    id: string
-    custom_ride_id: string
-    rider_id: string
-    driver_id: string | null
-    pickup?: Location
-    dropoff?: Location
-    status: StatusVariant
-    ride_type?: string
-    vehicle_category?: string
-    category_id?: string
-    estimated_fare: number | null
-    actual_fare: number | null
-    drivers_earning?: number | null
-    driver_commission?: number | null
-    commission?: number | null
-    cancellation_fee?: number | null
-    estimated_distance: number | null
-    actual_distance: number | null
-    estimated_duration: number | null
-    actual_duration: number | null
-    created_at: string
-    requested_at: string
-    rider?: Rider
-    driver?: Driver
+  id: string
+  custom_ride_id: string
+  rider_id: string
+  driver_id: string | null
+  pickup?: Location
+  dropoff?: Location
+  status: StatusVariant
+  ride_type?: string
+  vehicle_category?: string
+  category_id?: string
+  estimated_fare: number | null
+  actual_fare: number | null
+  drivers_earning?: number | null
+  driver_commission?: number | null
+  commission?: number | null
+  cancellation_fee?: number | null
+  estimated_distance: number | null
+  actual_distance: number | null
+  estimated_duration: number | null
+  actual_duration: number | null
+  created_at: string
+  requested_at: string
+  rider?: Rider
+  driver?: Driver
 }
 
 export interface VehicleCategory {
-    id: string
-    name: string
-    description: string
-    image_url: string
-    base_fare: number
-    distance_rate: number
-    time_rate: number
-    cancellation_fee: number
-    minimum_fare: number
-    booking_fee: number
-    commission_rate: number
-    surge_multiplier: number
-    is_active: boolean
-    created_at: string
-    updated_at: string
+  id: string
+  name: string
+  description: string
+  image_url: string
+  base_fare: number
+  distance_rate: number
+  time_rate: number
+  cancellation_fee: number
+  minimum_fare: number
+  booking_fee: number
+  commission_rate: number
+  surge_multiplier: number
+  is_active: boolean
+  created_at: string
+  updated_at: string
 }

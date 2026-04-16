@@ -1,6 +1,7 @@
 const typography = {
   fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", // default body
-  h1: { // text-9xl
+  h1: {
+    // text-9xl
     fontFamily: "'Kento', sans-serif",
     fontWeight: 700,
     fontSize: '8rem',

@@ -1,87 +1,125 @@
-import {
-  ExportButton,
-  FilterButton,
-  SearchInput,
-} from '@/components/ui/data-controls'
+import { ExportButton, SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
+import {
+  FilterChips,
+  formatDateRange,
+  type ActiveFilter,
+} from '@/components/ui/filter-chips'
+import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
+import { useTableParams } from '@/hooks/use-table-params'
+import { exportToCSV } from '@/utils/export-utils'
 import { Box } from '@mui/material'
-import { AltArrowDown, FileDownload } from '@solar-icons/react'
-import { format } from 'date-fns'
-import { useState } from 'react'
-import { useRefunds } from './api/use-finance'
-import { refundColumns } from './components/columns'
-import type { Refund as RefundType } from './types'
-
-const exportToCSV = (data: RefundType[]) => {
-  const headers = [
-    'Transaction ID',
-    'Transaction Date',
-    'Trip ID',
-    'Type',
-    'Description',
-    'Amount Collected',
-  ]
-  const rows = data.map((item) => [
-    item.id,
-    format(new Date(item.transaction_date), 'MMM dd, yyyy HH:mm'),
-    item.trip_id,
-    item.trip_type,
-    item.description,
-    item.amount_collected,
-  ])
-
-  const csvContent = [
-    headers.join(','),
-    ...rows.map((row) => row.join(',')),
-  ].join('\n')
-
-  const blob = new Blob([csvContent], { type: 'text/csv' })
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.download = `refunds-${format(new Date(), 'yyyy-MM-dd')}.csv`
-  link.click()
-  URL.revokeObjectURL(url)
-}
+import { parseAsString, useQueryState } from 'nuqs'
+import { PermissionGate } from '@/components/ui/permission-gate'
+import { useTransactions } from './api/use-transactions'
+import { refundColumns } from './components/transaction-columns'
 
 export const Refund = () => {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(10)
+  const {
+    page,
+    setPage,
+    pageSize: limit,
+    setPageSize: setLimit,
+    search: searchTerm,
+    setSearch: setSearchTerm,
+  } = useTableParams()
+
+  const [startDate, setStartDate] = useQueryState('start_date', parseAsString)
+  const [endDate, setEndDate] = useQueryState('end_date', parseAsString)
+
   const debouncedSearch = useDebounce(searchTerm, 500)
 
-  const { data, isLoading, error } = useRefunds({
+  const { data, isLoading, error } = useTransactions({
     search: debouncedSearch,
     page,
     page_size: limit,
+    is_refund: 'true',
+    start_date: startDate || undefined,
+    end_date: endDate || undefined,
   })
+
+  const handleFilterChange = (
+    key: string,
+    value: string | { start: Date | null; end: Date | null },
+  ) => {
+    setPage(1)
+    if (key === 'date') {
+      const dateVal = value as { start: Date | null; end: Date | null }
+      setStartDate(dateVal.start ? dateVal.start.toISOString() : null)
+      setEndDate(dateVal.end ? dateVal.end.toISOString() : null)
+    }
+  }
+
+  const handleRemoveFilter = (key: string) => {
+    setPage(1)
+    if (key === 'date') {
+      setStartDate(null)
+      setEndDate(null)
+    }
+  }
+
+  const handleExport = () => {
+    if (!data?.items) return
+    exportToCSV(data.items, 'refunds-export', [
+      { key: 'id', label: 'Transaction ID' },
+      { key: 'created_at', label: 'Date' },
+      { key: 'ride_id', label: 'Trip ID' },
+      { key: 'category', label: 'Type' },
+      { key: 'description', label: 'Description' },
+      { key: 'amount', label: 'Amount Refunded' },
+    ])
+  }
+
+  const activeFilterChips: ActiveFilter[] = []
+  if (startDate && endDate) {
+    activeFilterChips.push({
+      key: 'date',
+      label: 'Date',
+      displayValue: formatDateRange(startDate, endDate),
+    })
+  }
+
+  const filterOptions: FilterOption[] = [
+    { label: 'Date', key: 'date', type: 'date-range' },
+  ]
 
   if (error) return <ErrorState message="Failed to load refunds" />
 
-  const refunds = data?.data || []
-
   return (
     <div className="space-y-6">
-      <h1 className="text-4xl">Refunds</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-4xl">Refunds</h1>
+      </div>
 
       <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
         <Box sx={{ flex: 1 }}>
-          <SearchInput value={searchTerm} onChange={setSearchTerm} />
+          <SearchInput
+            value={searchTerm}
+            onChange={setSearchTerm}
+            placeholder="Search by trip id, transaction id..."
+          />
         </Box>
-        <FilterButton className="space-x-2">
-          <span>Filter By</span>
-          <AltArrowDown size={16} color="#000" />
-        </FilterButton>
-        <ExportButton
-          onClick={() => exportToCSV(refunds)}
-          endIcon={<FileDownload size={16} />}
-        />
+        <div className="flex gap-3">
+          <PermissionGate permission="finance:filter">
+            <FilterMenu
+              options={filterOptions}
+              onFilterChange={handleFilterChange}
+              activeFilters={{}}
+            />
+          </PermissionGate>
+          <ExportButton onClick={handleExport} />
+        </div>
       </Box>
 
+      <FilterChips
+        activeFilters={activeFilterChips}
+        onRemove={handleRemoveFilter}
+      />
+
       <DataTable
-        data={refunds}
+        data={data?.items || []}
         columns={refundColumns}
         isLoading={isLoading}
         pagination={

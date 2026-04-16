@@ -1,122 +1,150 @@
-import {
-  ExportButton,
-  FilterButton,
-  SearchInput,
-} from '@/components/ui/data-controls'
+import { ExportButton, SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
+import {
+  FilterChips,
+  formatDateRange,
+  type ActiveFilter,
+} from '@/components/ui/filter-chips'
+import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
+import { useTableParams } from '@/hooks/use-table-params'
+import { exportToCSV } from '@/utils/export-utils'
 import { Box, Tab, Tabs } from '@mui/material'
-import { AltArrowDown, FileDownload } from '@solar-icons/react'
-import { useState } from 'react'
-import { format } from 'date-fns'
-import { useTransactions, useWallet } from './api/use-finance'
-import type { Transaction } from './types'
-import { transactionColumns } from './components/columns'
-
-const exportToCSV = (data: Transaction[], type: string) => {
-  const headers = [
-    'Transaction ID',
-    'Transaction Date',
-    'Customer Name/ID',
-    'Description',
-    'Amount',
-    'Wallet Balance',
-  ]
-  const rows = data.map((item) => [
-    item.id,
-    format(new Date(item.transaction_date), 'MMM dd, yyyy HH:mm'),
-    item.user_name,
-    item.description,
-    item.amount,
-    item.wallet_balance,
-  ])
-
-  const csvContent = [
-    headers.join(','),
-    ...rows.map((row) => row.join(',')),
-  ].join('\n')
-
-  const blob = new Blob([csvContent], { type: 'text/csv' })
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.download = `customer-wallet-${type}-${format(new Date(), 'yyyy-MM-dd')}.csv`
-  link.click()
-  URL.revokeObjectURL(url)
-}
+import { parseAsString, useQueryState } from 'nuqs'
+import { PermissionGate } from '@/components/ui/permission-gate'
+import { useTransactions } from './api/use-transactions'
+import { customerWalletColumns } from './components/transaction-columns'
 
 export const CustomerWallet = () => {
-  const [activeTab, setActiveTab] = useState(0)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(10)
-  const debouncedSearch = useDebounce(searchTerm, 500)
-
-  const type = activeTab === 0 ? 'debit' : 'credit'
-
-  const { data: walletData, isLoading: walletLoading } = useWallet()
   const {
-    data: transactionsData,
-    isLoading: transactionsLoading,
-    error,
-  } = useTransactions({
+    page,
+    setPage,
+    pageSize: limit,
+    setPageSize: setLimit,
+    search: searchTerm,
+    setSearch: setSearchTerm,
+  } = useTableParams()
+
+  const [activeTab, setActiveTab] = useQueryState(
+    'tab',
+    parseAsString.withDefault('debit'),
+  )
+  const [startDate, setStartDate] = useQueryState('start_date', parseAsString)
+  const [endDate, setEndDate] = useQueryState('end_date', parseAsString)
+
+  const debouncedSearch = useDebounce(searchTerm, 500)
+  const transactionType = activeTab === 'debit' ? 'DR' : 'CR'
+
+  const { data, isLoading, error } = useTransactions({
     search: debouncedSearch,
     page,
     page_size: limit,
+    transaction_type: transactionType,
+    customer_wallet: 'true',
+    start_date: startDate || undefined,
+    end_date: endDate || undefined,
   })
 
-  if (error) return <ErrorState message="Failed to load transactions" />
+  const handleFilterChange = (
+    key: string,
+    value: string | { start: Date | null; end: Date | null },
+  ) => {
+    setPage(1)
+    if (key === 'date') {
+      const dateVal = value as { start: Date | null; end: Date | null }
+      setStartDate(dateVal.start ? dateVal.start.toISOString() : null)
+      setEndDate(dateVal.end ? dateVal.end.toISOString() : null)
+    }
+  }
 
-  const transactions = transactionsData?.data || []
-  const wallet = walletData?.data?.[0]
+  const handleRemoveFilter = (key: string) => {
+    setPage(1)
+    if (key === 'date') {
+      setStartDate(null)
+      setEndDate(null)
+    }
+  }
+
+  const handleExport = () => {
+    if (!data?.items) return
+    exportToCSV(data.items, 'customer-wallet-export', [
+      { key: 'id', label: 'Transaction ID' },
+      { key: 'created_at', label: 'Date' },
+      { key: 'transaction_type', label: 'Type' },
+      { key: 'description', label: 'Description' },
+      { key: 'amount', label: 'Amount' },
+    ])
+  }
+
+  const activeFilterChips: ActiveFilter[] = []
+  if (startDate && endDate) {
+    activeFilterChips.push({
+      key: 'date',
+      label: 'Date',
+      displayValue: formatDateRange(startDate, endDate),
+    })
+  }
+
+  const filterOptions: FilterOption[] = [
+    { label: 'Date', key: 'date', type: 'date-range' },
+  ]
+
+  if (error)
+    return <ErrorState message="Failed to load customer wallet transactions" />
 
   return (
     <div className="space-y-6">
-      <div>
+      <div className="flex justify-between items-center">
         <h1 className="text-4xl">Customer Wallet</h1>
-        {wallet && !walletLoading && (
-          <p className="text-lg text-neutral-600 mt-2">
-            Current Balance:{' '}
-            <span className="font-semibold">
-              ₦{wallet.current_balance.toLocaleString()}
-            </span>
-          </p>
-        )}
       </div>
 
       <Tabs
         value={activeTab}
-        onChange={(_, newValue) => setActiveTab(newValue)}
+        onChange={(_, v) => {
+          setActiveTab(v)
+          setPage(1)
+        }}
       >
-        <Tab label="Debit" />
-        <Tab label="Credit" />
+        <Tab label="Debit" value="debit" />
+        <Tab label="Credit" value="credit" />
       </Tabs>
 
       <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
         <Box sx={{ flex: 1 }}>
-          <SearchInput value={searchTerm} onChange={setSearchTerm} />
+          <SearchInput
+            value={searchTerm}
+            onChange={setSearchTerm}
+            placeholder="Search by booking id, transaction id..."
+          />
         </Box>
-        <FilterButton className="space-x-2">
-          <span>Filter By</span>
-          <AltArrowDown size={16} color="#000" />
-        </FilterButton>
-        <ExportButton
-          onClick={() => exportToCSV(transactions, type)}
-          startIcon={<FileDownload size={16} />}
-        />
+        <div className="flex gap-3">
+          <PermissionGate permission="finance:filter">
+            <FilterMenu
+              options={filterOptions}
+              onFilterChange={handleFilterChange}
+              activeFilters={{}}
+            />
+          </PermissionGate>
+          <ExportButton onClick={handleExport} />
+        </div>
       </Box>
 
+      <FilterChips
+        activeFilters={activeFilterChips}
+        onRemove={handleRemoveFilter}
+      />
+
       <DataTable
-        data={transactions}
-        columns={transactionColumns('customer')}
-        isLoading={transactionsLoading}
+        data={data?.items || []}
+        columns={customerWalletColumns}
+        isLoading={isLoading}
         pagination={
-          transactionsData?.pagination
+          data?.pagination
             ? {
-                currentPage: Number(transactionsData.pagination.current_page),
-                totalPages: transactionsData.pagination.total_pages,
-                totalItems: transactionsData.pagination.total_items,
+                currentPage: Number(data.pagination.current_page),
+                totalPages: data.pagination.total_pages,
+                totalItems: data.pagination.total_items,
               }
             : undefined
         }

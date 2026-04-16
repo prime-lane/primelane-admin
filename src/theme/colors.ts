@@ -31,7 +31,7 @@ export const colors = {
     950: '#030712',
   },
   grey: {
-    800: '#212B36'
+    800: '#212B36',
   },
   zinc: {
     50: '#fafafa',

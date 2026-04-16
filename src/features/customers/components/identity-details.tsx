@@ -24,10 +24,7 @@ export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
     <div className="space-y-8">
       {/* Top Stats Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <StatsCard
-          label="NIN"
-          value={ninData?.nin || 'N/A'}
-        />
+        <StatsCard label="NIN" value={ninData?.nin || 'N/A'} />
         <StatsCard
           label="ID Verification Status"
           status={customer.is_kyc_complete ? 'true' : 'false'}
@@ -67,16 +64,12 @@ export const IdentityDetails = ({ customer }: IdentityDetailsProps) => {
           <InfoRow
             index={1}
             label="First Name"
-            value={
-              ninData?.first_name || 'N/A'
-            }
+            value={ninData?.first_name || 'N/A'}
           />
           <InfoRow
             index={2}
             label="Last Name"
-            value={
-              ninData?.last_name || 'N/A'
-            }
+            value={ninData?.last_name || 'N/A'}
           />
           <InfoRow
             index={3}

@@ -5,33 +5,33 @@ import type { User } from '../types'
 import type { Role } from '@/features/admin/types'
 
 interface UserWithRole extends User {
-    role?: Role
+  role?: Role
 }
 
 export const useMe = () => {
-    return useQuery<UserWithRole | null>({
-        queryKey: ['me'],
-        queryFn: async () => {
-            const userStr = localStorage.getItem('user')
-            if (!userStr) return null
+  return useQuery<UserWithRole | null>({
+    queryKey: ['me'],
+    queryFn: async () => {
+      const userStr = localStorage.getItem('user')
+      if (!userStr) return null
 
-            const user: User = JSON.parse(userStr)
+      const user: User = JSON.parse(userStr)
 
-            if (!user.role_id) {
-                return user
-            }
+      if (!user.role_id) {
+        return user
+      }
 
-            const roleResponse = await apiClient.get<Role>(
-                e.ROLES.BY_ID(user.role_id),
-            )
+      const roleResponse = await apiClient.get<Role>(
+        e.ROLES.BY_ID(user.role_id),
+      )
 
-            return {
-                ...user,
-                role: roleResponse.data,
-            }
-        },
-        staleTime: Infinity,
-        retry: false,
-        refetchOnWindowFocus: 'always',
-    })
+      return {
+        ...user,
+        role: roleResponse.data,
+      }
+    },
+    staleTime: Infinity,
+    retry: false,
+    refetchOnWindowFocus: 'always',
+  })
 }
