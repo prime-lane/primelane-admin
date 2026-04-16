@@ -2,15 +2,19 @@ import { type ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { formatCurrency, fromKobo } from '@/lib/utils'
 import type { Transaction } from '@/features/customers/types'
+import { CopyButton } from '@/components/ui/copy-button'
 
 export const transactionColumns: ColumnDef<Transaction>[] = [
   {
     accessorKey: 'id',
     header: 'Transaction ID',
     cell: ({ row }) => (
-      <span className="text-sm text-neutral-800">
-        {row.original.id.substring(0, 8).toUpperCase()}
-      </span>
+      <div className="flex items-center gap-[2px]">
+        <span className="text-sm text-neutral-800">
+          {row.original.id.substring(0, 8).toUpperCase()}
+        </span>
+        <CopyButton textToCopy={row.original.id} />
+      </div>
     ),
   },
   {
@@ -49,9 +53,12 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
     accessorKey: 'reference',
     header: 'Reference no.',
     cell: ({ row }) => (
-      <span className="text-sm text-neutral-600">
-        {row.original.reference || '—'}
-      </span>
+      <div className="flex items-center gap-[2px]">
+        <span className="text-sm text-neutral-600">
+          {row.original.reference || '—'}
+        </span>
+        {row.original.reference && <CopyButton textToCopy={row.original.reference} />}
+      </div>
     ),
   },
   {
@@ -70,9 +77,12 @@ export const refundColumns: ColumnDef<Transaction>[] = [
     accessorKey: 'id',
     header: 'Transaction ID',
     cell: ({ row }) => (
-      <span className="text-sm text-neutral-800">
-        {row.original.id.substring(0, 8).toUpperCase()}
-      </span>
+      <div className="flex items-center gap-[2px]">
+        <span className="text-sm text-neutral-800">
+          {row.original.id.substring(0, 8).toUpperCase()}
+        </span>
+        <CopyButton textToCopy={row.original.id} />
+      </div>
     ),
   },
   {
@@ -92,7 +102,10 @@ export const refundColumns: ColumnDef<Transaction>[] = [
       const category = row.original.category || '—'
       return (
         <div className="flex flex-col gap-[2px]">
-          <span className="text-sm font-medium text-neutral-800">{tripId}</span>
+          <div className="flex items-center gap-[2px]">
+            <span className="text-sm font-medium text-neutral-800">{tripId}</span>
+            {row.original.ride_id && <CopyButton textToCopy={row.original.ride_id} />}
+          </div>
           <span className="text-xs text-gray-500">{category}</span>
         </div>
       )
@@ -123,9 +136,12 @@ export const customerWalletColumns: ColumnDef<Transaction>[] = [
     accessorKey: 'id',
     header: 'Transaction ID',
     cell: ({ row }) => (
-      <span className="text-sm text-neutral-800">
-        {row.original.id.substring(0, 8).toUpperCase()}
-      </span>
+      <div className="flex items-center gap-[2px]">
+        <span className="text-sm text-neutral-800">
+          {row.original.id.substring(0, 8).toUpperCase()}
+        </span>
+        <CopyButton textToCopy={row.original.id} />
+      </div>
     ),
   },
   {
@@ -141,9 +157,12 @@ export const customerWalletColumns: ColumnDef<Transaction>[] = [
     accessorKey: 'user_id',
     header: 'Customer ID',
     cell: ({ row }) => (
-      <span className="text-sm text-neutral-800">
-        {row.original.user_id.substring(0, 8).toUpperCase()}
-      </span>
+      <div className="flex items-center gap-[2px]">
+        <span className="text-sm text-neutral-800">
+          {row.original.user_id.substring(0, 8).toUpperCase()}
+        </span>
+        <CopyButton textToCopy={row.original.user_id} />
+      </div>
     ),
   },
   {
