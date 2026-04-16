@@ -39,6 +39,7 @@ export const Transactions = () => {
     search: debouncedSearch,
     page,
     page_size: limit,
+    has_provider: 'true',
     transaction_type: (transactionType as 'CR' | 'DR') || undefined,
     start_date: startDate || undefined,
     end_date: endDate || undefined,

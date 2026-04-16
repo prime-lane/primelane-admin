@@ -12,6 +12,7 @@ interface UseTransactionsParams extends PaginationParams {
   start_date?: string
   end_date?: string
   is_refund?: 'true'
+  has_provider?: 'true'
   customer_wallet?: 'true'
 }
 

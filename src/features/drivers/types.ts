@@ -82,12 +82,16 @@ export interface Transaction {
   user_id: string
   transaction_type: 'CR' | 'DR'
   description: string
-  reference: string
+  provider: string
+  channel: string
+  category: string
+  narration: string
+  reference: string | null
   ride_id: string | null
   amount: number
   created_at: string
   updated_at: string
-  status: string
+  status?: string
 }
 
 export interface RoadWorthiness {
