@@ -115,7 +115,7 @@ export const CustomerWallet = () => {
           <SearchInput
             value={searchTerm}
             onChange={setSearchTerm}
-            placeholder="Search by booking id, transaction id..."
+            placeholder="Search by trip id, transaction id..."
           />
         </Box>
         <div className="flex gap-3">
