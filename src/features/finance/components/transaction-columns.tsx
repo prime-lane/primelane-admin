@@ -57,7 +57,9 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
         <span className="text-sm text-neutral-600">
           {row.original.reference || '—'}
         </span>
-        {row.original.reference && <CopyButton textToCopy={row.original.reference} />}
+        {row.original.reference && (
+          <CopyButton textToCopy={row.original.reference} />
+        )}
       </div>
     ),
   },
@@ -103,8 +105,12 @@ export const refundColumns: ColumnDef<Transaction>[] = [
       return (
         <div className="flex flex-col gap-[2px]">
           <div className="flex items-center gap-[2px]">
-            <span className="text-sm font-medium text-neutral-800">{tripId}</span>
-            {row.original.ride_id && <CopyButton textToCopy={row.original.ride_id} />}
+            <span className="text-sm font-medium text-neutral-800">
+              {tripId}
+            </span>
+            {row.original.ride_id && (
+              <CopyButton textToCopy={row.original.ride_id} />
+            )}
           </div>
           <span className="text-xs text-gray-500">{category}</span>
         </div>
