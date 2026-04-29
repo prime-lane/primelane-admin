@@ -242,6 +242,10 @@ export const TripDetails = () => {
             value={trip.pickup?.address || '-'}
           />
           <DetailRow
+            label="Dropoff address"
+            value={trip.dropoff?.address || '-'}
+          />
+          <DetailRow
             label="Total trip time"
             value={formatDuration(trip.actual_duration)}
           />
