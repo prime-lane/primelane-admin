@@ -13,7 +13,6 @@ import { Box } from '@mui/material'
 
 import { parseAsString, useQueryState } from 'nuqs'
 import { useNavigate } from 'react-router-dom'
-import * as useTrips from './api/use-trips'
 import { useTripColumns } from './components/columns'
 
 import { path } from '@/app/paths'
@@ -22,6 +21,7 @@ import type { Trip } from './types'
 import { useTableParams } from '@/hooks/use-table-params'
 import { PermissionGate } from '@/components/ui/permission-gate'
 import { formatDateToLocal } from '@/lib/utils'
+import { useTrips } from './api/use-trips'
 
 export const Trips = () => {
   const {
@@ -56,7 +56,7 @@ export const Trips = () => {
 
   const { data: vehicleCategories } = useVehicleCategories()
 
-  const { data, isLoading, error } = useTrips.useTrips({
+  const { data, isLoading, error } = useTrips({
     search: debouncedSearch,
     page,
     page_size: limit,
