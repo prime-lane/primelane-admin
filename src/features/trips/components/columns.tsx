@@ -14,7 +14,7 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
       accessorKey: 'id',
       header: 'Trip ID',
       cell: ({ row }) => (
-        <div className="flex items-center gap-[2px]">
+        <div className="flex items-center gap-0.5">
           <span className="text-sm">{row.original?.custom_ride_id}</span>
           <CopyButton textToCopy={row.original?.custom_ride_id} />
         </div>
