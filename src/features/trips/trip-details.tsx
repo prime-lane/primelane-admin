@@ -87,6 +87,9 @@ export const TripDetails = () => {
     `${trip.rider?.first_name || ''} ${trip.rider?.last_name || ''}`.trim() ||
     'N/A'
 
+  const isDaily =
+    trip.ride_type === 'daily' || trip.ride_type === 'daily_rental'
+
   const vehicleCategory =
     trip.vehicle_category ||
     trip.driver_vehicle?.category_ids
@@ -99,9 +102,19 @@ export const TripDetails = () => {
     ? (rideTypeLabel[trip.ride_type] ?? trip.ride_type)
     : 'N/A'
 
-  const pickupDateTime =
-    trip.scheduled_at ?? trip.pickup_time ?? trip.created_at
+  const pickupDateTime = trip.pickup_time ?? 'N/A'
   const endDate = trip.end_time
+
+  // daily duratio rentals use half_day / full_day labels
+  const durationLabel = isDaily
+    ? trip.hourly_ride_type === 'half_day'
+      ? 'Half day'
+      : trip.hourly_ride_type === 'full_day'
+        ? 'Full day'
+        : trip.booked_hours
+          ? `${trip.booked_hours} hours`
+          : '-'
+    : formatDuration(trip.actual_duration)
 
   const slots: Slot[] = trip.slots ?? []
 
@@ -245,10 +258,7 @@ export const TripDetails = () => {
             label="Dropoff address"
             value={trip.dropoff?.address || '-'}
           />
-          <DetailRow
-            label="Total trip time"
-            value={formatDuration(trip.actual_duration)}
-          />
+          <DetailRow label="Total trip time" value={durationLabel} />
         </div>
 
         {/* Payment & Cancellation */}

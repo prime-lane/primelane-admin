@@ -62,8 +62,8 @@ export const RoutePermissionGate = ({
         <div className="flex flex-col gap-1">
           <h3 className="text-lg font-semibold text-gray-900">Access Denied</h3>
           <p className="text-sm text-gray-500 max-w-sm text-balance">
-            You don't have the required permission <code>({permission})</code> to view this
-            page. Please contact your administrator.
+            You don't have the required permission <code>({permission})</code>{' '}
+            to view this page. Please contact your administrator.
           </p>
         </div>
       </div>
@@ -72,4 +72,3 @@ export const RoutePermissionGate = ({
 
   return <>{children}</>
 }
-
