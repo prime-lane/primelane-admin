@@ -12,6 +12,7 @@ import { useCategoryName } from '@/features/pricing-config/hooks/use-category-na
 import { CAR_CURSOR } from '@/config/dashboard'
 import { TripDetailsSkeleton } from './components/skeletons'
 import type { Slot } from './types'
+import { formatRideType } from './utils'
 
 interface DetailRowProps {
   label: string
@@ -55,15 +56,6 @@ const DetailRow = ({
   </div>
 )
 
-const rideTypeLabel: Record<string, string> = {
-  one_off: 'Airport Transfer',
-  airport_transfer: 'Airport Transfer',
-  daily: 'Daily Rental',
-  daily_rental: 'Daily Rental',
-  fleet: 'Fleet Rental',
-  fleet_rental: 'Fleet Rental',
-  hourly: 'Hourly',
-}
 
 export const TripDetails = () => {
   const { id } = useParams<{ id: string }>()
@@ -95,9 +87,7 @@ export const TripDetails = () => {
       .join(', ') ||
     'N/A'
 
-  const bookingType = trip.ride_type
-    ? (rideTypeLabel[trip.ride_type] ?? trip.ride_type)
-    : 'N/A'
+  const bookingType = formatRideType(trip.ride_type)
 
   const pickupDateTime =
     trip.scheduled_at ?? trip.pickup_time ?? trip.created_at

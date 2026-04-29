@@ -4,6 +4,7 @@ import { StatusBadge } from '@/components/ui/status-badge'
 import { formatDate } from '@/utils/table-utils'
 import { formatCurrency, fromKobo } from '@/lib/utils'
 import { CopyButton } from '@/components/ui/copy-button'
+import { formatRideType } from '../utils'
 import { useCategoryName } from '@/features/pricing-config/hooks/use-category-name'
 
 export const useTripColumns = (): ColumnDef<Trip>[] => {
@@ -65,7 +66,7 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
       accessorKey: 'ride_type',
       header: 'Trip Type',
       cell: ({ row }) => (
-        <span className="text-sm">{row.original.ride_type || 'N/A'}</span>
+        <span className="text-sm">{formatRideType(row.original.ride_type)}</span>
       ),
     },
     {
