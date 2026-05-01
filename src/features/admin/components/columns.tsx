@@ -4,6 +4,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { StatusBadge } from '@/components/ui/status-badge'
 import type { Admin } from '../types'
+import { formatToLocalTimeZone } from '@/lib/utils'
 
 export const adminColumns: ColumnDef<Admin>[] = [
   {
@@ -22,7 +23,7 @@ export const adminColumns: ColumnDef<Admin>[] = [
       const val = info.getValue() as string
       return (
         <span className="text-sm font-medium text-neutral-900">
-          {val ? format(new Date(val), 'dd/MM/yyyy') : '-'}
+          {val ? format(formatToLocalTimeZone(val), 'dd/MM/yyyy') : '-'}
         </span>
       )
     },

@@ -1,3 +1,4 @@
+import { formatToLocalTimeZone } from '@/lib/utils'
 import { Chip } from '@mui/material'
 import { CloseCircle } from '@solar-icons/react'
 import { format } from 'date-fns'
@@ -46,5 +47,5 @@ export const formatDateRange = (
   end: string | null,
 ): string => {
   if (!start || !end) return ''
-  return `${format(new Date(start), 'dd/MM/yy')} - ${format(new Date(end), 'dd/MM/yy')}`
+  return `${format(formatToLocalTimeZone(start), 'dd/MM/yy')} - ${format(formatToLocalTimeZone(end), 'dd/MM/yy')}`
 }

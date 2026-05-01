@@ -13,6 +13,7 @@ import { useState } from 'react'
 import { useDriverSettlements } from './api/use-finance'
 import { driverSettlementColumns } from './components/columns'
 import type { DriverSettlement } from './types'
+import { formatToLocalTimeZone } from '@/lib/utils'
 
 const exportToCSV = (data: DriverSettlement[]) => {
   const headers = [
@@ -28,7 +29,7 @@ const exportToCSV = (data: DriverSettlement[]) => {
   ]
   const rows = data.map((item) => [
     item.settlement_id,
-    format(new Date(item.settlement_date), 'MMM dd, yyyy'),
+    format(formatToLocalTimeZone(item.settlement_date), 'MMM dd, yyyy'),
     item.trip_id,
     item.trip_type,
     item.fare_charged,
@@ -47,7 +48,7 @@ const exportToCSV = (data: DriverSettlement[]) => {
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
-  link.download = `driver-settlements-${format(new Date(), 'yyyy-MM-dd')}.csv`
+  link.download = `driver-settlements-${format(formatToLocalTimeZone(), 'yyyy-MM-dd')}.csv`
   link.click()
   URL.revokeObjectURL(url)
 }

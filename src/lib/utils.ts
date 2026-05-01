@@ -109,3 +109,8 @@ export const formatDateToLocal = (date: Date): string => {
   const seconds = String(date.getSeconds()).padStart(2, '0')
   return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
 }
+
+export const formatToLocalTimeZone = (isoString?: string | Date) => {
+  const dateStr = `${isoString}`
+  return dateStr ? new Date(dateStr.slice(0, -1)) : new Date();
+}
