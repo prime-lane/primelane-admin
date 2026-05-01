@@ -9,6 +9,7 @@ import { format } from 'date-fns'
 import { useTransactions, useWallet } from './api/use-finance'
 import type { Transaction } from './types'
 import { transactionColumns } from './components/columns'
+import { formatToLocalTimeZone } from '@/lib/utils'
 
 const exportToCSV = (data: Transaction[], type: string) => {
   const headers = [
@@ -21,7 +22,7 @@ const exportToCSV = (data: Transaction[], type: string) => {
   ]
   const rows = data.map((item) => [
     item.id,
-    format(new Date(item.transaction_date), 'MMM dd, yyyy HH:mm'),
+    format(formatToLocalTimeZone(item.transaction_date), 'MMM dd, yyyy HH:mm'),
     item.user_name,
     item.description,
     item.amount,
@@ -37,7 +38,7 @@ const exportToCSV = (data: Transaction[], type: string) => {
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
-  link.download = `driver-wallet-${type}-${format(new Date(), 'yyyy-MM-dd')}.csv`
+  link.download = `driver-wallet-${type}-${format(formatToLocalTimeZone(), 'yyyy-MM-dd')}.csv`
   link.click()
   URL.revokeObjectURL(url)
 }

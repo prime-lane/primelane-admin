@@ -6,7 +6,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useTrip } from './api/use-trips'
 import { format } from 'date-fns'
 import { ArrowRightUp as ExternalLink } from '@solar-icons/react'
-import { formatCurrency, formatDuration, fromKobo } from '@/lib/utils'
+import { formatCurrency, formatDuration, formatToLocalTimeZone, fromKobo } from '@/lib/utils'
 import { useEffect } from 'react'
 import { useCategoryName } from '@/features/pricing-config/hooks/use-category-name'
 import { CAR_CURSOR } from '@/config/dashboard'
@@ -239,13 +239,13 @@ export const TripDetails = () => {
           {pickupDateTime && endDate && (
             <DetailRow
               label="Multiple days"
-              value={`${format(new Date(pickupDateTime), 'dd/MM/yyyy')} - ${format(new Date(endDate), 'dd/MM/yyyy')}`}
+              value={`${format(formatToLocalTimeZone(pickupDateTime), 'dd/MM/yyyy')} - ${format(formatToLocalTimeZone(endDate), 'dd/MM/yyyy')}`}
             />
           )}
           {pickupDateTime && (
             <DetailRow
               label="Pickup Date and Time"
-              value={format(new Date(pickupDateTime), 'dd/MM/yyyy, hh:mmaaa')
+              value={format(formatToLocalTimeZone(pickupDateTime), 'dd/MM/yyyy, hh:mmaaa')
                 .replace('am', 'AM')
                 .replace('pm', 'PM')}
             />

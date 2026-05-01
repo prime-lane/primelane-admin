@@ -1,6 +1,6 @@
 import { type ColumnDef } from '@tanstack/react-table'
 import type { Transaction } from '../types'
-import { formatCurrency } from '@/lib/utils'
+import { formatCurrency, formatToLocalTimeZone } from '@/lib/utils'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { format } from 'date-fns'
 
@@ -54,7 +54,7 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
     header: 'Date',
     cell: ({ row }) => (
       <span className="text-sm text-neutral-600">
-        {format(new Date(row.original.created_at), 'dd/MM/yyyy')}
+        {format(formatToLocalTimeZone(row.original.created_at), 'dd/MM/yyyy')}
       </span>
     ),
   },
