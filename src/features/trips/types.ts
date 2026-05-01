@@ -142,6 +142,7 @@ export interface Trip {
   ride_type?: string
   vehicle_category?: string
   category_id?: string
+  category_name?: string
   estimated_fare: number | null
   actual_fare: number | null
   drivers_earning?: number | null

@@ -5,10 +5,10 @@ import { formatDate } from '@/utils/table-utils'
 import { formatCurrency, fromKobo } from '@/lib/utils'
 import { CopyButton } from '@/components/ui/copy-button'
 import { formatRideType } from '../utils'
-import { useCategoryName } from '@/features/pricing-config/hooks/use-category-name'
+// import { useCategoryName } from '@/features/pricing-config/hooks/use-category-name'
 
 export const useTripColumns = (): ColumnDef<Trip>[] => {
-  const { getCategoryName } = useCategoryName()
+  // const { getCategoryName } = useCategoryName()
 
   return [
     {
@@ -74,7 +74,8 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
       header: 'Vehicle Category',
       cell: ({ row }) => (
         <span className="text-sm">
-          {getCategoryName(row.original.category_id)}
+          {row.original.category_name}
+          {/* {getCategoryName(row.original.category_id)} */}
         </span>
       ),
     },
