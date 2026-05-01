@@ -6,7 +6,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useTrip } from './api/use-trips'
 import { format } from 'date-fns'
 import { ArrowRightUp as ExternalLink } from '@solar-icons/react'
-import { formatCurrency, formatDuration, fromKobo } from '@/lib/utils'
+import { formatCurrency, formatDuration, formatToLocalTimeZone, fromKobo } from '@/lib/utils'
 import { useEffect } from 'react'
 import { useCategoryName } from '@/features/pricing-config/hooks/use-category-name'
 import { CAR_CURSOR } from '@/config/dashboard'
@@ -79,6 +79,9 @@ export const TripDetails = () => {
     `${trip.rider?.first_name || ''} ${trip.rider?.last_name || ''}`.trim() ||
     'N/A'
 
+  const isDaily =
+    trip.ride_type === 'daily' || trip.ride_type === 'daily_rental'
+
   const vehicleCategory =
     trip.vehicle_category ||
     trip.driver_vehicle?.category_ids
@@ -89,9 +92,19 @@ export const TripDetails = () => {
 
   const bookingType = formatRideType(trip.ride_type)
 
-  const pickupDateTime =
-    trip.scheduled_at ?? trip.pickup_time ?? trip.created_at
+  const pickupDateTime = trip.pickup_time ?? 'N/A'
   const endDate = trip.end_time
+
+  // daily duratio rentals use half_day / full_day labels
+  const durationLabel = isDaily
+    ? trip.hourly_ride_type === 'half_day'
+      ? 'Half day'
+      : trip.hourly_ride_type === 'full_day'
+        ? 'Full day'
+        : trip.booked_hours
+          ? `${trip.booked_hours} hours`
+          : '-'
+    : formatDuration(trip.actual_duration)
 
   const slots: Slot[] = trip.slots ?? []
 
@@ -216,13 +229,13 @@ export const TripDetails = () => {
           {pickupDateTime && endDate && (
             <DetailRow
               label="Multiple days"
-              value={`${format(new Date(pickupDateTime), 'dd/MM/yyyy')} - ${format(new Date(endDate), 'dd/MM/yyyy')}`}
+              value={`${format(formatToLocalTimeZone(pickupDateTime), 'dd/MM/yyyy')} - ${format(formatToLocalTimeZone(endDate), 'dd/MM/yyyy')}`}
             />
           )}
           {pickupDateTime && (
             <DetailRow
               label="Pickup Date and Time"
-              value={format(new Date(pickupDateTime), 'dd/MM/yyyy, hh:mmaaa')
+              value={format(formatToLocalTimeZone(pickupDateTime), 'dd/MM/yyyy, hh:mmaaa')
                 .replace('am', 'AM')
                 .replace('pm', 'PM')}
             />
@@ -235,10 +248,7 @@ export const TripDetails = () => {
             label="Dropoff address"
             value={trip.dropoff?.address || '-'}
           />
-          <DetailRow
-            label="Total trip time"
-            value={formatDuration(trip.actual_duration)}
-          />
+          <DetailRow label="Total trip time" value={durationLabel} />
         </div>
 
         {/* Payment & Cancellation */}

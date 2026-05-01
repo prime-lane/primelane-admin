@@ -14,6 +14,7 @@ import { useState } from 'react'
 import { useCommissions } from './api/use-finance'
 import { commissionColumns } from './components/columns'
 import type { Commission as CommissionType } from './types'
+import { formatToLocalTimeZone } from '@/lib/utils'
 
 const exportToCSV = (data: CommissionType[]) => {
   const headers = [
@@ -29,7 +30,7 @@ const exportToCSV = (data: CommissionType[]) => {
   ]
   const rows = data.map((item) => [
     item.settlement_id,
-    format(new Date(item.settlement_date), 'MMM dd, yyyy'),
+    format(formatToLocalTimeZone(item.settlement_date), 'MMM dd, yyyy'),
     item.trip_id,
     item.trip_type,
     item.fare_charged,
@@ -48,7 +49,7 @@ const exportToCSV = (data: CommissionType[]) => {
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
-  link.download = `commission-${format(new Date(), 'yyyy-MM-dd')}.csv`
+  link.download = `commission-${format(formatToLocalTimeZone(), 'yyyy-MM-dd')}.csv`
   link.click()
   URL.revokeObjectURL(url)
 }

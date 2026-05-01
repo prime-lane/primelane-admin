@@ -7,6 +7,7 @@ import type {
   DriverSettlement,
 } from '../types'
 import type { UserType } from '@/services/api-types'
+import { formatToLocalTimeZone } from '@/lib/utils'
 
 const commissionHelper = createColumnHelper<Commission>()
 
@@ -17,7 +18,7 @@ export const commissionColumns = [
   }),
   commissionHelper.accessor('settlement_date', {
     header: 'Settlement Date',
-    cell: (info) => format(new Date(info.getValue()), 'MMM dd, yyyy'),
+    cell: (info) => format(formatToLocalTimeZone(info.getValue()), 'MMM dd, yyyy'),
   }),
   commissionHelper.accessor('trip_id', {
     header: 'Trip ID',
@@ -70,7 +71,7 @@ export const driverSettlementColumns: ColumnDef<DriverSettlement>[] = [
   {
     accessorKey: 'settlement_date',
     header: 'Settlement Date',
-    cell: (info) => format(new Date(info.getValue() as string), 'MMM dd, yyyy'),
+    cell: (info) => format(formatToLocalTimeZone(info.getValue() as string), 'MMM dd, yyyy'),
   },
   {
     accessorKey: 'trip_id',
@@ -137,7 +138,7 @@ export const transactionColumns = (
     accessorKey: 'transaction_date',
     header: 'Transaction Date',
     cell: (info) =>
-      format(new Date(info.getValue() as string), 'MMM dd, yyyy HH:mm'),
+      format(formatToLocalTimeZone(info.getValue() as string), 'MMM dd, yyyy HH:mm'),
   },
   {
     accessorKey: 'user_name',
@@ -171,7 +172,7 @@ export const refundColumns: ColumnDef<Refund>[] = [
     accessorKey: 'transaction_date',
     header: 'Transaction Date',
     cell: (info) =>
-      format(new Date(info.getValue() as string), 'MMM dd, yyyy HH:mm'),
+      format(formatToLocalTimeZone(info.getValue() as string), 'MMM dd, yyyy HH:mm'),
   },
   {
     accessorKey: 'trip_id',

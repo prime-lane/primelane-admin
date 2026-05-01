@@ -1,6 +1,6 @@
 import { type ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
-import { formatCurrency, fromKobo } from '@/lib/utils'
+import { formatCurrency, formatToLocalTimeZone, fromKobo } from '@/lib/utils'
 import type { Transaction } from '@/features/customers/types'
 import { CopyButton } from '@/components/ui/copy-button'
 
@@ -22,7 +22,7 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
     header: 'Transaction Date',
     cell: ({ row }) => (
       <span className="text-sm text-neutral-600">
-        {format(new Date(row.original.created_at), 'dd/MM/yyyy')}
+        {format(formatToLocalTimeZone(row.original.created_at), 'dd/MM/yyyy')}
       </span>
     ),
   },
@@ -92,7 +92,7 @@ export const refundColumns: ColumnDef<Transaction>[] = [
     header: 'Transaction Date',
     cell: ({ row }) => (
       <span className="text-sm text-neutral-600">
-        {format(new Date(row.original.created_at), 'dd/MM/yyyy')}
+        {format(formatToLocalTimeZone(row.original.created_at), 'dd/MM/yyyy')}
       </span>
     ),
   },
@@ -155,7 +155,7 @@ export const customerWalletColumns: ColumnDef<Transaction>[] = [
     header: 'Transaction Date',
     cell: ({ row }) => (
       <span className="text-sm text-neutral-600">
-        {format(new Date(row.original.created_at), 'dd/MM/yyyy')}
+        {format(formatToLocalTimeZone(row.original.created_at), 'dd/MM/yyyy')}
       </span>
     ),
   },
