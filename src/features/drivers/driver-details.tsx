@@ -391,19 +391,20 @@ export const DriverDetails = () => {
                     <MenuItem value="" disabled>
                       Select a reason
                     </MenuItem>
-                    <MenuItem value="Repeated cancellations or no-shows disrupting driver schedules">
-                      Repeated cancellations or no-shows disrupting driver
-                      schedules
+                    <MenuItem value="Failed or falsified ID/vehicle documents">
+                      Failed or falsified ID/vehicle documents
                     </MenuItem>
-                    <MenuItem value="Reported misconduct or inappropriate behavior toward drivers">
-                      Reported misconduct or inappropriate behavior toward
-                      drivers
+                    <MenuItem value="Repeated customer complaints or misconduct">
+                      Repeated customer complaints or misconduct
                     </MenuItem>
-                    <MenuItem value="Outstanding unpaid trip fares or unresolved disputes">
-                      Outstanding unpaid trip fares or unresolved disputes
+                    <MenuItem value="Excessive ride cancellations or no-shows">
+                      Excessive ride cancellations or no-shows
                     </MenuItem>
-                    <MenuItem value="Violation of Primelane's community or safety policies">
-                      Violation of Primelane&apos;s community or safety policies
+                    <MenuItem value="Vehicle no longer meets standards">
+                      Vehicle no longer meets standards
+                    </MenuItem>
+                    <MenuItem value="Violation of platform policies or terms">
+                      Violation of platform policies or terms
                     </MenuItem>
                   </Select>
                 </FormControl>
