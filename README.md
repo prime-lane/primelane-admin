@@ -75,9 +75,9 @@ pnpm run storybook
 - [x] add remaining summary card
 - [x] filter button
 - [x] updating vehicle category endpoint (dependent on chijiooke)]
-- [ ] delimit currency with commas
-- [ ] fix input padding with naira symbol
-- [ ] has_provider to filter refunds
+- [x] delimit currency with commas
+- [x] fix input padding with naira symbol
+- [x] has_provider to filter refunds
 - [ ] customer_wallet to filter customer wallet
 
 ### BACKEND
