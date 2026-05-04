@@ -61,14 +61,6 @@ export const TripDetails = () => {
   const { id } = useParams<{ id: string }>()
   const { data: trip, isLoading, error } = useTrip(id!)
 
-  useEffect(() => {
-    const originalCursor = document.body.style.cursor
-    document.body.style.cursor = CAR_CURSOR
-    return () => {
-      document.body.style.cursor = originalCursor
-    }
-  }, [])
-
   const { getCategoryName } = useCategoryName()
 
   if (isLoading) return <TripDetailsSkeleton />
