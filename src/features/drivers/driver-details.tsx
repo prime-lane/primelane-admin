@@ -8,31 +8,34 @@ import {
   CustomTabPanel as TabPanel,
   a11yProps,
 } from '@/components/ui/tab-panel'
+import { usePermissionsContext } from '@/hooks/permissions-context'
 import { getInitials } from '@/lib/utils'
 import { colors } from '@/theme/colors'
+import { formatDate } from '@/utils/table-utils'
 import {
   Avatar,
   Button,
-  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   FormControl,
-  FormControlLabel,
-  FormGroup,
   InputLabel,
   Menu,
   MenuItem,
   Select,
   Tab,
-  Tabs,
+  Tabs
 } from '@mui/material'
 import { AltArrowDown } from '@solar-icons/react'
-import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
 import { useQueryState } from 'nuqs'
+import { useMemo, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
+import {
+  useUpdateVehicleCategory,
+  useVehicleCategories,
+} from '../pricing-config/api/use-vehicle-categories'
 import { useKycDetails } from '../shared/api/use-users'
 import {
   useDriver,
@@ -45,13 +48,6 @@ import { DriverOverview } from './components/driver-overview'
 import { DriverRatings } from './components/driver-ratings'
 import { IdentityDetails } from './components/identity-details'
 import { VehicleDetails } from './components/vehicle-details'
-import {
-  useUpdateVehicleCategory,
-  useVehicleCategories,
-} from '../pricing-config/api/use-vehicle-categories'
-import { usePermissionsContext } from '@/hooks/permissions-context'
-import { useMemo } from 'react'
-import { formatDate } from '@/utils/table-utils'
 
 export const DriverDetails = () => {
   const { id } = useParams<{ id: string }>()
@@ -289,11 +285,11 @@ export const DriverDetails = () => {
           <MenuItem onClick={handleEdit}>
             <span className="text-base text-neutral-500">Edit Account</span>
           </MenuItem>
-          <MenuItem onClick={() => handleStatusChangeClick('vehicle_category')}>
+          {/* <MenuItem onClick={() => handleStatusChangeClick('vehicle_category')}>
             <span className="text-base text-neutral-500">
               Update vehicle category
             </span>
-          </MenuItem>
+          </MenuItem> */}
           {driver.status === 'active' ? (
             <MenuItem
               onClick={() => handleStatusChangeClick('inactive')}
@@ -340,7 +336,7 @@ export const DriverDetails = () => {
               {dialogType === 'vehicle_category' ||
               dialogType === 'reactivate' ? (
                 <>
-                  <div className="space-y-2">
+                  {/* <div className="space-y-2">
                     <p className="text-sm font-medium text-neutral-700">
                       Vehicle Category
                     </p>
@@ -375,7 +371,7 @@ export const DriverDetails = () => {
                         )}
                       </FormGroup>
                     </FormControl>
-                  </div>
+                  </div> */}
                 </>
               ) : (
                 <FormControl fullWidth>

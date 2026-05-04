@@ -18,6 +18,7 @@
 [ ] only show cancellation fee if user cancelled (check design for full details on what should be displayed)
 [ ] add extra fair in trip details
 [ ] render vehicle documents conditionally (driver details page)
+[x] remove custom cursor
 
 
 side notes:
