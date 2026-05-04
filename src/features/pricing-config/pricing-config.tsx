@@ -94,7 +94,7 @@ export const PricingConfig = () => {
           </div>
         </section>
 
-        <section className="space-y-4">
+        {/* <section className="space-y-4">
           <SectionHeader title="Fleet Rental" />
           <div className="space-y-4">
             {categoriesData?.categories?.map((category) => (
@@ -106,7 +106,7 @@ export const PricingConfig = () => {
               />
             ))}
           </div>
-        </section>
+        </section> */}
       </div>
     </>
   )
