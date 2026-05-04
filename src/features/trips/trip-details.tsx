@@ -32,7 +32,7 @@ const DetailRow = ({
   indent,
 }: DetailRowProps) => (
   <div
-    className={`flex items-center gap-4 border-b border-neutral-100 last:border-0 ${indent ? 'pl-4' : ''}`}
+    className={`flex items-center gap-4 ${indent ? 'pl-4' : ''}`}
   >
     <span
       className={`text-neutral-500 text-sm w-60 shrink-0 ${bold ? 'font-semibold text-neutral-900' : ''}`}
