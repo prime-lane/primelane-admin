@@ -2,7 +2,8 @@ import { ExportButton, SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
 import { PageHeader } from '@/components/ui/page-header'
 import { useDebounce } from '@/hooks/use-debounce'
-import { exportToCSV } from '@/utils/export-utils'
+import { downloadExport } from '@/utils/export-utils'
+import { buildQueryParams } from '@/lib/utils'
 import { Box, Button } from '@mui/material'
 import { UserPlus } from '@solar-icons/react'
 import { useMemo, useState } from 'react'
@@ -78,12 +79,9 @@ export const RolesManagement = () => {
   }
 
   const handleExport = () => {
-    if (!data?.items) return
-    exportToCSV(data.items, 'roles-export', [
-      { key: 'name', label: 'Role Name' },
-      { key: 'permissions', label: 'Number of Permissions' },
-      { key: 'createdAt', label: 'Created At' },
-    ])
+    const params = buildQueryParams({ search: debouncedSearch || undefined })
+    const qs = params.toString()
+    downloadExport(`/roles${qs ? `?${qs}` : ''}`, 'roles-export')
   }
 
   const columns = useMemo(

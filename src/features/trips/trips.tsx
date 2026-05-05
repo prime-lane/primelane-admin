@@ -8,7 +8,8 @@ import {
 import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
-import { exportToCSV } from '@/utils/export-utils'
+import { buildQueryParams, formatDateToLocal } from '@/lib/utils'
+import { downloadExport } from '@/utils/export-utils'
 import { Box } from '@mui/material'
 
 import { parseAsString, useQueryState } from 'nuqs'
@@ -20,7 +21,6 @@ import { useVehicleCategories } from '../pricing-config/api/use-vehicle-categori
 import type { Trip } from './types'
 import { useTableParams } from '@/hooks/use-table-params'
 import { PermissionGate } from '@/components/ui/permission-gate'
-import { formatDateToLocal } from '@/lib/utils'
 import { useTrips } from './api/use-trips'
 
 export const Trips = () => {
@@ -76,12 +76,12 @@ export const Trips = () => {
   }
 
   const handleExport = () => {
-    if (!data?.items) return
-    exportToCSV(data.items, 'trips-export', [
-      { key: 'id', label: 'Trip ID' },
-      { key: 'status', label: 'Status' },
-      { key: 'created_at', label: 'Date' },
-    ])
+    const params = buildQueryParams({
+      search: debouncedSearch || undefined,
+      ...filters,
+    })
+    const qs = params.toString()
+    downloadExport(`/rides${qs ? `?${qs}` : ''}`, 'trips-export')
   }
 
   const handleRemoveFilter = (key: string) => {

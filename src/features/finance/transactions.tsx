@@ -8,7 +8,8 @@ import {
 import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
-import { exportToCSV } from '@/utils/export-utils'
+import { buildQueryParams } from '@/lib/utils'
+import { downloadExport } from '@/utils/export-utils'
 import { Box } from '@mui/material'
 import { parseAsString, useQueryState } from 'nuqs'
 import { useTransactions } from './api/use-transactions'
@@ -71,15 +72,15 @@ export const Transactions = () => {
   }
 
   const handleExport = () => {
-    if (!data?.items) return
-    exportToCSV(data.items, 'transactions-export', [
-      { key: 'id', label: 'Transaction ID' },
-      { key: 'created_at', label: 'Date' },
-      { key: 'transaction_type', label: 'Type' },
-      { key: 'description', label: 'Payment method/Partner' },
-      { key: 'reference', label: 'Reference no.' },
-      { key: 'amount', label: 'Amount Paid' },
-    ])
+    const params = buildQueryParams({
+      search: debouncedSearch || undefined,
+      has_provider: 'true',
+      transaction_type: transactionType || undefined,
+      start_date: startDate || undefined,
+      end_date: endDate || undefined,
+    })
+    const qs = params.toString()
+    downloadExport(`/transactions${qs ? `?${qs}` : ''}`, 'transactions-export')
   }
 
   const activeFilterChips: ActiveFilter[] = []

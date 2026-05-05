@@ -1,14 +1,14 @@
 [ ] Export w/o pagination
 [ ] Making NIN field optional  at edit customer - Admin
 [x] Remove Update Vehicle Category - at driver
-[ ] Remove vehicle category selection from re-activation modal 
+[x] Remove vehicle category selection from re-activation modal 
 [x] Hide fleet rental in pricing config.
 [ ] change base price label -> min price on airport transfer price config (check design)
 [ ] Make the cancellation fee field dynamic based on the type of fee selected (percentage or fixed amount) 
 [ ] Remove wait fee per minute field on airport transfer and daily rental price config.
 [ ] Remove daily hours on daily rental price config
 [ ] ⁠Remove platform commission on airport transfer and daily rental price config.
-[ ] Approx airport transfer fares to nearest 100
+[ ] Approx airport transfer fares to nearest 100 - (Chijioke)
 [x] remove line from trip details UI
 [ ] Change nomenclature from Trips to Booking on the navigation bar, page headers and details where necessary (check design)
 [ ] Align airport transfer booking details with design

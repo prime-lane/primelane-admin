@@ -10,7 +10,7 @@ import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { PageHeader } from '@/components/ui/page-header'
 import { useDebounce } from '@/hooks/use-debounce'
-import { exportToCSV } from '@/utils/export-utils'
+import { downloadExport } from '@/utils/export-utils'
 import { Box } from '@mui/material'
 
 import { PermissionGate } from '@/components/ui/permission-gate'
@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom'
 import { useCustomers } from './api/use-customers'
 import { customerColumns } from './components/columns'
 import type { Customer } from './types'
-import { formatDateToLocal } from '@/lib/utils'
+import { buildQueryParams, formatDateToLocal } from '@/lib/utils'
 
 export const Customers = () => {
   const navigate = useNavigate()
@@ -65,15 +65,13 @@ export const Customers = () => {
   }
 
   const handleExport = () => {
-    if (!data?.items) return
-    exportToCSV(data.items, 'customers-export', [
-      { key: 'first_name', label: 'First Name' },
-      { key: 'last_name', label: 'Last Name' },
-      { key: 'email', label: 'Email' },
-      { key: 'phone_number', label: 'Phone Number' },
-      { key: 'status', label: 'Status' },
-      { key: 'created_at', label: 'Date Joined' },
-    ])
+    const params = buildQueryParams({
+      search: debouncedSearch || undefined,
+      user_type: 'customer',
+      ...filters,
+    })
+    const qs = params.toString()
+    downloadExport(`/users${qs ? `?${qs}` : ''}`, 'customers-export')
   }
 
   const handleRemoveFilter = (key: string) => {

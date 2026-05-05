@@ -9,7 +9,8 @@ import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
 import { useTableParams } from '@/hooks/use-table-params'
-import { exportToCSV } from '@/utils/export-utils'
+import { buildQueryParams } from '@/lib/utils'
+import { downloadExport } from '@/utils/export-utils'
 import { Box } from '@mui/material'
 import { parseAsString, useQueryState } from 'nuqs'
 import { PermissionGate } from '@/components/ui/permission-gate'
@@ -61,15 +62,14 @@ export const Refund = () => {
   }
 
   const handleExport = () => {
-    if (!data?.items) return
-    exportToCSV(data.items, 'refunds-export', [
-      { key: 'id', label: 'Transaction ID' },
-      { key: 'created_at', label: 'Date' },
-      { key: 'ride_id', label: 'Trip ID' },
-      { key: 'category', label: 'Type' },
-      { key: 'description', label: 'Description' },
-      { key: 'amount', label: 'Amount Refunded' },
-    ])
+    const params = buildQueryParams({
+      search: debouncedSearch || undefined,
+      is_refund: 'true',
+      start_date: startDate || undefined,
+      end_date: endDate || undefined,
+    })
+    const qs = params.toString()
+    downloadExport(`/transactions${qs ? `?${qs}` : ''}`, 'refunds-export')
   }
 
   const activeFilterChips: ActiveFilter[] = []

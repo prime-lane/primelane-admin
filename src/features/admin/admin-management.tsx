@@ -2,7 +2,8 @@ import { ExportButton, SearchInput } from '@/components/ui/data-controls'
 import { FilterMenu } from '@/components/ui/filter-menu'
 import { DataTable } from '@/components/ui/data-table'
 import { PageHeader } from '@/components/ui/page-header'
-import { exportToCSV } from '@/utils/export-utils'
+import { buildQueryParams, formatDateToLocal } from '@/lib/utils'
+import { downloadExport } from '@/utils/export-utils'
 import { Box, Button } from '@mui/material'
 import { UserPlus } from '@solar-icons/react'
 import { useState } from 'react'
@@ -14,7 +15,6 @@ import { InviteAdminModal } from './components/invite-admin-modal'
 import { useDebounce } from '@/hooks/use-debounce'
 import { useTableParams } from '@/hooks/use-table-params'
 import { PermissionGate } from '@/components/ui/permission-gate'
-import { formatDateToLocal } from '@/lib/utils'
 
 export const AdminManagement = () => {
   const { page, setPage, pageSize, setPageSize, search, setSearch } =
@@ -54,14 +54,13 @@ export const AdminManagement = () => {
   }
 
   const handleExport = () => {
-    if (!data?.items) return
-    exportToCSV(data.items, 'admins-export', [
-      { key: 'first_name', label: 'First Name' },
-      { key: 'last_name', label: 'Last Name' },
-      { key: 'email', label: 'Email' },
-      { key: 'status', label: 'Status' },
-      { key: 'created_at', label: 'Date Joined' },
-    ])
+    const params = buildQueryParams({
+      search: debouncedSearch || undefined,
+      user_type: 'admin',
+      ...filters,
+    })
+    const qs = params.toString()
+    downloadExport(`/users${qs ? `?${qs}` : ''}`, 'admins-export')
   }
 
   return (

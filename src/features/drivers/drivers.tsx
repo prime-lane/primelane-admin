@@ -10,7 +10,8 @@ import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { PageHeader } from '@/components/ui/page-header'
 import { useDebounce } from '@/hooks/use-debounce'
-import { exportToCSV } from '@/utils/export-utils'
+import { buildQueryParams, formatDateToLocal } from '@/lib/utils'
+import { downloadExport } from '@/utils/export-utils'
 import { Box } from '@mui/material'
 
 import { parseAsString, useQueryState } from 'nuqs'
@@ -21,7 +22,6 @@ import { useDriverColumns } from './components/columns'
 import type { Driver } from './types'
 import { useTableParams } from '@/hooks/use-table-params'
 import { PermissionGate } from '@/components/ui/permission-gate'
-import { formatDateToLocal } from '@/lib/utils'
 
 export const Drivers = () => {
   const {
@@ -82,15 +82,13 @@ export const Drivers = () => {
   }
 
   const handleExport = () => {
-    if (!data?.items) return
-    exportToCSV(data.items, 'drivers-export', [
-      { key: 'first_name', label: 'First Name' },
-      { key: 'last_name', label: 'Last Name' },
-      { key: 'email', label: 'Email' },
-      { key: 'phone_number', label: 'Phone Number' },
-      { key: 'status', label: 'Status' },
-      { key: 'created_at', label: 'Date Joined' },
-    ])
+    const params = buildQueryParams({
+      search: debouncedSearch || undefined,
+      user_type: 'driver',
+      ...filters,
+    })
+    const qs = params.toString()
+    downloadExport(`/users${qs ? `?${qs}` : ''}`, 'drivers-export')
   }
 
   const handleRemoveFilter = (key: string) => {
