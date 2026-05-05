@@ -12,7 +12,7 @@ import {
   TextField,
 } from '@mui/material'
 import React, { useEffect } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useForm, useWatch } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
@@ -72,41 +72,35 @@ const AirportTransferForm = ({
     formState: { errors },
   } = useForm<AirportTransferFormData>({
     resolver: zodResolver(airportTransferSchema) as any,
+    defaultValues: { cancellation_fee_type: 'percentage' },
   })
 
   useEffect(() => {
     if (categoryData) {
       reset({
-        base_price: fromKobo(categoryData.airport_transfer_base_price),
         per_km: fromKobo(categoryData.airport_transfer_per_km),
         per_min: fromKobo(categoryData.airport_transfer_per_min),
+        min_fare: fromKobo(categoryData.airport_transfer_base_price),
         free_wait_time: categoryData.airport_transfer_free_wait_time,
-        wait_fee_per_min: fromKobo(
-          categoryData.airport_transfer_wait_fee_per_min,
-        ),
-        trip_commission_percentage:
-          categoryData.airport_transfer_trip_commission_percentage,
         cancellation_fee_type:
           categoryData.airport_transfer_cancellation_fee_type,
+        cancellation_percentage:
+          categoryData.airport_transfer_cancellation_percentage,
         cancellation_base: fromKobo(
           categoryData.airport_transfer_cancellation_base,
         ),
-        cancellation_percentage:
-          categoryData.airport_transfer_cancellation_percentage,
       })
     }
   }, [categoryData, reset])
 
   const onSubmit = (data: AirportTransferFormData) => {
     updateConfig({
-      base_price: toKobo(data.base_price),
+      base_price: toKobo(data.min_fare),
       per_km: toKobo(data.per_km),
       per_min: toKobo(data.per_min),
       free_wait_time: Number(data.free_wait_time),
-      wait_fee_per_min: toKobo(data.wait_fee_per_min),
-      trip_commission_percentage: Number(data.trip_commission_percentage),
       cancellation_fee_type: data.cancellation_fee_type,
-      cancellation_base: toKobo(data.cancellation_base),
+      cancellation_base: data.cancellation_fee_type === 'fixed' ? toKobo(data.cancellation_base ?? 0) : 0,
       cancellation_percentage: Number(data.cancellation_percentage),
     } as any)
     navigate(path.DASHBOARD.PRICING_CONFIG)
@@ -118,21 +112,6 @@ const AirportTransferForm = ({
         <section className="space-y-4">
           <h2 className="text-lg font-normal text-neutral-900">Trip fare</h2>
           <div className="space-y-4">
-            <Field
-              label="Base price"
-              hint="Starting amount per trip"
-              error={errors.base_price?.message}
-            >
-              <TextField
-                fullWidth
-                type="number"
-                size="medium"
-                sx={inputSx}
-                {...register('base_price')}
-                error={!!errors.base_price}
-                slotProps={{ input: { startAdornment: naira } }}
-              />
-            </Field>
             <Field
               label="Price per kilometer"
               hint="Rate charged based on total trip distance"
@@ -150,7 +129,7 @@ const AirportTransferForm = ({
             </Field>
             <Field
               label="Price per minute"
-              hint="Rate charged based on total trip duration"
+              hint="Rate charged based on total trip duration."
               error={errors.per_min?.message}
             >
               <TextField
@@ -160,6 +139,21 @@ const AirportTransferForm = ({
                 sx={inputSx}
                 {...register('per_min')}
                 error={!!errors.per_min}
+                slotProps={{ input: { startAdornment: naira } }}
+              />
+            </Field>
+            <Field
+              label="Minimum price"
+              hint="Minimum amount per trip"
+              error={errors.min_fare?.message}
+            >
+              <TextField
+                fullWidth
+                type="number"
+                size="medium"
+                sx={inputSx}
+                {...register('min_fare')}
+                error={!!errors.min_fare}
                 slotProps={{ input: { startAdornment: naira } }}
               />
             </Field>
@@ -184,21 +178,6 @@ const AirportTransferForm = ({
                 error={!!errors.free_wait_time}
               />
             </Field>
-            <Field
-              label="Wait fee per minute"
-              hint="Fee charged per minute after free wait time"
-              error={errors.wait_fee_per_min?.message}
-            >
-              <TextField
-                fullWidth
-                type="number"
-                size="medium"
-                sx={inputSx}
-                {...register('wait_fee_per_min')}
-                error={!!errors.wait_fee_per_min}
-                slotProps={{ input: { startAdornment: naira } }}
-              />
-            </Field>
           </div>
         </section>
 
@@ -206,8 +185,8 @@ const AirportTransferForm = ({
           errors={errors}
           register={register}
           control={control}
+          showBase={false}
         />
-        <CommissionSection errors={errors} register={register} />
       </div>
     </form>
   )
@@ -240,7 +219,7 @@ const DailyForm = ({
     reset,
     control,
     formState: { errors },
-  } = useForm<DailyFormData>({ resolver: zodResolver(dailySchema) as any })
+  } = useForm<DailyFormData>({ resolver: zodResolver(dailySchema) as any, defaultValues: { cancellation_fee_type: 'percentage' } })
 
   useEffect(() => {
     if (categoryData) {
@@ -250,18 +229,11 @@ const DailyForm = ({
         full_day_hours: categoryData.daily_rental_full_day_hours,
         full_day_fare: fromKobo(categoryData.daily_rental_full_day_fare),
         free_wait_time: categoryData.daily_rental_free_wait_time,
-        wait_fee_per_min: fromKobo(categoryData.daily_rental_wait_fee_per_min),
-        trip_commission_percentage:
-          categoryData.daily_rental_trip_commission_percentage,
         cancellation_fee_type: categoryData.daily_rental_cancellation_fee_type,
-        cancellation_base: fromKobo(
-          categoryData.daily_rental_cancellation_base,
-        ),
         cancellation_percentage:
           categoryData.daily_rental_cancellation_percentage,
         extra_time_cost: fromKobo(categoryData.daily_rental_extra_time_cost),
         grace_period_mins: categoryData.daily_rental_grace_period_mins,
-        daily_hours: categoryData.daily_rental_daily_hours,
       })
     }
   }, [categoryData, reset])
@@ -273,14 +245,10 @@ const DailyForm = ({
       full_day_hours: Number(data.full_day_hours),
       full_day_fare: toKobo(data.full_day_fare),
       free_wait_time: Number(data.free_wait_time),
-      wait_fee_per_min: toKobo(data.wait_fee_per_min),
-      trip_commission_percentage: Number(data.trip_commission_percentage),
       cancellation_fee_type: data.cancellation_fee_type,
-      cancellation_base: toKobo(data.cancellation_base),
       cancellation_percentage: Number(data.cancellation_percentage),
       extra_time_cost: toKobo(data.extra_time_cost),
       grace_period_mins: Number(data.grace_period_mins),
-      daily_hours: Number(data.daily_hours),
     })
     navigate(path.DASHBOARD.PRICING_CONFIG)
   }
@@ -357,19 +325,6 @@ const DailyForm = ({
                 slotProps={{ input: { startAdornment: naira } }}
               />
             </Field>
-            <Field
-              label="Daily hours"
-              hint="Total hours in a day"
-              error={errors.daily_hours?.message}
-            >
-              <TextField
-                fullWidth
-                type="number"
-                size="medium"
-                {...register('daily_hours')}
-                error={!!errors.daily_hours}
-              />
-            </Field>
           </div>
         </section>
 
@@ -387,21 +342,6 @@ const DailyForm = ({
                 size="medium"
                 {...register('free_wait_time')}
                 error={!!errors.free_wait_time}
-              />
-            </Field>
-            <Field
-              label="Wait fee per minute"
-              hint="Fee charged per minute after free wait time"
-              error={errors.wait_fee_per_min?.message}
-            >
-              <TextField
-                fullWidth
-                type="number"
-                size="medium"
-                sx={inputSx}
-                {...register('wait_fee_per_min')}
-                error={!!errors.wait_fee_per_min}
-                slotProps={{ input: { startAdornment: naira } }}
               />
             </Field>
           </div>
@@ -445,8 +385,8 @@ const DailyForm = ({
           errors={errors}
           register={register}
           control={control}
+          showBase={false}
         />
-        <CommissionSection errors={errors} register={register} />
       </div>
     </form>
   )
@@ -479,7 +419,7 @@ const FleetForm = ({
     reset,
     control,
     formState: { errors },
-  } = useForm<FleetFormData>({ resolver: zodResolver(fleetSchema) as any })
+  } = useForm<FleetFormData>({ resolver: zodResolver(fleetSchema) as any, defaultValues: { cancellation_fee_type: 'percentage' } })
 
   useEffect(() => {
     if (categoryData) {
@@ -681,7 +621,21 @@ const SaveButton = ({
   </Button>
 )
 
-const CancellationSection = ({ errors, register, control }: any) => (
+interface CancellationSectionProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  errors: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  register: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: any
+  showBase?: boolean
+}
+
+const CancellationSection = ({ errors, register, control, showBase = true }: CancellationSectionProps) => {
+  const feeType = useWatch({ control, name: 'cancellation_fee_type' })
+  const showBaseField = showBase || feeType === 'fixed'
+
+  return (
   <section className="space-y-4">
     <h2 className="text-lg font-normal text-neutral-900">Cancellation fee</h2>
     <div className="space-y-1">
@@ -720,21 +674,24 @@ const CancellationSection = ({ errors, register, control }: any) => (
         error={!!errors.cancellation_percentage}
       />
     </Field>
-    <Field
-      label="Cancellation base"
-      hint="A fixed amount charged for trip cancellation"
-      error={errors.cancellation_base?.message}
-    >
-      <TextField
-        fullWidth
-        type="number"
-        size="medium"
-        {...register('cancellation_base')}
-        error={!!errors.cancellation_base}
-      />
-    </Field>
+    {showBaseField && (
+      <Field
+        label="Cancellation base"
+        hint="A fixed amount charged for trip cancellation"
+        error={errors.cancellation_base?.message}
+      >
+        <TextField
+          fullWidth
+          type="number"
+          size="medium"
+          {...register('cancellation_base')}
+          error={!!errors.cancellation_base}
+        />
+      </Field>
+    )}
   </section>
-)
+  )
+}
 
 const CommissionSection = ({ errors, register }: any) => (
   <section className="space-y-4">

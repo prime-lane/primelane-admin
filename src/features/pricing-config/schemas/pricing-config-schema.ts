@@ -17,15 +17,13 @@ const koboNum = (msg: string) =>
   )
 
 export const airportTransferSchema = z.object({
-  base_price: koboNum('Base price is required'),
   per_km: koboNum('Price per km is required'),
   per_min: koboNum('Price per minute is required'),
+  min_fare: koboNum('Minimum fare is required'),
   free_wait_time: num('Free wait time is required'),
-  wait_fee_per_min: koboNum('Wait fee per minute is required'),
-  trip_commission_percentage: num('Commission is required', 100),
   cancellation_fee_type: z.enum(['fixed', 'percentage']),
-  cancellation_base: koboNum('Cancellation base is required'),
   cancellation_percentage: num('Cancellation % is required', 100),
+  cancellation_base: koboNum('Cancellation base is required'),
 })
 
 export const dailySchema = z.object({
@@ -34,14 +32,10 @@ export const dailySchema = z.object({
   full_day_hours: num('Full-day hours is required'),
   full_day_fare: koboNum('Full-day fare is required'),
   free_wait_time: num('Free wait time is required'),
-  wait_fee_per_min: koboNum('Wait fee per minute is required'),
-  trip_commission_percentage: num('Commission is required', 100),
   cancellation_fee_type: z.enum(['fixed', 'percentage']),
-  cancellation_base: koboNum('Cancellation base is required'),
   cancellation_percentage: num('Cancellation % is required', 100),
   extra_time_cost: koboNum('Extra time cost is required'),
   grace_period_mins: num('Grace period is required'),
-  daily_hours: num('Daily hours is required'),
 })
 
 export const fleetSchema = z.object({
