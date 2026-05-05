@@ -1,4 +1,4 @@
-import { formatToLocalTimeZone } from "@/lib/utils"
+import { formatToLocalTimeZone } from '@/lib/utils'
 
 export function formatDate(date: string | Date): string {
   const d = formatToLocalTimeZone(date)

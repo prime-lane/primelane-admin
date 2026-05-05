@@ -81,7 +81,7 @@ export const Trips = () => {
       ...filters,
     })
     const qs = params.toString()
-    downloadExport(`/rides${qs ? `?${qs}` : ''}`, 'trips-export')
+    downloadExport(`/rides${qs ? `?${qs}` : ''}`)
   }
 
   const handleRemoveFilter = (key: string) => {
@@ -161,7 +161,7 @@ export const Trips = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl">Trips</h1>
+        <h1 className="text-4xl">Bookings</h1>
       </div>
 
       <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>

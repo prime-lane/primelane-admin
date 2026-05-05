@@ -88,7 +88,7 @@ export const Drivers = () => {
       ...filters,
     })
     const qs = params.toString()
-    downloadExport(`/users${qs ? `?${qs}` : ''}`, 'drivers-export')
+    downloadExport(`/users${qs ? `?${qs}` : ''}`)
   }
 
   const handleRemoveFilter = (key: string) => {

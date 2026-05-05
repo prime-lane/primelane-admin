@@ -25,7 +25,7 @@ import {
   MenuItem,
   Select,
   Tab,
-  Tabs
+  Tabs,
 } from '@mui/material'
 import { AltArrowDown } from '@solar-icons/react'
 import { useQueryState } from 'nuqs'

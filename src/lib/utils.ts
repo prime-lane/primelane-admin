@@ -112,5 +112,10 @@ export const formatDateToLocal = (date: Date): string => {
 
 export const formatToLocalTimeZone = (isoString?: string | Date) => {
   const dateStr = `${isoString}`
-  return dateStr ? new Date(dateStr.slice(0, -1)) : new Date();
+  return dateStr ? new Date(dateStr.slice(0, -1)) : new Date()
+}
+
+export const capitalize = (str: string) => {
+  return str.charAt(0).toUpperCase()
+    + str.slice(1).toLowerCase()
 }

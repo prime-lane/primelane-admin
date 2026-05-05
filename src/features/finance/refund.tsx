@@ -69,7 +69,7 @@ export const Refund = () => {
       end_date: endDate || undefined,
     })
     const qs = params.toString()
-    downloadExport(`/transactions${qs ? `?${qs}` : ''}`, 'refunds-export')
+    downloadExport(`/transactions${qs ? `?${qs}` : ''}`)
   }
 
   const activeFilterChips: ActiveFilter[] = []

@@ -1,9 +1,12 @@
+import { toast } from 'sonner'
+
 const API_BASE_URL = import.meta.env.VITE_PRIMELANE_API_BASE_URL
 
-export const downloadExport = async (
-  endpoint: string,
-  filename: string,
-): Promise<void> => {
+/**
+ * Triggers a backend export by appending `export=true` to the endpoint.
+ * The backend sends the report to the user's email and returns a success message.
+ */
+export const downloadExport = async (endpoint: string): Promise<void> => {
   const token = localStorage.getItem('access_token')
 
   const separator = endpoint.includes('?') ? '&' : '?'
@@ -17,22 +20,15 @@ export const downloadExport = async (
       },
     })
 
+    const data = await response.json()
+
     if (!response.ok) {
-      throw new Error(`Export failed: ${response.statusText}`)
+      toast.error(data?.message || 'Export failed')
+      return
     }
 
-    const blob = await response.blob()
-    const objectUrl = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = objectUrl
-    link.download = filename.endsWith('.csv') ? filename : `${filename}.csv`
-    link.style.display = 'none'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    URL.revokeObjectURL(objectUrl)
-  } catch (error) {
-    console.error('Export error:', error)
-    throw error
+    toast.success(data?.message || 'Report has been sent to your email')
+  } catch {
+    toast.error('Export failed. Please try again.')
   }
 }

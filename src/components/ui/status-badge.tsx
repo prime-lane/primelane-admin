@@ -1,3 +1,4 @@
+import { capitalize } from '@/lib/utils'
 import { Chip, type ChipProps } from '@mui/material'
 
 export type TripStatus = 'SCHEDULED' | 'COMPLETED'
@@ -26,12 +27,16 @@ interface StatusBadgeProps {
 const getStatusConfig = (status: string) => {
   switch (status) {
     case 'active':
+    case 'Active':
+    case 'ACTIVE':
       return {
         label: 'Active',
         color: 'green.400',
         bgcolor: '#22C55E1A',
       }
     case 'pending':
+    case 'Pending':
+    case 'PENDING':
       return {
         label: 'Pending',
         color: 'orange.400',
@@ -64,10 +69,12 @@ const getStatusConfig = (status: string) => {
         bgcolor: '#EF44441A',
       }
     case 'cancelled':
+    case 'Cancelled':
+    case 'CANCELLED':
       return {
         label: 'Cancelled',
         color: 'red.500',
-        bgcolor: '#EF44441A',
+        bgcolor: '#FEF2F2',
       }
     case 'started':
       return {
@@ -110,10 +117,11 @@ const getStatusConfig = (status: string) => {
 
 export const StatusBadge = ({ status, sx }: StatusBadgeProps) => {
   const config = getStatusConfig(status)
+  const label = capitalize(config.label)
 
   return (
     <Chip
-      label={config.label}
+      label={label}
       sx={{
         color: config.color,
         bgcolor: config.bgcolor,

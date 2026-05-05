@@ -6,7 +6,12 @@ import { Link, useParams } from 'react-router-dom'
 import { useTrip } from './api/use-trips'
 import { format } from 'date-fns'
 import { ArrowRightUp as ExternalLink } from '@solar-icons/react'
-import { formatCurrency, formatDuration, formatToLocalTimeZone, fromKobo } from '@/lib/utils'
+import {
+  formatCurrency,
+  formatDuration,
+  formatToLocalTimeZone,
+  fromKobo,
+} from '@/lib/utils'
 import { useEffect } from 'react'
 import { useCategoryName } from '@/features/pricing-config/hooks/use-category-name'
 import { CAR_CURSOR } from '@/config/dashboard'
@@ -31,9 +36,7 @@ const DetailRow = ({
   bold,
   indent,
 }: DetailRowProps) => (
-  <div
-    className={`flex items-center gap-4 ${indent ? 'pl-4' : ''}`}
-  >
+  <div className={`flex items-center gap-4 ${indent ? 'pl-4' : ''}`}>
     <span
       className={`text-neutral-500 text-sm w-60 shrink-0 ${bold ? 'font-semibold text-neutral-900' : ''}`}
     >
@@ -55,7 +58,6 @@ const DetailRow = ({
     </div>
   </div>
 )
-
 
 export const TripDetails = () => {
   const { id } = useParams<{ id: string }>()
@@ -120,9 +122,9 @@ export const TripDetails = () => {
       <div className="space-y-6 max-w-lg mx-auto">
         {/* Overview */}
         <div className="flex flex-col gap-6">
-          <DetailRow label="Trip ID" value={trip.custom_ride_id || id} />
+          <DetailRow label="Booking ID" value={trip.custom_ride_id || id} />
           <DetailRow
-            label="Trip Status"
+            label="Booking Status"
             value={<StatusBadge status={trip.status as any} />}
           />
           <DetailRow label="Booking Type" value={bookingType} />
@@ -227,7 +229,10 @@ export const TripDetails = () => {
           {pickupDateTime && (
             <DetailRow
               label="Pickup Date and Time"
-              value={format(formatToLocalTimeZone(pickupDateTime), 'dd/MM/yyyy, hh:mmaaa')
+              value={format(
+                formatToLocalTimeZone(pickupDateTime),
+                'dd/MM/yyyy, hh:mmaaa',
+              )
                 .replace('am', 'AM')
                 .replace('pm', 'PM')}
             />
@@ -270,6 +275,16 @@ export const TripDetails = () => {
             value={formatCurrency(fromKobo(trip.estimated_fare))}
             indent
           />
+          <DetailRow
+            label="Fare"
+            value={formatCurrency(fromKobo(trip.estimated_fare))}
+            indent
+          />
+          {trip.extra_fare && <DetailRow
+            label="Fare"
+            value={formatCurrency(fromKobo(trip.extra_fare))}
+            indent
+          />}
           <DetailRow
             label="Amount Paid"
             value={formatCurrency(

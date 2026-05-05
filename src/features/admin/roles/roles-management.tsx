@@ -81,7 +81,7 @@ export const RolesManagement = () => {
   const handleExport = () => {
     const params = buildQueryParams({ search: debouncedSearch || undefined })
     const qs = params.toString()
-    downloadExport(`/roles${qs ? `?${qs}` : ''}`, 'roles-export')
+    downloadExport(`/roles${qs ? `?${qs}` : ''}`)
   }
 
   const columns = useMemo(

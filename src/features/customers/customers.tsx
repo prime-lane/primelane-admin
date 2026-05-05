@@ -71,7 +71,7 @@ export const Customers = () => {
       ...filters,
     })
     const qs = params.toString()
-    downloadExport(`/users${qs ? `?${qs}` : ''}`, 'customers-export')
+    downloadExport(`/users${qs ? `?${qs}` : ''}`)
   }
 
   const handleRemoveFilter = (key: string) => {

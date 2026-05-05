@@ -85,7 +85,10 @@ export const CustomerOverview = ({
             label="Average Rating"
             value={stats?.average_rating || 0}
           />
-          <TripSummaryCard label="Total amount spent" value={formatCurrency(fromKobo(stats?.total_spent))} />
+          <TripSummaryCard
+            label="Total amount spent"
+            value={formatCurrency(fromKobo(stats?.total_spent))}
+          />
         </div>
       </div>
     </div>

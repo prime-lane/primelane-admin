@@ -60,7 +60,7 @@ export const AdminManagement = () => {
       ...filters,
     })
     const qs = params.toString()
-    downloadExport(`/users${qs ? `?${qs}` : ''}`, 'admins-export')
+    downloadExport(`/users${qs ? `?${qs}` : ''}`)
   }
 
   return (

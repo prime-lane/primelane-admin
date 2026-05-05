@@ -50,7 +50,7 @@ export const NAV_ITEMS: NavItem[] = [
     description: 'Manage pricing configurations',
   },
   {
-    label: 'Trips',
+    label: 'Bookings',
     icon: BillList,
     to: path.DASHBOARD.TRIPS,
     permission: 'trips:view',

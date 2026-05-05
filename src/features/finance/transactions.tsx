@@ -80,7 +80,7 @@ export const Transactions = () => {
       end_date: endDate || undefined,
     })
     const qs = params.toString()
-    downloadExport(`/transactions${qs ? `?${qs}` : ''}`, 'transactions-export')
+    downloadExport(`/transactions${qs ? `?${qs}` : ''}`)
   }
 
   const activeFilterChips: ActiveFilter[] = []

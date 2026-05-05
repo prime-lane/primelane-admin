@@ -29,24 +29,8 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
       ),
     },
     {
-      accessorKey: 'rider_id',
-      header: 'Rider Name/ID',
-      cell: ({ row }) => (
-        <div className="flex flex-col gap-0.5">
-          <span className="text-sm font-medium">
-            {row.original.rider
-              ? `${row.original.rider.first_name} ${row.original.rider.last_name}`
-              : 'N/A'}
-          </span>
-          <span className="text-xs text-gray-500">
-            #{row.original?.rider_id?.substring(0, 8).toUpperCase()}
-          </span>
-        </div>
-      ),
-    },
-    {
       accessorKey: 'driver_id',
-      header: 'Driver Name/ID',
+      header: 'Customer Name/ID',
       cell: ({ row }) => (
         <div className="flex flex-col gap-0.5">
           <span className="text-sm font-medium">
@@ -63,10 +47,29 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
       ),
     },
     {
+      accessorKey: 'rider_id',
+      header: 'Rider Name/ID',
+      cell: ({ row }) => (
+        <div className="flex flex-col gap-0.5">
+          <span className="text-sm font-medium">
+            {row.original.rider
+              ? `${row.original.rider.first_name} ${row.original.rider.last_name}`
+              : 'N/A'}
+          </span>
+          <span className="text-xs text-gray-500">
+            #{row.original?.rider_id?.substring(0, 8).toUpperCase()}
+          </span>
+        </div>
+      ),
+    },
+
+    {
       accessorKey: 'ride_type',
       header: 'Trip Type',
       cell: ({ row }) => (
-        <span className="text-sm">{formatRideType(row.original.ride_type)}</span>
+        <span className="text-sm">
+          {formatRideType(row.original.ride_type)}
+        </span>
       ),
     },
     {
@@ -81,44 +84,11 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
     },
     {
       accessorKey: 'actual_fare',
-      header: 'Actual Fare',
+      header: 'Total Fare',
       cell: ({ row }) => (
         <span className="text-sm">
           {row.original.actual_fare
             ? `${formatCurrency(fromKobo(row.original.actual_fare))}`
-            : 'N/A'}
-        </span>
-      ),
-    },
-    {
-      accessorKey: 'driver_commission',
-      header: "Driver's Earning",
-      cell: ({ row }) => (
-        <span className="text-sm">
-          {row.original.driver_commission
-            ? `${formatCurrency(fromKobo(row.original.driver_commission))}`
-            : 'N/A'}
-        </span>
-      ),
-    },
-    {
-      accessorKey: 'commission',
-      header: 'Commission',
-      cell: ({ row }) => (
-        <span className="text-sm">
-          {row.original.commission
-            ? `${formatCurrency(fromKobo(row.original.commission))}`
-            : 'N/A'}
-        </span>
-      ),
-    },
-    {
-      accessorKey: 'calculation_fee',
-      header: 'Cancellation Fee',
-      cell: ({ row }) => (
-        <span className="text-sm">
-          {row.original.cancellation_fee
-            ? `${formatCurrency(fromKobo(row.original.cancellation_fee))}`
             : 'N/A'}
         </span>
       ),

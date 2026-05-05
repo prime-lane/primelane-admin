@@ -99,6 +99,7 @@ export interface TripDetail {
   vehicle_category?: string
   estimated_fare: string | number | null
   actual_fare: string | number | null
+  extra_fare: string | number | null
   estimated_distance: string | number | null
   actual_distance: string | number | null
   estimated_duration: string | number | null
