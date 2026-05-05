@@ -15,7 +15,7 @@
 [ ] ⁠Align daily rental booking details with design
 [x] ⁠ In booking details, display extra fare under total fare, if we have extra fare (check design)
 [x] ⁠Align booking(trip) list with design
-[ ] only show cancellation fee if user cancelled (check design for full details on what should be displayed)
+[x] only show cancellation fee if user cancelled (check design for full details on what should be displayed)
 [ ] add extra fair in trip details
 [x] render vehicle documents conditionally (driver details page)
 [x] remove custom cursor

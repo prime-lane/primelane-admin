@@ -290,14 +290,14 @@ export const TripDetails = () => {
             )}
             bold
           />
-          <DetailRow
+          {trip.cancellation_fee && <DetailRow
             label="Cancellation Fee"
             value={
               trip.cancellation_fee
                 ? formatCurrency(fromKobo(trip.cancellation_fee))
                 : '₦0'
             }
-          />
+          />}
         </div>
       </div>
     </div>
