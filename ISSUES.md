@@ -1,5 +1,5 @@
-[ ] Export w/o pagination
-[ ] Making NIN field optional  at edit customer - Admin
+[x] Export w/o pagination
+[x] Making NIN field optional  at edit customer - Admin
 [x] Remove Update Vehicle Category - at driver
 [x] Remove vehicle category selection from re-activation modal 
 [x] Hide fleet rental in pricing config.

@@ -7,7 +7,11 @@ export const editCustomerSchema = z.object({
     .email({ message: 'Invalid email address' })
     .min(1, { message: 'Email cannot be empty' }),
   phone_number: z.string().min(1, 'Phone number is required').optional(),
-  nin: z.string().min(1, 'NIN is required'),
+  nin: z.string()
+    .length(11, { message: "NIN must be exactly 11 digits" })
+    .regex(/^\d{11}$/, { message: "NIN must contain only numbers" })
+    .optional()
+    .or(z.literal('')),
   // image_url: z.string().url('Invalid image URL').optional().or(z.literal('')),
 })
 
