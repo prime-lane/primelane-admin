@@ -53,14 +53,21 @@ export const AdminManagement = () => {
     }
   }
 
-  const handleExport = () => {
+  const [isExporting, setIsExporting] = useState(false)
+
+  const handleExport = async () => {
     const params = buildQueryParams({
       search: debouncedSearch || undefined,
       user_type: 'admin',
       ...filters,
     })
     const qs = params.toString()
-    downloadExport(`/users${qs ? `?${qs}` : ''}`)
+    setIsExporting(true)
+    try {
+      await downloadExport(`/users${qs ? `?${qs}` : ''}`)
+    } finally {
+      setIsExporting(false)
+    }
   }
 
   return (
@@ -115,7 +122,7 @@ export const AdminManagement = () => {
             />
           </PermissionGate>
           <PermissionGate permission="admin_management:export">
-            <ExportButton onClick={handleExport} />
+            <ExportButton onClick={handleExport} isLoading={isExporting} />
           </PermissionGate>
         </div>
       </Box>

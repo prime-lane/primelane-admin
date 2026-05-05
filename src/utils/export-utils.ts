@@ -2,10 +2,6 @@ import { toast } from 'sonner'
 
 const API_BASE_URL = import.meta.env.VITE_PRIMELANE_API_BASE_URL
 
-/**
- * Triggers a backend export by appending `export=true` to the endpoint.
- * The backend sends the report to the user's email and returns a success message.
- */
 export const downloadExport = async (endpoint: string): Promise<void> => {
   const token = localStorage.getItem('access_token')
 

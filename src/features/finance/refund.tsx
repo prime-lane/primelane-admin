@@ -16,6 +16,7 @@ import { parseAsString, useQueryState } from 'nuqs'
 import { PermissionGate } from '@/components/ui/permission-gate'
 import { useTransactions } from './api/use-transactions'
 import { refundColumns } from './components/transaction-columns'
+import { useState } from 'react'
 
 export const Refund = () => {
   const {
@@ -61,7 +62,9 @@ export const Refund = () => {
     }
   }
 
-  const handleExport = () => {
+  const [isExporting, setIsExporting] = useState(false)
+
+  const handleExport = async () => {
     const params = buildQueryParams({
       search: debouncedSearch || undefined,
       is_refund: 'true',
@@ -69,7 +72,12 @@ export const Refund = () => {
       end_date: endDate || undefined,
     })
     const qs = params.toString()
-    downloadExport(`/transactions${qs ? `?${qs}` : ''}`)
+    setIsExporting(true)
+    try {
+      await downloadExport(`/transactions${qs ? `?${qs}` : ''}`)
+    } finally {
+      setIsExporting(false)
+    }
   }
 
   const activeFilterChips: ActiveFilter[] = []
@@ -109,7 +117,7 @@ export const Refund = () => {
               activeFilters={{}}
             />
           </PermissionGate>
-          <ExportButton onClick={handleExport} />
+          <ExportButton onClick={handleExport} isLoading={isExporting} />
         </div>
       </Box>
 

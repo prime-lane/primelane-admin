@@ -33,8 +33,7 @@ import { useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import {
-  useUpdateVehicleCategory,
-  useVehicleCategories,
+  useUpdateVehicleCategory
 } from '../pricing-config/api/use-vehicle-categories'
 import { useKycDetails } from '../shared/api/use-users'
 import {
@@ -58,7 +57,7 @@ export const DriverDetails = () => {
   const { data: reviews, isLoading: isReviewsLoading } = useDriverReviews(id!)
   const { mutate: manageVehicleStatus, isPending: isUpdating } =
     useManageVehicleStatus(id)
-  const { data: vehicleCategories } = useVehicleCategories()
+  // const { data: vehicleCategories } = useVehicleCategories()
   const navigate = useNavigate()
   const { hasPermission, permissions } = usePermissionsContext()
 
@@ -334,7 +333,7 @@ export const DriverDetails = () => {
               </p>
 
               {dialogType === 'vehicle_category' ||
-              dialogType === 'reactivate' ? (
+                dialogType === 'reactivate' ? (
                 <>
                   {/* <div className="space-y-2">
                     <p className="text-sm font-medium text-neutral-700">

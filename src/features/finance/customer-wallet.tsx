@@ -9,9 +9,11 @@ import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { useDebounce } from '@/hooks/use-debounce'
 import { useTableParams } from '@/hooks/use-table-params'
-import { exportToCSV } from '@/utils/export-utils'
+import { buildQueryParams } from '@/lib/utils'
+import { downloadExport } from '@/utils/export-utils'
 import { Box, Tab, Tabs } from '@mui/material'
 import { parseAsString, useQueryState } from 'nuqs'
+import { useState } from 'react'
 import { PermissionGate } from '@/components/ui/permission-gate'
 import { useTransactions } from './api/use-transactions'
 import { customerWalletColumns } from './components/transaction-columns'
@@ -66,15 +68,23 @@ export const CustomerWallet = () => {
     }
   }
 
-  const handleExport = () => {
-    if (!data?.items) return
-    exportToCSV(data.items, 'customer-wallet-export', [
-      { key: 'id', label: 'Transaction ID' },
-      { key: 'created_at', label: 'Date' },
-      { key: 'transaction_type', label: 'Type' },
-      { key: 'description', label: 'Description' },
-      { key: 'amount', label: 'Amount' },
-    ])
+  const [isExporting, setIsExporting] = useState(false)
+
+  const handleExport = async () => {
+    const params = buildQueryParams({
+      search: debouncedSearch || undefined,
+      transaction_type: transactionType,
+      customer_wallet: 'true',
+      start_date: startDate || undefined,
+      end_date: endDate || undefined,
+    })
+    const qs = params.toString()
+    setIsExporting(true)
+    try {
+      await downloadExport(`/transactions${qs ? `?${qs}` : ''}`)
+    } finally {
+      setIsExporting(false)
+    }
   }
 
   const activeFilterChips: ActiveFilter[] = []
@@ -126,7 +136,7 @@ export const CustomerWallet = () => {
               activeFilters={{}}
             />
           </PermissionGate>
-          <ExportButton onClick={handleExport} />
+          <ExportButton onClick={handleExport} isLoading={isExporting} />
         </div>
       </Box>
 

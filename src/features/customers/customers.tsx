@@ -21,6 +21,7 @@ import { useCustomers } from './api/use-customers'
 import { customerColumns } from './components/columns'
 import type { Customer } from './types'
 import { buildQueryParams, formatDateToLocal } from '@/lib/utils'
+import { useState } from 'react'
 
 export const Customers = () => {
   const navigate = useNavigate()
@@ -64,14 +65,21 @@ export const Customers = () => {
     }
   }
 
-  const handleExport = () => {
+  const [isExporting, setIsExporting] = useState(false)
+
+  const handleExport = async () => {
     const params = buildQueryParams({
       search: debouncedSearch || undefined,
       user_type: 'customer',
       ...filters,
     })
     const qs = params.toString()
-    downloadExport(`/users${qs ? `?${qs}` : ''}`)
+    setIsExporting(true)
+    try {
+      await downloadExport(`/users${qs ? `?${qs}` : ''}`)
+    } finally {
+      setIsExporting(false)
+    }
   }
 
   const handleRemoveFilter = (key: string) => {
@@ -142,7 +150,7 @@ export const Customers = () => {
               }}
             />
           </PermissionGate>
-          <ExportButton onClick={handleExport} />
+          <ExportButton onClick={handleExport} isLoading={isExporting} />
         </div>
       </Box>
 

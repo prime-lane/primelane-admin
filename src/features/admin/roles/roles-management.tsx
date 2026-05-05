@@ -78,10 +78,17 @@ export const RolesManagement = () => {
     }
   }
 
-  const handleExport = () => {
+  const [isExporting, setIsExporting] = useState(false)
+
+  const handleExport = async () => {
     const params = buildQueryParams({ search: debouncedSearch || undefined })
     const qs = params.toString()
-    downloadExport(`/roles${qs ? `?${qs}` : ''}`)
+    setIsExporting(true)
+    try {
+      await downloadExport(`/roles${qs ? `?${qs}` : ''}`)
+    } finally {
+      setIsExporting(false)
+    }
   }
 
   const columns = useMemo(
@@ -122,7 +129,7 @@ export const RolesManagement = () => {
           />
         </Box>
         <div className="flex gap-3">
-          <ExportButton onClick={handleExport} />
+          <ExportButton onClick={handleExport} isLoading={isExporting} />
         </div>
       </Box>
 

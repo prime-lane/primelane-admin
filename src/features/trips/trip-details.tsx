@@ -2,19 +2,17 @@ import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { StatusBadge } from '@/components/ui/status-badge'
-import { Link, useParams } from 'react-router-dom'
-import { useTrip } from './api/use-trips'
-import { format } from 'date-fns'
-import { ArrowRightUp as ExternalLink } from '@solar-icons/react'
+import { useCategoryName } from '@/features/pricing-config/hooks/use-category-name'
 import {
   formatCurrency,
   formatDuration,
   formatToLocalTimeZone,
   fromKobo,
 } from '@/lib/utils'
-import { useEffect } from 'react'
-import { useCategoryName } from '@/features/pricing-config/hooks/use-category-name'
-import { CAR_CURSOR } from '@/config/dashboard'
+import { ArrowRightUp as ExternalLink } from '@solar-icons/react'
+import { format } from 'date-fns'
+import { Link, useParams } from 'react-router-dom'
+import { useTrip } from './api/use-trips'
 import { TripDetailsSkeleton } from './components/skeletons'
 import type { Slot } from './types'
 import { formatRideType } from './utils'

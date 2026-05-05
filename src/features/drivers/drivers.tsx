@@ -22,6 +22,7 @@ import { useDriverColumns } from './components/columns'
 import type { Driver } from './types'
 import { useTableParams } from '@/hooks/use-table-params'
 import { PermissionGate } from '@/components/ui/permission-gate'
+import { useState } from 'react'
 
 export const Drivers = () => {
   const {
@@ -81,14 +82,21 @@ export const Drivers = () => {
     }
   }
 
-  const handleExport = () => {
+  const [isExporting, setIsExporting] = useState(false)
+
+  const handleExport = async () => {
     const params = buildQueryParams({
       search: debouncedSearch || undefined,
       user_type: 'driver',
       ...filters,
     })
     const qs = params.toString()
-    downloadExport(`/users${qs ? `?${qs}` : ''}`)
+    setIsExporting(true)
+    try {
+      await downloadExport(`/users${qs ? `?${qs}` : ''}`)
+    } finally {
+      setIsExporting(false)
+    }
   }
 
   const handleRemoveFilter = (key: string) => {
@@ -190,7 +198,7 @@ export const Drivers = () => {
             />
           </PermissionGate>
           <PermissionGate permission="drivers:view">
-            <ExportButton onClick={handleExport} />
+            <ExportButton onClick={handleExport} isLoading={isExporting} />
           </PermissionGate>
         </div>
       </Box>

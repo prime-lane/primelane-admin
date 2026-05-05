@@ -10,7 +10,7 @@
 [ ] ⁠Remove platform commission on airport transfer and daily rental price config.
 [ ] Approx airport transfer fares to nearest 100 - (Chijioke)
 [x] remove line from trip details UI
-[ ] Change nomenclature from Trips to Booking on the navigation bar, page headers and details where necessary (check design)
+[x] Change nomenclature from Trips to Booking on the navigation bar, page headers and details where necessary (check design)
 [ ] Align airport transfer booking details with design
 [ ] ⁠Align daily rental booking details with design
 [ ] ⁠ In booking details, display extra fare under total fare, if we have extra fare (check design)

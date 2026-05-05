@@ -47,12 +47,14 @@ interface ExportButtonProps extends Omit<ButtonProps, 'variant'> {
   onClick: () => void
   variant?: 'outlined' | 'contained' | 'text'
   label?: string
+  isLoading?: boolean
 }
 
 export const ExportButton = ({
   onClick,
   variant = 'outlined',
   label = 'Export CSV',
+  isLoading = false,
   sx,
   ...props
 }: ExportButtonProps) => {
@@ -61,6 +63,8 @@ export const ExportButton = ({
       variant={variant}
       size="small"
       onClick={onClick}
+      disabled={isLoading}
+      loading={isLoading}
       sx={{
         textTransform: 'none',
         borderColor: 'neutral.200',

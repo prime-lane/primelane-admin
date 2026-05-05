@@ -13,6 +13,7 @@ import { downloadExport } from '@/utils/export-utils'
 import { Box } from '@mui/material'
 
 import { parseAsString, useQueryState } from 'nuqs'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTripColumns } from './components/columns'
 
@@ -75,13 +76,20 @@ export const Trips = () => {
     }
   }
 
-  const handleExport = () => {
+  const [isExporting, setIsExporting] = useState(false)
+
+  const handleExport = async () => {
     const params = buildQueryParams({
       search: debouncedSearch || undefined,
       ...filters,
     })
     const qs = params.toString()
-    downloadExport(`/rides${qs ? `?${qs}` : ''}`)
+    setIsExporting(true)
+    try {
+      await downloadExport(`/rides${qs ? `?${qs}` : ''}`)
+    } finally {
+      setIsExporting(false)
+    }
   }
 
   const handleRemoveFilter = (key: string) => {
@@ -179,7 +187,7 @@ export const Trips = () => {
               }}
             />
           </PermissionGate>
-          <ExportButton onClick={handleExport} />
+          <ExportButton onClick={handleExport} isLoading={isExporting} />
         </div>
       </Box>
 

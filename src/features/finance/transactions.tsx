@@ -16,6 +16,7 @@ import { useTransactions } from './api/use-transactions'
 import { transactionColumns } from './components/transaction-columns'
 import { useTableParams } from '@/hooks/use-table-params'
 import { PermissionGate } from '@/components/ui/permission-gate'
+import { useState } from 'react'
 
 export const Transactions = () => {
   const {
@@ -71,7 +72,9 @@ export const Transactions = () => {
     }
   }
 
-  const handleExport = () => {
+  const [isExporting, setIsExporting] = useState(false)
+
+  const handleExport = async () => {
     const params = buildQueryParams({
       search: debouncedSearch || undefined,
       has_provider: 'true',
@@ -80,7 +83,12 @@ export const Transactions = () => {
       end_date: endDate || undefined,
     })
     const qs = params.toString()
-    downloadExport(`/transactions${qs ? `?${qs}` : ''}`)
+    setIsExporting(true)
+    try {
+      await downloadExport(`/transactions${qs ? `?${qs}` : ''}`)
+    } finally {
+      setIsExporting(false)
+    }
   }
 
   const activeFilterChips: ActiveFilter[] = []
@@ -143,7 +151,7 @@ export const Transactions = () => {
               }}
             />
           </PermissionGate>
-          <ExportButton onClick={handleExport} />
+          <ExportButton onClick={handleExport} isLoading={isExporting} />
         </div>
       </Box>
 
