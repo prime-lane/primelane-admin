@@ -27,7 +27,7 @@ const StatCard = ({ icon, label, value }: StatCardProps) => {
       <CardContent>
         <div className="flex flex-col gap-[70px]">
           <span>{icon}</span>
-          <div className="flex flex-col gap-[2px]">
+          <div className="flex flex-col gap-0.5">
             <span className="text-sm text-neutral-500">{label}</span>
             <p className="text-xl font-semibold">{value}</p>
           </div>
@@ -43,7 +43,7 @@ const SkeletonStatCard = () => {
       <CardContent>
         <div className="flex flex-col gap-[70px]">
           <Skeleton variant="circular" width={24} height={24} />
-          <div className="flex flex-col gap-[2px]">
+          <div className="flex flex-col gap-0.5">
             <Skeleton variant="text" width="60%" height={20} />
             <Skeleton variant="text" width="80%" height={28} />
           </div>

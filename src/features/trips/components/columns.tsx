@@ -13,7 +13,7 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
   return [
     {
       accessorKey: 'id',
-      header: 'Trip ID',
+      header: 'Booking ID',
       cell: ({ row }) => (
         <div className="flex items-center gap-0.5">
           <span className="text-sm">{row.original?.custom_ride_id}</span>
@@ -23,7 +23,7 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
     },
     {
       accessorKey: 'created_at',
-      header: 'Trip Date',
+      header: 'Booking Date',
       cell: ({ row }) => (
         <span className="text-sm">{formatDate(row.original?.created_at)}</span>
       ),
@@ -32,7 +32,7 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
       accessorKey: 'rider_id',
       header: 'Rider Name/ID',
       cell: ({ row }) => (
-        <div className="flex flex-col gap-[2px]">
+        <div className="flex flex-col gap-0.5">
           <span className="text-sm font-medium">
             {row.original.rider
               ? `${row.original.rider.first_name} ${row.original.rider.last_name}`
@@ -48,7 +48,7 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
       accessorKey: 'driver_id',
       header: 'Driver Name/ID',
       cell: ({ row }) => (
-        <div className="flex flex-col gap-[2px]">
+        <div className="flex flex-col gap-0.5">
           <span className="text-sm font-medium">
             {row.original.driver
               ? `${row.original.driver.first_name} ${row.original.driver.last_name}`

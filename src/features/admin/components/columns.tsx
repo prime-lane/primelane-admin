@@ -32,7 +32,7 @@ export const adminColumns: ColumnDef<Admin>[] = [
     accessorKey: 'first_name',
     header: 'Name/Role',
     cell: ({ row }) => (
-      <div className="flex flex-col gap-[2px]">
+      <div className="flex flex-col gap-0.5">
         <span className="text-sm font-medium text-neutral-900">
           {row.original.first_name} {row.original.last_name}
         </span>

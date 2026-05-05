@@ -14,7 +14,7 @@ const DetailItem = ({
   copyable?: boolean
 }) => {
   return (
-    <div className="flex flex-col gap-[2px]">
+    <div className="flex flex-col gap-0.5">
       <p className="text-sm text-neutral-500">{label}</p>
       <div className="flex items-center gap-1">
         <p className="text-base font-semibold text-neutral-900">

@@ -80,7 +80,7 @@ export const driverSettlementColumns: ColumnDef<DriverSettlement>[] = [
       const tripId = row.original.trip_id
       const tripType = row.original.trip_type
       return (
-        <div className="flex flex-col gap-[2px]">
+        <div className="flex flex-col gap-0.5">
           <span className="text-sm font-medium">{tripId}</span>
           <span className="text-xs text-gray-500">{tripType}</span>
         </div>

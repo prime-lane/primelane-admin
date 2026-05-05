@@ -9,7 +9,7 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
     accessorKey: 'id',
     header: 'Transaction ID',
     cell: ({ row }) => (
-      <div className="flex items-center gap-[2px]">
+      <div className="flex items-center gap-0.5">
         <span className="text-sm text-neutral-800">
           {row.original.id.substring(0, 8).toUpperCase()}
         </span>
@@ -53,7 +53,7 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
     accessorKey: 'reference',
     header: 'Reference no.',
     cell: ({ row }) => (
-      <div className="flex items-center gap-[2px]">
+      <div className="flex items-center gap-0.5">
         <span className="text-sm text-neutral-600">
           {row.original.reference || '—'}
         </span>
@@ -79,7 +79,7 @@ export const refundColumns: ColumnDef<Transaction>[] = [
     accessorKey: 'id',
     header: 'Transaction ID',
     cell: ({ row }) => (
-      <div className="flex items-center gap-[2px]">
+      <div className="flex items-center gap-0.5">
         <span className="text-sm text-neutral-800">
           {row.original.id.substring(0, 8).toUpperCase()}
         </span>
@@ -103,8 +103,8 @@ export const refundColumns: ColumnDef<Transaction>[] = [
       const tripId = row.original.ride_id || '—'
       const category = row.original.category || '—'
       return (
-        <div className="flex flex-col gap-[2px]">
-          <div className="flex items-center gap-[2px]">
+        <div className="flex flex-col gap-0.5">
+          <div className="flex items-center gap-0.5">
             <span className="text-sm font-medium text-neutral-800">
               {tripId}
             </span>
@@ -142,7 +142,7 @@ export const customerWalletColumns: ColumnDef<Transaction>[] = [
     accessorKey: 'id',
     header: 'Transaction ID',
     cell: ({ row }) => (
-      <div className="flex items-center gap-[2px]">
+      <div className="flex items-center gap-0.5">
         <span className="text-sm text-neutral-800">
           {row.original.id.substring(0, 8).toUpperCase()}
         </span>
@@ -163,7 +163,7 @@ export const customerWalletColumns: ColumnDef<Transaction>[] = [
     accessorKey: 'user_id',
     header: 'Customer ID',
     cell: ({ row }) => (
-      <div className="flex items-center gap-[2px]">
+      <div className="flex items-center gap-0.5">
         <span className="text-sm text-neutral-800">
           {row.original.user_id.substring(0, 8).toUpperCase()}
         </span>

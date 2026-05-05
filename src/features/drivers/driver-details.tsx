@@ -251,7 +251,7 @@ export const DriverDetails = () => {
           >
             {avatarInitials}
           </Avatar>
-          <div className="flex flex-col gap-[2px]">
+          <div className="flex flex-col gap-0.5">
             <span className="text-xl text-black font-semibold">
               {driverName}
             </span>

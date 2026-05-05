@@ -10,7 +10,7 @@ export const customerColumns: ColumnDef<Customer>[] = [
     accessorKey: 'custom_user_id',
     header: 'ID',
     cell: ({ row }) => (
-      <div className="flex items-center gap-[2px]">
+      <div className="flex items-center gap-0.5">
         <span className="text-sm">{row.original?.custom_user_id}</span>
         <CopyButton textToCopy={row.original?.custom_user_id} />
       </div>
@@ -27,7 +27,7 @@ export const customerColumns: ColumnDef<Customer>[] = [
     accessorKey: 'name',
     header: 'Customer Names',
     cell: ({ row }) => (
-      <div className="flex flex-col gap-[2px]">
+      <div className="flex flex-col gap-0.5">
         <span className="text-sm font-medium">
           {row.original.first_name} {row.original.last_name}
         </span>
