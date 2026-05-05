@@ -78,7 +78,7 @@ pnpm run storybook
 - [x] delimit currency with commas
 - [x] fix input padding with naira symbol
 - [x] has_provider to filter refunds
-- [ ] customer_wallet to filter customer wallet
+- [x] customer_wallet to filter customer wallet
 
 ### BACKEND
 

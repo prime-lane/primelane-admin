@@ -166,7 +166,7 @@ export const useManageVehicleStatus = (id?: string) => {
     }: ManageUserStatusRequest & { category_ids?: string[] }) => {
       if (!id) throw new Error('User ID is required')
       const response = await apiClient.patch(
-        e.VEHICLES.MANAGE_STATUS(id, action),
+        e.USERS.MANAGE_STATUS(id, action),
         { reason, ...(category_ids && { category_ids }) },
       )
       return response.data
