@@ -48,7 +48,7 @@ const DetailRow = ({
         </Link>
       ) : (
         <span
-          className={`ml-auto text-sm ${bold ? 'font-bold text-neutral-900' : 'font-medium text-neutral-900'}`}
+          className={`ml-auto text-sm ${bold ? 'font-medium text-neutral-900' : 'font-normal text-neutral-900'}`}
         >
           {value}
         </span>
@@ -122,20 +122,39 @@ export const TripDetails = () => {
       <div className="space-y-6 max-w-lg mx-auto">
         <div className="flex flex-col gap-6">
           <DetailRow label="Booking ID" value={trip.custom_ride_id || id} />
-          <DetailRow label="Booking Type" value={bookingType} />
-          <DetailRow label="Vehicle Category" value={vehicleCategory} />
-          <DetailRow
-            label="Booking Status"
-            value={<StatusBadge status={trip.status as any} />}
-          />
-          <DetailRow
-            label="Customer name"
-            value={riderName}
-            isLink={!!trip.rider_id}
-            linkTo={path.DASHBOARD.CUSTOMER_DETAILS.replace(':id', trip.rider_id)}
-          />
-          {trip.no_of_vehicles != null && (
-            <DetailRow label="No. of Vehicles" value={trip.no_of_vehicles} />
+          {slots.length > 0 ? (
+            <>
+              <DetailRow
+                label="Booking Status"
+                value={<StatusBadge status={trip.status as any} />}
+              />
+              <DetailRow label="Booking Type" value={bookingType} />
+              <DetailRow
+                label="Customer name"
+                value={riderName}
+                isLink={!!trip.rider_id}
+                linkTo={path.DASHBOARD.CUSTOMER_DETAILS.replace(':id', trip.rider_id)}
+              />
+              {trip.no_of_vehicles != null && (
+                <DetailRow label="No. of Vehicles" value={trip.no_of_vehicles} />
+              )}
+              <DetailRow label="Vehicle Category" value={vehicleCategory} />
+            </>
+          ) : (
+            <>
+              <DetailRow label="Booking Type" value={bookingType} />
+              <DetailRow label="Vehicle Category" value={vehicleCategory} />
+              <DetailRow
+                label="Booking Status"
+                value={<StatusBadge status={trip.status as any} />}
+              />
+              <DetailRow
+                label="Customer name"
+                value={riderName}
+                isLink={!!trip.rider_id}
+                linkTo={path.DASHBOARD.CUSTOMER_DETAILS.replace(':id', trip.rider_id)}
+              />
+            </>
           )}
         </div>
 
@@ -204,7 +223,7 @@ export const TripDetails = () => {
 
         {/* Schedule */}
         <div className="flex flex-col gap-6">
-          {pickupDateTime && endDate && (
+          {slots.length > 0 && pickupDateTime && endDate && (
             <DetailRow
               label="Multiple days"
               value={`${format(formatToLocalTimeZone(pickupDateTime), 'dd/MM/yyyy')} - ${format(formatToLocalTimeZone(endDate), 'dd/MM/yyyy')}`}
@@ -222,11 +241,13 @@ export const TripDetails = () => {
             />
           )}
           <DetailRow label="Pickup address" value={trip.pickup?.address || '-'} />
-          {!isDaily && (
+          {slots.length === 0 && !isDaily && (
             <DetailRow label="Dropoff address" value={trip.dropoff?.address || '-'} />
           )}
-          <DetailRow label="Booking Duration" value={durationLabel} />
-          {trip.estimated_fare && (
+          {slots.length === 0 && (
+            <DetailRow label="Booking Duration" value={durationLabel} />
+          )}
+          {slots.length === 0 && trip.estimated_fare && (
             <DetailRow
               label="Fare"
               value={formatCurrency(fromKobo(trip.estimated_fare))}
@@ -245,9 +266,16 @@ export const TripDetails = () => {
             value={formatCurrency(fromKobo(trip.actual_fare ?? trip.estimated_fare))}
             bold
           />
+          {trip.estimated_fare && (
+            <DetailRow
+              label="Fare"
+              value={formatCurrency(fromKobo(trip.estimated_fare))}
+              indent
+            />
+          )}
           {trip.extra_fare && (
             <DetailRow
-              label="Extra Fare"
+              label="Extra fare"
               value={formatCurrency(fromKobo(trip.extra_fare))}
               indent
             />
