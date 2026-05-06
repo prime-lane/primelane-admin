@@ -118,3 +118,7 @@ export const formatToLocalTimeZone = (isoString?: string | Date) => {
 export const capitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
 }
+
+export const stripSpecialCharacters = (str: string) => {
+  return str.replace(/[^a-zA-Z0-9]/g, ' ')
+}

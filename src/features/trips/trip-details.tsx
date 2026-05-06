@@ -82,20 +82,22 @@ export const TripDetails = () => {
       .join(', ') ||
     'N/A'
 
-  const bookingType = formatRideType(trip.ride_type)
+  const dailySubtype =
+    trip.hourly_ride_type === 'half_day'
+      ? 'Half-day'
+      : trip.hourly_ride_type === 'full_day'
+        ? 'Full-day'
+        : null
+
+  const bookingType = isDaily && dailySubtype
+    ? `${formatRideType(trip.ride_type)}: ${dailySubtype}`
+    : formatRideType(trip.ride_type)
 
   const pickupDateTime = trip.pickup_time ?? 'N/A'
   const endDate = trip.end_time
 
-  // daily duratio rentals use half_day / full_day labels
   const durationLabel = isDaily
-    ? trip.hourly_ride_type === 'half_day'
-      ? 'Half day'
-      : trip.hourly_ride_type === 'full_day'
-        ? 'Full day'
-        : trip.booked_hours
-          ? `${trip.booked_hours} hours`
-          : '-'
+    ? dailySubtype ?? (trip.booked_hours ? `${trip.booked_hours} hours` : '-')
     : formatDuration(trip.actual_duration)
 
   const slots: Slot[] = trip.slots ?? []
@@ -118,35 +120,29 @@ export const TripDetails = () => {
       </div>
 
       <div className="space-y-6 max-w-lg mx-auto">
-        {/* Overview */}
         <div className="flex flex-col gap-6">
           <DetailRow label="Booking ID" value={trip.custom_ride_id || id} />
+          <DetailRow label="Booking Type" value={bookingType} />
+          <DetailRow label="Vehicle Category" value={vehicleCategory} />
           <DetailRow
             label="Booking Status"
             value={<StatusBadge status={trip.status as any} />}
           />
-          <DetailRow label="Booking Type" value={bookingType} />
           <DetailRow
             label="Customer name"
             value={riderName}
             isLink={!!trip.rider_id}
-            linkTo={path.DASHBOARD.CUSTOMER_DETAILS.replace(
-              ':id',
-              trip.rider_id,
-            )}
+            linkTo={path.DASHBOARD.CUSTOMER_DETAILS.replace(':id', trip.rider_id)}
           />
           {trip.no_of_vehicles != null && (
             <DetailRow label="No. of Vehicles" value={trip.no_of_vehicles} />
           )}
-          <DetailRow label="Vehicle Category" value={vehicleCategory} />
         </div>
 
         {/* Drivers & Vehicles */}
         {slots.length > 0 && (
           <div className="grid grid-cols-1 gap-2">
-            <h3 className="text-sm font-bold text-neutral-600">
-              Drivers &amp; Vehicles
-            </h3>
+            <h3 className="text-sm font-bold text-neutral-600">Drivers &amp; Vehicles</h3>
             <div className="flex flex-col gap-4">
               {slots.map((slot: Slot) => {
                 const driverName = slot.driver
@@ -164,10 +160,7 @@ export const TripDetails = () => {
                   >
                     <div className="w-60 shrink-0">
                       <Link
-                        to={path.DASHBOARD.DRIVER_DETAILS.replace(
-                          ':id',
-                          slot.driver_id,
-                        )}
+                        to={path.DASHBOARD.DRIVER_DETAILS.replace(':id', slot.driver_id)}
                         className="flex items-center gap-1 font-medium text-sm text-black"
                       >
                         {driverName}
@@ -175,13 +168,9 @@ export const TripDetails = () => {
                       </Link>
                     </div>
                     <div className="flex flex-col gap-0.5">
-                      <span className="text-sm font-medium text-neutral-900">
-                        {vehicleDesc}
-                      </span>
+                      <span className="text-sm font-medium text-neutral-900">{vehicleDesc}</span>
                       {plate && (
-                        <span className="text-xs text-neutral-500">
-                          {plate}
-                        </span>
+                        <span className="text-xs text-neutral-500">{plate}</span>
                       )}
                     </div>
                   </div>
@@ -194,9 +183,6 @@ export const TripDetails = () => {
         {/* Single driver fallback (non-fleet trips) */}
         {slots.length === 0 && trip.driver && (
           <div className="flex flex-col gap-6">
-            <h3 className="text-sm font-bold text-neutral-600">
-              Driver &amp; Vehicle
-            </h3>
             <DetailRow
               label="Driver Name"
               value={`${trip.driver.first_name} ${trip.driver.last_name}`}
@@ -235,27 +221,20 @@ export const TripDetails = () => {
                 .replace('pm', 'PM')}
             />
           )}
-          <DetailRow
-            label="Pickup address"
-            value={trip.pickup?.address || '-'}
-          />
-          <DetailRow
-            label="Dropoff address"
-            value={trip.dropoff?.address || '-'}
-          />
-          <DetailRow label="Total trip time" value={durationLabel} />
-        </div>
-
-        {/* Payment & Cancellation */}
-        <div className="flex flex-col gap-6">
+          <DetailRow label="Pickup address" value={trip.pickup?.address || '-'} />
+          {!isDaily && (
+            <DetailRow label="Dropoff address" value={trip.dropoff?.address || '-'} />
+          )}
+          <DetailRow label="Booking Duration" value={durationLabel} />
+          {trip.estimated_fare && (
+            <DetailRow
+              label="Fare"
+              value={formatCurrency(fromKobo(trip.estimated_fare))}
+            />
+          )}
+          <DetailRow label="Total trip time" value={formatDuration(trip.actual_duration)} />
           {trip.payment_method && (
             <DetailRow label="Payment Method" value={trip.payment_method} />
-          )}
-          {trip.cancellation_reason && (
-            <DetailRow
-              label="Reason for Cancellation"
-              value={trip.cancellation_reason}
-            />
           )}
         </div>
 
@@ -263,15 +242,8 @@ export const TripDetails = () => {
         <div className="flex flex-col gap-6">
           <DetailRow
             label="Total Fare"
-            value={formatCurrency(
-              fromKobo(trip.actual_fare ?? trip.estimated_fare),
-            )}
+            value={formatCurrency(fromKobo(trip.actual_fare ?? trip.estimated_fare))}
             bold
-          />
-          <DetailRow
-            label="Fare"
-            value={formatCurrency(fromKobo(trip.estimated_fare))}
-            indent
           />
           {trip.extra_fare && (
             <DetailRow
@@ -282,19 +254,19 @@ export const TripDetails = () => {
           )}
           <DetailRow
             label="Amount Paid"
-            value={formatCurrency(
-              fromKobo(trip.actual_fare ?? trip.estimated_fare),
-            )}
+            value={formatCurrency(fromKobo(trip.actual_fare ?? trip.estimated_fare))}
             bold
           />
           {trip.cancellation_fee && (
             <DetailRow
               label="Cancellation Fee"
-              value={
-                trip.cancellation_fee
-                  ? formatCurrency(fromKobo(trip.cancellation_fee))
-                  : '₦0'
-              }
+              value={formatCurrency(fromKobo(trip.cancellation_fee))}
+            />
+          )}
+          {trip.cancellation_reason && (
+            <DetailRow
+              label="Reason for Cancellation"
+              value={trip.cancellation_reason}
             />
           )}
         </div>

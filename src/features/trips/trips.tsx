@@ -177,7 +177,7 @@ export const Trips = () => {
           <SearchInput value={searchTerm} onChange={setSearchTerm} />
         </Box>
         <div className="flex gap-3">
-          <PermissionGate permission="trips:filter">
+          <PermissionGate permission="trips:view">
             <FilterMenu
               options={filterOptions}
               onFilterChange={handleFilterChange}

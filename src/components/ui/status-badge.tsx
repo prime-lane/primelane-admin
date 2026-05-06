@@ -1,4 +1,4 @@
-import { capitalize } from '@/lib/utils'
+import { capitalize, stripSpecialCharacters } from '@/lib/utils'
 
 export type TripStatus = 'SCHEDULED' | 'COMPLETED'
 export type StatusVariant =
@@ -59,7 +59,7 @@ const getStatusConfig = (status: string) => {
 
 export const StatusBadge = ({ status }: StatusBadgeProps) => {
   const config = getStatusConfig(status)
-  const label = capitalize(config.label)
+  const label = capitalize(stripSpecialCharacters(config.label))
 
   return (
     <span

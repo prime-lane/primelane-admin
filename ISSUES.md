@@ -27,7 +27,7 @@
     - [ ] confirm-otp (`auth/confirm-otp/:action`)
     - [ ] change pwd: identifier, new password (`auth/change-password`)
 - [x] on trips page use estimated_fare for "Total fare"
-- [ ] To_pickup to "To pickup" on bookings page table
+- [x] To_pickup to "To pickup" on bookings page table
 - [ ] booking filters
 
 side notes:
