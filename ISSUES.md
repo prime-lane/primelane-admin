@@ -28,7 +28,7 @@
     - [ ] change pwd: identifier, new password (`auth/change-password`)
 - [x] on trips page use estimated_fare for "Total fare"
 - [x] To_pickup to "To pickup" on bookings page table
-- [ ] booking filters
+- [x] booking filters
 
 side notes:
 

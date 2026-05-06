@@ -108,14 +108,14 @@ export const Trips = () => {
   if (status && status !== 'all') {
     activeFilterChips.push({
       key: 'status',
-      label: 'Trip Status',
+      label: 'TRIP STATUS',
       displayValue: status.charAt(0).toUpperCase() + status.slice(1),
     })
   }
   if (startDate && endDate) {
     activeFilterChips.push({
       key: 'date',
-      label: 'Date',
+      label: 'DATE',
       displayValue: formatDateRange(startDate, endDate),
     })
   }
@@ -126,7 +126,7 @@ export const Trips = () => {
     if (categoryName) {
       activeFilterChips.push({
         key: 'vehicle_category',
-        label: 'Vehicle category',
+        label: 'VEHICLE CATEGORY',
         displayValue: categoryName,
       })
     }
@@ -138,7 +138,7 @@ export const Trips = () => {
 
   const filterOptions: FilterOption[] = [
     {
-      label: 'Trip Status',
+      label: 'TRIP STATUS',
       key: 'status',
       type: 'select',
       options: [
@@ -150,12 +150,12 @@ export const Trips = () => {
       ],
     },
     {
-      label: 'Date',
+      label: 'DATE',
       key: 'date',
       type: 'date-range',
     },
     {
-      label: 'Vehicle category',
+      label: 'VEHICLE CATEGORY',
       key: 'vehicle_category',
       type: 'select',
       options:
