@@ -278,11 +278,13 @@ export const TripDetails = () => {
             value={formatCurrency(fromKobo(trip.estimated_fare))}
             indent
           />
-          {trip.extra_fare && <DetailRow
-            label="Fare"
-            value={formatCurrency(fromKobo(trip.extra_fare))}
-            indent
-          />}
+          {trip.extra_fare && (
+            <DetailRow
+              label="Fare"
+              value={formatCurrency(fromKobo(trip.extra_fare))}
+              indent
+            />
+          )}
           <DetailRow
             label="Amount Paid"
             value={formatCurrency(
@@ -290,14 +292,16 @@ export const TripDetails = () => {
             )}
             bold
           />
-          {trip.cancellation_fee && <DetailRow
-            label="Cancellation Fee"
-            value={
-              trip.cancellation_fee
-                ? formatCurrency(fromKobo(trip.cancellation_fee))
-                : '₦0'
-            }
-          />}
+          {trip.cancellation_fee && (
+            <DetailRow
+              label="Cancellation Fee"
+              value={
+                trip.cancellation_fee
+                  ? formatCurrency(fromKobo(trip.cancellation_fee))
+                  : '₦0'
+              }
+            />
+          )}
         </div>
       </div>
     </div>

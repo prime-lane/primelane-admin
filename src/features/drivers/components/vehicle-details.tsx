@@ -50,31 +50,43 @@ export const VehicleDetails = ({
       <div className="space-y-4">
         <h3 className="text-sm font-semibold">Vehicle Documents</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {vehicle.front_image && <FileCard
-            label="Front View"
-            url={vehicle.front_image}
-            onUpload={(files) => console.log('Upload Front View', files)}
-          />}
-          {vehicle.back_image && <FileCard
-            label="Back View"
-            url={vehicle.back_image}
-            onUpload={(files) => console.log('Upload Back View', files)}
-          />}
-          {vehicle.side_image && <FileCard
-            label="Side View"
-            url={vehicle.side_image}
-            onUpload={(files) => console.log('Upload Side View', files)}
-          />}
-          {vehicle?.road_worthiness?.doc && <FileCard
-            label="Road Worthiness"
-            url={vehicle?.road_worthiness?.doc}
-            onUpload={(files) => console.log('Upload Road Worthiness', files)}
-          />}
-          {vehicle?.vehicle_insurance?.doc && <FileCard
-            label="Vehicle Insurance"
-            url={vehicle?.vehicle_insurance?.doc}
-            onUpload={(files) => console.log('Upload Vehicle Insurance', files)}
-          />}
+          {vehicle.front_image && (
+            <FileCard
+              label="Front View"
+              url={vehicle.front_image}
+              onUpload={(files) => console.log('Upload Front View', files)}
+            />
+          )}
+          {vehicle.back_image && (
+            <FileCard
+              label="Back View"
+              url={vehicle.back_image}
+              onUpload={(files) => console.log('Upload Back View', files)}
+            />
+          )}
+          {vehicle.side_image && (
+            <FileCard
+              label="Side View"
+              url={vehicle.side_image}
+              onUpload={(files) => console.log('Upload Side View', files)}
+            />
+          )}
+          {vehicle?.road_worthiness?.doc && (
+            <FileCard
+              label="Road Worthiness"
+              url={vehicle?.road_worthiness?.doc}
+              onUpload={(files) => console.log('Upload Road Worthiness', files)}
+            />
+          )}
+          {vehicle?.vehicle_insurance?.doc && (
+            <FileCard
+              label="Vehicle Insurance"
+              url={vehicle?.vehicle_insurance?.doc}
+              onUpload={(files) =>
+                console.log('Upload Vehicle Insurance', files)
+              }
+            />
+          )}
         </div>
       </div>
     </div>

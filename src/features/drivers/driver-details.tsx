@@ -32,9 +32,7 @@ import { useQueryState } from 'nuqs'
 import { useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
-import {
-  useUpdateVehicleCategory
-} from '../pricing-config/api/use-vehicle-categories'
+import { useUpdateVehicleCategory } from '../pricing-config/api/use-vehicle-categories'
 import { useKycDetails } from '../shared/api/use-users'
 import {
   useDriver,
@@ -333,7 +331,7 @@ export const DriverDetails = () => {
               </p>
 
               {dialogType === 'vehicle_category' ||
-                dialogType === 'reactivate' ? (
+              dialogType === 'reactivate' ? (
                 <>
                   {/* <div className="space-y-2">
                     <p className="text-sm font-medium text-neutral-700">

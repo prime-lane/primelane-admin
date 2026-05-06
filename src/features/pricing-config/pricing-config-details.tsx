@@ -100,7 +100,10 @@ const AirportTransferForm = ({
       per_min: toKobo(data.per_min),
       free_wait_time: Number(data.free_wait_time),
       cancellation_fee_type: data.cancellation_fee_type,
-      cancellation_base: data.cancellation_fee_type === 'fixed' ? toKobo(data.cancellation_base ?? 0) : 0,
+      cancellation_base:
+        data.cancellation_fee_type === 'fixed'
+          ? toKobo(data.cancellation_base ?? 0)
+          : 0,
       cancellation_percentage: Number(data.cancellation_percentage),
     } as any)
     navigate(path.DASHBOARD.PRICING_CONFIG)
@@ -219,7 +222,10 @@ const DailyForm = ({
     reset,
     control,
     formState: { errors },
-  } = useForm<DailyFormData>({ resolver: zodResolver(dailySchema) as any, defaultValues: { cancellation_fee_type: 'percentage' } })
+  } = useForm<DailyFormData>({
+    resolver: zodResolver(dailySchema) as any,
+    defaultValues: { cancellation_fee_type: 'percentage' },
+  })
 
   useEffect(() => {
     if (categoryData) {
@@ -419,7 +425,10 @@ const FleetForm = ({
     reset,
     control,
     formState: { errors },
-  } = useForm<FleetFormData>({ resolver: zodResolver(fleetSchema) as any, defaultValues: { cancellation_fee_type: 'percentage' } })
+  } = useForm<FleetFormData>({
+    resolver: zodResolver(fleetSchema) as any,
+    defaultValues: { cancellation_fee_type: 'percentage' },
+  })
 
   useEffect(() => {
     if (categoryData) {
@@ -631,65 +640,73 @@ interface CancellationSectionProps {
   showBase?: boolean
 }
 
-const CancellationSection = ({ errors, register, control, showBase = true }: CancellationSectionProps) => {
+const CancellationSection = ({
+  errors,
+  register,
+  control,
+  showBase = true,
+}: CancellationSectionProps) => {
   const feeType = useWatch({ control, name: 'cancellation_fee_type' })
   const showBaseField = showBase || feeType === 'fixed'
 
   return (
-  <section className="space-y-4">
-    <h2 className="text-lg font-normal text-neutral-900">Cancellation fee</h2>
-    <div className="space-y-1">
-      <FormControl component="fieldset" error={!!errors.cancellation_fee_type}>
-        <FormLabel component="legend">Cancellation fee type</FormLabel>
-        <Controller
-          name="cancellation_fee_type"
-          control={control}
-          render={({ field }) => (
-            <RadioGroup row {...field}>
-              <FormControlLabel
-                value="percentage"
-                control={<Radio size="small" />}
-                label="Percentage"
-              />
-              <FormControlLabel
-                value="fixed"
-                control={<Radio size="small" />}
-                label="Fixed"
-              />
-            </RadioGroup>
-          )}
-        />
-      </FormControl>
-    </div>
-    <Field
-      label="Cancel fee"
-      hint="A percentage of the trip fare that is charged for trip cancellation"
-      error={errors.cancellation_percentage?.message}
-    >
-      <TextField
-        fullWidth
-        type="number"
-        size="medium"
-        {...register('cancellation_percentage')}
-        error={!!errors.cancellation_percentage}
-      />
-    </Field>
-    {showBaseField && (
+    <section className="space-y-4">
+      <h2 className="text-lg font-normal text-neutral-900">Cancellation fee</h2>
+      <div className="space-y-1">
+        <FormControl
+          component="fieldset"
+          error={!!errors.cancellation_fee_type}
+        >
+          <FormLabel component="legend">Cancellation fee type</FormLabel>
+          <Controller
+            name="cancellation_fee_type"
+            control={control}
+            render={({ field }) => (
+              <RadioGroup row {...field}>
+                <FormControlLabel
+                  value="percentage"
+                  control={<Radio size="small" />}
+                  label="Percentage"
+                />
+                <FormControlLabel
+                  value="fixed"
+                  control={<Radio size="small" />}
+                  label="Fixed"
+                />
+              </RadioGroup>
+            )}
+          />
+        </FormControl>
+      </div>
       <Field
-        label="Cancellation base"
-        hint="A fixed amount charged for trip cancellation"
-        error={errors.cancellation_base?.message}
+        label="Cancel fee"
+        hint="A percentage of the trip fare that is charged for trip cancellation"
+        error={errors.cancellation_percentage?.message}
       >
         <TextField
           fullWidth
           type="number"
           size="medium"
-          {...register('cancellation_base')}
-          error={!!errors.cancellation_base}
+          {...register('cancellation_percentage')}
+          error={!!errors.cancellation_percentage}
         />
       </Field>
-    )}
-  </section>
+      {showBaseField && (
+        <Field
+          label="Cancellation base"
+          hint="A fixed amount charged for trip cancellation"
+          error={errors.cancellation_base?.message}
+        >
+          <TextField
+            fullWidth
+            type="number"
+            size="medium"
+            {...register('cancellation_base')}
+            error={!!errors.cancellation_base}
+          />
+        </Field>
+      )}
+    </section>
   )
 }
 
