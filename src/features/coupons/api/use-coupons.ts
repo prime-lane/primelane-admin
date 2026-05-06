@@ -69,10 +69,10 @@ export const useCouponUsage = (id: string, params?: PaginationParams) => {
       const searchParams = buildQueryParams(params)
       const endpoint = `${e.COUPONS.USAGE(id)}?${searchParams.toString()}`
       const response = await apiClient.get<{
-        usage: CouponUsageRecord[]
+        records: CouponUsageRecord[]
         pagination: PaginatedResponse<unknown>['pagination']
       }>(endpoint)
-      return transformPaginatedResponse(response.data, 'usage')
+      return transformPaginatedResponse(response.data, 'records')
     },
     enabled: !!id,
   })

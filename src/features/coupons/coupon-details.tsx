@@ -30,6 +30,7 @@ import { downloadExport } from '@/utils/export-utils'
 import { CouponDetailsSkeleton } from './components/skeletons'
 import { useVehicleCategories } from '@/features/pricing-config/api/use-vehicle-categories'
 import { CouponActionMenu } from './components/coupon-action-menu'
+import { CopyButton } from '@/components/ui/copy-button'
 
 const usageColumns: ColumnDef<CouponUsageRecord>[] = [
   {
@@ -89,13 +90,18 @@ const usageColumns: ColumnDef<CouponUsageRecord>[] = [
 const InfoCell = ({
   label,
   value,
+  canCopy
 }: {
   label: string
-  value: React.ReactNode
+  value: React.ReactNode,
+  canCopy?: boolean
 }) => (
   <div className="flex flex-col gap-1">
     <span className="text-xs text-neutral-500">{label}</span>
-    <span className="text-sm font-normal text-neutral-900">{value ?? '—'}</span>
+    <div className="flex gap-1 items-center">
+      <span className="text-sm font-normal text-neutral-900">{value ?? '—'}</span>
+      {canCopy && typeof value === 'string' && <CopyButton textToCopy={value} />}
+    </div>
   </div>
 )
 
@@ -117,6 +123,7 @@ export const CouponDetails = () => {
     page,
     page_size: pageSize,
   })
+  console.log(usageData)
   const { data: vehicleCategories } = useVehicleCategories()
   const { mutate: toggleCoupon } = useToggleCoupon(id!)
 
@@ -230,6 +237,7 @@ export const CouponDetails = () => {
               <InfoCell
                 label="Code"
                 value={coupon.code}
+                canCopy
               />
               <InfoCell
                 label="Coupon type"
@@ -328,10 +336,10 @@ export const CouponDetails = () => {
             pagination={
               usageData?.pagination
                 ? {
-                    currentPage: Number(usageData.pagination.current_page),
-                    totalPages: usageData.pagination.total_pages,
-                    totalItems: usageData.pagination.total_items,
-                  }
+                  currentPage: Number(usageData.pagination.current_page),
+                  totalPages: usageData.pagination.total_pages,
+                  totalItems: usageData.pagination.total_items,
+                }
                 : undefined
             }
             onPageChange={setPage}
