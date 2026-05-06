@@ -185,23 +185,13 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
       return
     }
 
-    const payload: CreateCouponRequest = {
-      code: formData.code.trim().toUpperCase(),
+    const payload: Pick<CreateCouponRequest, 'description' | 'usage_limit' | 'expires_at'> = {
       description: formData.description.trim(),
-      discount_type: formData.discount_type,
-      discount_value:
-        formData.discount_type === 'fixed'
-          ? toKobo(Number(formData.discount_value))
-          : Number(formData.discount_value),
-      usage_type: formData.usage_type,
       usage_limit:
         formData.usage_type === 'multiple' && formData.usage_limit
           ? Number(formData.usage_limit)
           : null,
-      starts_at: formData.starts_at.toISOString(),
       expires_at: formData.expires_at.toISOString(),
-      applicable_ride_types: formData.applicable_ride_types,
-      applicable_category_ids: formData.applicable_category_ids,
     }
 
     if (isEdit) {
@@ -210,7 +200,19 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
           navigate(path.DASHBOARD.COUPON_DETAILS.replace(':id', id!)),
       })
     } else {
-      createCoupon(payload, {
+      const newPayload = {
+        discount_type: formData.discount_type,
+        discount_value:
+          formData.discount_type === 'fixed'
+            ? toKobo(Number(formData.discount_value))
+            : Number(formData.discount_value),
+        usage_type: formData.usage_type,
+        starts_at: formData.starts_at.toISOString(),
+        applicable_ride_types: formData.applicable_ride_types,
+        applicable_category_ids: formData.applicable_category_ids,
+        ...payload, code: formData.code.trim().toUpperCase(),
+      }
+      createCoupon(newPayload, {
         onSuccess: (res) => {
           const newId = (res as any)?.data?.id
           navigate(
@@ -284,6 +286,7 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
                     placeholder="E.g. WELCOME1, COMPANYXYZ"
                     error={!!errors.code}
                     helperText={errors.code?.message}
+                    disabled={isEdit}
                   />
                 </div>
                 <div>
@@ -320,7 +323,7 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
                     <FormControlLabel
                       key={opt.value}
                       value={opt.value}
-                      control={<Radio size="small" />}
+                      control={<Radio size="small" disabled={isEdit} />}
                       label={opt.label}
                       sx={toggleSx(discountType === opt.value)}
                     />
@@ -340,6 +343,7 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
                         ? { input: { startAdornment: naira } }
                         : {}
                     }
+                    disabled={isEdit}
                   />
                 </div>
               </div>
@@ -479,6 +483,7 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
                               checked={selectedRideTypes.includes(bt.value)}
                               onChange={() => toggleRideType(bt.value)}
                               size="small"
+                              disabled={isEdit}
                             />
                           }
                           label={bt.label}
@@ -501,6 +506,7 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
                               checked={selectedCategories.includes(cat.id)}
                               onChange={() => toggleCategory(cat.id)}
                               size="small"
+                              disabled={isEdit}
                             />
                           }
                           label={cat.name}

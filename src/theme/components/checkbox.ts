@@ -12,6 +12,9 @@ export const MuiCheckbox: Components['MuiCheckbox'] = {
       '&.Mui-checked': {
         color: colors.base.black,
       },
+      '&.Mui-disabled': {
+        color: colors.neutral[400],
+      },
     },
   },
 }
