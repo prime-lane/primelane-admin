@@ -10,6 +10,7 @@ import {
   MuiDayCalendar,
 } from './datepicker'
 import { MuiFormLabel, MuiRadio, MuiFormControlLabel } from './radio'
+import { MuiCheckbox } from './checkbox'
 
 export const components = {
   MuiButton,
@@ -27,4 +28,5 @@ export const components = {
   MuiFormLabel,
   MuiRadio,
   MuiFormControlLabel,
+  MuiCheckbox,
 }

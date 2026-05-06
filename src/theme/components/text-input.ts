@@ -8,7 +8,7 @@ export const MuiTextField: Components<Theme>['MuiTextField'] = {
         margin: 0,
         marginTop: '2px',
         fontSize: '12px',
-        color: colors.red[100],
+        color: '#737373',
       },
       '& .MuiOutlinedInput-root': {
         bgcolor: 'white',
