@@ -19,13 +19,16 @@
 - [ ] add extra fair in trip details
 - [x] render vehicle documents conditionally (driver details page)
 - [x] remove custom cursor
-- [ ] edit admin role
-    - [ ] add actions on the admin actions button
-    - [ ] disable email input when editing admin
+- [x] edit admin role
+    - [x] add actions on the admin actions button
+    - [x] disable email input when editing admin
 - [x] fix usage table  
 - [ ] forgot password flow:
     - [ ] confirm-otp (`auth/confirm-otp/:action`)
     - [ ] change pwd: identifier, new password (`auth/change-password`)
+- [x] on trips page use estimated_fare for "Total fare"
+- [ ] To_pickup to "To pickup" on bookings page table
+- [ ] booking filters
 
 side notes:
 

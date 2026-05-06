@@ -29,26 +29,8 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
       ),
     },
     {
-      accessorKey: 'driver_id',
-      header: 'Customer Name/ID',
-      cell: ({ row }) => (
-        <div className="flex flex-col gap-0.5">
-          <span className="text-sm font-medium">
-            {row.original.driver
-              ? `${row.original.driver.first_name} ${row.original.driver.last_name}`
-              : 'N/A'}
-          </span>
-          {row.original.driver_id && (
-            <span className="text-xs text-gray-500">
-              #{row.original?.driver_id?.substring(0, 8).toUpperCase()}
-            </span>
-          )}
-        </div>
-      ),
-    },
-    {
       accessorKey: 'rider_id',
-      header: 'Rider Name/ID',
+      header: 'Customer Name/ID',
       cell: ({ row }) => (
         <div className="flex flex-col gap-0.5">
           <span className="text-sm font-medium">
@@ -56,8 +38,26 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
               ? `${row.original.rider.first_name} ${row.original.rider.last_name}`
               : 'N/A'}
           </span>
+          {row.original.rider_id && (
+            <span className="text-xs text-gray-500">
+              #{row.original?.rider_id?.substring(0, 8).toUpperCase()}
+            </span>
+          )}
+        </div>
+      ),
+    },
+    {
+      accessorKey: 'driver_id',
+      header: 'Driver Name/ID',
+      cell: ({ row }) => (
+        <div className="flex flex-col gap-0.5">
+          <span className="text-sm font-medium">
+            {row.original.driver
+              ? `${row.original.driver?.first_name} ${row.original.driver?.last_name}`
+              : 'N/A'}
+          </span>
           <span className="text-xs text-gray-500">
-            #{row.original?.rider_id?.substring(0, 8).toUpperCase()}
+            #{row.original?.driver_id?.substring(0, 8).toUpperCase()}
           </span>
         </div>
       ),
@@ -83,12 +83,12 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
       ),
     },
     {
-      accessorKey: 'actual_fare',
+      accessorKey: 'estimated_fare',
       header: 'Total Fare',
       cell: ({ row }) => (
         <span className="text-sm">
-          {row.original.actual_fare
-            ? `${formatCurrency(fromKobo(row.original.actual_fare))}`
+          {row.original.estimated_fare
+            ? `${formatCurrency(fromKobo(row.original.estimated_fare))}`
             : 'N/A'}
         </span>
       ),

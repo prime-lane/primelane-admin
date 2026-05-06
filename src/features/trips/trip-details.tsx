@@ -40,15 +40,15 @@ const DetailRow = ({
     >
       {label}
     </span>
-    <div className="flex items-center gap-2">
+    <div className="flex items-end text-right w-full ml-auto gap-2">
       {isLink && linkTo ? (
-        <Link to={linkTo} className="flex items-center gap-1 font-medium">
+        <Link to={linkTo} className="flex ml-auto items-center gap-1 font-medium">
           <span className="text-sm text-black font-medium">{value}</span>
           <ExternalLink size={11} />
         </Link>
       ) : (
         <span
-          className={`text-sm ${bold ? 'font-bold text-neutral-900' : 'font-medium text-neutral-900'}`}
+          className={`ml-auto text-sm ${bold ? 'font-bold text-neutral-900' : 'font-medium text-neutral-900'}`}
         >
           {value}
         </span>
@@ -273,14 +273,9 @@ export const TripDetails = () => {
             value={formatCurrency(fromKobo(trip.estimated_fare))}
             indent
           />
-          <DetailRow
-            label="Fare"
-            value={formatCurrency(fromKobo(trip.estimated_fare))}
-            indent
-          />
           {trip.extra_fare && (
             <DetailRow
-              label="Fare"
+              label="Extra Fare"
               value={formatCurrency(fromKobo(trip.extra_fare))}
               indent
             />
