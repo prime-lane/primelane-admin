@@ -23,6 +23,7 @@ export const useManageUserStatus = (id?: string) => {
       queryClient.invalidateQueries({ queryKey: ['customers'] })
       queryClient.invalidateQueries({ queryKey: ['driver', id] })
       queryClient.invalidateQueries({ queryKey: ['drivers'] })
+      queryClient.invalidateQueries({ queryKey: ['admins'] })
     },
   })
 }

@@ -5,15 +5,24 @@ import { format } from 'date-fns'
 import { StatusBadge } from '@/components/ui/status-badge'
 import type { Admin } from '../types'
 import { formatToLocalTimeZone } from '@/lib/utils'
+import { AdminActionMenu } from './admin-action-menu'
 
-export const adminColumns: ColumnDef<Admin>[] = [
+interface AdminColumnActions {
+  onEdit: (admin: Admin) => void
+  onResetPassword: (admin: Admin) => void
+  onToggleStatus: (admin: Admin) => void
+}
+
+export const getAdminColumns = ({
+  onEdit,
+  onResetPassword,
+  onToggleStatus,
+}: AdminColumnActions): ColumnDef<Admin>[] => [
   {
     accessorKey: 'id',
     header: 'Admin ID',
     cell: (info) => (
-      <span className="text-sm text-neutral-900">
-        {info.getValue() as string}
-      </span>
+      <span className="text-sm text-neutral-900">{info.getValue() as string}</span>
     ),
   },
   {
@@ -36,9 +45,7 @@ export const adminColumns: ColumnDef<Admin>[] = [
         <span className="text-sm font-medium text-neutral-900">
           {row.original.first_name} {row.original.last_name}
         </span>
-        <span className="text-xs text-neutral-500">
-          {row.original.role_name || 'N/A'}
-        </span>
+        <span className="text-xs text-neutral-500">{row.original.role_name || 'N/A'}</span>
       </div>
     ),
   },
@@ -50,10 +57,7 @@ export const adminColumns: ColumnDef<Admin>[] = [
         href={`mailto:${info.getValue() as string}`}
         className="flex items-center gap-1 cursor-pointer"
       >
-        <span className="text-sm font-medium text-neutral-900">
-          {info.getValue() as string}
-        </span>
-
+        <span className="text-sm font-medium text-neutral-900">{info.getValue() as string}</span>
         <ArrowRightUp size={16} color="#9095A1" />
       </a>
     ),
@@ -66,10 +70,18 @@ export const adminColumns: ColumnDef<Admin>[] = [
   {
     id: 'actions',
     header: 'Actions',
-    cell: () => (
-      <IconButton size="small">
-        <MenuDots size={24} color="#525866" />
-      </IconButton>
+    cell: ({ row }) => (
+      <AdminActionMenu
+        admin={row.original}
+        onEdit={onEdit}
+        onResetPassword={onResetPassword}
+        onToggleStatus={onToggleStatus}
+        trigger={(openMenu) => (
+          <IconButton size="small" onClick={openMenu}>
+            <MenuDots size={24} color="#525866" />
+          </IconButton>
+        )}
+      />
     ),
   },
 ]

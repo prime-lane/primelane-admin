@@ -5,7 +5,7 @@ import { API_ENDPOINTS as e } from '@/services/api-endpoints'
 import type { PaginationParams, PaginatedResponse } from '@/services/api-types'
 import { transformPaginatedResponse } from '@/utils/api-utils'
 import { buildQueryParams } from '@/lib/utils'
-import type { Admin, InviteAdminRequest, Role } from '../types'
+import type { Admin, InviteAdminRequest, Role, UpdateAdminRequest } from '../types'
 
 interface UseAdminsParams extends PaginationParams {}
 
@@ -70,6 +70,28 @@ export const useInviteAdmin = () => {
     },
     onError: (error: any) => {
       toast.error(error.message || 'Failed to invite admin')
+    },
+  })
+}
+
+export const useUpdateAdmin = (id?: string) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (data: UpdateAdminRequest) => {
+      if (!id) throw new Error('Admin ID is required')
+      const response = await apiClient.patch<{ message: string }>(
+        e.USERS.BY_ID(id),
+        data,
+      )
+      return response.data
+    },
+    onSuccess: (response) => {
+      toast.success(response.message || 'Admin updated successfully')
+      queryClient.invalidateQueries({ queryKey: ['admins'] })
+    },
+    onError: (error: any) => {
+      toast.error(error.message || 'Failed to update admin')
     },
   })
 }

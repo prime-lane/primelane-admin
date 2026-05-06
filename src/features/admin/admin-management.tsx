@@ -6,15 +6,17 @@ import { buildQueryParams, formatDateToLocal } from '@/lib/utils'
 import { downloadExport } from '@/utils/export-utils'
 import { Box, Button } from '@mui/material'
 import { UserPlus } from '@solar-icons/react'
-import { useState } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { useQueryState, parseAsString } from 'nuqs'
 import { useAdmins } from './api/use-admins'
-import { adminColumns } from './components/columns'
+import { getAdminColumns } from './components/columns'
 import { InviteAdminModal } from './components/invite-admin-modal'
-
+import { EditAdminModal } from './components/edit-admin-modal'
 import { useDebounce } from '@/hooks/use-debounce'
 import { useTableParams } from '@/hooks/use-table-params'
 import { PermissionGate } from '@/components/ui/permission-gate'
+import { useManageUserStatus } from '@/features/shared/api/use-users'
+import type { Admin } from './types'
 
 export const AdminManagement = () => {
   const { page, setPage, pageSize, setPageSize, search, setSearch } =
@@ -25,10 +27,11 @@ export const AdminManagement = () => {
   const [endDate, setEndDate] = useQueryState('end_date', parseAsString)
 
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false)
+  const [editingAdmin, setEditingAdmin] = useState<Admin | null>(null)
+  const [statusTargetId, setStatusTargetId] = useState<string | undefined>()
 
   const debouncedSearch = useDebounce(search, 500)
 
-  // Sync state to filters object for API hook
   const filters = {
     status: status || undefined,
     start_date: startDate || undefined,
@@ -42,7 +45,8 @@ export const AdminManagement = () => {
     ...filters,
   })
 
-  // Handle filter changes via URL updates
+  const { mutate: manageStatus } = useManageUserStatus(statusTargetId)
+
   const handleFilterChange = (key: string, value: any) => {
     setPage(1)
     if (key === 'status') {
@@ -52,6 +56,15 @@ export const AdminManagement = () => {
       setEndDate(value.end ? formatDateToLocal(value.end) : null)
     }
   }
+
+  const handleToggleStatus = useCallback(
+    (admin: Admin) => {
+      setStatusTargetId(admin.id)
+      const action = admin.status === 'active' ? 'deactivate' : 'activate'
+      manageStatus({ action })
+    },
+    [manageStatus],
+  )
 
   const [isExporting, setIsExporting] = useState(false)
 
@@ -69,6 +82,18 @@ export const AdminManagement = () => {
       setIsExporting(false)
     }
   }
+
+  const columns = useMemo(
+    () =>
+      getAdminColumns({
+        onEdit: (admin) => setEditingAdmin(admin),
+        onResetPassword: (_admin) => {
+          // TODO: wire reset password endpoint when available
+        },
+        onToggleStatus: handleToggleStatus,
+      }),
+    [handleToggleStatus],
+  )
 
   return (
     <div className="space-y-6">
@@ -116,9 +141,7 @@ export const AdminManagement = () => {
                 },
               ]}
               onFilterChange={handleFilterChange}
-              activeFilters={{
-                status: status || 'all',
-              }}
+              activeFilters={{ status: status || 'all' }}
             />
           </PermissionGate>
           <PermissionGate permission="admin_management:export">
@@ -129,7 +152,7 @@ export const AdminManagement = () => {
 
       <DataTable
         data={data?.items || []}
-        columns={adminColumns}
+        columns={columns}
         isLoading={isLoading}
         pagination={{
           currentPage:
@@ -147,6 +170,14 @@ export const AdminManagement = () => {
         open={isInviteModalOpen}
         onClose={() => setIsInviteModalOpen(false)}
       />
+
+      {editingAdmin && (
+        <EditAdminModal
+          open={Boolean(editingAdmin)}
+          onClose={() => setEditingAdmin(null)}
+          admin={editingAdmin}
+        />
+      )}
     </div>
   )
 }

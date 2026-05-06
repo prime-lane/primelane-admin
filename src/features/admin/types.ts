@@ -29,3 +29,9 @@ export interface InviteAdminRequest {
   email: string
   role_id: string
 }
+
+export interface UpdateAdminRequest {
+  first_name: string
+  last_name: string
+  role_id: string
+}
