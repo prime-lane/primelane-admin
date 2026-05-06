@@ -13,6 +13,8 @@ import { Invite } from '@/features/auth/invite'
 import { Otp } from '@/features/auth/otp'
 import { SignIn } from '@/features/auth/sign-in'
 import { ForgotPassword } from '@/features/auth/forgot-password'
+import { ResetPassword } from '@/features/auth/reset-password'
+import { ChangePassword } from '@/features/auth/change-password'
 import { path } from './paths'
 import { RoutePermissionGate } from '@/components/ui/route-permission-gate'
 
@@ -380,6 +382,14 @@ export const router = createBrowserRouter([
           </Suspense>
         ),
       },
+      {
+        path: path.AUTH.RESET_PASSWORD,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <ResetPassword />
+          </Suspense>
+        ),
+      },
     ],
   },
   {
@@ -412,6 +422,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <Otp />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.AUTH.CHANGE_PASSWORD,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <ChangePassword />
           </Suspense>
         ),
       },

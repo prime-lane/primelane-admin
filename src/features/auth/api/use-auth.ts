@@ -13,6 +13,9 @@ import type {
   ChangePasswordRequest,
   VerifyOTPRequest,
   ResendOTPRequest,
+  InitializePasswordResetRequest,
+  CompletePasswordResetRequest,
+  ConfirmOTPResetRequest,
 } from '../types'
 
 // Sign In
@@ -84,12 +87,14 @@ export const useForgotPassword = () => {
     },
     onSuccess: (response, variables) => {
       toast.success(response.message || 'OTP sent to your email')
-      navigate(path.AUTH.OTP, { state: { email: variables.identifier } })
+      navigate(path.AUTH.OTP, {
+        state: { email: variables.identifier, mode: 'reset-password' },
+      })
     },
   })
 }
 
-// Change Password
+// Change Password (after OTP confirmation in forgot-password flow)
 export const useChangePassword = () => {
   const navigate = useNavigate()
 
@@ -104,6 +109,70 @@ export const useChangePassword = () => {
     onSuccess: (response) => {
       toast.success(response.message || 'Password changed successfully')
       navigate(path.AUTH.SIGN_IN)
+    },
+  })
+}
+
+// Initialize Password Reset (admin panel: sends reset email to user)
+export const useInitializePasswordReset = () => {
+  return useMutation({
+    mutationFn: async (data: InitializePasswordResetRequest) => {
+      const response = await apiClient.post<Record<string, never>>(
+        e.AUTH.INITIALIZE_PASSWORD_RESET,
+        data,
+      )
+      return response
+    },
+    onSuccess: (response) => {
+      toast.success(response.message || 'Password reset email sent')
+    },
+    onError: (error: any) => {
+      toast.error(error.message || 'Failed to send password reset email')
+    },
+  })
+}
+
+// Complete Password Reset (user lands on reset-password page from email link)
+export const useCompletePasswordReset = () => {
+  const navigate = useNavigate()
+
+  return useMutation({
+    mutationFn: async (data: CompletePasswordResetRequest) => {
+      const response = await apiClient.post<Record<string, never>>(
+        e.AUTH.COMPLETE_PASSWORD_RESET,
+        data,
+      )
+      return response
+    },
+    onSuccess: (response) => {
+      toast.success(response.message || 'Password reset successfully')
+      navigate(path.AUTH.SIGN_IN)
+    },
+    onError: (error: any) => {
+      toast.error(error.message || 'Failed to reset password')
+    },
+  })
+}
+
+// Confirm OTP for reset-password flow
+export const useConfirmOTPForReset = () => {
+  const navigate = useNavigate()
+
+  return useMutation({
+    mutationFn: async (data: ConfirmOTPResetRequest) => {
+      const response = await apiClient.post<Record<string, never>>(
+        e.AUTH.CONFIRM_OTP('reset-password'),
+        data,
+      )
+      return response
+    },
+    onSuccess: (_response, variables) => {
+      navigate(path.AUTH.CHANGE_PASSWORD, {
+        state: { identifier: variables.identifier, otp: variables.otp },
+      })
+    },
+    onError: (error: any) => {
+      toast.error(error.message || 'Invalid OTP')
     },
   })
 }

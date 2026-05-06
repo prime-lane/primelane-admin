@@ -16,6 +16,7 @@ import { useDebounce } from '@/hooks/use-debounce'
 import { useTableParams } from '@/hooks/use-table-params'
 import { PermissionGate } from '@/components/ui/permission-gate'
 import { useManageUserStatus } from '@/features/shared/api/use-users'
+import { useInitializePasswordReset } from '@/features/auth/api/use-auth'
 import type { Admin } from './types'
 
 export const AdminManagement = () => {
@@ -46,6 +47,7 @@ export const AdminManagement = () => {
   })
 
   const { mutate: manageStatus } = useManageUserStatus(statusTargetId)
+  const { mutate: initializePasswordReset } = useInitializePasswordReset()
 
   const handleFilterChange = (key: string, value: any) => {
     setPage(1)
@@ -87,12 +89,12 @@ export const AdminManagement = () => {
     () =>
       getAdminColumns({
         onEdit: (admin) => setEditingAdmin(admin),
-        onResetPassword: (_admin) => {
-          // TODO: wire reset password endpoint when available
+        onResetPassword: (admin) => {
+          initializePasswordReset({ user_id: admin.id })
         },
         onToggleStatus: handleToggleStatus,
       }),
-    [handleToggleStatus],
+    [handleToggleStatus, initializePasswordReset],
   )
 
   return (
@@ -132,7 +134,7 @@ export const AdminManagement = () => {
                     { label: 'All', value: 'all' },
                     { label: 'Pending', value: 'pending' },
                     { label: 'Active', value: 'active' },
-                    { label: 'Deactivated', value: 'inactive' },
+                    { label: 'Deactivated', value: 'deactivated' },
                   ],
                 },
                 {

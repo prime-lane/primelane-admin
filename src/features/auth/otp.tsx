@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { otpSchema, type OtpFormValues } from './schemas/otp-schema'
-import { useResendOTP, useVerifyAdminOtp } from './api/use-auth'
+import { useResendOTP, useVerifyAdminOtp, useConfirmOTPForReset } from './api/use-auth'
 import { toast } from 'sonner'
 import { path } from '../../app/paths'
 
@@ -12,9 +12,14 @@ export const Otp = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const email = location.state?.email
+  const mode = location.state?.mode as string | undefined
+  const isResetMode = mode === 'reset-password'
 
   const { mutate: verifyOtp, isPending: isVerifying } = useVerifyAdminOtp()
+  const { mutate: confirmOtpReset, isPending: isConfirming } = useConfirmOTPForReset()
   const { mutate: resendOtp, isPending: isResending } = useResendOTP('login')
+
+  const isPending = isVerifying || isConfirming
 
   const [timer, setTimer] = useState(60)
 
@@ -89,10 +94,11 @@ export const Otp = () => {
   }
 
   const onSubmit = (data: OtpFormValues) => {
-    verifyOtp({
-      email: data.email,
-      otp: data.otp,
-    })
+    if (isResetMode) {
+      confirmOtpReset({ identifier: data.email, otp: data.otp })
+    } else {
+      verifyOtp({ email: data.email, otp: data.otp })
+    }
   }
 
   const handleResend = () => {
@@ -226,7 +232,7 @@ export const Otp = () => {
           fullWidth
           size="large"
           type="submit"
-          disabled={isVerifying || !isValid || otpValue.length !== 6}
+          disabled={isPending || !isValid || otpValue.length !== 6}
         >
           {isVerifying ? 'Verifying...' : 'Verify'}
         </Button>

@@ -24,11 +24,14 @@
     - [x] disable email input when editing admin
 - [x] fix usage table  
 - [ ] forgot password flow:
-    - [ ] confirm-otp (`auth/confirm-otp/:action`)
-    - [ ] change pwd: identifier, new password (`auth/change-password`)
+    - [x] confirm-otp (`auth/confirm-otp/:action`)
+    - [x] change pwd: identifier, new password (`auth/change-password`)
+    - [x] last_login_at
 - [x] on trips page use estimated_fare for "Total fare"
 - [x] To_pickup to "To pickup" on bookings page table
 - [x] booking filters
+- [x] export btn on coupon page
+- [ ] cancellation_refund_reason
 
 side notes:
 

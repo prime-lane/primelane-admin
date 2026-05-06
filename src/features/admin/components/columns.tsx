@@ -19,14 +19,14 @@ export const getAdminColumns = ({
   onToggleStatus,
 }: AdminColumnActions): ColumnDef<Admin>[] => [
   {
-    accessorKey: 'id',
+    accessorKey: 'custom_user_id',
     header: 'Admin ID',
     cell: (info) => (
       <span className="text-sm text-neutral-900">{info.getValue() as string}</span>
     ),
   },
   {
-    accessorKey: 'last_active_at',
+    accessorKey: 'last_login_at',
     header: 'Last Active',
     cell: (info) => {
       const val = info.getValue() as string

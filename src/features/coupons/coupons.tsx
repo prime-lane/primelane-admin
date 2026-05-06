@@ -1,5 +1,5 @@
 import { path } from '@/app/paths'
-import { SearchInput } from '@/components/ui/data-controls'
+import { ExportButton, SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
 import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
@@ -8,10 +8,11 @@ import { useTableParams } from '@/hooks/use-table-params'
 import { apiClient } from '@/services/api-client'
 import { API_ENDPOINTS as e } from '@/services/api-endpoints'
 import { downloadExport } from '@/utils/export-utils'
+import { buildQueryParams } from '@/lib/utils'
 import { Box, Button } from '@mui/material'
 import { useQueryClient } from '@tanstack/react-query'
 import { parseAsString, useQueryState } from 'nuqs'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useCoupons } from './api/use-coupons'
@@ -60,6 +61,22 @@ export const Coupons = () => {
     }
   }
 
+  const [isExporting, setIsExporting] = useState(false)
+
+  const handleExport = async () => {
+    const params = buildQueryParams({
+      search: debouncedSearch || undefined,
+      status: status || undefined,
+    })
+    const qs = params.toString()
+    setIsExporting(true)
+    try {
+      await downloadExport(`/coupons${qs ? `?${qs}` : ''}`)
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
   const columns = useMemo(
     () => getCouponColumns(handleEdit, handleExportUsage, handleToggle),
     [handleEdit, handleExportUsage, handleToggle],
@@ -104,11 +121,14 @@ export const Coupons = () => {
             placeholder="Search by code..."
           />
         </Box>
-        <FilterMenu
-          options={filterOptions}
-          onFilterChange={handleFilterChange}
-          activeFilters={{ status: status || 'all' }}
-        />
+        <div className="flex gap-3">
+          <FilterMenu
+            options={filterOptions}
+            onFilterChange={handleFilterChange}
+            activeFilters={{ status: status || 'all' }}
+          />
+          <ExportButton onClick={handleExport} isLoading={isExporting} />
+        </div>
       </Box>
 
       <DataTable

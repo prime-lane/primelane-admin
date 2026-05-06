@@ -32,6 +32,8 @@ export const API_ENDPOINTS = {
     ADMIN_INVITE: '/auth/admin-invite',
     ADMIN_INVITE_RESEND: '/auth/admin-invite/resend',
     ADMIN_INVITE_ACCEPT: '/auth/admin-invite/accept',
+    INITIALIZE_PASSWORD_RESET: '/auth/initialize-password-reset',
+    COMPLETE_PASSWORD_RESET: '/auth/complete-password-reset',
   },
   USERS: {
     ROOT: '/users',

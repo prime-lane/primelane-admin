@@ -45,11 +45,27 @@ export interface RefreshTokenRequest {
 
 export interface ForgotPasswordRequest {
   identifier: string
+  user_type: string
 }
 
 export interface ChangePasswordRequest {
-  email: string
+  identifier: string
   password: string
+  otp: string
+  user_type: string
+}
+
+export interface InitializePasswordResetRequest {
+  user_id: string
+}
+
+export interface CompletePasswordResetRequest {
+  token: string
+  password: string
+}
+
+export interface ConfirmOTPResetRequest {
+  identifier: string
   otp: string
 }
 
