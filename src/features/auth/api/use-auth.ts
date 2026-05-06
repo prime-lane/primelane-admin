@@ -84,7 +84,7 @@ export const useForgotPassword = () => {
     },
     onSuccess: (response, variables) => {
       toast.success(response.message || 'OTP sent to your email')
-      navigate(path.AUTH.OTP, { state: { email: variables.email } })
+      navigate(path.AUTH.OTP, { state: { email: variables.identifier } })
     },
   })
 }

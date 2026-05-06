@@ -27,6 +27,7 @@ const getStatusConfig = (status: string) => {
     case 'pending':
       return { label: 'Pending', color: '#EA580C', bgcolor: '#FFF7ED' }
     case 'inactive':
+      return { label: 'Inactive', color: '#DC2626', bgcolor: '#EF44441A' }
     case 'deactivated':
       return { label: 'Deactivated', color: '#DC2626', bgcolor: '#EF44441A' }
     case 'completed':

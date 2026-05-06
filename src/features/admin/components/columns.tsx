@@ -37,7 +37,7 @@ export const adminColumns: ColumnDef<Admin>[] = [
           {row.original.first_name} {row.original.last_name}
         </span>
         <span className="text-xs text-neutral-500">
-          {row.original.user_type}
+          {row.original.role_name || 'N/A'}
         </span>
       </div>
     ),

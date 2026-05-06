@@ -26,7 +26,7 @@ export const ForgotPassword = () => {
   })
 
   const onSubmit = (data: ForgotPasswordFormData) => {
-    forgotPassword({ email: data.email })
+    forgotPassword({ identifier: data.email })
   }
 
   return (

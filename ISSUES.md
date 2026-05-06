@@ -19,6 +19,10 @@
 - [ ] add extra fair in trip details
 - [x] render vehicle documents conditionally (driver details page)
 - [x] remove custom cursor
+- [ ] edit admin role
+- [ ] forgot password flow:
+    - [ ] confirm-otp (`auth/confirm-otp/:action`)
+    - [ ] change pwd: identifier, new password (`auth/change-password`)
 
 side notes:
 

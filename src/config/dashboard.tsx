@@ -89,7 +89,7 @@ export const NAV_ITEMS: NavItem[] = [
     label: 'Coupons',
     icon: Sale,
     to: path.DASHBOARD.COUPONS,
-    // permission: 'coupons:view',
+    permission: 'coupon:view',
     description: 'Manage coupons',
   },
   {

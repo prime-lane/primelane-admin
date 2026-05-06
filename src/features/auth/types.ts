@@ -44,7 +44,7 @@ export interface RefreshTokenRequest {
 }
 
 export interface ForgotPasswordRequest {
-  email: string
+  identifier: string
 }
 
 export interface ChangePasswordRequest {

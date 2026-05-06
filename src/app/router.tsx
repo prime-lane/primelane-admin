@@ -315,7 +315,7 @@ export const router = createBrowserRouter([
       {
         path: path.DASHBOARD.COUPONS,
         element: (
-          <RoutePermissionGate permission="refund:view">
+          <RoutePermissionGate permission="coupon:view">
             <Suspense fallback={<Loading />}>
               <Coupons />
             </Suspense>

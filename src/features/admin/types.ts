@@ -6,6 +6,7 @@ export interface Admin {
   last_name: string
   email: string
   user_type: string
+  role_name: string
   status: AccountStatus
   created_at: string
 }
