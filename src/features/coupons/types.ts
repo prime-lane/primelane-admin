@@ -46,3 +46,9 @@ export interface CreateCouponRequest {
   applicable_ride_types: string[]
   applicable_category_ids: string[]
 }
+
+export interface CouponDetailsResponse {
+  coupon: Coupon
+  total_uses: number
+  remaining_uses: number | null
+}

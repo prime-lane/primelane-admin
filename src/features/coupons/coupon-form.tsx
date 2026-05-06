@@ -62,10 +62,7 @@ const checkboxToggleSx = {
     fontWeight: 400,
   },
   '& .MuiCheckbox-root': {
-    color: '#94A3B8',
-    '&.Mui-checked': {
-      color: 'primary.main',
-    },
+    p: 0.5,
   },
 }
 
@@ -135,25 +132,25 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
   useEffect(() => {
     if (isEdit && existingCoupon) {
       reset({
-        code: existingCoupon.code,
-        description: existingCoupon.description,
-        discount_type: existingCoupon.discount_type,
+        code: existingCoupon.coupon.code,
+        description: existingCoupon.coupon.description,
+        discount_type: existingCoupon.coupon.discount_type,
         discount_value:
-          existingCoupon.discount_type === 'fixed'
-            ? String(fromKobo(existingCoupon.discount_value))
-            : String(existingCoupon.discount_value),
-        usage_type: existingCoupon.usage_type,
-        usage_limit: existingCoupon.usage_limit
-          ? String(existingCoupon.usage_limit)
+          existingCoupon.coupon.discount_type === 'fixed'
+            ? String(fromKobo(existingCoupon.coupon.discount_value))
+            : String(existingCoupon.coupon.discount_value),
+        usage_type: existingCoupon.coupon.usage_type,
+        usage_limit: existingCoupon.coupon.usage_limit
+          ? String(existingCoupon.coupon.usage_limit)
           : '',
-        starts_at: existingCoupon.starts_at
-          ? new Date(existingCoupon.starts_at)
+        starts_at: existingCoupon.coupon.starts_at
+          ? new Date(existingCoupon.coupon.starts_at)
           : null,
-        expires_at: existingCoupon.expires_at
-          ? new Date(existingCoupon.expires_at)
+        expires_at: existingCoupon.coupon.expires_at
+          ? new Date(existingCoupon.coupon.expires_at)
           : null,
-        applicable_ride_types: existingCoupon.applicable_ride_types || [],
-        applicable_category_ids: existingCoupon.applicable_category_ids || [],
+        applicable_ride_types: existingCoupon.coupon.applicable_ride_types || [],
+        applicable_category_ids: existingCoupon.coupon.applicable_category_ids || [],
       })
     }
   }, [isEdit, existingCoupon, reset])
@@ -180,7 +177,7 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
       return
     }
     if (!formData.discount_value) {
-      toast.error('Value is required')
+      toast.error('Coupon value is required')
       return
     }
     if (!formData.starts_at || !formData.expires_at) {
@@ -242,7 +239,7 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
             ...(isEdit && existingCoupon
               ? [
                 {
-                  label: existingCoupon.code,
+                  label: existingCoupon.coupon.code,
                   to: path.DASHBOARD.COUPON_DETAILS.replace(':id', id!),
                 },
               ]
@@ -331,7 +328,7 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
                 </RadioGroup>
                 <div className="space-y-1">
                   <TextField
-                    {...register('discount_value')}
+                    {...register('discount_value', { required: 'Coupon value is required' })}
                     fullWidth
                     size="medium"
                     type="number"
@@ -381,7 +378,16 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
                       size="medium"
                       type="number"
                       label="Usage Limit (optional)"
-                      sx={inputSx}
+                      sx={{
+                        ...inputSx,
+                        '& .MuiFormLabel-root': { order: 0 },
+                        '& .MuiFormHelperText-root': {
+                          order: 1,
+                          mt: 0.5,
+                          mb: 1,
+                        },
+                        '& .MuiInputBase-root': { order: 2 },
+                      }}
                       placeholder="1000"
                       helperText="Set a maximum number of coupon usage"
                     />
@@ -390,7 +396,7 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
               </div>
             </section>
 
-            <section className="space-y-4">
+            <section className="space-y-2">
               <h2 className="text-base">
                 Validity Period
               </h2>
@@ -414,7 +420,7 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
                               size: 'small',
                               sx: {
                                 '& .MuiInputBase-input, & .MuiPickersSectionList-sectionContent, & .MuiPickersInputBase-sectionBefore, & .MuiPickersInputBase-sectionAfter': {
-                                  fontSize: '12px',
+                                  fontSize: '16px',
                                 },
                               },
                             },
@@ -441,7 +447,7 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
                               size: 'small',
                               sx: {
                                 '& .MuiInputBase-input, & .MuiPickersSectionList-sectionContent, & .MuiPickersInputBase-sectionBefore, & .MuiPickersInputBase-sectionAfter': {
-                                  fontSize: '12px',
+                                  fontSize: '16px',
                                 },
                               },
                             },
@@ -454,50 +460,55 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
               </div>
             </section>
 
-            {/* Scope */}
             <section className="space-y-4">
               <h2 className="text-base">Scope</h2>
               <div className="space-y-4">
-                <p className="text-sm text-neutral-500">
+                <p className="text-sm">
                   Choose the booking and vehicle category for this coupon.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <p className="text-xs text-neutral-500">Booking type</p>
+                    <p className="text-sm text-neutral-500">Booking type</p>
                     {BOOKING_TYPES.map((bt) => (
-                      <FormControlLabel
-                        key={bt.value}
-                        control={
-                          <Checkbox
-                            checked={selectedRideTypes.includes(bt.value)}
-                            onChange={() => toggleRideType(bt.value)}
-                            size="small"
-                          />
-                        }
-                        label={bt.label}
-                        sx={{
-                        ...checkboxToggleSx,
-                        }}
-                      />
+                      <div className='block'>
+                        <FormControlLabel
+                          className='gap-2'
+                          key={bt.value}
+                          control={
+                            <Checkbox
+                              checked={selectedRideTypes.includes(bt.value)}
+                              onChange={() => toggleRideType(bt.value)}
+                              size="small"
+                            />
+                          }
+                          label={bt.label}
+                          sx={{
+                            ...checkboxToggleSx,
+                          }}
+                        />
+                      </div>
                     ))}
                   </div>
                   <div className="space-y-2">
-                    <p className="text-xs text-neutral-500">Vehicle category</p>
+                    <p className="text-sm text-neutral-500">Vehicle category</p>
                     {(vehicleCategories?.categories || []).map((cat) => (
-                      <FormControlLabel
-                        key={cat.id}
-                        control={
-                          <Checkbox
-                            checked={selectedCategories.includes(cat.id)}
-                            onChange={() => toggleCategory(cat.id)}
-                            size="small"
-                          />
-                        }
-                        label={cat.name}
-                        sx={{
-                        ...checkboxToggleSx,
-                        }}
-                      />
+                      <div className='block'>
+                        <FormControlLabel
+                          className='gap-2'
+                          key={cat.id}
+                          control={
+                            <Checkbox
+                              checked={selectedCategories.includes(cat.id)}
+                              onChange={() => toggleCategory(cat.id)}
+                              size="small"
+                            />
+                          }
+                          label={cat.name}
+                          sx={{
+                            ...checkboxToggleSx,
+                          }}
+                        />
+                      </div>
                     ))}
                   </div>
                 </div>

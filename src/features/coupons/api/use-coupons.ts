@@ -5,7 +5,12 @@ import { API_ENDPOINTS as e } from '@/services/api-endpoints'
 import type { PaginationParams, PaginatedResponse } from '@/services/api-types'
 import { transformPaginatedResponse } from '@/utils/api-utils'
 import { buildQueryParams } from '@/lib/utils'
-import type { Coupon, CouponUsageRecord, CreateCouponRequest } from '../types'
+import type {
+  Coupon,
+  CouponDetailsResponse,
+  CouponUsageRecord,
+  CreateCouponRequest,
+} from '../types'
 
 interface UseCouponsParams extends PaginationParams {
   search?: string
@@ -31,8 +36,27 @@ export const useCoupon = (id: string) => {
   return useQuery({
     queryKey: ['coupon', id],
     queryFn: async () => {
-      const response = await apiClient.get<Coupon>(e.COUPONS.BY_ID(id))
-      return response.data
+      const response = await apiClient.get<{
+        data?: CouponDetailsResponse
+        coupon?: Coupon
+        total_uses?: number
+        remaining_uses?: number | null
+      }>(e.COUPONS.BY_ID(id))
+
+      const raw = response.data
+      const details = raw.data
+
+      const coupon = details?.coupon ?? raw.coupon
+      if (!coupon) {
+        throw new Error('Coupon payload missing in response')
+      }
+
+      return {
+        coupon,
+        total_uses: details?.total_uses ?? raw.total_uses ?? coupon.usage_count ?? 0,
+        remaining_uses:
+          details?.remaining_uses ?? raw.remaining_uses ?? coupon.usage_limit ?? null,
+      } satisfies CouponDetailsResponse
     },
     enabled: !!id,
   })

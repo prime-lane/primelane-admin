@@ -3,6 +3,7 @@ import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
 import { CountUp } from '@/components/ui/count-up'
 import { DataTable } from '@/components/ui/data-table'
 import { ErrorState } from '@/components/ui/loading-error-states'
+import { StatusBadge } from '@/components/ui/status-badge'
 import {
   CustomTabPanel as TabPanel,
   a11yProps,
@@ -13,8 +14,6 @@ import {
   Button,
   Card,
   CardContent,
-  Menu,
-  MenuItem,
   Tab,
   Tabs,
 } from '@mui/material'
@@ -29,6 +28,8 @@ import type { CouponUsageRecord } from './types'
 import { useTableParams } from '@/hooks/use-table-params'
 import { downloadExport } from '@/utils/export-utils'
 import { CouponDetailsSkeleton } from './components/skeletons'
+import { useVehicleCategories } from '@/features/pricing-config/api/use-vehicle-categories'
+import { CouponActionMenu } from './components/coupon-action-menu'
 
 const usageColumns: ColumnDef<CouponUsageRecord>[] = [
   {
@@ -94,7 +95,7 @@ const InfoCell = ({
 }) => (
   <div className="flex flex-col gap-1">
     <span className="text-xs text-neutral-500">{label}</span>
-    <span className="text-sm font-medium text-neutral-900">{value ?? '—'}</span>
+    <span className="text-sm font-normal text-neutral-900">{value ?? '—'}</span>
   </div>
 )
 
@@ -111,15 +112,14 @@ export const CouponDetails = () => {
   const navigate = useNavigate()
   const { page, setPage, pageSize, setPageSize } = useTableParams()
 
-  const { data: coupon, isLoading, error } = useCoupon(id!)
+  const { data: couponData, isLoading, error } = useCoupon(id!)
   const { data: usageData, isLoading: isUsageLoading } = useCouponUsage(id!, {
     page,
     page_size: pageSize,
   })
+  const { data: vehicleCategories } = useVehicleCategories()
   const { mutate: toggleCoupon } = useToggleCoupon(id!)
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const openMenu = Boolean(anchorEl)
   const [isExporting, setIsExporting] = useState(false)
 
   const [tabValue, setTabValue] = useQueryState('tab', {
@@ -130,14 +130,26 @@ export const CouponDetails = () => {
   const activeIndex = tabValue === 'usage' ? 1 : 0
 
   if (isLoading) return <CouponDetailsSkeleton />
-  if (error || !coupon) return <ErrorState message="Failed to load coupon" />
+  if (error || !couponData) return <ErrorState message="Failed to load coupon" />
+
+  const { coupon, total_uses, remaining_uses } = couponData
 
   const isActive = coupon.is_active
 
-  const scopeLabel =
+  const categoryNameById = new Map(
+    (vehicleCategories?.categories || []).map((cat) => [cat.id, cat.name]),
+  )
+
+  const rideScope =
     (coupon.applicable_ride_types || [])
       .map((r) => RIDE_TYPE_LABELS[r] || r)
       .join(' & ') || 'All'
+
+  const categoryScope = (coupon.applicable_category_ids || [])
+    .map((id) => categoryNameById.get(id) || id)
+    .join(', ')
+
+  const scopeLabel = categoryScope ? `${rideScope} • ${categoryScope}` : rideScope
 
   const handleExportUsage = async () => {
     setIsExporting(true)
@@ -164,21 +176,10 @@ export const CouponDetails = () => {
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-neutral-900">
+            <h1 className="text-xl">
               Coupon details
             </h1>
-            <span
-              style={{
-                fontSize: '0.75rem',
-                padding: '2px 10px',
-                borderRadius: '999px',
-                fontWeight: 500,
-                backgroundColor: isActive ? '#22C55E1A' : '#EF44441A',
-                color: isActive ? '#16A34A' : '#DC2626',
-              }}
-            >
-              {isActive ? 'Active' : 'Inactive'}
-            </span>
+            <StatusBadge status={isActive ? 'active' : 'inactive'} />
           </div>
           <span className="text-sm text-neutral-500">
             Date Created:{' '}
@@ -188,62 +189,28 @@ export const CouponDetails = () => {
           </span>
         </div>
 
-        <div>
-          <Button
-            variant="contained"
-            endIcon={<AltArrowDown />}
-            onClick={(e) => setAnchorEl(e.currentTarget)}
-            sx={{
-              bgcolor: 'black',
-              color: 'white',
-              textTransform: 'none',
-              '&:hover': { bgcolor: 'neutral.800' },
-            }}
-          >
-            Action
-          </Button>
-          <Menu
-            anchorEl={anchorEl}
-            open={openMenu}
-            onClose={() => setAnchorEl(null)}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-          >
-            <MenuItem
-              onClick={() => {
-                setAnchorEl(null)
-                navigate(path.DASHBOARD.COUPON_EDIT.replace(':id', id!))
+        <CouponActionMenu
+          coupon={coupon}
+          isExporting={isExporting}
+          onEdit={() => navigate(path.DASHBOARD.COUPON_EDIT.replace(':id', id!))}
+          onExportUsage={handleExportUsage}
+          onToggle={(selectedCoupon) => toggleCoupon(!selectedCoupon.is_active)}
+          trigger={(openMenu) => (
+            <Button
+              variant="contained"
+              endIcon={<AltArrowDown />}
+              onClick={openMenu}
+              sx={{
+                bgcolor: 'black',
+                color: 'white',
+                textTransform: 'none',
+                '&:hover': { bgcolor: 'neutral.800' },
               }}
             >
-              <span className="text-sm text-neutral-600">Edit Coupon</span>
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                setAnchorEl(null)
-                handleExportUsage()
-              }}
-              disabled={isExporting}
-            >
-              <span className="text-sm text-neutral-600">
-                {isExporting ? 'Exporting...' : 'Export Usage Record'}
-              </span>
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                setAnchorEl(null)
-                toggleCoupon(!isActive)
-              }}
-              sx={{ bgcolor: isActive ? '#FFF0F0' : '#F0FFF4' }}
-            >
-              <span
-                className="text-sm font-medium"
-                style={{ color: isActive ? '#DC2626' : '#16A34A' }}
-              >
-                {isActive ? 'Disable Coupon' : 'Enable Coupon'}
-              </span>
-            </MenuItem>
-          </Menu>
-        </div>
+              Action
+            </Button>
+          )}
+        />
       </div>
 
       {/* Tabs */}
@@ -259,13 +226,10 @@ export const CouponDetails = () => {
       <TabPanel value={activeIndex} index={0}>
         <div className="space-y-8">
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-neutral-700">
-              Coupon details
-            </h3>
             <div className="grid grid-cols-3 gap-x-8 gap-y-6">
               <InfoCell
                 label="Code"
-                value={<span className="font-bold">{coupon.code}</span>}
+                value={coupon.code}
               />
               <InfoCell
                 label="Coupon type"
@@ -328,8 +292,8 @@ export const CouponDetails = () => {
                     <span className="text-sm text-neutral-500">
                       No. of Uses
                     </span>
-                    <p className="text-2xl font-bold">
-                      <CountUp value={coupon.usage_count} />
+                    <p className="text-2xl font-semibold">
+                      <CountUp value={total_uses} />
                     </p>
                   </div>
                 </CardContent>
@@ -340,11 +304,9 @@ export const CouponDetails = () => {
                     <span className="text-sm text-neutral-500">
                       Remaining Uses
                     </span>
-                    <p className="text-2xl font-bold">
-                      {coupon.usage_limit != null ? (
-                        <CountUp
-                          value={coupon.usage_limit - coupon.usage_count}
-                        />
+                    <p className="text-2xl font-semibold">
+                      {remaining_uses != null ? (
+                        <CountUp value={remaining_uses} />
                       ) : (
                         '—'
                       )}
@@ -357,7 +319,6 @@ export const CouponDetails = () => {
         </div>
       </TabPanel>
 
-      {/* Usage Record */}
       <TabPanel value={activeIndex} index={1}>
         <Box>
           <DataTable
