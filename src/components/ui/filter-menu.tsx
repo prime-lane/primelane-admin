@@ -15,7 +15,6 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AltArrowDown, AltArrowLeft, CheckCircle } from '@solar-icons/react'
 import { FilterButton } from './data-controls'
-import { formatToLocalTimeZone } from '@/lib/utils'
 
 const dateFilterOptions = [
   { label: 'Today', value: 'today' },
@@ -104,7 +103,7 @@ export const FilterMenu = ({
     setActiveDatePreset(preset)
     if (preset === 'custom') return
 
-    const now = formatToLocalTimeZone()
+    const now = new Date()
     let start: Date | null = null
     let end: Date | null = null
 
