@@ -2,7 +2,6 @@ import { path } from '@/app/paths'
 import { SearchInput } from '@/components/ui/data-controls'
 import { DataTable } from '@/components/ui/data-table'
 import { ErrorState } from '@/components/ui/loading-error-states'
-import { PermissionGate } from '@/components/ui/permission-gate'
 import { FilterMenu, type FilterOption } from '@/components/ui/filter-menu'
 import { useDebounce } from '@/hooks/use-debounce'
 import { useTableParams } from '@/hooks/use-table-params'
@@ -86,19 +85,16 @@ export const Coupons = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-4xl">Coupons</h1>
-        <PermissionGate permission="coupons:create">
-          <Button
-            variant="contained"
-            onClick={() => navigate(path.DASHBOARD.COUPON_CREATE)}
-            endIcon={<AddSquare />}
-            sx={{
-              bgcolor: 'black', color: 'white', textTransform: 'none',
-              fontWeight: 500, '&:hover': { bgcolor: 'neutral.800' },
-            }}
-          >
-            Create Coupon
-          </Button>
-        </PermissionGate>
+        <Button
+          variant="contained"
+          onClick={() => navigate(path.DASHBOARD.COUPON_CREATE)}
+          endIcon={<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4.16663 10.0003H15.8333M9.99996 4.16699V15.8337" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          }
+        >
+          CREATE COUPON
+        </Button>
       </div>
 
       <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
@@ -126,10 +122,10 @@ export const Coupons = () => {
         pagination={
           data?.pagination
             ? {
-                currentPage: Number(data.pagination.current_page),
-                totalPages: data.pagination.total_pages,
-                totalItems: data.pagination.total_items,
-              }
+              currentPage: Number(data.pagination.current_page),
+              totalPages: data.pagination.total_pages,
+              totalItems: data.pagination.total_items,
+            }
             : undefined
         }
         onPageChange={setPage}

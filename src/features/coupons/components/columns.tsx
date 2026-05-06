@@ -1,6 +1,6 @@
 import { type ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
-import { formatCurrency, fromKobo } from '@/lib/utils'
+import { formatCurrency } from '@/lib/utils'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { IconButton, Menu, MenuItem } from '@mui/material'
 import { MenuDots } from '@solar-icons/react'
@@ -39,6 +39,23 @@ const ActionMenu = ({
         onClose={handleClose}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        slotProps={{
+          paper: {
+            sx: {
+              width: 180,
+              p: 1,
+              boxShadow: '0px 8px 24px rgba(16, 24, 40, 0.08)',
+              borderRadius: '2px',
+            },
+          },
+          list: {
+            sx: {
+              p: 0,
+              display: 'grid',
+              gap: 0.5,
+            },
+          },
+        }}
       >
         <MenuItem
           onClick={(e) => {
@@ -46,8 +63,16 @@ const ActionMenu = ({
             onEdit(coupon)
             handleClose()
           }}
+          sx={{
+            justifyContent: 'center',
+            py: 3,
+            px: 3,
+            borderRadius: '0px',
+            bgcolor: '#F3F4F6',
+            '&:hover': { bgcolor: '#EAECEF' },
+          }}
         >
-          <span className="text-sm font-medium text-neutral-600">
+          <span className="text-xs font-medium uppercase tracking-tight text-neutral-500">
             Edit Coupon
           </span>
         </MenuItem>
@@ -57,8 +82,16 @@ const ActionMenu = ({
             onExportUsage(coupon)
             handleClose()
           }}
+          sx={{
+            justifyContent: 'center',
+            py: 3,
+            px: 3,
+            borderRadius: '0px',
+            bgcolor: '#F3F4F6',
+            '&:hover': { bgcolor: '#EAECEF' },
+          }}
         >
-          <span className="text-sm font-medium text-neutral-600">
+          <span className="text-xs font-medium uppercase tracking-tight text-neutral-500">
             Export Usage Record
           </span>
         </MenuItem>
@@ -68,10 +101,19 @@ const ActionMenu = ({
             onToggle(coupon)
             handleClose()
           }}
-          sx={{ bgcolor: coupon.is_active ? '#FFF0F0' : '#F0FFF4' }}
+          sx={{
+            justifyContent: 'center',
+            py: 3,
+            px: 3,
+            borderRadius: '0px',
+            bgcolor: coupon.is_active ? '#FDEEEE' : '#EBF8EF',
+            '&:hover': {
+              bgcolor: coupon.is_active ? '#FBE3E3' : '#DDF2E3',
+            },
+          }}
         >
           <span
-            className="text-sm font-medium"
+            className="text-xs font-medium uppercase tracking-tight"
             style={{ color: coupon.is_active ? '#DC2626' : '#16A34A' }}
           >
             {coupon.is_active ? 'Disable Coupon' : 'Enable Coupon'}
