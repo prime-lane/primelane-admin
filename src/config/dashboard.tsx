@@ -2,8 +2,10 @@ import { path } from '@/app/paths'
 import {
   BillList,
   Home,
+  Sale,
   SettingsMinimalistic,
   ShieldUser,
+  Tag,
   UserRounded,
   UsersGroupRounded,
   WalletMoney,
@@ -83,6 +85,13 @@ export const NAV_ITEMS: NavItem[] = [
         description: 'View refunds',
       },
     ],
+  },
+  {
+    label: 'Coupons',
+    icon: Sale,
+    to: path.DASHBOARD.COUPONS,
+    // permission: 'coupons:view',
+    description: 'Manage coupons',
   },
   {
     label: 'Admin Mgmt.',

@@ -3022,6 +3022,174 @@ export const handlers = [
     })
   }),
 
+  // ─── Coupons ──────────────────────────────────────────────────────────────
+
+  http.get(`${API_BASE_URL}/coupons`, () => {
+    return HttpResponse.json({
+      data: {
+        coupons: [
+          {
+            id: '3f9c38ee-dd69-4ead-9d3b-8cc650b61fc0',
+            code: 'EXEC15',
+            description: '15% off executive class on any ride type',
+            discount_type: 'percentage',
+            discount_value: 15,
+            usage_type: 'multiple',
+            usage_limit: null,
+            usage_count: 42,
+            starts_at: '2026-05-01T00:00:00.000Z',
+            expires_at: '2026-12-31T23:59:59.000Z',
+            applicable_ride_types: ['airport_transfer', 'daily'],
+            applicable_category_ids: ['221f7bd4-953e-460f-9b60-75d8f45403f7'],
+            is_active: true,
+            created_at: '2026-05-01T11:58:15.212Z',
+            updated_at: '2026-05-01T11:58:15.212Z',
+          },
+          {
+            id: '916539bc-baef-436b-8dc9-5b4a21818f1c',
+            code: 'AIRPORT500',
+            description: '₦500 off your first airport transfer',
+            discount_type: 'fixed',
+            discount_value: 50000,
+            usage_type: 'one_time',
+            usage_limit: null,
+            usage_count: 12,
+            starts_at: '2026-05-01T00:00:00.000Z',
+            expires_at: '2026-07-31T23:59:59.000Z',
+            applicable_ride_types: ['airport_transfer'],
+            applicable_category_ids: [
+              '221f7bd4-953e-460f-9b60-75d8f45403f7',
+              '3b73ae37-2ee6-4534-be0a-9fc7a8dc7e60',
+            ],
+            is_active: false,
+            created_at: '2026-05-01T11:54:41.284Z',
+            updated_at: '2026-05-01T11:54:41.284Z',
+          },
+          {
+            id: 'f6e5287b-6181-4371-bb62-7154d5e57f92',
+            code: 'DAILY20',
+            description: '20% off all daily rental bookings',
+            discount_type: 'percentage',
+            discount_value: 20,
+            usage_type: 'multiple',
+            usage_limit: 100,
+            usage_count: 67,
+            starts_at: '2026-05-01T00:00:00.000Z',
+            expires_at: '2026-06-30T23:59:59.000Z',
+            applicable_ride_types: ['daily'],
+            applicable_category_ids: [
+              '221f7bd4-953e-460f-9b60-75d8f45403f7',
+              '3b73ae37-2ee6-4534-be0a-9fc7a8dc7e60',
+            ],
+            is_active: true,
+            created_at: '2026-05-01T11:56:10.730Z',
+            updated_at: '2026-05-01T11:56:10.730Z',
+          },
+        ],
+        pagination: {
+          total_items: 3,
+          total_pages: 1,
+          current_page: 1,
+          limit: 10,
+        },
+      },
+      success: true,
+    })
+  }),
+
+  http.get(`${API_BASE_URL}/coupons/:id`, ({ params }) => {
+    return HttpResponse.json({
+      data: {
+        id: params.id,
+        code: 'EXEC15',
+        description: '15% off executive class on any ride type',
+        discount_type: 'percentage',
+        discount_value: 15,
+        usage_type: 'multiple',
+        usage_limit: null,
+        usage_count: 42,
+        starts_at: '2026-05-01T00:00:00.000Z',
+        expires_at: '2026-12-31T23:59:59.000Z',
+        applicable_ride_types: ['airport_transfer', 'daily'],
+        applicable_category_ids: ['221f7bd4-953e-460f-9b60-75d8f45403f7'],
+        is_active: true,
+        created_at: '2026-05-01T11:58:15.212Z',
+        updated_at: '2026-05-01T11:58:15.212Z',
+      },
+      success: true,
+    })
+  }),
+
+  http.post(`${API_BASE_URL}/coupons`, () => {
+    return HttpResponse.json({
+      data: {
+        id: '916539bc-baef-436b-8dc9-5b4a21818f1c',
+        code: 'NEWCODE',
+        description: 'New coupon',
+        discount_type: 'fixed',
+        discount_value: 50000,
+        usage_type: 'one_time',
+        usage_limit: null,
+        usage_count: 0,
+        starts_at: '2026-05-01T00:00:00.000Z',
+        expires_at: '2026-07-31T23:59:59.000Z',
+        applicable_ride_types: ['airport_transfer'],
+        applicable_category_ids: [],
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      },
+      success: true,
+      message: 'Coupon created successfully',
+    })
+  }),
+
+  http.patch(`${API_BASE_URL}/coupons/:id`, () => {
+    return HttpResponse.json({
+      data: { id: 'f6e5287b-6181-4371-bb62-7154d5e57f92' },
+      success: true,
+      message: 'Coupon updated successfully',
+    })
+  }),
+
+  http.patch(`${API_BASE_URL}/coupons/:id/status`, () => {
+    return HttpResponse.json({
+      data: { id: '3f9c38ee-dd69-4ead-9d3b-8cc650b61fc0', is_active: false },
+      success: true,
+      message: 'Coupon status updated',
+    })
+  }),
+
+  http.get(`${API_BASE_URL}/coupons/:id/usage`, () => {
+    return HttpResponse.json({
+      data: {
+        usage: [
+          {
+            id: 'usage-1',
+            coupon_id: '3f9c38ee-dd69-4ead-9d3b-8cc650b61fc0',
+            user_id: '233499934',
+            ride_id: '22819112',
+            discount_applied: 1000000,
+            created_at: '2025-02-19T10:00:00.000Z',
+            user: {
+              id: '233499934',
+              first_name: 'Timothy',
+              last_name: 'Exodus',
+              email: 'tim@company.com',
+            },
+          },
+        ],
+        pagination: {
+          total_items: 1,
+          total_pages: 1,
+          current_page: 1,
+          limit: 10,
+        },
+      },
+      success: true,
+    })
+  }),
+
   // get roles
   http.get(`${API_BASE_URL}/roles`, () => {
     // Return a list or paginated structure depending on query. Use paginated structure as super-set.

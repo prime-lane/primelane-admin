@@ -94,6 +94,21 @@ const AdminManagement = lazy(() =>
     default: module.AdminManagement,
   })),
 )
+const Coupons = lazy(() =>
+  import('@/features/coupons/coupons').then((module) => ({
+    default: module.Coupons,
+  })),
+)
+const CouponDetails = lazy(() =>
+  import('@/features/coupons/coupon-details').then((module) => ({
+    default: module.CouponDetails,
+  })),
+)
+const CouponForm = lazy(() =>
+  import('@/features/coupons/coupon-form').then((module) => ({
+    default: module.CouponForm,
+  })),
+)
 const RolesManagement = lazy(() =>
   import('@/features/admin/roles/roles-management').then((module) => ({
     default: module.RolesManagement,
@@ -295,6 +310,40 @@ export const router = createBrowserRouter([
               <Refund />
             </Suspense>
           </RoutePermissionGate>
+        ),
+      },
+      {
+        path: path.DASHBOARD.COUPONS,
+        element: (
+          <RoutePermissionGate permission="refund:view">
+            <Suspense fallback={<Loading />}>
+              <Coupons />
+            </Suspense>
+          </RoutePermissionGate>
+        ),
+      },
+      {
+        path: path.DASHBOARD.COUPON_CREATE,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <CouponForm mode="create" />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.COUPON_DETAILS,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <CouponDetails />
+          </Suspense>
+        ),
+      },
+      {
+        path: path.DASHBOARD.COUPON_EDIT,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <CouponForm mode="edit" />
+          </Suspense>
         ),
       },
       {

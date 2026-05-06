@@ -1,0 +1,116 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
+import { apiClient } from '@/services/api-client'
+import { API_ENDPOINTS as e } from '@/services/api-endpoints'
+import type { PaginationParams, PaginatedResponse } from '@/services/api-types'
+import { transformPaginatedResponse } from '@/utils/api-utils'
+import { buildQueryParams } from '@/lib/utils'
+import type { Coupon, CouponUsageRecord, CreateCouponRequest } from '../types'
+
+interface UseCouponsParams extends PaginationParams {
+  search?: string
+  status?: string
+}
+
+export const useCoupons = (params?: UseCouponsParams) => {
+  return useQuery({
+    queryKey: ['coupons', params],
+    queryFn: async () => {
+      const searchParams = buildQueryParams(params)
+      const endpoint = `${e.COUPONS.ROOT}?${searchParams.toString()}`
+      const response = await apiClient.get<{
+        coupons: Coupon[]
+        pagination: PaginatedResponse<unknown>['pagination']
+      }>(endpoint)
+      return transformPaginatedResponse(response.data, 'coupons')
+    },
+  })
+}
+
+export const useCoupon = (id: string) => {
+  return useQuery({
+    queryKey: ['coupon', id],
+    queryFn: async () => {
+      const response = await apiClient.get<Coupon>(e.COUPONS.BY_ID(id))
+      return response.data
+    },
+    enabled: !!id,
+  })
+}
+
+export const useCouponUsage = (id: string, params?: PaginationParams) => {
+  return useQuery({
+    queryKey: ['coupon-usage', id, params],
+    queryFn: async () => {
+      const searchParams = buildQueryParams(params)
+      const endpoint = `${e.COUPONS.USAGE(id)}?${searchParams.toString()}`
+      const response = await apiClient.get<{
+        usage: CouponUsageRecord[]
+        pagination: PaginatedResponse<unknown>['pagination']
+      }>(endpoint)
+      return transformPaginatedResponse(response.data, 'usage')
+    },
+    enabled: !!id,
+  })
+}
+
+export const useCreateCoupon = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (data: CreateCouponRequest) => {
+      const response = await apiClient.post<{ message: string; data: Coupon }>(
+        e.COUPONS.ROOT,
+        data,
+      )
+      return response.data
+    },
+    onSuccess: () => {
+      toast.success('Coupon created successfully')
+      queryClient.invalidateQueries({ queryKey: ['coupons'] })
+    },
+    onError: (error: { message?: string }) => {
+      toast.error(error.message || 'Failed to create coupon')
+    },
+  })
+}
+
+export const useUpdateCoupon = (id: string) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (data: Partial<CreateCouponRequest>) => {
+      const response = await apiClient.patch<{ message: string; data: Coupon }>(
+        e.COUPONS.BY_ID(id),
+        data,
+      )
+      return response.data
+    },
+    onSuccess: () => {
+      toast.success('Coupon updated successfully')
+      queryClient.invalidateQueries({ queryKey: ['coupons'] })
+      queryClient.invalidateQueries({ queryKey: ['coupon', id] })
+    },
+    onError: (error: { message?: string }) => {
+      toast.error(error.message || 'Failed to update coupon')
+    },
+  })
+}
+
+export const useToggleCoupon = (id: string) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (action: 'activate' | 'deactivate') => {
+      const response = await apiClient.patch<{ message: string; data: Coupon }>(
+        e.COUPONS.TOGGLE(id, action),
+      )
+      return response.data
+    },
+    onSuccess: () => {
+      toast.success('Coupon status updated')
+      queryClient.invalidateQueries({ queryKey: ['coupons'] })
+      queryClient.invalidateQueries({ queryKey: ['coupon', id] })
+    },
+    onError: (error: { message?: string }) => {
+      toast.error(error.message || 'Failed to update coupon status')
+    },
+  })
+}

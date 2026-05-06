@@ -88,4 +88,11 @@ export const API_ENDPOINTS = {
     BY_ID: (id: string) => `/roles/${id}`,
     PERMISSIONS: '/roles/permissions',
   },
+  COUPONS: {
+    ROOT: '/coupons',
+    BY_ID: (id: string) => `/coupons/${id}`,
+    TOGGLE: (id: string, action: 'activate' | 'deactivate') =>
+      `/coupons/${id}/status`,
+    USAGE: (id: string) => `/coupons/${id}/usage`,
+  },
 } as const
