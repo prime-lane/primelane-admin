@@ -130,8 +130,9 @@ export const AdminManagement = () => {
                   type: 'select',
                   options: [
                     { label: 'All', value: 'all' },
+                    { label: 'Pending', value: 'pending' },
                     { label: 'Active', value: 'active' },
-                    { label: 'Inactive', value: 'inactive' },
+                    { label: 'Deactivated', value: 'inactive' },
                   ],
                 },
                 {
