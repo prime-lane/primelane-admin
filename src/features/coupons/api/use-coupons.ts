@@ -98,9 +98,10 @@ export const useUpdateCoupon = (id: string) => {
 export const useToggleCoupon = (id: string) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async (action: 'activate' | 'deactivate') => {
+    mutationFn: async (isActive: boolean) => {
       const response = await apiClient.patch<{ message: string; data: Coupon }>(
-        e.COUPONS.TOGGLE(id, action),
+        e.COUPONS.TOGGLE(id),
+        { is_active: isActive },
       )
       return response.data
     },

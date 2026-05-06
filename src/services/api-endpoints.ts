@@ -91,8 +91,7 @@ export const API_ENDPOINTS = {
   COUPONS: {
     ROOT: '/coupons',
     BY_ID: (id: string) => `/coupons/${id}`,
-    TOGGLE: (id: string, action: 'activate' | 'deactivate') =>
-      `/coupons/${id}/status`,
+    TOGGLE: (id: string) => `/coupons/${id}/status`,
     USAGE: (id: string) => `/coupons/${id}/usage`,
   },
 } as const

@@ -44,9 +44,9 @@ export const Coupons = () => {
 
   const handleToggle = useCallback(async (coupon: Coupon) => {
     try {
-      const action = coupon.is_active ? 'deactivate' : 'activate'
-      await apiClient.patch(e.COUPONS.TOGGLE(coupon.id, action))
-      toast.success(`Coupon ${action}d successfully`)
+      const nextStatus = !coupon.is_active
+      await apiClient.patch(e.COUPONS.TOGGLE(coupon.id), { is_active: nextStatus })
+      toast.success(`Coupon ${nextStatus ? 'enabled' : 'disabled'} successfully`)
       queryClient.invalidateQueries({ queryKey: ['coupons'] })
     } catch {
       toast.error('Failed to update coupon status')

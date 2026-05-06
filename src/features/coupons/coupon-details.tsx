@@ -231,7 +231,7 @@ export const CouponDetails = () => {
             <MenuItem
               onClick={() => {
                 setAnchorEl(null)
-                toggleCoupon(isActive ? 'deactivate' : 'activate')
+                toggleCoupon(!isActive)
               }}
               sx={{ bgcolor: isActive ? '#FFF0F0' : '#F0FFF4' }}
             >
