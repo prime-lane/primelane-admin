@@ -1,5 +1,4 @@
 import { capitalize } from '@/lib/utils'
-import { Chip, type ChipProps } from '@mui/material'
 
 export type TripStatus = 'SCHEDULED' | 'COMPLETED'
 export type StatusVariant =
@@ -14,125 +13,68 @@ export type StatusVariant =
   | 'verified'
   | 'true'
   | 'false'
-
-  // driver status
   | 'PENDING_VERIFICATION'
   | TripStatus
 
 interface StatusBadgeProps {
   status: StatusVariant
-  sx?: ChipProps['sx']
 }
 
 const getStatusConfig = (status: string) => {
-  switch (status) {
+  switch (status.toLowerCase()) {
     case 'active':
-    case 'Active':
-    case 'ACTIVE':
-      return {
-        label: 'Active',
-        color: 'green.400',
-        bgcolor: '#22C55E1A',
-      }
+      return { label: 'Active', color: '#16A34A', bgcolor: '#22C55E1A' }
     case 'pending':
-    case 'Pending':
-    case 'PENDING':
-      return {
-        label: 'Pending',
-        color: 'orange.400',
-        bgcolor: '#F973161A',
-      }
+      return { label: 'Pending', color: '#EA580C', bgcolor: '#FFF7ED' }
     case 'inactive':
     case 'deactivated':
-      return {
-        label: 'Deactivated',
-        color: 'red.500',
-        bgcolor: '#EF44441A',
-      }
+      return { label: 'Deactivated', color: '#DC2626', bgcolor: '#EF44441A' }
     case 'completed':
-    case 'COMPLETED':
-      return {
-        label: 'Completed',
-        color: 'green.400',
-        bgcolor: '#22C55E1A',
-      }
+      return { label: 'Completed', color: '#16A34A', bgcolor: '#22C55E1A' }
     case 'true':
-      return {
-        label: 'COMPLETE',
-        color: 'green.400',
-        bgcolor: '#22C55E1A',
-      }
+      return { label: 'Complete', color: '#16A34A', bgcolor: '#22C55E1A' }
     case 'false':
-      return {
-        label: 'INCOMPLETE',
-        color: 'red.500',
-        bgcolor: '#EF44441A',
-      }
+      return { label: 'Incomplete', color: '#DC2626', bgcolor: '#EF44441A' }
     case 'cancelled':
-    case 'Cancelled':
-    case 'CANCELLED':
-      return {
-        label: 'Cancelled',
-        color: 'red.500',
-        bgcolor: '#FEF2F2',
-      }
+      return { label: 'Cancelled', color: '#DC2626', bgcolor: '#FEF2F2' }
     case 'started':
-      return {
-        label: 'On trip',
-        color: 'blue.400',
-        bgcolor: '#3B82F61A',
-      }
+      return { label: 'On trip', color: '#2563EB', bgcolor: '#3B82F61A' }
     case 'accepted':
-      return {
-        label: 'Accepted',
-        color: 'purple.400',
-        bgcolor: '#A855F71A',
-      }
+      return { label: 'Accepted', color: '#9333EA', bgcolor: '#A855F71A' }
     case 'verified':
-      return {
-        label: 'Verified',
-        color: 'green.400',
-        bgcolor: '#22C55E1A',
-      }
-    case 'PENDING_VERIFICATION':
+      return { label: 'Verified', color: '#16A34A', bgcolor: '#22C55E1A' }
+    case 'pending_verification':
       return {
         label: 'Pending Verification',
-        color: 'orange.400',
-        bgcolor: '#F973161A',
+        color: '#EA580C',
+        bgcolor: '#FFF7ED',
       }
-    case 'SCHEDULED':
-      return {
-        label: 'Scheduled',
-        color: 'blue.400',
-        bgcolor: '#3B82F61A',
-      }
+    case 'scheduled':
+      return { label: 'Scheduled', color: '#2563EB', bgcolor: '#3B82F61A' }
     default:
-      return {
-        label: status || 'N/A',
-        color: 'neutral.500',
-        bgcolor: 'neutral.100',
-      }
+      return { label: status || 'N/A', color: '#6B7280', bgcolor: '#F3F4F6' }
   }
 }
 
-export const StatusBadge = ({ status, sx }: StatusBadgeProps) => {
+export const StatusBadge = ({ status }: StatusBadgeProps) => {
   const config = getStatusConfig(status)
   const label = capitalize(config.label)
 
   return (
-    <Chip
-      label={label}
-      sx={{
+    <span
+      style={{
+        backgroundColor: config.bgcolor,
         color: config.color,
-        bgcolor: config.bgcolor,
         fontSize: '0.875rem',
-        py: 1,
-        px: 0,
-        borderRadius: 0,
-        width: 'fit-content',
+        paddingTop: '4px',
+        paddingBottom: '4px',
+        paddingLeft: '16px',
+        paddingRight: '16px',
+        display: 'inline-block',
         fontWeight: 500,
-        ...sx,
       }}
-    />
+    >
+      {label}
+    </span>
   )
 }
