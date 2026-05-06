@@ -21,6 +21,7 @@ import type { Admin } from '../types'
 const editAdminSchema = z.object({
   first_name: z.string().min(1, 'First name is required'),
   last_name: z.string().min(1, 'Last name is required'),
+  email: z.string().email(),
   role_id: z.string().min(1, 'Role is required'),
 })
 
@@ -47,6 +48,7 @@ export const EditAdminModal = ({ open, onClose, admin }: EditAdminModalProps) =>
     defaultValues: {
       first_name: admin.first_name,
       last_name: admin.last_name,
+      email: admin.email,
       role_id: '',
     },
   })
@@ -57,6 +59,7 @@ export const EditAdminModal = ({ open, onClose, admin }: EditAdminModalProps) =>
       reset({
         first_name: admin.first_name,
         last_name: admin.last_name,
+        email: admin.email,
         role_id: matchedRole?.id ?? '',
       })
     }
@@ -123,8 +126,8 @@ export const EditAdminModal = ({ open, onClose, admin }: EditAdminModalProps) =>
                 fullWidth
                 variant="outlined"
                 size="medium"
-                value={admin.email}
                 disabled
+                {...register('email')}
               />
             </div>
             <div className="space-y-1">
