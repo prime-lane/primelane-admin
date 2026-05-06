@@ -5,10 +5,9 @@ import {
   Sale,
   SettingsMinimalistic,
   ShieldUser,
-  Tag,
   UserRounded,
   UsersGroupRounded,
-  WalletMoney,
+  WalletMoney
 } from '@solar-icons/react'
 import { type ElementType } from 'react'
 
