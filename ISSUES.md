@@ -20,13 +20,13 @@
 - [x] render vehicle documents conditionally (driver details page)
 - [x] remove custom cursor
 - [x] edit admin role
-    - [x] add actions on the admin actions button
-    - [x] disable email input when editing admin
-- [x] fix usage table  
+  - [x] add actions on the admin actions button
+  - [x] disable email input when editing admin
+- [x] fix usage table
 - [x] forgot password flow:
-    - [x] confirm-otp (`auth/confirm-otp/:action`)
-    - [x] change pwd: identifier, new password (`auth/change-password`)
-    - [x] last_login_at
+  - [x] confirm-otp (`auth/confirm-otp/:action`)
+  - [x] change pwd: identifier, new password (`auth/change-password`)
+  - [x] last_login_at
 - [x] on trips page use estimated_fare for "Total fare"
 - [x] To_pickup to "To pickup" on bookings page table
 - [x] booking filters

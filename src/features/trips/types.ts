@@ -117,6 +117,7 @@ export interface TripDetail {
   updated_at: string
   cancellation_reason: string | null
   cancellation_fee?: number | null
+  cancellation_refund_reason?: string
   commission?: number | null
   canceller_name: string | null
   cancelled_by: string | null

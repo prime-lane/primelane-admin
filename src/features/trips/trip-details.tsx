@@ -24,6 +24,7 @@ interface DetailRowProps {
   linkTo?: string
   bold?: boolean
   indent?: boolean
+  full?: boolean
 }
 
 const DetailRow = ({
@@ -33,27 +34,33 @@ const DetailRow = ({
   linkTo,
   bold,
   indent,
+  full = false,
 }: DetailRowProps) => (
   <div className={`flex items-center gap-4 ${indent ? 'pl-4' : ''}`}>
     <span
-      className={`text-neutral-500 text-sm w-60 shrink-0 ${bold ? 'font-semibold text-neutral-900' : ''}`}
+      className={`text-neutral-500 text-sm ${full ? 'w-full' : 'w-60'} shrink-0 ${bold ? 'font-semibold text-neutral-900' : ''}`}
     >
       {label}
     </span>
-    <div className="flex items-end text-right w-full ml-auto gap-2">
-      {isLink && linkTo ? (
-        <Link to={linkTo} className="flex ml-auto items-center gap-1 font-medium">
-          <span className="text-sm text-black font-medium">{value}</span>
-          <ExternalLink size={11} />
-        </Link>
-      ) : (
-        <span
-          className={`ml-auto text-sm ${bold ? 'font-medium text-neutral-900' : 'font-normal text-neutral-900'}`}
-        >
-          {value}
-        </span>
-      )}
-    </div>
+    {!full && (
+      <div className="flex items-end text-right w-full ml-auto gap-2">
+        {isLink && linkTo ? (
+          <Link
+            to={linkTo}
+            className="flex ml-auto items-center gap-1 font-medium"
+          >
+            <span className="text-sm text-black font-medium">{value}</span>
+            <ExternalLink size={11} />
+          </Link>
+        ) : (
+          <span
+            className={`ml-auto text-sm ${bold ? 'font-medium text-neutral-900' : 'font-normal text-neutral-900'}`}
+          >
+            {value}
+          </span>
+        )}
+      </div>
+    )}
   </div>
 )
 
@@ -89,15 +96,16 @@ export const TripDetails = () => {
         ? 'Full-day'
         : null
 
-  const bookingType = isDaily && dailySubtype
-    ? `${formatRideType(trip.ride_type)}: ${dailySubtype}`
-    : formatRideType(trip.ride_type)
+  const bookingType =
+    isDaily && dailySubtype
+      ? `${formatRideType(trip.ride_type)}: ${dailySubtype}`
+      : formatRideType(trip.ride_type)
 
   const pickupDateTime = trip.pickup_time ?? 'N/A'
   const endDate = trip.end_time
 
   const durationLabel = isDaily
-    ? dailySubtype ?? (trip.booked_hours ? `${trip.booked_hours} hours` : '-')
+    ? (dailySubtype ?? (trip.booked_hours ? `${trip.booked_hours} hours` : '-'))
     : formatDuration(trip.estimated_fare)
 
   const slots: Slot[] = trip.slots ?? []
@@ -133,10 +141,16 @@ export const TripDetails = () => {
                 label="Customer name"
                 value={riderName}
                 isLink={!!trip.rider_id}
-                linkTo={path.DASHBOARD.CUSTOMER_DETAILS.replace(':id', trip.rider_id)}
+                linkTo={path.DASHBOARD.CUSTOMER_DETAILS.replace(
+                  ':id',
+                  trip.rider_id,
+                )}
               />
               {trip.no_of_vehicles != null && (
-                <DetailRow label="No. of Vehicles" value={trip.no_of_vehicles} />
+                <DetailRow
+                  label="No. of Vehicles"
+                  value={trip.no_of_vehicles}
+                />
               )}
               <DetailRow label="Vehicle Category" value={vehicleCategory} />
             </>
@@ -152,7 +166,10 @@ export const TripDetails = () => {
                 label="Customer name"
                 value={riderName}
                 isLink={!!trip.rider_id}
-                linkTo={path.DASHBOARD.CUSTOMER_DETAILS.replace(':id', trip.rider_id)}
+                linkTo={path.DASHBOARD.CUSTOMER_DETAILS.replace(
+                  ':id',
+                  trip.rider_id,
+                )}
               />
             </>
           )}
@@ -161,7 +178,9 @@ export const TripDetails = () => {
         {/* Drivers & Vehicles */}
         {slots.length > 0 && (
           <div className="grid grid-cols-1 gap-2">
-            <h3 className="text-sm font-bold text-neutral-600">Drivers &amp; Vehicles</h3>
+            <h3 className="text-sm font-bold text-neutral-600">
+              Drivers &amp; Vehicles
+            </h3>
             <div className="flex flex-col gap-4">
               {slots.map((slot: Slot) => {
                 const driverName = slot.driver
@@ -179,7 +198,10 @@ export const TripDetails = () => {
                   >
                     <div className="w-60 shrink-0">
                       <Link
-                        to={path.DASHBOARD.DRIVER_DETAILS.replace(':id', slot.driver_id)}
+                        to={path.DASHBOARD.DRIVER_DETAILS.replace(
+                          ':id',
+                          slot.driver_id,
+                        )}
                         className="flex items-center gap-1 font-medium text-sm text-black"
                       >
                         {driverName}
@@ -187,9 +209,13 @@ export const TripDetails = () => {
                       </Link>
                     </div>
                     <div className="flex flex-col gap-0.5">
-                      <span className="text-sm font-medium text-neutral-900">{vehicleDesc}</span>
+                      <span className="text-sm font-medium text-neutral-900">
+                        {vehicleDesc}
+                      </span>
                       {plate && (
-                        <span className="text-xs text-neutral-500">{plate}</span>
+                        <span className="text-xs text-neutral-500">
+                          {plate}
+                        </span>
                       )}
                     </div>
                   </div>
@@ -240,14 +266,23 @@ export const TripDetails = () => {
                 .replace('pm', 'PM')}
             />
           )}
-          <DetailRow label="Pickup address" value={trip.pickup?.address || '-'} />
+          <DetailRow
+            label="Pickup address"
+            value={trip.pickup?.address || '-'}
+          />
           {slots.length === 0 && !isDaily && (
-            <DetailRow label="Dropoff address" value={trip.dropoff?.address || '-'} />
+            <DetailRow
+              label="Dropoff address"
+              value={trip.dropoff?.address || '-'}
+            />
           )}
           {!isDaily && slots.length === 0 && (
             <DetailRow label="Booking Duration" value={durationLabel} />
           )}
-          <DetailRow label="Total trip time" value={formatDuration(trip.estimated_fare)} />
+          <DetailRow
+            label="Total trip time"
+            value={formatDuration(trip.estimated_fare)}
+          />
           {trip.payment_method && (
             <DetailRow label="Payment Method" value={trip.payment_method} />
           )}
@@ -257,7 +292,9 @@ export const TripDetails = () => {
         <div className="flex flex-col gap-6">
           <DetailRow
             label="Total Fare"
-            value={formatCurrency(fromKobo(trip.actual_fare ?? trip.estimated_fare))}
+            value={formatCurrency(
+              fromKobo(trip.actual_fare ?? trip.estimated_fare),
+            )}
             bold
           />
           {trip?.estimated_fare != null && Number(trip.estimated_fare) > 0 && (
@@ -276,10 +313,12 @@ export const TripDetails = () => {
           )}
           <DetailRow
             label="Amount Paid"
-            value={formatCurrency(fromKobo(trip.actual_fare ?? trip.estimated_fare))}
+            value={formatCurrency(
+              fromKobo(trip.actual_fare ?? trip.estimated_fare),
+            )}
             bold
           />
-          {trip.cancellation_fee && (
+          {Number(trip.cancellation_fee) > 0 && (
             <DetailRow
               label="Cancellation Fee"
               value={formatCurrency(fromKobo(trip.cancellation_fee))}
@@ -290,6 +329,9 @@ export const TripDetails = () => {
               label="Reason for Cancellation"
               value={trip.cancellation_reason}
             />
+          )}
+          {trip.cancellation_refund_reason && (
+            <DetailRow label={trip.cancellation_refund_reason} value="" full />
           )}
         </div>
       </div>
