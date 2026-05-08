@@ -65,7 +65,7 @@ export const TripDetails = () => {
 
   if (isLoading) return <TripDetailsSkeleton />
   if (error || !trip)
-    return <ErrorState message="Failed to load trip details" />
+    return <ErrorState message="Failed to load booking details" />
 
   const riderName =
     `${trip.rider?.first_name || ''} ${trip.rider?.last_name || ''}`.trim() ||
@@ -107,15 +107,15 @@ export const TripDetails = () => {
       <div>
         <AppBreadcrumbs
           items={[
-            { label: 'Trips', to: path.DASHBOARD.TRIPS },
+            { label: 'Booking', to: path.DASHBOARD.TRIPS },
             {
-              label: 'Trip Details',
+              label: 'Booking Details',
               to: path.DASHBOARD.TRIP_DETAILS.replace(':id', id!),
             },
           ]}
         />
         <div className="flex justify-between items-center">
-          <span className="text-2xl font-bold">Trip Details</span>
+          <span className="text-2xl font-bold">Booking Details</span>
         </div>
       </div>
 
