@@ -4,7 +4,11 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { otpSchema, type OtpFormValues } from './schemas/otp-schema'
-import { useResendOTP, useVerifyAdminOtp, useConfirmOTPForReset } from './api/use-auth'
+import {
+  useResendOTP,
+  useVerifyAdminOtp,
+  useConfirmOTPForReset,
+} from './api/use-auth'
 import { toast } from 'sonner'
 import { path } from '../../app/paths'
 
@@ -16,7 +20,8 @@ export const Otp = () => {
   const isResetMode = mode === 'reset-password'
 
   const { mutate: verifyOtp, isPending: isVerifying } = useVerifyAdminOtp()
-  const { mutate: confirmOtpReset, isPending: isConfirming } = useConfirmOTPForReset()
+  const { mutate: confirmOtpReset, isPending: isConfirming } =
+    useConfirmOTPForReset()
   const { mutate: resendOtp, isPending: isResending } = useResendOTP('login')
 
   const isPending = isVerifying || isConfirming

@@ -5,7 +5,9 @@ import type { Coupon } from '../types'
 
 interface CouponActionMenuProps {
   coupon: Coupon
-  trigger: (openMenu: (event: React.MouseEvent<HTMLElement>) => void) => ReactNode
+  trigger: (
+    openMenu: (event: React.MouseEvent<HTMLElement>) => void,
+  ) => ReactNode
   onEdit: (coupon: Coupon) => void
   onExportUsage: (coupon: Coupon) => void
   onToggle: (coupon: Coupon) => void

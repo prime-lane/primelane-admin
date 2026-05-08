@@ -44,7 +44,12 @@ export const ChangePassword = () => {
 
   const onSubmit = (data: FormData) => {
     if (!identifier || !otp) return
-    changePassword({ identifier, password: data.password, otp, user_type: 'admin' })
+    changePassword({
+      identifier,
+      password: data.password,
+      otp,
+      user_type: 'admin',
+    })
   }
 
   return (

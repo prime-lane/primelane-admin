@@ -33,7 +33,11 @@ interface EditAdminModalProps {
   admin: Admin
 }
 
-export const EditAdminModal = ({ open, onClose, admin }: EditAdminModalProps) => {
+export const EditAdminModal = ({
+  open,
+  onClose,
+  admin,
+}: EditAdminModalProps) => {
   const { data: roles, isLoading: isLoadingRoles } = useRoles()
   const { mutate: updateAdmin, isPending } = useUpdateAdmin(admin.id)
 
@@ -87,7 +91,10 @@ export const EditAdminModal = ({ open, onClose, admin }: EditAdminModalProps) =>
         <form id="edit-admin-form" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-4 mt-2">
             <div className="space-y-1">
-              <label className="text-sm font-medium text-neutral-700" htmlFor="edit_first_name">
+              <label
+                className="text-sm font-medium text-neutral-700"
+                htmlFor="edit_first_name"
+              >
                 First name
               </label>
               <TextField
@@ -103,7 +110,10 @@ export const EditAdminModal = ({ open, onClose, admin }: EditAdminModalProps) =>
               />
             </div>
             <div className="space-y-1">
-              <label className="text-sm font-medium text-neutral-700" htmlFor="edit_last_name">
+              <label
+                className="text-sm font-medium text-neutral-700"
+                htmlFor="edit_last_name"
+              >
                 Last name
               </label>
               <TextField
@@ -118,7 +128,10 @@ export const EditAdminModal = ({ open, onClose, admin }: EditAdminModalProps) =>
               />
             </div>
             <div className="space-y-1">
-              <label className="text-sm font-medium text-neutral-700" htmlFor="edit_email">
+              <label
+                className="text-sm font-medium text-neutral-700"
+                htmlFor="edit_email"
+              >
                 Email
               </label>
               <TextField
@@ -131,7 +144,10 @@ export const EditAdminModal = ({ open, onClose, admin }: EditAdminModalProps) =>
               />
             </div>
             <div className="space-y-1">
-              <label className="text-sm font-medium text-neutral-700" htmlFor="edit_role_id">
+              <label
+                className="text-sm font-medium text-neutral-700"
+                htmlFor="edit_role_id"
+              >
                 Role
               </label>
               <FormControl fullWidth size="medium" error={!!errors.role_id}>
@@ -145,7 +161,11 @@ export const EditAdminModal = ({ open, onClose, admin }: EditAdminModalProps) =>
                       displayEmpty
                       renderValue={(selected) => {
                         if (!selected) {
-                          return <span className="text-neutral-400">Select role</span>
+                          return (
+                            <span className="text-neutral-400">
+                              Select role
+                            </span>
+                          )
                         }
                         const role = roles?.find((r) => r.id === selected)
                         return role ? role.name : selected
@@ -157,14 +177,18 @@ export const EditAdminModal = ({ open, onClose, admin }: EditAdminModalProps) =>
                       ) : (
                         roles?.map((role) => (
                           <MenuItem key={role.id} value={role.id}>
-                            <span className="text-sm text-neutral-500">{role.name}</span>
+                            <span className="text-sm text-neutral-500">
+                              {role.name}
+                            </span>
                           </MenuItem>
                         ))
                       )}
                     </Select>
                   )}
                 />
-                {errors.role_id && <FormHelperText>{errors.role_id.message}</FormHelperText>}
+                {errors.role_id && (
+                  <FormHelperText>{errors.role_id.message}</FormHelperText>
+                )}
               </FormControl>
             </div>
           </div>

@@ -5,7 +5,9 @@ import type { Admin } from '../types'
 
 interface AdminActionMenuProps {
   admin: Admin
-  trigger: (openMenu: (event: React.MouseEvent<HTMLElement>) => void) => ReactNode
+  trigger: (
+    openMenu: (event: React.MouseEvent<HTMLElement>) => void,
+  ) => ReactNode
   onEdit: (admin: Admin) => void
   onResetPassword: (admin: Admin) => void
   onToggleStatus: (admin: Admin) => void
@@ -67,7 +69,11 @@ export const AdminActionMenu = ({
             onEdit(admin)
             handleClose()
           }}
-          sx={{ ...baseItemSx, bgcolor: '#F3F4F6', '&:hover': { bgcolor: '#EAECEF' } }}
+          sx={{
+            ...baseItemSx,
+            bgcolor: '#F3F4F6',
+            '&:hover': { bgcolor: '#EAECEF' },
+          }}
         >
           <span className="text-xs font-medium uppercase tracking-tight text-neutral-500">
             Edit Account
@@ -80,7 +86,11 @@ export const AdminActionMenu = ({
             onResetPassword(admin)
             handleClose()
           }}
-          sx={{ ...baseItemSx, bgcolor: '#F3F4F6', '&:hover': { bgcolor: '#EAECEF' } }}
+          sx={{
+            ...baseItemSx,
+            bgcolor: '#F3F4F6',
+            '&:hover': { bgcolor: '#EAECEF' },
+          }}
         >
           <span className="text-xs font-medium uppercase tracking-tight text-neutral-500">
             Reset Password

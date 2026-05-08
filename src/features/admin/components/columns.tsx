@@ -22,7 +22,9 @@ export const getAdminColumns = ({
     accessorKey: 'custom_user_id',
     header: 'Admin ID',
     cell: (info) => (
-      <span className="text-sm text-neutral-900">{info.getValue() as string}</span>
+      <span className="text-sm text-neutral-900">
+        {info.getValue() as string}
+      </span>
     ),
   },
   {
@@ -45,7 +47,9 @@ export const getAdminColumns = ({
         <span className="text-sm font-medium text-neutral-900">
           {row.original.first_name} {row.original.last_name}
         </span>
-        <span className="text-xs text-neutral-500">{row.original.role_name || 'N/A'}</span>
+        <span className="text-xs text-neutral-500">
+          {row.original.role_name || 'N/A'}
+        </span>
       </div>
     ),
   },
@@ -57,7 +61,9 @@ export const getAdminColumns = ({
         href={`mailto:${info.getValue() as string}`}
         className="flex items-center gap-1 cursor-pointer"
       >
-        <span className="text-sm font-medium text-neutral-900">{info.getValue() as string}</span>
+        <span className="text-sm font-medium text-neutral-900">
+          {info.getValue() as string}
+        </span>
         <ArrowRightUp size={16} color="#9095A1" />
       </a>
     ),

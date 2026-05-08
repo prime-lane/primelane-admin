@@ -149,8 +149,10 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
         expires_at: existingCoupon.coupon.expires_at
           ? new Date(existingCoupon.coupon.expires_at)
           : null,
-        applicable_ride_types: existingCoupon.coupon.applicable_ride_types || [],
-        applicable_category_ids: existingCoupon.coupon.applicable_category_ids || [],
+        applicable_ride_types:
+          existingCoupon.coupon.applicable_ride_types || [],
+        applicable_category_ids:
+          existingCoupon.coupon.applicable_category_ids || [],
       })
     }
   }, [isEdit, existingCoupon, reset])
@@ -185,7 +187,10 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
       return
     }
 
-    const payload: Pick<CreateCouponRequest, 'description' | 'usage_limit' | 'expires_at'> = {
+    const payload: Pick<
+      CreateCouponRequest,
+      'description' | 'usage_limit' | 'expires_at'
+    > = {
       description: formData.description.trim(),
       usage_limit:
         formData.usage_type === 'multiple' && formData.usage_limit
@@ -210,7 +215,8 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
         starts_at: formData.starts_at.toISOString(),
         applicable_ride_types: formData.applicable_ride_types,
         applicable_category_ids: formData.applicable_category_ids,
-        ...payload, code: formData.code.trim().toUpperCase(),
+        ...payload,
+        code: formData.code.trim().toUpperCase(),
       }
       createCoupon(newPayload, {
         onSuccess: (res) => {
@@ -240,11 +246,11 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
             { label: 'Coupons', to: path.DASHBOARD.COUPONS },
             ...(isEdit && existingCoupon
               ? [
-                {
-                  label: existingCoupon.coupon.code,
-                  to: path.DASHBOARD.COUPON_DETAILS.replace(':id', id!),
-                },
-              ]
+                  {
+                    label: existingCoupon.coupon.code,
+                    to: path.DASHBOARD.COUPON_DETAILS.replace(':id', id!),
+                  },
+                ]
               : []),
             { label: title, to: '#' },
           ]}
@@ -272,9 +278,7 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
 
           <div className="max-w-lg mx-auto space-y-4">
             <section className="space-y-4">
-              <h2 className="text-base">
-                Coupon
-              </h2>
+              <h2 className="text-base">Coupon</h2>
               <div className="space-y-4">
                 <div>
                   <TextField
@@ -302,11 +306,8 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
               </div>
             </section>
 
-
             <section className="space-y-4">
-              <h2 className="text-base">
-                Coupon type
-              </h2>
+              <h2 className="text-base">Coupon type</h2>
               <div className="space-y-4">
                 <RadioGroup
                   row
@@ -331,11 +332,15 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
                 </RadioGroup>
                 <div className="space-y-1">
                   <TextField
-                    {...register('discount_value', { required: 'Coupon value is required' })}
+                    {...register('discount_value', {
+                      required: 'Coupon value is required',
+                    })}
                     fullWidth
                     size="medium"
                     type="number"
-                    label={discountType === 'fixed' ? 'Fixed amount' : 'Percentage'}
+                    label={
+                      discountType === 'fixed' ? 'Fixed amount' : 'Percentage'
+                    }
                     sx={inputSx}
                     placeholder={discountType === 'fixed' ? '0.00' : '10'}
                     slotProps={
@@ -349,16 +354,15 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
               </div>
             </section>
 
-
             <section className="space-y-4">
-              <h2 className="text-base">
-                Coupon Usage
-              </h2>
+              <h2 className="text-base">Coupon Usage</h2>
               <div className="space-y-4">
                 <RadioGroup
                   row
                   value={usageType}
-                  onChange={(e) => setValue('usage_type', e.target.value as UsageType)}
+                  onChange={(e) =>
+                    setValue('usage_type', e.target.value as UsageType)
+                  }
                   sx={{ gap: 1 }}
                 >
                   {[
@@ -401,9 +405,7 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
             </section>
 
             <section className="space-y-2">
-              <h2 className="text-base">
-                Validity Period
-              </h2>
+              <h2 className="text-base">Validity Period</h2>
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
@@ -423,9 +425,10 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
                               fullWidth: true,
                               size: 'small',
                               sx: {
-                                '& .MuiInputBase-input, & .MuiPickersSectionList-sectionContent, & .MuiPickersInputBase-sectionBefore, & .MuiPickersInputBase-sectionAfter': {
-                                  fontSize: '16px',
-                                },
+                                '& .MuiInputBase-input, & .MuiPickersSectionList-sectionContent, & .MuiPickersInputBase-sectionBefore, & .MuiPickersInputBase-sectionAfter':
+                                  {
+                                    fontSize: '16px',
+                                  },
                               },
                             },
                           }}
@@ -450,9 +453,10 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
                               fullWidth: true,
                               size: 'small',
                               sx: {
-                                '& .MuiInputBase-input, & .MuiPickersSectionList-sectionContent, & .MuiPickersInputBase-sectionBefore, & .MuiPickersInputBase-sectionAfter': {
-                                  fontSize: '16px',
-                                },
+                                '& .MuiInputBase-input, & .MuiPickersSectionList-sectionContent, & .MuiPickersInputBase-sectionBefore, & .MuiPickersInputBase-sectionAfter':
+                                  {
+                                    fontSize: '16px',
+                                  },
                               },
                             },
                           }}
@@ -474,9 +478,9 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
                   <div className="space-y-2">
                     <p className="text-sm text-neutral-500">Booking type</p>
                     {BOOKING_TYPES.map((bt) => (
-                      <div className='block'>
+                      <div className="block">
                         <FormControlLabel
-                          className='gap-2'
+                          className="gap-2"
                           key={bt.value}
                           control={
                             <Checkbox
@@ -497,9 +501,9 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
                   <div className="space-y-2">
                     <p className="text-sm text-neutral-500">Vehicle category</p>
                     {(vehicleCategories?.categories || []).map((cat) => (
-                      <div className='block'>
+                      <div className="block">
                         <FormControlLabel
-                          className='gap-2'
+                          className="gap-2"
                           key={cat.id}
                           control={
                             <Checkbox

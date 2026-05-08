@@ -10,7 +10,13 @@ export const CouponDetailsSkeleton = () => (
     </Box>
 
     {/* Header */}
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+      }}
+    >
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Skeleton variant="text" width={180} height={36} />
@@ -22,7 +28,9 @@ export const CouponDetailsSkeleton = () => (
     </Box>
 
     {/* Tabs */}
-    <Box sx={{ display: 'flex', gap: 4, borderBottom: 1, borderColor: 'divider' }}>
+    <Box
+      sx={{ display: 'flex', gap: 4, borderBottom: 1, borderColor: 'divider' }}
+    >
       <Skeleton variant="text" width={80} height={40} />
       <Skeleton variant="text" width={110} height={40} />
     </Box>
@@ -38,7 +46,10 @@ export const CouponDetailsSkeleton = () => (
         }}
       >
         {Array.from({ length: 9 }).map((_, i) => (
-          <Box key={i} sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+          <Box
+            key={i}
+            sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}
+          >
             <Skeleton variant="text" width={100} height={16} />
             <Skeleton variant="text" width={140} height={22} />
           </Box>

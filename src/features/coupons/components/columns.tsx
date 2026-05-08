@@ -37,9 +37,7 @@ export const getCouponColumns = (
     header: 'Coupon Usage',
     cell: ({ row }) => (
       <span className="text-sm text-neutral-800">
-        {row.original.usage_type === 'one_time'
-          ? 'One-time'
-          : 'Multiple use'}
+        {row.original.usage_type === 'one_time' ? 'One-time' : 'Multiple use'}
       </span>
     ),
   },

@@ -5,7 +5,12 @@ import { API_ENDPOINTS as e } from '@/services/api-endpoints'
 import type { PaginationParams, PaginatedResponse } from '@/services/api-types'
 import { transformPaginatedResponse } from '@/utils/api-utils'
 import { buildQueryParams } from '@/lib/utils'
-import type { Admin, InviteAdminRequest, Role, UpdateAdminRequest } from '../types'
+import type {
+  Admin,
+  InviteAdminRequest,
+  Role,
+  UpdateAdminRequest,
+} from '../types'
 
 interface UseAdminsParams extends PaginationParams {}
 

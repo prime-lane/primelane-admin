@@ -53,9 +53,13 @@ export const useCoupon = (id: string) => {
 
       return {
         coupon,
-        total_uses: details?.total_uses ?? raw.total_uses ?? coupon.usage_count ?? 0,
+        total_uses:
+          details?.total_uses ?? raw.total_uses ?? coupon.usage_count ?? 0,
         remaining_uses:
-          details?.remaining_uses ?? raw.remaining_uses ?? coupon.usage_limit ?? null,
+          details?.remaining_uses ??
+          raw.remaining_uses ??
+          coupon.usage_limit ??
+          null,
       } satisfies CouponDetailsResponse
     },
     enabled: !!id,

@@ -43,7 +43,10 @@ export const ResetPassword = () => {
         <Typography variant="subtitle1" color="error">
           Invalid or missing reset token.
         </Typography>
-        <Link to={path.AUTH.FORGOT_PASSWORD} className="text-sm text-neutral-500 hover:text-black">
+        <Link
+          to={path.AUTH.FORGOT_PASSWORD}
+          className="text-sm text-neutral-500 hover:text-black"
+        >
           Request a new reset link
         </Link>
       </div>

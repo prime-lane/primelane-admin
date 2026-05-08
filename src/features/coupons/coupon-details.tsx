@@ -9,14 +9,7 @@ import {
   a11yProps,
 } from '@/components/ui/tab-panel'
 import { formatCurrency, fromKobo } from '@/lib/utils'
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Tab,
-  Tabs,
-} from '@mui/material'
+import { Box, Button, Card, CardContent, Tab, Tabs } from '@mui/material'
 import { AltArrowDown } from '@solar-icons/react'
 import { type ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
@@ -90,17 +83,21 @@ const usageColumns: ColumnDef<CouponUsageRecord>[] = [
 const InfoCell = ({
   label,
   value,
-  canCopy
+  canCopy,
 }: {
   label: string
-  value: React.ReactNode,
+  value: React.ReactNode
   canCopy?: boolean
 }) => (
   <div className="flex flex-col gap-1">
     <span className="text-xs text-neutral-500">{label}</span>
     <div className="flex gap-1 items-center">
-      <span className="text-sm font-normal text-neutral-900">{value ?? '—'}</span>
-      {canCopy && typeof value === 'string' && <CopyButton textToCopy={value} />}
+      <span className="text-sm font-normal text-neutral-900">
+        {value ?? '—'}
+      </span>
+      {canCopy && typeof value === 'string' && (
+        <CopyButton textToCopy={value} />
+      )}
     </div>
   </div>
 )
@@ -137,7 +134,8 @@ export const CouponDetails = () => {
   const activeIndex = tabValue === 'usage' ? 1 : 0
 
   if (isLoading) return <CouponDetailsSkeleton />
-  if (error || !couponData) return <ErrorState message="Failed to load coupon" />
+  if (error || !couponData)
+    return <ErrorState message="Failed to load coupon" />
 
   const { coupon, total_uses, remaining_uses } = couponData
 
@@ -156,7 +154,9 @@ export const CouponDetails = () => {
     .map((id) => categoryNameById.get(id) || id)
     .join(', ')
 
-  const scopeLabel = categoryScope ? `${rideScope} • ${categoryScope}` : rideScope
+  const scopeLabel = categoryScope
+    ? `${rideScope} • ${categoryScope}`
+    : rideScope
 
   const handleExportUsage = async () => {
     setIsExporting(true)
@@ -183,9 +183,7 @@ export const CouponDetails = () => {
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-3">
-            <h1 className="text-xl">
-              Coupon details
-            </h1>
+            <h1 className="text-xl">Coupon details</h1>
             <StatusBadge status={isActive ? 'active' : 'inactive'} />
           </div>
           <span className="text-sm text-neutral-500">
@@ -199,7 +197,9 @@ export const CouponDetails = () => {
         <CouponActionMenu
           coupon={coupon}
           isExporting={isExporting}
-          onEdit={() => navigate(path.DASHBOARD.COUPON_EDIT.replace(':id', id!))}
+          onEdit={() =>
+            navigate(path.DASHBOARD.COUPON_EDIT.replace(':id', id!))
+          }
           onExportUsage={handleExportUsage}
           onToggle={(selectedCoupon) => toggleCoupon(!selectedCoupon.is_active)}
           trigger={(openMenu) => (
@@ -234,11 +234,7 @@ export const CouponDetails = () => {
         <div className="space-y-8">
           <div className="space-y-4">
             <div className="grid grid-cols-3 gap-x-8 gap-y-6">
-              <InfoCell
-                label="Code"
-                value={coupon.code}
-                canCopy
-              />
+              <InfoCell label="Code" value={coupon.code} canCopy />
               <InfoCell
                 label="Coupon type"
                 value={
@@ -336,10 +332,10 @@ export const CouponDetails = () => {
             pagination={
               usageData?.pagination
                 ? {
-                  currentPage: Number(usageData.pagination.current_page),
-                  totalPages: usageData.pagination.total_pages,
-                  totalItems: usageData.pagination.total_items,
-                }
+                    currentPage: Number(usageData.pagination.current_page),
+                    totalPages: usageData.pagination.total_pages,
+                    totalItems: usageData.pagination.total_items,
+                  }
                 : undefined
             }
             onPageChange={setPage}

@@ -22,7 +22,8 @@ import type { Coupon } from './types'
 export const Coupons = () => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
-  const { page, setPage, pageSize, setPageSize, search, setSearch } = useTableParams()
+  const { page, setPage, pageSize, setPageSize, search, setSearch } =
+    useTableParams()
   const debouncedSearch = useDebounce(search, 500)
 
   const [status, setStatus] = useQueryState('status', parseAsString)
@@ -34,26 +35,39 @@ export const Coupons = () => {
     status: status || undefined,
   })
 
-  const handleEdit = useCallback((coupon: Coupon) => {
-    navigate(path.DASHBOARD.COUPON_EDIT.replace(':id', coupon.id))
-  }, [navigate])
+  const handleEdit = useCallback(
+    (coupon: Coupon) => {
+      navigate(path.DASHBOARD.COUPON_EDIT.replace(':id', coupon.id))
+    },
+    [navigate],
+  )
 
   const handleExportUsage = useCallback(async (coupon: Coupon) => {
     await downloadExport(`/coupons/${coupon.id}/usage`)
   }, [])
 
-  const handleToggle = useCallback(async (coupon: Coupon) => {
-    try {
-      const nextStatus = !coupon.is_active
-      await apiClient.patch(e.COUPONS.TOGGLE(coupon.id), { is_active: nextStatus })
-      toast.success(`Coupon ${nextStatus ? 'enabled' : 'disabled'} successfully`)
-      queryClient.invalidateQueries({ queryKey: ['coupons'] })
-    } catch {
-      toast.error('Failed to update coupon status')
-    }
-  }, [queryClient])
+  const handleToggle = useCallback(
+    async (coupon: Coupon) => {
+      try {
+        const nextStatus = !coupon.is_active
+        await apiClient.patch(e.COUPONS.TOGGLE(coupon.id), {
+          is_active: nextStatus,
+        })
+        toast.success(
+          `Coupon ${nextStatus ? 'enabled' : 'disabled'} successfully`,
+        )
+        queryClient.invalidateQueries({ queryKey: ['coupons'] })
+      } catch {
+        toast.error('Failed to update coupon status')
+      }
+    },
+    [queryClient],
+  )
 
-  const handleFilterChange = (key: string, value: string | { start: Date | null; end: Date | null }) => {
+  const handleFilterChange = (
+    key: string,
+    value: string | { start: Date | null; end: Date | null },
+  ) => {
     setPage(1)
     if (key === 'status') {
       const v = value as string
@@ -104,9 +118,22 @@ export const Coupons = () => {
         <Button
           variant="contained"
           onClick={() => navigate(path.DASHBOARD.COUPON_CREATE)}
-          endIcon={<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4.16663 10.0003H15.8333M9.99996 4.16699V15.8337" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
+          endIcon={
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4.16663 10.0003H15.8333M9.99996 4.16699V15.8337"
+                stroke="white"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
           }
         >
           CREATE COUPON
@@ -141,14 +168,17 @@ export const Coupons = () => {
         pagination={
           data?.pagination
             ? {
-              currentPage: Number(data.pagination.current_page),
-              totalPages: data.pagination.total_pages,
-              totalItems: data.pagination.total_items,
-            }
+                currentPage: Number(data.pagination.current_page),
+                totalPages: data.pagination.total_pages,
+                totalItems: data.pagination.total_items,
+              }
             : undefined
         }
         onPageChange={setPage}
-        onPageSizeChange={(size) => { setPageSize(size); setPage(1) }}
+        onPageSizeChange={(size) => {
+          setPageSize(size)
+          setPage(1)
+        }}
       />
     </div>
   )
