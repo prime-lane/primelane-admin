@@ -103,7 +103,7 @@ export const AdminActionMenu = ({
             className="text-xs font-medium uppercase tracking-tight"
             style={{ color: isActive ? '#DC2626' : '#16A34A' }}
           >
-            {isActive ? 'Deactivate Account' : 'Re-activate Account'}
+            {isActive ? 'Deactivate Account' : 'Activate Account'}
           </span>
         </MenuItem>
       </Menu>
