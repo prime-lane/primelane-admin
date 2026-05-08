@@ -98,7 +98,7 @@ export const TripDetails = () => {
 
   const durationLabel = isDaily
     ? dailySubtype ?? (trip.booked_hours ? `${trip.booked_hours} hours` : '-')
-    : formatDuration(trip.actual_duration)
+    : formatDuration(trip.estimated_fare)
 
   const slots: Slot[] = trip.slots ?? []
 
@@ -200,7 +200,7 @@ export const TripDetails = () => {
         )}
 
         {/* Single driver fallback (non-fleet trips) */}
-        {slots.length === 0 && trip.driver && (
+        {trip.driver && (
           <div className="flex flex-col gap-6">
             <DetailRow
               label="Driver Name"
@@ -244,16 +244,10 @@ export const TripDetails = () => {
           {slots.length === 0 && !isDaily && (
             <DetailRow label="Dropoff address" value={trip.dropoff?.address || '-'} />
           )}
-          {slots.length === 0 && (
+          {!isDaily && slots.length === 0 && (
             <DetailRow label="Booking Duration" value={durationLabel} />
           )}
-          {slots.length === 0 && trip.estimated_fare && (
-            <DetailRow
-              label="Fare"
-              value={formatCurrency(fromKobo(trip.estimated_fare))}
-            />
-          )}
-          <DetailRow label="Total trip time" value={formatDuration(trip.actual_duration)} />
+          <DetailRow label="Total trip time" value={formatDuration(trip.estimated_fare)} />
           {trip.payment_method && (
             <DetailRow label="Payment Method" value={trip.payment_method} />
           )}
@@ -266,17 +260,17 @@ export const TripDetails = () => {
             value={formatCurrency(fromKobo(trip.actual_fare ?? trip.estimated_fare))}
             bold
           />
-          {trip.estimated_fare && (
+          {trip?.estimated_fare != null && Number(trip.estimated_fare) > 0 && (
             <DetailRow
               label="Fare"
-              value={formatCurrency(fromKobo(trip.estimated_fare))}
+              value={formatCurrency(fromKobo(trip?.estimated_fare))}
               indent
             />
           )}
-          {trip.extra_fare && (
+          {Number(trip?.extra_fare) > 0 && (
             <DetailRow
               label="Extra fare"
-              value={formatCurrency(fromKobo(trip.extra_fare))}
+              value={formatCurrency(fromKobo(trip?.extra_fare))}
               indent
             />
           )}
