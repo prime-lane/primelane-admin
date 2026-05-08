@@ -134,10 +134,10 @@ export const DriverDetails = () => {
       return
     }
 
-    if (dialogType === 'reactivate' && selectedCategories.length === 0) {
-      toast.error('Please select at least one vehicle category')
-      return
-    }
+    // if (dialogType === 'reactivate' && selectedCategories.length === 0) {
+    //   toast.error('Please select at least one vehicle category')
+    //   return
+    // }
 
     const action = dialogType === 'inactive' ? 'deactivate' : 'activate'
 

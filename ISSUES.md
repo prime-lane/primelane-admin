@@ -8,7 +8,7 @@
 - [x] Remove wait fee per minute field on airport transfer and daily rental price config.
 - [ ] Remove daily hours on daily rental price config
 - [x] ⁠Remove platform commission on airport transfer and daily rental price config.
-- [ ] Approx airport transfer fares to nearest 100 - (Chijioke)
+- [x] Approx airport transfer fares to nearest 100 - (Chijioke)
 - [x] remove line from trip details UI
 - [x] Change nomenclature from Trips to Booking on the navigation bar, page headers and details where necessary (check design)
 - [x] Align airport transfer booking details with design
@@ -23,7 +23,7 @@
     - [x] add actions on the admin actions button
     - [x] disable email input when editing admin
 - [x] fix usage table  
-- [ ] forgot password flow:
+- [x] forgot password flow:
     - [x] confirm-otp (`auth/confirm-otp/:action`)
     - [x] change pwd: identifier, new password (`auth/change-password`)
     - [x] last_login_at
