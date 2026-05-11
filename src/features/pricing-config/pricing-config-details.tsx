@@ -3,16 +3,11 @@ import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import {
   Button,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
   InputAdornment,
-  Radio,
-  RadioGroup,
   TextField,
 } from '@mui/material'
 import React, { useEffect } from 'react'
-import { Controller, useForm, useWatch } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
@@ -68,11 +63,9 @@ const AirportTransferForm = ({
     register,
     handleSubmit,
     reset,
-    control,
     formState: { errors },
   } = useForm<AirportTransferFormData>({
     resolver: zodResolver(airportTransferSchema) as any,
-    defaultValues: { cancellation_fee_type: 'percentage' },
   })
 
   useEffect(() => {
@@ -82,13 +75,8 @@ const AirportTransferForm = ({
         per_min: fromKobo(categoryData.airport_transfer_per_min),
         min_fare: fromKobo(categoryData.airport_transfer_base_price),
         free_wait_time: categoryData.airport_transfer_free_wait_time,
-        cancellation_fee_type:
-          categoryData.airport_transfer_cancellation_fee_type,
         cancellation_percentage:
           categoryData.airport_transfer_cancellation_percentage,
-        cancellation_base: fromKobo(
-          categoryData.airport_transfer_cancellation_base,
-        ),
       })
     }
   }, [categoryData, reset])
@@ -99,11 +87,6 @@ const AirportTransferForm = ({
       per_km: toKobo(data.per_km),
       per_min: toKobo(data.per_min),
       free_wait_time: Number(data.free_wait_time),
-      cancellation_fee_type: data.cancellation_fee_type,
-      cancellation_base:
-        data.cancellation_fee_type === 'fixed'
-          ? toKobo(data.cancellation_base ?? 0)
-          : 0,
       cancellation_percentage: Number(data.cancellation_percentage),
     } as any)
     navigate(path.DASHBOARD.PRICING_CONFIG)
@@ -187,8 +170,6 @@ const AirportTransferForm = ({
         <CancellationSection
           errors={errors}
           register={register}
-          control={control}
-          showBase={false}
         />
       </div>
     </form>
@@ -220,11 +201,9 @@ const DailyForm = ({
     register,
     handleSubmit,
     reset,
-    control,
     formState: { errors },
   } = useForm<DailyFormData>({
     resolver: zodResolver(dailySchema) as any,
-    defaultValues: { cancellation_fee_type: 'percentage' },
   })
 
   useEffect(() => {
@@ -235,7 +214,6 @@ const DailyForm = ({
         full_day_hours: categoryData.daily_rental_full_day_hours,
         full_day_fare: fromKobo(categoryData.daily_rental_full_day_fare),
         free_wait_time: categoryData.daily_rental_free_wait_time,
-        cancellation_fee_type: categoryData.daily_rental_cancellation_fee_type,
         cancellation_percentage:
           categoryData.daily_rental_cancellation_percentage,
         extra_time_cost: fromKobo(categoryData.daily_rental_extra_time_cost),
@@ -251,7 +229,6 @@ const DailyForm = ({
       full_day_hours: Number(data.full_day_hours),
       full_day_fare: toKobo(data.full_day_fare),
       free_wait_time: Number(data.free_wait_time),
-      cancellation_fee_type: data.cancellation_fee_type,
       cancellation_percentage: Number(data.cancellation_percentage),
       extra_time_cost: toKobo(data.extra_time_cost),
       grace_period_mins: Number(data.grace_period_mins),
@@ -390,8 +367,6 @@ const DailyForm = ({
         <CancellationSection
           errors={errors}
           register={register}
-          control={control}
-          showBase={false}
         />
       </div>
     </form>
@@ -423,11 +398,9 @@ const FleetForm = ({
     register,
     handleSubmit,
     reset,
-    control,
     formState: { errors },
   } = useForm<FleetFormData>({
     resolver: zodResolver(fleetSchema) as any,
-    defaultValues: { cancellation_fee_type: 'percentage' },
   })
 
   useEffect(() => {
@@ -438,10 +411,6 @@ const FleetForm = ({
         wait_fee_per_min: fromKobo(categoryData.fleet_rental_wait_fee_per_min),
         trip_commission_percentage:
           categoryData.fleet_rental_trip_commission_percentage,
-        cancellation_fee_type: categoryData.fleet_rental_cancellation_fee_type,
-        cancellation_base: fromKobo(
-          categoryData.fleet_rental_cancellation_base,
-        ),
         cancellation_percentage:
           categoryData.fleet_rental_cancellation_percentage,
         extra_time_cost: fromKobo(categoryData.fleet_rental_extra_time_cost),
@@ -457,8 +426,6 @@ const FleetForm = ({
       free_wait_time: Number(data.free_wait_time),
       wait_fee_per_min: toKobo(data.wait_fee_per_min),
       trip_commission_percentage: Number(data.trip_commission_percentage),
-      cancellation_fee_type: data.cancellation_fee_type,
-      cancellation_base: toKobo(data.cancellation_base),
       cancellation_percentage: Number(data.cancellation_percentage),
       extra_time_cost: toKobo(data.extra_time_cost),
       grace_period_mins: Number(data.grace_period_mins),
@@ -575,7 +542,6 @@ const FleetForm = ({
         <CancellationSection
           errors={errors}
           register={register}
-          control={control}
         />
         <CommissionSection errors={errors} register={register} />
       </div>
@@ -635,49 +601,15 @@ interface CancellationSectionProps {
   errors: any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register: any
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: any
-  showBase?: boolean
 }
 
 const CancellationSection = ({
   errors,
   register,
-  control,
-  showBase = true,
 }: CancellationSectionProps) => {
-  const feeType = useWatch({ control, name: 'cancellation_fee_type' })
-  const showBaseField = showBase || feeType === 'fixed'
-
   return (
     <section className="space-y-4">
       <h2 className="text-lg font-normal text-neutral-900">Cancellation fee</h2>
-      <div className="space-y-1">
-        <FormControl
-          component="fieldset"
-          error={!!errors.cancellation_fee_type}
-        >
-          <FormLabel component="legend">Cancellation fee type</FormLabel>
-          <Controller
-            name="cancellation_fee_type"
-            control={control}
-            render={({ field }) => (
-              <RadioGroup row {...field}>
-                <FormControlLabel
-                  value="percentage"
-                  control={<Radio size="small" />}
-                  label="Percentage"
-                />
-                <FormControlLabel
-                  value="fixed"
-                  control={<Radio size="small" />}
-                  label="Fixed"
-                />
-              </RadioGroup>
-            )}
-          />
-        </FormControl>
-      </div>
       <Field
         label="Cancel fee"
         hint="A percentage of the trip fare that is charged for trip cancellation"
@@ -691,21 +623,6 @@ const CancellationSection = ({
           error={!!errors.cancellation_percentage}
         />
       </Field>
-      {showBaseField && (
-        <Field
-          label="Cancellation base"
-          hint="A fixed amount charged for trip cancellation"
-          error={errors.cancellation_base?.message}
-        >
-          <TextField
-            fullWidth
-            type="number"
-            size="medium"
-            {...register('cancellation_base')}
-            error={!!errors.cancellation_base}
-          />
-        </Field>
-      )}
     </section>
   )
 }
