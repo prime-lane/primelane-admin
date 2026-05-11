@@ -82,6 +82,7 @@ export const TripDetails = () => {
     trip.ride_type === 'daily' || trip.ride_type === 'daily_rental'
 
   const vehicleCategory =
+    trip.category_name ||
     trip.vehicle_category ||
     trip.driver_vehicle?.category_ids
       ?.map((cid) => getCategoryName(cid))

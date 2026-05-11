@@ -97,6 +97,8 @@ export interface TripDetail {
   is_scheduled: boolean
   scheduled_at: string | null
   vehicle_category?: string
+  category_name?: string
+  category_id?: string
   estimated_fare: string | number | null
   actual_fare: string | number | null
   extra_fare: string | number | null

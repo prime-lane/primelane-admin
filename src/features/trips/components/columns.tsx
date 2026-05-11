@@ -87,7 +87,7 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
       header: 'Total Fare',
       cell: ({ row }) => (
         <span className="text-sm">
-          {row.original.estimated_fare
+          {row.original.estimated_fare != null
             ? `${formatCurrency(fromKobo(row.original.estimated_fare))}`
             : 'N/A'}
         </span>
