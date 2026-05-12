@@ -284,9 +284,7 @@ export const TripDetails = () => {
             label="Total trip time"
             value={formatDuration(trip.estimated_fare)}
           />
-          {trip.payment_method && (
-            <DetailRow label="Payment Method" value={trip.payment_method} />
-          )}
+          <DetailRow label="Payment Method" value={trip.payment_method || 'N/A'} />
         </div>
 
         {/* Fare breakdown */}
