@@ -3,6 +3,7 @@ import { MenuDots } from '@solar-icons/react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useState } from 'react'
 import type { Role } from '../../types'
+import { formatDate } from '@/utils/table-utils'
 
 const ActionMenu = ({
   role,
@@ -62,35 +63,36 @@ export const getRoleColumns = (
   onEdit: (role: Role) => void,
   onDelete: (role: Role) => void,
 ): ColumnDef<Role>[] => [
-  {
-    accessorKey: 'name',
-    header: 'Role',
-    cell: ({ row }) => (
-      <span className="font-medium text-neutral-900">{row.original.name}</span>
-    ),
-  },
-  {
-    accessorKey: 'permissions',
-    header: 'Number of Permissions',
-    cell: ({ row }) => (
-      <span className="font-medium text-neutral-900">
-        {row.original.permissions.length}
-      </span>
-    ),
-  },
-  {
-    header: 'Created By',
-    cell: () => (
-      <div className="flex flex-col">
-        <span className="text-sm font-medium text-neutral-900">-</span>
-      </div>
-    ),
-  },
-  {
-    id: 'actions',
-    header: 'Actions',
-    cell: ({ row }) => (
-      <ActionMenu role={row.original} onEdit={onEdit} onDelete={onDelete} />
-    ),
-  },
-]
+    {
+      accessorKey: 'name',
+      header: 'Role',
+      cell: ({ row }) => (
+        <span className="font-medium text-neutral-900">{row.original.name}</span>
+      ),
+    },
+    {
+      accessorKey: 'permissions',
+      header: 'Number of Permissions',
+      cell: ({ row }) => (
+        <span className="font-medium text-neutral-900">
+          {row.original.permissions.length}
+        </span>
+      ),
+    },
+    {
+      accessorKey: 'creator_first_name',
+      header: 'Created By',
+      cell: ({ row }) => (
+        <div className="flex flex-col">
+          <span className="text-sm font-medium text-neutral-900">{`${row.original.creator_first_name} ${row.original.creator_last_name}`}</span>
+        </div>
+      ),
+    },
+    {
+      id: 'actions',
+      header: 'Actions',
+      cell: ({ row }) => (
+        <ActionMenu role={row.original} onEdit={onEdit} onDelete={onDelete} />
+      ),
+    },
+  ]

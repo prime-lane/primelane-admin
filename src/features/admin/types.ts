@@ -19,6 +19,8 @@ export interface Role {
   type: string
   isDefaultRole: boolean
   slug: string
+  creator_first_name: string
+  creator_last_name: string
   createdAt: string
   updatedAt: string
 }
