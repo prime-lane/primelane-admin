@@ -128,6 +128,7 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
   const usageType = watch('usage_type')
   const selectedRideTypes = watch('applicable_ride_types')
   const selectedCategories = watch('applicable_category_ids')
+  const startsAt = watch('starts_at')
 
   useEffect(() => {
     if (isEdit && existingCoupon) {
@@ -184,6 +185,10 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
     }
     if (!formData.starts_at || !formData.expires_at) {
       toast.error('Validity period is required')
+      return
+    }
+    if (formData.expires_at <= formData.starts_at) {
+      toast.error('End date must be after start date')
       return
     }
 
@@ -420,6 +425,7 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
                           value={field.value}
                           onChange={field.onChange}
                           format="dd/MM/yyyy, HH:mm"
+                          disablePast
                           slotProps={{
                             textField: {
                               fullWidth: true,
@@ -448,6 +454,8 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
                           value={field.value}
                           onChange={field.onChange}
                           format="dd/MM/yyyy, HH:mm"
+                          disablePast
+                          minDateTime={startsAt ?? undefined}
                           slotProps={{
                             textField: {
                               fullWidth: true,
