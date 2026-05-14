@@ -3,7 +3,6 @@ import { MenuDots } from '@solar-icons/react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useState } from 'react'
 import type { Role } from '../../types'
-import { formatDate } from '@/utils/table-utils'
 
 const ActionMenu = ({
   role,
