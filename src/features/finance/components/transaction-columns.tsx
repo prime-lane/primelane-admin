@@ -169,10 +169,10 @@ export const customerWalletColumns: ColumnDef<Transaction>[] = [
             {`${row.original.first_name || ''} ${row.original.last_name || ''}`}
           </p>
           <span className="text-xs text-neutral-500">
-            {row.original.user_id.substring(0, 8).toUpperCase()}
+            {row.original.ride_id?.substring(0, 12).toUpperCase()}
+            <CopyButton textToCopy={`${row.original.ride_id}`} />
           </span>
         </div>
-        <CopyButton textToCopy={row.original.user_id} />
       </div>
     ),
   },
