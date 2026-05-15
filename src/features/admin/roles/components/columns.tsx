@@ -45,13 +45,18 @@ const ActionMenu = ({
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleEdit} sx={{ bgcolor: '#F3F4F6', justifyContent: 'center' }}>
+        <MenuItem
+          onClick={handleEdit}
+          sx={{ bgcolor: '#F3F4F6', justifyContent: 'center' }}
+        >
           <span className="text-sm font-medium text-neutral-500 uppercase tracking-tight">
             Edit Permissions
           </span>
         </MenuItem>
         <MenuItem onClick={handleDelete}>
-          <span className="text-sm font-medium text-red-400 uppercase tracking-tight text-center">Delete Role</span>
+          <span className="text-sm font-medium text-red-400 uppercase tracking-tight text-center">
+            Delete Role
+          </span>
         </MenuItem>
       </Menu>
     </>
@@ -62,36 +67,36 @@ export const getRoleColumns = (
   onEdit: (role: Role) => void,
   onDelete: (role: Role) => void,
 ): ColumnDef<Role>[] => [
-    {
-      accessorKey: 'name',
-      header: 'Role',
-      cell: ({ row }) => (
-        <span className="font-medium text-neutral-900">{row.original.name}</span>
-      ),
-    },
-    {
-      accessorKey: 'permissions',
-      header: 'Number of Permissions',
-      cell: ({ row }) => (
-        <span className="font-medium text-neutral-900">
-          {row.original.permissions.length}
-        </span>
-      ),
-    },
-    {
-      accessorKey: 'creator_first_name',
-      header: 'Created By',
-      cell: ({ row }) => (
-        <div className="flex flex-col">
-          <span className="text-sm font-medium text-neutral-900">{`${row.original.creator_first_name} ${row.original.creator_last_name}`}</span>
-        </div>
-      ),
-    },
-    {
-      id: 'actions',
-      header: 'Actions',
-      cell: ({ row }) => (
-        <ActionMenu role={row.original} onEdit={onEdit} onDelete={onDelete} />
-      ),
-    },
-  ]
+  {
+    accessorKey: 'name',
+    header: 'Role',
+    cell: ({ row }) => (
+      <span className="font-medium text-neutral-900">{row.original.name}</span>
+    ),
+  },
+  {
+    accessorKey: 'permissions',
+    header: 'Number of Permissions',
+    cell: ({ row }) => (
+      <span className="font-medium text-neutral-900">
+        {row.original.permissions.length}
+      </span>
+    ),
+  },
+  {
+    accessorKey: 'creator_first_name',
+    header: 'Created By',
+    cell: ({ row }) => (
+      <div className="flex flex-col">
+        <span className="text-sm font-medium text-neutral-900">{`${row.original.creator_first_name} ${row.original.creator_last_name}`}</span>
+      </div>
+    ),
+  },
+  {
+    id: 'actions',
+    header: 'Actions',
+    cell: ({ row }) => (
+      <ActionMenu role={row.original} onEdit={onEdit} onDelete={onDelete} />
+    ),
+  },
+]

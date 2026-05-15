@@ -195,7 +195,10 @@ export const CouponDetails = () => {
           <span className="text-sm text-neutral-500">
             Date Created:{' '}
             {coupon.created_at
-              ? format(formatToLocalTimeZone(coupon.created_at), 'dd/MM/yyyy, HH:mm')
+              ? format(
+                  formatToLocalTimeZone(coupon.created_at),
+                  'dd/MM/yyyy, HH:mm',
+                )
               : '—'}
           </span>
         </div>
@@ -274,7 +277,10 @@ export const CouponDetails = () => {
                 label="Validity - Start date"
                 value={
                   coupon.starts_at
-                    ? format(formatToLocalTimeZone(coupon.starts_at), 'dd/MM/yyyy, HH:mm')
+                    ? format(
+                        formatToLocalTimeZone(coupon.starts_at),
+                        'dd/MM/yyyy, HH:mm',
+                      )
                     : '—'
                 }
               />
@@ -282,7 +288,10 @@ export const CouponDetails = () => {
                 label="Validity - End date"
                 value={
                   coupon.expires_at
-                    ? format(formatToLocalTimeZone(coupon.expires_at), 'dd/MM/yyyy, HH:mm')
+                    ? format(
+                        formatToLocalTimeZone(coupon.expires_at),
+                        'dd/MM/yyyy, HH:mm',
+                      )
                     : '—'
                 }
               />
@@ -338,10 +347,10 @@ export const CouponDetails = () => {
             pagination={
               usageData?.pagination
                 ? {
-                  currentPage: Number(usageData.pagination.current_page),
-                  totalPages: usageData.pagination.total_pages,
-                  totalItems: usageData.pagination.total_items,
-                }
+                    currentPage: Number(usageData.pagination.current_page),
+                    totalPages: usageData.pagination.total_pages,
+                    totalItems: usageData.pagination.total_items,
+                  }
                 : undefined
             }
             onPageChange={setPage}

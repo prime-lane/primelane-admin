@@ -1,11 +1,7 @@
 import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
 import { ErrorState } from '@/components/ui/loading-error-states'
-import {
-  Button,
-  InputAdornment,
-  TextField,
-} from '@mui/material'
+import { Button, InputAdornment, TextField } from '@mui/material'
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -167,10 +163,7 @@ const AirportTransferForm = ({
           </div>
         </section>
 
-        <CancellationSection
-          errors={errors}
-          register={register}
-        />
+        <CancellationSection errors={errors} register={register} />
       </div>
     </form>
   )
@@ -364,10 +357,7 @@ const DailyForm = ({
           </div>
         </section>
 
-        <CancellationSection
-          errors={errors}
-          register={register}
-        />
+        <CancellationSection errors={errors} register={register} />
       </div>
     </form>
   )
@@ -539,10 +529,7 @@ const FleetForm = ({
           </div>
         </section>
 
-        <CancellationSection
-          errors={errors}
-          register={register}
-        />
+        <CancellationSection errors={errors} register={register} />
         <CommissionSection errors={errors} register={register} />
       </div>
     </form>

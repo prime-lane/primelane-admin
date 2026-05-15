@@ -25,7 +25,12 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
       accessorKey: 'created_at',
       header: 'Booking Date',
       cell: ({ row }) => (
-        <span className="text-sm">{format(formatToLocalTimeZone(row.original?.created_at), 'dd/MM/yyyy, hh:mmaaa')}</span>
+        <span className="text-sm">
+          {format(
+            formatToLocalTimeZone(row.original?.created_at),
+            'dd/MM/yyyy, hh:mmaaa',
+          )}
+        </span>
       ),
     },
     {
@@ -50,19 +55,25 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
       accessorKey: 'driver_id',
       header: 'Driver Name/ID',
       cell: ({ row }) => {
-        const name = (!row.original.driver?.first_name || !row.original.driver?.last_name) ? "Unassigned" : `${row.original.driver?.first_name} ${row.original.driver?.last_name}`
+        const name =
+          !row.original.driver?.first_name || !row.original.driver?.last_name
+            ? 'Unassigned'
+            : `${row.original.driver?.first_name} ${row.original.driver?.last_name}`
         return (
-        <div className="flex flex-col gap-0.5">
-          <span className={`text-sm ${name === "Unassigned" ? "text-neutral-500 font-mono" : "font-medium"}`}>
-            {name}
-          </span>
-          {row.original.driver_id && (
-            <span className="text-xs text-gray-500">
-              {row.original?.driver_id?.substring(0, 8).toUpperCase()}
+          <div className="flex flex-col gap-0.5">
+            <span
+              className={`text-sm ${name === 'Unassigned' ? 'text-neutral-500 font-mono' : 'font-medium'}`}
+            >
+              {name}
             </span>
-          )}
-        </div>
-      )},
+            {row.original.driver_id && (
+              <span className="text-xs text-gray-500">
+                {row.original?.driver_id?.substring(0, 8).toUpperCase()}
+              </span>
+            )}
+          </div>
+        )
+      },
     },
 
     {
