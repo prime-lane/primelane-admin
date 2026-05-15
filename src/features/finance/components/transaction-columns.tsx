@@ -98,7 +98,7 @@ export const refundColumns: ColumnDef<Transaction>[] = [
   },
   {
     accessorKey: 'ride_id',
-    header: 'Trip ID / Category',
+    header: 'Trip ID / Type',
     cell: ({ row }) => {
       const tripId = row.original.ride_id || '—'
       const category = row.original.category || '—'
