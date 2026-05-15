@@ -38,9 +38,9 @@ const usageColumns: ColumnDef<CouponUsageRecord>[] = [
         </span>
         <div className="flex items-center gap-0.5">
           <span className="text-xs text-neutral-500">
-            {row.original.user_id?.substring(0, 8).toUpperCase()}
+            {row.original.custom_user_id?.substring(0, 8).toUpperCase()}
           </span>
-          <CopyButton textToCopy={row.original?.user_id} />
+          <CopyButton textToCopy={row.original?.custom_user_id} />
         </div>
       </div>
     ),

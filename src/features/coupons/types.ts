@@ -25,6 +25,7 @@ export interface CouponUsageRecord {
   user_id: string
   ride_id: string
   custom_ride_id: string
+  custom_user_id: string
   discount_applied: number
   created_at: string
   user: {
