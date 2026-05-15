@@ -76,7 +76,7 @@ export interface Slot {
   slot_index: number
   driver_id: string
   category_id: string
-  status: string
+  status: 'PENDING' | 'ASSIGNED' | 'RELEASED' | string
   driver: Driver
   driver_vehicle: Partial<DriverVehicle>
 }
