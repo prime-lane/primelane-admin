@@ -7,7 +7,7 @@ import type { Role } from '../../types'
 const ActionMenu = ({
   role,
   onEdit,
-  // onDelete,
+  onDelete,
 }: {
   role: Role
   onEdit: (role: Role) => void
@@ -28,10 +28,10 @@ const ActionMenu = ({
     handleClose()
   }
 
-  // const handleDelete = () => {
-  //   onDelete(role)
-  //   handleClose()
-  // }
+  const handleDelete = () => {
+    onDelete(role)
+    handleClose()
+  }
 
   return (
     <>
@@ -50,7 +50,7 @@ const ActionMenu = ({
             Edit Permissions
           </span>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={handleDelete}>
           <span className="text-sm font-medium text-red-400 uppercase tracking-tight text-center">Delete Role</span>
         </MenuItem>
       </Menu>
