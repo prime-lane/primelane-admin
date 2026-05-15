@@ -45,14 +45,14 @@ const ActionMenu = ({
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleEdit}>
-          <span className="text-sm font-medium text-[#262626]">
+        <MenuItem onClick={handleEdit} sx={{ bgcolor: '#F3F4F6', justifyContent: 'center' }}>
+          <span className="text-sm font-medium text-neutral-500 uppercase tracking-tight">
             Edit Permissions
           </span>
         </MenuItem>
-        {/* <MenuItem onClick={handleDelete}>
-          <span className="text-sm font-medium text-[red]">Delete Role</span>
-        </MenuItem> */}
+        <MenuItem>
+          <span className="text-sm font-medium text-red-400 uppercase tracking-tight text-center">Delete Role</span>
+        </MenuItem>
       </Menu>
     </>
   )
