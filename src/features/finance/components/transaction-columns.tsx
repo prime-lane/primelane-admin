@@ -195,11 +195,11 @@ export const customerWalletColumns: ColumnDef<Transaction>[] = [
     ),
   },
   {
-    accessorKey: 'wallet_balance',
+    accessorKey: 'balance_snapshot',
     header: 'Wallet Balance',
     cell: ({ row }) => (
       <span className="text-sm text-neutral-800">
-        {formatCurrency(fromKobo(row.original.wallet_balance))}
+        {formatCurrency(fromKobo(row.original.balance_snapshot))}
       </span>
     ),
   },

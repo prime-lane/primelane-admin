@@ -73,7 +73,7 @@ export interface Transaction {
   reference: string | null
   ride_id: string | null
   amount: number
-  wallet_balance: number
+  balance_snapshot: number
   created_at: string
   updated_at: string
   status?: string
