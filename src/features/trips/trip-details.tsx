@@ -110,6 +110,8 @@ export const TripDetails = () => {
     : formatDuration(trip.estimated_fare)
 
   const slots: Slot[] = trip.slots ?? []
+  const assignedSlots = slots.filter((s) => s.status === 'ASSIGNED')
+  const pendingCount = slots.filter((s) => s.status === 'PENDING').length
 
   return (
     <div className="space-y-9">
@@ -183,10 +185,8 @@ export const TripDetails = () => {
               Drivers &amp; Vehicles
             </h3>
             <div className="flex flex-col gap-4">
-              {slots.map((slot: Slot) => {
-                const driverName = slot.driver
-                  ? `${slot.driver.first_name} ${slot.driver.last_name}`
-                  : 'N/A'
+              {assignedSlots.map((slot: Slot) => {
+                const driverName = `${slot.driver!.first_name} ${slot.driver!.last_name}`
                 const v = slot.driver_vehicle
                 const vehicleDesc = v
                   ? `${v.make ?? ''} ${v.model ?? ''} ${v.year ?? ''}, ${v.color ?? ''}`.trim()
@@ -201,7 +201,7 @@ export const TripDetails = () => {
                       <Link
                         to={path.DASHBOARD.DRIVER_DETAILS.replace(
                           ':id',
-                          slot.driver_id,
+                          slot.driver_id!,
                         )}
                         className="flex items-center gap-1 font-medium text-sm text-black"
                       >
@@ -222,6 +222,13 @@ export const TripDetails = () => {
                   </div>
                 )
               })}
+              {pendingCount > 0 && (
+                <div className="flex items-center gap-4 pt-1">
+                  <span className="text-neutral-400 text-sm w-60 shrink-0">
+                    {pendingCount} slot{pendingCount > 1 ? 's' : ''} pending assignment
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         )}
