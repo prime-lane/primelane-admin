@@ -8,7 +8,7 @@ import {
   CustomTabPanel as TabPanel,
   a11yProps,
 } from '@/components/ui/tab-panel'
-import { formatCurrency, fromKobo } from '@/lib/utils'
+import { formatCurrency, formatToLocalTimeZone, fromKobo } from '@/lib/utils'
 import { Box, Button, Card, CardContent, Tab, Tabs } from '@mui/material'
 import { AltArrowDown } from '@solar-icons/react'
 import { type ColumnDef } from '@tanstack/react-table'
@@ -50,7 +50,7 @@ const usageColumns: ColumnDef<CouponUsageRecord>[] = [
     header: 'Date Created',
     cell: ({ row }) => (
       <span className="text-sm text-neutral-600">
-        {format(new Date(row.original.created_at), 'dd/MM/yyyy')}
+        {format(formatToLocalTimeZone(row.original.created_at), 'dd/MM/yyyy')}
       </span>
     ),
   },
@@ -195,7 +195,7 @@ export const CouponDetails = () => {
           <span className="text-sm text-neutral-500">
             Date Created:{' '}
             {coupon.created_at
-              ? format(new Date(coupon.created_at), 'dd/MM/yyyy, HH:mm')
+              ? format(formatToLocalTimeZone(coupon.created_at), 'dd/MM/yyyy, HH:mm')
               : '—'}
           </span>
         </div>
@@ -274,7 +274,7 @@ export const CouponDetails = () => {
                 label="Validity - Start date"
                 value={
                   coupon.starts_at
-                    ? format(new Date(coupon.starts_at), 'dd/MM/yyyy, HH:mm')
+                    ? format(formatToLocalTimeZone(coupon.starts_at), 'dd/MM/yyyy, HH:mm')
                     : '—'
                 }
               />
@@ -282,7 +282,7 @@ export const CouponDetails = () => {
                 label="Validity - End date"
                 value={
                   coupon.expires_at
-                    ? format(new Date(coupon.expires_at), 'dd/MM/yyyy, HH:mm')
+                    ? format(formatToLocalTimeZone(coupon.expires_at), 'dd/MM/yyyy, HH:mm')
                     : '—'
                 }
               />

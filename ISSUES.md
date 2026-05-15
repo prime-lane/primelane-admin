@@ -31,7 +31,10 @@
 - [x] To_pickup to "To pickup" on bookings page table
 - [x] booking filters
 - [x] export btn on coupon page
-- [ ] cancellation_refund_reason
+- [x] cancellation_refund_reason
+- [ ] display unassigned for empty driver name/id
+- [x] booking date is different from booking trip detail pickup time
+- [ ] global provider for date
 
 side notes:
 

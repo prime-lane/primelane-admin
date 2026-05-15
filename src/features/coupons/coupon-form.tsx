@@ -2,7 +2,7 @@ import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { useVehicleCategories } from '@/features/pricing-config/api/use-vehicle-categories'
-import { fromKobo, toKobo } from '@/lib/utils'
+import { formatToLocalTimeZone, fromKobo, toKobo } from '@/lib/utils'
 import {
   Button,
   Checkbox,
@@ -145,10 +145,10 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
           ? String(existingCoupon.coupon.usage_limit)
           : '',
         starts_at: existingCoupon.coupon.starts_at
-          ? new Date(existingCoupon.coupon.starts_at)
+          ? formatToLocalTimeZone(existingCoupon.coupon.starts_at)
           : null,
         expires_at: existingCoupon.coupon.expires_at
-          ? new Date(existingCoupon.coupon.expires_at)
+          ? formatToLocalTimeZone(existingCoupon.coupon.expires_at)
           : null,
         applicable_ride_types:
           existingCoupon.coupon.applicable_ride_types || [],
