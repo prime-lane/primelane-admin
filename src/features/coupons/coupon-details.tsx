@@ -36,9 +36,12 @@ const usageColumns: ColumnDef<CouponUsageRecord>[] = [
             ? `${row.original.user.first_name} ${row.original.user.last_name}`
             : '—'}
         </span>
-        <span className="text-xs text-neutral-500">
-          {row.original.user_id?.substring(0, 9)}
-        </span>
+        <div className="flex items-center gap-0.5">
+          <span className="text-xs text-neutral-500">
+            {row.original.user_id?.substring(0, 8).toUpperCase()}
+          </span>
+          <CopyButton textToCopy={row.original?.user_id} />
+        </div>
       </div>
     ),
   },
@@ -55,9 +58,12 @@ const usageColumns: ColumnDef<CouponUsageRecord>[] = [
     accessorKey: 'ride_id',
     header: 'Booking ID',
     cell: ({ row }) => (
-      <span className="text-sm text-neutral-600">
-        {row.original.ride_id || '—'}
-      </span>
+      <div>
+        <span className="text-sm text-neutral-500">
+          {row.original.ride_id.substring(0, 8).toUpperCase() || '—'}
+        </span>
+        <CopyButton textToCopy={row.original?.ride_id} />
+      </div>
     ),
   },
   {
@@ -332,10 +338,10 @@ export const CouponDetails = () => {
             pagination={
               usageData?.pagination
                 ? {
-                    currentPage: Number(usageData.pagination.current_page),
-                    totalPages: usageData.pagination.total_pages,
-                    totalItems: usageData.pagination.total_items,
-                  }
+                  currentPage: Number(usageData.pagination.current_page),
+                  totalPages: usageData.pagination.total_pages,
+                  totalItems: usageData.pagination.total_items,
+                }
                 : undefined
             }
             onPageChange={setPage}
