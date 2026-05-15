@@ -1,4 +1,5 @@
-import { Button, TextField, Typography } from '@mui/material'
+import { Button, InputAdornment, Typography } from '@mui/material'
+import { PasswordInput } from '@/components/ui/password-input'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -6,6 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useChangePassword } from './api/use-auth'
 import { path } from '@/app/paths'
+import { LockPassword } from '@solar-icons/react'
 
 const schema = z
   .object({
@@ -68,25 +70,41 @@ export const ChangePassword = () => {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-        <TextField
+        <PasswordInput
           {...register('password')}
-          type="password"
           label="New Password"
           fullWidth
           size="medium"
           error={!!errors.password}
           helperText={errors.password?.message}
           disabled={isPending}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockPassword />
+                </InputAdornment>
+              ),
+            },
+          }}
         />
-        <TextField
+        <PasswordInput
           {...register('confirm_password')}
-          type="password"
           label="Confirm Password"
           fullWidth
           size="medium"
           error={!!errors.confirm_password}
           helperText={errors.confirm_password?.message}
           disabled={isPending}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockPassword />
+                </InputAdornment>
+              ),
+            },
+          }}
         />
         <Button
           type="submit"
