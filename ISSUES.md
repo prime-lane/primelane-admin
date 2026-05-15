@@ -32,7 +32,7 @@
 - [x] booking filters
 - [x] export btn on coupon page
 - [x] cancellation_refund_reason
-- [ ] display unassigned for empty driver name/id
+- [x] display unassigned for empty driver name/id
 - [x] booking date is different from booking trip detail pickup time
 - [ ] global provider for date
 

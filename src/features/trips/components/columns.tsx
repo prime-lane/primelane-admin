@@ -49,18 +49,20 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
     {
       accessorKey: 'driver_id',
       header: 'Driver Name/ID',
-      cell: ({ row }) => (
+      cell: ({ row }) => {
+        const name = (!row.original.driver?.first_name || !row.original.driver?.last_name) ? "Unassigned" : `${row.original.driver?.first_name} ${row.original.driver?.last_name}`
+        return (
         <div className="flex flex-col gap-0.5">
-          <span className="text-sm font-medium">
-            {row.original.driver
-              ? `${row.original.driver?.first_name} ${row.original.driver?.last_name}`
-              : 'N/A'}
+          <span className={`text-sm ${name === "Unassigned" ? "text-neutral-500 font-mono" : "font-medium"}`}>
+            {name}
           </span>
-          <span className="text-xs text-gray-500">
-            #{row.original?.driver_id?.substring(0, 8).toUpperCase()}
-          </span>
+          {row.original.driver_id && (
+            <span className="text-xs text-gray-500">
+              {row.original?.driver_id?.substring(0, 8).toUpperCase()}
+            </span>
+          )}
         </div>
-      ),
+      )},
     },
 
     {
