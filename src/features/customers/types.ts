@@ -62,6 +62,8 @@ export interface Wallet {
 export interface Transaction {
   id: string
   user_id: string
+  first_name: string
+  last_name: string
   transaction_type: 'CR' | 'DR'
   description: string
   provider: string
@@ -71,6 +73,7 @@ export interface Transaction {
   reference: string | null
   ride_id: string | null
   amount: number
+  wallet_balance: number
   created_at: string
   updated_at: string
   status?: string

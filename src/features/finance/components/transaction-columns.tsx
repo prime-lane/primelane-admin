@@ -161,12 +161,17 @@ export const customerWalletColumns: ColumnDef<Transaction>[] = [
   },
   {
     accessorKey: 'user_id',
-    header: 'Customer ID',
+    header: 'Customer Name/ID',
     cell: ({ row }) => (
       <div className="flex items-center gap-0.5">
-        <span className="text-sm text-neutral-800">
-          {row.original.user_id.substring(0, 8).toUpperCase()}
-        </span>
+        <div>
+          <p className="text-sm text-black">
+            {`${row.original.first_name || ''} ${row.original.last_name || ''}`}
+          </p>
+          <span className="text-xs text-neutral-500">
+            {row.original.user_id.substring(0, 8).toUpperCase()}
+          </span>
+        </div>
         <CopyButton textToCopy={row.original.user_id} />
       </div>
     ),
@@ -186,6 +191,15 @@ export const customerWalletColumns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => (
       <span className="text-sm text-neutral-800">
         {formatCurrency(fromKobo(row.original.amount))}
+      </span>
+    ),
+  },
+  {
+    accessorKey: 'wallet_balance',
+    header: 'Wallet Balance',
+    cell: ({ row }) => (
+      <span className="text-sm text-neutral-800">
+        {formatCurrency(fromKobo(row.original.wallet_balance))}
       </span>
     ),
   },
