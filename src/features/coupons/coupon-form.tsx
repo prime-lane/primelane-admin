@@ -2,7 +2,7 @@ import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { useVehicleCategories } from '@/features/pricing-config/api/use-vehicle-categories'
-import { formatToLocalTimeZone, fromKobo, toKobo } from '@/lib/utils'
+import { formatDateToLocal, formatToLocalTimeZone, fromKobo, toKobo } from '@/lib/utils'
 import {
   Button,
   Checkbox,
@@ -200,8 +200,8 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
       usage_limit:
         formData.usage_type === 'multiple' && formData.usage_limit
           ? Number(formData.usage_limit)
-          : null,
-      expires_at: formData.expires_at.toISOString(),
+          : undefined,
+      expires_at: formatDateToLocal(formData.expires_at),
     }
 
     if (isEdit) {
@@ -217,12 +217,13 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
             ? toKobo(Number(formData.discount_value))
             : Number(formData.discount_value),
         usage_type: formData.usage_type,
-        starts_at: formData.starts_at.toISOString(),
+        starts_at: formatDateToLocal(formData.starts_at),
         applicable_ride_types: formData.applicable_ride_types,
         applicable_category_ids: formData.applicable_category_ids,
         ...payload,
         code: formData.code.trim().toUpperCase(),
       }
+      // return console.log({newPayload, expires_at: formData.expires_at})
       createCoupon(newPayload, {
         onSuccess: (res) => {
           const newId = (res as any)?.data?.id

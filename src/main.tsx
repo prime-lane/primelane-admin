@@ -12,6 +12,7 @@ import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import { NuqsAdapter } from 'nuqs/adapters/react'
 import { theme } from './theme'
+import { DateFormatProvider } from './components/providers/date-format-provider'
 
 async function enableMocking() {
   if (import.meta.env.VITE_USE_MOCK_API !== 'true') {
@@ -33,7 +34,9 @@ enableMocking().then(() => {
         <CssBaseline />
         <ErrorBoundary fallback={<div>something went wrong</div>}>
           <NuqsAdapter>
-            <App />
+            <DateFormatProvider>
+              <App />
+            </DateFormatProvider>
           </NuqsAdapter>
         </ErrorBoundary>
       </ThemeProvider>
