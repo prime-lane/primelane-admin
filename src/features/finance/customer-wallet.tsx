@@ -16,9 +16,10 @@ import { parseAsString, useQueryState } from 'nuqs'
 import { useState } from 'react'
 import { PermissionGate } from '@/components/ui/permission-gate'
 import { useTransactions } from './api/use-transactions'
-import { customerWalletColumns } from './components/transaction-columns'
+import { useCustomerWalletColumns } from './components/transaction-columns'
 
 export const CustomerWallet = () => {
+  const customerWalletColumns = useCustomerWalletColumns()
   const {
     page,
     setPage,

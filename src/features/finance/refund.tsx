@@ -15,10 +15,11 @@ import { Box } from '@mui/material'
 import { parseAsString, useQueryState } from 'nuqs'
 import { PermissionGate } from '@/components/ui/permission-gate'
 import { useTransactions } from './api/use-transactions'
-import { refundColumns } from './components/transaction-columns'
+import { useRefundColumns } from './components/transaction-columns'
 import { useState } from 'react'
 
 export const Refund = () => {
+  const refundColumns = useRefundColumns()
   const {
     page,
     setPage,

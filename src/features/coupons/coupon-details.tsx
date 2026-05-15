@@ -8,11 +8,10 @@ import {
   CustomTabPanel as TabPanel,
   a11yProps,
 } from '@/components/ui/tab-panel'
-import { formatCurrency, formatToLocalTimeZone, fromKobo } from '@/lib/utils'
+import { formatCurrency, fromKobo } from '@/lib/utils'
 import { Box, Button, Card, CardContent, Tab, Tabs } from '@mui/material'
 import { AltArrowDown } from '@solar-icons/react'
 import { type ColumnDef } from '@tanstack/react-table'
-import { format } from 'date-fns'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useQueryState } from 'nuqs'
@@ -24,67 +23,72 @@ import { CouponDetailsSkeleton } from './components/skeletons'
 import { useVehicleCategories } from '@/features/pricing-config/api/use-vehicle-categories'
 import { CouponActionMenu } from './components/coupon-action-menu'
 import { CopyButton } from '@/components/ui/copy-button'
+import { useDateFormat } from '@/components/providers/date-format-provider'
 
-const usageColumns: ColumnDef<CouponUsageRecord>[] = [
-  {
-    accessorKey: 'user',
-    header: 'Customer name/ID',
-    cell: ({ row }) => (
-      <div className="flex flex-col gap-0.5">
-        <span className="text-sm font-medium text-neutral-900">
-          {row.original.user
-            ? `${row.original.user.first_name} ${row.original.user.last_name}`
-            : '—'}
-        </span>
-        <div className="flex items-center gap-0.5">
-          <span className="text-xs text-neutral-500">
-            {row.original.custom_user_id?.substring(0, 8).toUpperCase()}
+const useUsageColumns = (): ColumnDef<CouponUsageRecord>[] => {
+  const { format } = useDateFormat()
+
+  return [
+    {
+      accessorKey: 'user',
+      header: 'Customer name/ID',
+      cell: ({ row }) => (
+        <div className="flex flex-col gap-0.5">
+          <span className="text-sm font-medium text-neutral-900">
+            {row.original.user
+              ? `${row.original.user.first_name} ${row.original.user.last_name}`
+              : '—'}
           </span>
-          <CopyButton textToCopy={row.original?.custom_user_id} />
+          <div className="flex items-center gap-0.5">
+            <span className="text-xs text-neutral-500">
+              {row.original.custom_user_id?.substring(0, 8).toUpperCase()}
+            </span>
+            <CopyButton textToCopy={row.original?.custom_user_id} />
+          </div>
         </div>
-      </div>
-    ),
-  },
-  {
-    accessorKey: 'created_at',
-    header: 'Date Created',
-    cell: ({ row }) => (
-      <span className="text-sm text-neutral-600">
-        {format(formatToLocalTimeZone(row.original.created_at), 'dd/MM/yyyy')}
-      </span>
-    ),
-  },
-  {
-    accessorKey: 'custom_ride_id',
-    header: 'Booking ID',
-    cell: ({ row }) => (
-      <div>
-        <span className="text-sm text-neutral-500">
-          {row.original.custom_ride_id.substring(0, 8).toUpperCase() || '—'}
+      ),
+    },
+    {
+      accessorKey: 'created_at',
+      header: 'Date Created',
+      cell: ({ row }) => (
+        <span className="text-sm text-neutral-600">
+          {format(row.original.created_at)}
         </span>
-        <CopyButton textToCopy={row.original?.custom_ride_id} />
-      </div>
-    ),
-  },
-  {
-    accessorKey: 'email',
-    header: 'Customer email',
-    cell: ({ row }) => (
-      <span className="text-sm text-neutral-600">
-        {row.original.user?.email || '—'}
-      </span>
-    ),
-  },
-  {
-    accessorKey: 'discount_applied',
-    header: 'Discount applied',
-    cell: ({ row }) => (
-      <span className="text-sm text-neutral-800">
-        {formatCurrency(fromKobo(row.original.discount_applied))}
-      </span>
-    ),
-  },
-]
+      ),
+    },
+    {
+      accessorKey: 'custom_ride_id',
+      header: 'Booking ID',
+      cell: ({ row }) => (
+        <div>
+          <span className="text-sm text-neutral-500">
+            {row.original.custom_ride_id.substring(0, 8).toUpperCase() || '—'}
+          </span>
+          <CopyButton textToCopy={row.original?.custom_ride_id} />
+        </div>
+      ),
+    },
+    {
+      accessorKey: 'email',
+      header: 'Customer email',
+      cell: ({ row }) => (
+        <span className="text-sm text-neutral-600">
+          {row.original.user?.email || '—'}
+        </span>
+      ),
+    },
+    {
+      accessorKey: 'discount_applied',
+      header: 'Discount applied',
+      cell: ({ row }) => (
+        <span className="text-sm text-neutral-800">
+          {formatCurrency(fromKobo(row.original.discount_applied))}
+        </span>
+      ),
+    },
+  ]
+}
 
 const InfoCell = ({
   label,
@@ -120,6 +124,8 @@ export const CouponDetails = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { page, setPage, pageSize, setPageSize } = useTableParams()
+  const { format } = useDateFormat()
+  const usageColumns = useUsageColumns()
 
   const { data: couponData, isLoading, error } = useCoupon(id!)
   const { data: usageData, isLoading: isUsageLoading } = useCouponUsage(id!, {
@@ -194,12 +200,7 @@ export const CouponDetails = () => {
           </div>
           <span className="text-sm text-neutral-500">
             Date Created:{' '}
-            {coupon.created_at
-              ? format(
-                  formatToLocalTimeZone(coupon.created_at),
-                  'dd/MM/yyyy, HH:mm',
-                )
-              : '—'}
+            {coupon.created_at ? format(coupon.created_at) : '—'}
           </span>
         </div>
 
@@ -277,10 +278,7 @@ export const CouponDetails = () => {
                 label="Validity - Start date"
                 value={
                   coupon.starts_at
-                    ? format(
-                        formatToLocalTimeZone(coupon.starts_at),
-                        'dd/MM/yyyy, HH:mm',
-                      )
+                    ? format(coupon.starts_at)
                     : '—'
                 }
               />
@@ -288,10 +286,7 @@ export const CouponDetails = () => {
                 label="Validity - End date"
                 value={
                   coupon.expires_at
-                    ? format(
-                        formatToLocalTimeZone(coupon.expires_at),
-                        'dd/MM/yyyy, HH:mm',
-                      )
+                    ? format(coupon.expires_at)
                     : '—'
                 }
               />

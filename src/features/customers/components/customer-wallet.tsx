@@ -4,7 +4,7 @@ import { SearchInput } from '@/components/ui/data-controls'
 import { formatCurrency } from '@/lib/utils'
 import type { Transaction, Wallet } from '../types'
 import { StatsCard } from './stats-card'
-import { transactionColumns } from './transaction-columns'
+import { useTransactionColumns } from './transaction-columns'
 
 interface CustomerWalletProps {
   wallet?: Wallet
@@ -17,6 +17,7 @@ export const CustomerWallet = ({
   transactions = [],
   isLoading,
 }: CustomerWalletProps) => {
+  const transactionColumns = useTransactionColumns()
   const [searchQuery, setSearchQuery] = useState('')
 
   const filteredTransactions = transactions.filter(

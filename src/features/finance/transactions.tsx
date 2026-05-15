@@ -13,12 +13,13 @@ import { downloadExport } from '@/utils/export-utils'
 import { Box } from '@mui/material'
 import { parseAsString, useQueryState } from 'nuqs'
 import { useTransactions } from './api/use-transactions'
-import { transactionColumns } from './components/transaction-columns'
+import { useTransactionColumns } from './components/transaction-columns'
 import { useTableParams } from '@/hooks/use-table-params'
 import { PermissionGate } from '@/components/ui/permission-gate'
 import { useState } from 'react'
 
 export const Transactions = () => {
+  const transactionColumns = useTransactionColumns()
   const {
     page,
     setPage,

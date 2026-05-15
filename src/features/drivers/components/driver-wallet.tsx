@@ -5,7 +5,7 @@ import { formatCurrency } from '@/lib/utils'
 import type { Wallet } from '../types'
 import type { Transaction } from '@/features/customers/types'
 import { StatsCard } from '@/features/customers/components/stats-card'
-import { transactionColumns } from '@/features/customers/components/transaction-columns'
+import { useTransactionColumns } from '@/features/customers/components/transaction-columns'
 
 interface DriverWalletProps {
   wallet?: Wallet
@@ -18,6 +18,7 @@ export const DriverWallet = ({
   transactions = [],
   isLoading,
 }: DriverWalletProps) => {
+  const transactionColumns = useTransactionColumns()
   const [searchQuery, setSearchQuery] = useState('')
 
   const filteredTransactions = transactions.filter(
