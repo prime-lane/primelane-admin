@@ -55,14 +55,14 @@ const usageColumns: ColumnDef<CouponUsageRecord>[] = [
     ),
   },
   {
-    accessorKey: 'ride_id',
+    accessorKey: 'custom_ride_id',
     header: 'Booking ID',
     cell: ({ row }) => (
       <div>
         <span className="text-sm text-neutral-500">
-          {row.original.ride_id.substring(0, 8).toUpperCase() || '—'}
+          {row.original.custom_ride_id.substring(0, 8).toUpperCase() || '—'}
         </span>
-        <CopyButton textToCopy={row.original?.ride_id} />
+        <CopyButton textToCopy={row.original?.custom_ride_id} />
       </div>
     ),
   },
