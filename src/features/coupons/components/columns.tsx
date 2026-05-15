@@ -1,6 +1,6 @@
 import { type ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
-import { formatCurrency, fromKobo } from '@/lib/utils'
+import { formatCurrency, formatToLocalTimeZone, fromKobo } from '@/lib/utils'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { IconButton } from '@mui/material'
 import { MenuDots } from '@solar-icons/react'
@@ -27,7 +27,7 @@ export const getCouponColumns = (
     cell: ({ row }) => (
       <span className="text-sm text-neutral-600">
         {row.original.created_at
-          ? format(new Date(row.original.created_at), 'dd/MM/yyyy')
+          ? format(formatToLocalTimeZone(row.original.created_at), 'dd/MM/yyyy')
           : '—'}
       </span>
     ),

@@ -1,10 +1,10 @@
 import { type ColumnDef } from '@tanstack/react-table'
 import { type Trip } from '../types'
 import { StatusBadge } from '@/components/ui/status-badge'
-import { formatDate } from '@/utils/table-utils'
-import { formatCurrency, fromKobo } from '@/lib/utils'
+import { formatCurrency, formatToLocalTimeZone, fromKobo } from '@/lib/utils'
 import { CopyButton } from '@/components/ui/copy-button'
 import { formatRideType } from '../utils'
+import { format } from 'date-fns'
 // import { useCategoryName } from '@/features/pricing-config/hooks/use-category-name'
 
 export const useTripColumns = (): ColumnDef<Trip>[] => {
@@ -25,7 +25,7 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
       accessorKey: 'created_at',
       header: 'Booking Date',
       cell: ({ row }) => (
-        <span className="text-sm">{formatDate(row.original?.created_at)}</span>
+        <span className="text-sm">{format(formatToLocalTimeZone(row.original?.created_at), 'dd/MM/yyyy, hh:mmaaa')}</span>
       ),
     },
     {
