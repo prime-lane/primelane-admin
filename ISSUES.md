@@ -34,7 +34,8 @@
 - [x] cancellation_refund_reason
 - [x] display unassigned for empty driver name/id
 - [x] booking date is different from booking trip detail pickup time
-- [ ] global provider for date
+- [x] global provider for date
+- [ ] mobile responsiveness on coupon details page
 
 side notes:
 

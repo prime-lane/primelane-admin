@@ -16,7 +16,7 @@ interface DateFormatProviderProps {
 export const DateFormatProvider = ({ children }: DateFormatProviderProps) => {
   const fmt = (
     isoString: string | Date | undefined,
-    pattern: string='yyyy-MM-dd hh:mm:ss a',
+    pattern: string = 'yyyy-MM-dd hh:mm:ss a',
   ): string => {
     if (!isoString) return '-'
     try {
@@ -35,6 +35,7 @@ export const DateFormatProvider = ({ children }: DateFormatProviderProps) => {
 
 export const useDateFormat = (): DateFormatContextValue => {
   const ctx = useContext(DateFormatContext)
-  if (!ctx) throw new Error('useDateFormat must be used within DateFormatProvider')
+  if (!ctx)
+    throw new Error('useDateFormat must be used within DateFormatProvider')
   return ctx
 }

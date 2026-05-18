@@ -225,7 +225,8 @@ export const TripDetails = () => {
               {pendingCount > 0 && (
                 <div className="flex items-center gap-4 pt-1">
                   <span className="text-neutral-400 text-sm w-60 shrink-0">
-                    {pendingCount} slot{pendingCount > 1 ? 's' : ''} pending assignment
+                    {pendingCount} slot{pendingCount > 1 ? 's' : ''} pending
+                    assignment
                   </span>
                 </div>
               )}
@@ -291,6 +292,19 @@ export const TripDetails = () => {
             label="Total trip time"
             value={formatDuration(trip.actual_duration)}
           />
+          {trip.coupon_code && (
+            <DetailRow
+              label="Coupon used"
+              value={`${
+                trip.coupon_code || '-'
+              } (${formatCurrency(fromKobo(trip.discount_applied))})`}
+              isLink
+              linkTo={path.DASHBOARD.COUPON_DETAILS.replace(
+                ':id',
+                trip.coupon_code || '',
+              )}
+            />
+          )}
           <DetailRow
             label="Payment Method"
             value={trip.payment_method || 'N/A'}

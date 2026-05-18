@@ -2,7 +2,12 @@ import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { useVehicleCategories } from '@/features/pricing-config/api/use-vehicle-categories'
-import { formatDateToLocal, formatToLocalTimeZone, fromKobo, toKobo } from '@/lib/utils'
+import {
+  formatDateToLocal,
+  formatToLocalTimeZone,
+  fromKobo,
+  toKobo,
+} from '@/lib/utils'
 import {
   Button,
   Checkbox,

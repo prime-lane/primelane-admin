@@ -133,6 +133,8 @@ export interface TripDetail {
   driver_vehicle?: DriverVehicle
   stops?: Location[]
   slots?: Slot[]
+  coupon_code?: string
+  discount_applied?: number
 }
 
 export interface Trip {

@@ -199,8 +199,7 @@ export const CouponDetails = () => {
             <StatusBadge status={isActive ? 'active' : 'inactive'} />
           </div>
           <span className="text-sm text-neutral-500">
-            Date Created:{' '}
-            {coupon.created_at ? format(coupon.created_at) : '—'}
+            Date Created: {coupon.created_at ? format(coupon.created_at) : '—'}
           </span>
         </div>
 
@@ -276,19 +275,11 @@ export const CouponDetails = () => {
               />
               <InfoCell
                 label="Validity - Start date"
-                value={
-                  coupon.starts_at
-                    ? format(coupon.starts_at)
-                    : '—'
-                }
+                value={coupon.starts_at ? format(coupon.starts_at) : '—'}
               />
               <InfoCell
                 label="Validity - End date"
-                value={
-                  coupon.expires_at
-                    ? format(coupon.expires_at)
-                    : '—'
-                }
+                value={coupon.expires_at ? format(coupon.expires_at) : '—'}
               />
               <InfoCell label="Scope" value={`${scopeLabel}`} />
             </div>
