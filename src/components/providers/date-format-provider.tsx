@@ -16,7 +16,7 @@ interface DateFormatProviderProps {
 export const DateFormatProvider = ({ children }: DateFormatProviderProps) => {
   const fmt = (
     isoString: string | Date | undefined,
-    pattern: string = 'yyyy-MM-dd hh:mm:ss a',
+    pattern: string = 'dd/MM/yyyy, hh:mma',
   ): string => {
     if (!isoString) return '-'
     try {

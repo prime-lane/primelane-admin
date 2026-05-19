@@ -27,7 +27,7 @@ export const getCouponColumns = (
     cell: ({ row }) => (
       <span className="text-sm text-neutral-600">
         {row.original.created_at
-          ? format(formatToLocalTimeZone(row.original.created_at), 'dd/MM/yyyy')
+          ? format(formatToLocalTimeZone(row.original.created_at), 'dd/MM/yyyy, hh:mma')
           : '—'}
       </span>
     ),

@@ -28,7 +28,7 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
         <span className="text-sm">
           {format(
             formatToLocalTimeZone(row.original?.created_at),
-            'dd/MM/yyyy, hh:mmaaa',
+            'dd/MM/yyyy, hh:mma',
           )}
         </span>
       ),

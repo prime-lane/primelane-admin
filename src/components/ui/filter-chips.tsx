@@ -49,5 +49,5 @@ export const formatDateRange = (
   const startDate = new Date(start)
   const endDate = new Date(end)
   if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) return ''
-  return `${format(startDate, 'dd/MM/yy')} - ${format(endDate, 'dd/MM/yy')}`
+  return `${format(startDate, 'dd/MM/yyyy')} - ${format(endDate, 'dd/MM/yyyy')}`
 }

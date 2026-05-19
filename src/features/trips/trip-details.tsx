@@ -269,10 +269,8 @@ export const TripDetails = () => {
               label="Pickup Date and Time"
               value={format(
                 formatToLocalTimeZone(pickupDateTime),
-                'dd/MM/yyyy, hh:mmaaa',
-              )
-                .replace('am', 'AM')
-                .replace('pm', 'PM')}
+                'dd/MM/yyyy, hh:mma',
+              )}
             />
           )}
           <DetailRow

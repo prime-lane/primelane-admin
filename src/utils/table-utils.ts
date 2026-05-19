@@ -1,11 +1,8 @@
+import { format } from 'date-fns'
 import { formatToLocalTimeZone } from '@/lib/utils'
 
 export function formatDate(date: string | Date): string {
-  const d = formatToLocalTimeZone(date)
-  const day = String(d.getDate()).padStart(2, '0')
-  const month = String(d.getMonth() + 1).padStart(2, '0')
-  const year = d.getFullYear()
-  return `${day}/${month}/${year}`
+  return format(formatToLocalTimeZone(date), 'dd/MM/yyyy, hh:mma')
 }
 
 export function globalFilter<T extends Record<string, any>>(

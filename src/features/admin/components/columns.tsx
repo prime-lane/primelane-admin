@@ -34,7 +34,7 @@ export const getAdminColumns = ({
       const val = info.getValue() as string
       return (
         <span className="text-sm font-medium text-neutral-900">
-          {val ? format(formatToLocalTimeZone(val), 'dd/MM/yyyy') : '-'}
+          {val ? format(formatToLocalTimeZone(val), 'dd/MM/yyyy, hh:mma') : '-'}
         </span>
       )
     },

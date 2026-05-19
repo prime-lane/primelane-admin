@@ -19,7 +19,7 @@ export const commissionColumns = [
   commissionHelper.accessor('settlement_date', {
     header: 'Settlement Date',
     cell: (info) =>
-      format(formatToLocalTimeZone(info.getValue()), 'MMM dd, yyyy'),
+      format(formatToLocalTimeZone(info.getValue()), 'dd/MM/yyyy, hh:mma'),
   }),
   commissionHelper.accessor('trip_id', {
     header: 'Trip ID',
@@ -73,7 +73,7 @@ export const driverSettlementColumns: ColumnDef<DriverSettlement>[] = [
     accessorKey: 'settlement_date',
     header: 'Settlement Date',
     cell: (info) =>
-      format(formatToLocalTimeZone(info.getValue() as string), 'MMM dd, yyyy'),
+      format(formatToLocalTimeZone(info.getValue() as string), 'dd/MM/yyyy, hh:mma'),
   },
   {
     accessorKey: 'trip_id',
@@ -142,7 +142,7 @@ export const transactionColumns = (
     cell: (info) =>
       format(
         formatToLocalTimeZone(info.getValue() as string),
-        'MMM dd, yyyy HH:mm',
+        'dd/MM/yyyy, hh:mma',
       ),
   },
   {
@@ -179,7 +179,7 @@ export const refundColumns: ColumnDef<Refund>[] = [
     cell: (info) =>
       format(
         formatToLocalTimeZone(info.getValue() as string),
-        'MMM dd, yyyy HH:mm',
+        'dd/MM/yyyy, hh:mma',
       ),
   },
   {
