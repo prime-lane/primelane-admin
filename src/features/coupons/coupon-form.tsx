@@ -3,7 +3,6 @@ import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { useVehicleCategories } from '@/features/pricing-config/api/use-vehicle-categories'
 import {
-  formatDateToLocal,
   formatToLocalTimeZone,
   fromKobo,
   toKobo,
@@ -206,7 +205,7 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
         formData.usage_type === 'multiple' && formData.usage_limit
           ? Number(formData.usage_limit)
           : undefined,
-      expires_at: formatDateToLocal(formData.expires_at),
+      expires_at: formData.expires_at.toISOString(),
     }
 
     if (isEdit) {
@@ -222,7 +221,7 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
             ? toKobo(Number(formData.discount_value))
             : Number(formData.discount_value),
         usage_type: formData.usage_type,
-        starts_at: formatDateToLocal(formData.starts_at),
+        starts_at: formData.starts_at.toISOString(),
         applicable_ride_types: formData.applicable_ride_types,
         applicable_category_ids: formData.applicable_category_ids,
         ...payload,
@@ -293,12 +292,23 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
               <div className="space-y-4">
                 <div>
                   <TextField
-                    {...register('code', { required: 'Code name is required' })}
+                    {...register('code', {
+                      required: 'Code name is required',
+                      pattern: {
+                        value: /^[A-Z0-9_]+$/,
+                        message: 'Only letters, numbers, and underscores allowed',
+                      },
+                      onChange: (e) => {
+                        e.target.value = e.target.value
+                          .toUpperCase()
+                          .replace(/[^A-Z0-9_]/g, '')
+                      },
+                    })}
                     fullWidth
                     size="medium"
                     label="Code Name"
                     sx={inputSx}
-                    placeholder="E.g. WELCOME1, COMPANYXYZ"
+                    placeholder="E.g. WELCOME1, COMPANY_XYZ"
                     error={!!errors.code}
                     helperText={errors.code?.message}
                     disabled={isEdit}
