@@ -14,6 +14,7 @@ export const Invite = () => {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const inviteKey = searchParams.get('id')
+  const emailParam = searchParams.get('email')
 
   const { mutate: acceptInvite, isPending } = useAcceptAdminInvite()
 
@@ -24,7 +25,7 @@ export const Invite = () => {
   } = useForm<InviteFormValues>({
     resolver: zodResolver(inviteSchema),
     defaultValues: {
-      email: '',
+      email: emailParam || '',
       password: '',
       confirmPassword: '',
     },
