@@ -9,6 +9,7 @@ import type { Transaction } from '@/features/customers/types'
 interface UseTransactionsParams extends PaginationParams {
   search?: string
   ledger_entry?: 'cash_in' | 'cash_out' | 'internal'
+  transaction_type?: 'DR' | 'CR',
   start_date?: string
   end_date?: string
   is_refund?: 'true'
