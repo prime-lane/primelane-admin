@@ -65,6 +65,7 @@ export interface Transaction {
   first_name: string
   last_name: string
   transaction_type: 'CR' | 'DR'
+  ledger_entry: 'cash_in' | 'cash_out' | 'internal'
   description: string
   provider: string
   channel: string

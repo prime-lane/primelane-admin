@@ -18,6 +18,7 @@ export type NavItem = {
   hasSubmenu?: boolean
   children?: NavItem[]
   permission?: string
+  anyOf?: string[]
   description?: string
 }
 
@@ -26,7 +27,7 @@ export const NAV_ITEMS: NavItem[] = [
     label: 'Home',
     icon: Home,
     to: path.DASHBOARD.ROOT,
-    permission: 'dashboard:view',
+    permission: 'home:view',
     description: 'View dashboard',
   },
   {
@@ -62,25 +63,31 @@ export const NAV_ITEMS: NavItem[] = [
     icon: WalletMoney,
     to: path.DASHBOARD.FINANCE.TRANSACTIONS,
     hasSubmenu: true,
-    permission: 'finance:view',
+    anyOf: [
+      'finance:view_commissions',
+      'finance:view_earnings',
+      'finance:view_driver_wallet',
+      'finance:view_customer_wallet',
+      'finance:view_refunds',
+    ],
     description: 'Finance management',
     children: [
       {
         label: 'Transactions',
         to: path.DASHBOARD.FINANCE.TRANSACTIONS,
-        permission: 'transaction:view',
+        permission: 'finance:view_commissions',
         description: 'View transactions',
       },
       {
         label: 'Customer Wallet',
         to: path.DASHBOARD.FINANCE.CUSTOMER_WALLET,
-        permission: 'wallet:view',
+        permission: 'finance:view_customer_wallet',
         description: 'View customer wallet',
       },
       {
         label: 'Refund',
         to: path.DASHBOARD.FINANCE.REFUND,
-        permission: 'refund:view',
+        permission: 'finance:view_refunds',
         description: 'View refunds',
       },
     ],
@@ -89,7 +96,7 @@ export const NAV_ITEMS: NavItem[] = [
     label: 'Coupons',
     icon: Sale,
     to: path.DASHBOARD.COUPONS,
-    permission: 'coupon:view',
+    permission: 'coupons:view',
     description: 'Manage coupons',
   },
   {
@@ -104,12 +111,12 @@ export const NAV_ITEMS: NavItem[] = [
         label: 'Admin',
         to: path.DASHBOARD.ADMIN_MANAGEMENT,
         permission: 'admin_management:view',
-        description: 'Invite admin',
+        description: 'View admins',
       },
       {
         label: 'Roles & Permissions',
         to: path.DASHBOARD.ROLES_PERMISSIONS,
-        permission: 'rbac:view',
+        permission: 'rbac:create_role',
         description: 'Manage roles and permissions',
       },
     ],

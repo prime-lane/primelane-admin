@@ -137,7 +137,7 @@ export const useUpdateCustomer = (id?: string) => {
       if (!id) throw new Error('Customer ID is required')
       const response = await apiClient.patch<{ user: Customer }>(
         e.CUSTOMERS.BY_ID(id),
-        data,
+        { ...data, user_type: 'customer' },
       )
       return response.data
     },

@@ -3,6 +3,7 @@ import { MenuDots } from '@solar-icons/react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useState } from 'react'
 import type { Role } from '../../types'
+import { usePermissionsContext } from '@/hooks/permissions-context'
 
 const ActionMenu = ({
   role,
@@ -14,6 +15,10 @@ const ActionMenu = ({
   onDelete: (role: Role) => void
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const { hasPermission } = usePermissionsContext()
+
+  const canEdit = hasPermission('rbac:update_role')
+  const canDelete = hasPermission('rbac:delete_role')
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -33,6 +38,8 @@ const ActionMenu = ({
     handleClose()
   }
 
+  if (!canEdit && !canDelete) return null
+
   return (
     <>
       <IconButton size="small" onClick={handleOpen}>
@@ -45,19 +52,23 @@ const ActionMenu = ({
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem
-          onClick={handleEdit}
-          sx={{ bgcolor: '#F3F4F6', justifyContent: 'center' }}
-        >
-          <span className="text-sm font-medium text-neutral-500 uppercase tracking-tight">
-            Edit Permissions
-          </span>
-        </MenuItem>
-        <MenuItem onClick={handleDelete}>
-          <span className="text-sm font-medium text-red-400 uppercase tracking-tight text-center">
-            Delete Role
-          </span>
-        </MenuItem>
+        {canEdit && (
+          <MenuItem
+            onClick={handleEdit}
+            sx={{ bgcolor: '#F3F4F6', justifyContent: 'center' }}
+          >
+            <span className="text-sm font-medium text-neutral-500 uppercase tracking-tight">
+              Edit Permissions
+            </span>
+          </MenuItem>
+        )}
+        {canDelete && (
+          <MenuItem onClick={handleDelete}>
+            <span className="text-sm font-medium text-red-400 uppercase tracking-tight text-center">
+              Delete Role
+            </span>
+          </MenuItem>
+        )}
       </Menu>
     </>
   )

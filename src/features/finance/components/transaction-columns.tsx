@@ -30,13 +30,20 @@ export const useTransactionColumns = (): ColumnDef<Transaction>[] => {
       ),
     },
     {
-      accessorKey: 'transaction_type',
+      accessorKey: 'ledger_entry',
       header: 'Transaction Type',
-      cell: ({ row }) => (
-        <span className="text-sm text-neutral-800">
-          {row.original.transaction_type === 'CR' ? 'Inflow' : 'Outflow'}
-        </span>
-      ),
+      cell: ({ row }) => {
+        const labels: Record<string, string> = {
+          cash_in: 'Inflow',
+          cash_out: 'Outflow',
+          internal: 'Internal',
+        }
+        return (
+          <span className="text-sm text-neutral-800">
+            {labels[row.original.ledger_entry] ?? row.original.ledger_entry ?? '—'}
+          </span>
+        )
+      },
     },
     {
       accessorKey: 'provider',

@@ -1,7 +1,6 @@
 import { CountUp } from '@/components/ui/count-up'
 import { FilterMenu } from '@/components/ui/filter-menu'
 import { ErrorState } from '@/components/ui/loading-error-states'
-import { PermissionGate } from '@/components/ui/permission-gate'
 import { formatCurrency, formatDateToLocal, fromKobo } from '@/lib/utils'
 import { Box, Card, CardContent, Grid, Skeleton } from '@mui/material'
 import {
@@ -134,19 +133,17 @@ export const Home = () => {
         }}
       >
         <h1 className="text-4xl">Summary</h1>
-        <PermissionGate permission="dashboard:filter">
-          <FilterMenu
-            options={[
-              {
-                label: 'Date',
-                key: 'date_joined',
-                type: 'date-range',
-              },
-            ]}
-            onFilterChange={handleFilterChange}
-            activeFilters={{}}
-          />
-        </PermissionGate>
+        <FilterMenu
+          options={[
+            {
+              label: 'Date',
+              key: 'date_joined',
+              type: 'date-range',
+            },
+          ]}
+          onFilterChange={handleFilterChange}
+          activeFilters={{}}
+        />
       </Box>
 
       <Grid container spacing={4}>

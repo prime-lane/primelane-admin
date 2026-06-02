@@ -2,6 +2,7 @@ import { Menu, MenuItem } from '@mui/material'
 import { useState } from 'react'
 import type { ReactNode } from 'react'
 import type { Admin } from '../types'
+import { usePermissionsContext } from '@/hooks/permissions-context'
 
 interface AdminActionMenuProps {
   admin: Admin
@@ -28,6 +29,9 @@ export const AdminActionMenu = ({
   onToggleStatus,
 }: AdminActionMenuProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const { hasPermission } = usePermissionsContext()
+
+  const canEdit = hasPermission('admin_management:edit')
 
   const handleClose = () => setAnchorEl(null)
 
@@ -39,6 +43,8 @@ export const AdminActionMenu = ({
   const stop = (event: React.MouseEvent<HTMLElement>) => event.stopPropagation()
 
   const isActive = admin.status === 'active'
+
+  if (!canEdit) return null
 
   return (
     <>

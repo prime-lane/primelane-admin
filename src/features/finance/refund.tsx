@@ -13,7 +13,6 @@ import { buildQueryParams } from '@/lib/utils'
 import { downloadExport } from '@/utils/export-utils'
 import { Box } from '@mui/material'
 import { parseAsString, useQueryState } from 'nuqs'
-import { PermissionGate } from '@/components/ui/permission-gate'
 import { useTransactions } from './api/use-transactions'
 import { useRefundColumns } from './components/transaction-columns'
 import { useState } from 'react'
@@ -111,13 +110,11 @@ export const Refund = () => {
           />
         </Box>
         <div className="flex gap-3">
-          <PermissionGate permission="finance:filter">
-            <FilterMenu
-              options={filterOptions}
-              onFilterChange={handleFilterChange}
-              activeFilters={{}}
-            />
-          </PermissionGate>
+          <FilterMenu
+            options={filterOptions}
+            onFilterChange={handleFilterChange}
+            activeFilters={{}}
+          />
           <ExportButton onClick={handleExport} isLoading={isExporting} />
         </div>
       </Box>

@@ -39,6 +39,7 @@ export const DashboardLayout = () => {
             children={item.children}
             onLinkClick={handleDrawerClose}
             permission={item.permission}
+            anyOf={item.anyOf}
             dataTour={item.label
               .toLowerCase()
               .replace(/\s+/g, '-')

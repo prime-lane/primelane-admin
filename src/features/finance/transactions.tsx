@@ -15,7 +15,6 @@ import { parseAsString, useQueryState } from 'nuqs'
 import { useTransactions } from './api/use-transactions'
 import { useTransactionColumns } from './components/transaction-columns'
 import { useTableParams } from '@/hooks/use-table-params'
-import { PermissionGate } from '@/components/ui/permission-gate'
 import { useState } from 'react'
 
 export const Transactions = () => {
@@ -29,8 +28,8 @@ export const Transactions = () => {
     setSearch: setSearchTerm,
   } = useTableParams()
 
-  const [transactionType, setTransactionType] = useQueryState(
-    'transaction_type',
+  const [ledgerEntry, setLedgerEntry] = useQueryState(
+    'ledger_entry',
     parseAsString,
   )
   const [startDate, setStartDate] = useQueryState('start_date', parseAsString)
@@ -43,7 +42,7 @@ export const Transactions = () => {
     page,
     page_size: limit,
     has_provider: 'true',
-    transaction_type: (transactionType as 'CR' | 'DR') || undefined,
+    ledger_entry: (ledgerEntry as 'cash_in' | 'cash_out' | 'internal') || undefined,
     start_date: startDate || undefined,
     end_date: endDate || undefined,
   })
@@ -53,8 +52,8 @@ export const Transactions = () => {
     value: string | { start: Date | null; end: Date | null },
   ) => {
     setPage(1)
-    if (key === 'transaction_type') {
-      setTransactionType(
+    if (key === 'ledger_entry') {
+      setLedgerEntry(
         (value as string).toLowerCase() === 'all' ? null : (value as string),
       )
     } else if (key === 'date') {
@@ -66,7 +65,7 @@ export const Transactions = () => {
 
   const handleRemoveFilter = (key: string) => {
     setPage(1)
-    if (key === 'transaction_type') setTransactionType(null)
+    if (key === 'ledger_entry') setLedgerEntry(null)
     else if (key === 'date') {
       setStartDate(null)
       setEndDate(null)
@@ -79,7 +78,7 @@ export const Transactions = () => {
     const params = buildQueryParams({
       search: debouncedSearch || undefined,
       has_provider: 'true',
-      transaction_type: transactionType || undefined,
+      ledger_entry: ledgerEntry || undefined,
       start_date: startDate || undefined,
       end_date: endDate || undefined,
     })
@@ -92,12 +91,18 @@ export const Transactions = () => {
     }
   }
 
+  const ledgerEntryLabels: Record<string, string> = {
+    cash_in: 'Inflow',
+    cash_out: 'Outflow',
+    internal: 'Internal',
+  }
+
   const activeFilterChips: ActiveFilter[] = []
-  if (transactionType && transactionType !== 'all') {
+  if (ledgerEntry && ledgerEntry !== 'all') {
     activeFilterChips.push({
-      key: 'transaction_type',
+      key: 'ledger_entry',
       label: 'Type',
-      displayValue: transactionType === 'CR' ? 'Inflow' : 'Outflow',
+      displayValue: ledgerEntryLabels[ledgerEntry] ?? ledgerEntry,
     })
   }
   if (startDate && endDate) {
@@ -111,12 +116,13 @@ export const Transactions = () => {
   const filterOptions: FilterOption[] = [
     {
       label: 'Transaction Type',
-      key: 'transaction_type',
+      key: 'ledger_entry',
       type: 'select',
       options: [
         { label: 'All', value: 'all' },
-        { label: 'Inflow', value: 'CR' },
-        { label: 'Outflow', value: 'DR' },
+        { label: 'Inflow', value: 'cash_in' },
+        { label: 'Outflow', value: 'cash_out' },
+        { label: 'Internal', value: 'internal' },
       ],
     },
     {
@@ -143,15 +149,13 @@ export const Transactions = () => {
           />
         </Box>
         <div className="flex gap-3">
-          <PermissionGate permission="finance:filter">
-            <FilterMenu
-              options={filterOptions}
-              onFilterChange={handleFilterChange}
-              activeFilters={{
-                transaction_type: transactionType || 'all',
-              }}
-            />
-          </PermissionGate>
+          <FilterMenu
+            options={filterOptions}
+            onFilterChange={handleFilterChange}
+            activeFilters={{
+              ledger_entry: ledgerEntry || 'all',
+            }}
+          />
           <ExportButton onClick={handleExport} isLoading={isExporting} />
         </div>
       </Box>

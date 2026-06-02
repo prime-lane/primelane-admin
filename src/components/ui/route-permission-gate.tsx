@@ -13,9 +13,14 @@ const getFirstAccessibleRoute = (
   hasPermission: (permission: string) => boolean,
 ): string | null => {
   for (const item of NAV_ITEMS) {
-    if (item.permission && hasPermission(item.permission)) {
+    const parentAllowed =
+      (item.permission && hasPermission(item.permission)) ||
+      (item.anyOf && item.anyOf.some(hasPermission))
+
+    if (!item.children && parentAllowed) {
       return item.to
     }
+
     if (item.children) {
       for (const child of item.children) {
         if (child.permission && hasPermission(child.permission)) {

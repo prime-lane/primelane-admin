@@ -14,7 +14,6 @@ import { downloadExport } from '@/utils/export-utils'
 import { Box, Tab, Tabs } from '@mui/material'
 import { parseAsString, useQueryState } from 'nuqs'
 import { useState } from 'react'
-import { PermissionGate } from '@/components/ui/permission-gate'
 import { useTransactions } from './api/use-transactions'
 import { useCustomerWalletColumns } from './components/transaction-columns'
 
@@ -130,13 +129,11 @@ export const CustomerWallet = () => {
           />
         </Box>
         <div className="flex gap-3">
-          <PermissionGate permission="finance:filter">
-            <FilterMenu
-              options={filterOptions}
-              onFilterChange={handleFilterChange}
-              activeFilters={{}}
-            />
-          </PermissionGate>
+          <FilterMenu
+            options={filterOptions}
+            onFilterChange={handleFilterChange}
+            activeFilters={{}}
+          />
           <ExportButton onClick={handleExport} isLoading={isExporting} />
         </div>
       </Box>

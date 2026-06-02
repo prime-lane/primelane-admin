@@ -14,6 +14,7 @@ interface SidebarNavItemProps {
   children?: { label: string; to: string; permission?: string }[]
   onLinkClick?: () => void
   permission?: string
+  anyOf?: string[]
   dataTour?: string
 }
 
@@ -27,6 +28,7 @@ export const SidebarNavItem = ({
   children,
   onLinkClick,
   permission,
+  anyOf,
   dataTour,
 }: SidebarNavItemProps) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -52,7 +54,7 @@ export const SidebarNavItem = ({
   }
 
   if (hasSubmenu) {
-    return (
+    const submenuContent = (
       <div className="flex flex-col" data-tour={dataTour}>
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -112,6 +114,14 @@ export const SidebarNavItem = ({
         )}
       </div>
     )
+
+    if (anyOf) {
+      return <PermissionGate anyOf={anyOf}>{submenuContent}</PermissionGate>
+    }
+    if (permission) {
+      return <PermissionGate permission={permission}>{submenuContent}</PermissionGate>
+    }
+    return submenuContent
   }
 
   const content = (

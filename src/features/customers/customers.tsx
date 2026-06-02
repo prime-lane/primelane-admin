@@ -13,7 +13,6 @@ import { useDebounce } from '@/hooks/use-debounce'
 import { downloadExport } from '@/utils/export-utils'
 import { Box } from '@mui/material'
 
-import { PermissionGate } from '@/components/ui/permission-gate'
 import { useTableParams } from '@/hooks/use-table-params'
 import { parseAsString, useQueryState } from 'nuqs'
 import { useNavigate } from 'react-router-dom'
@@ -141,15 +140,13 @@ export const Customers = () => {
           <SearchInput value={searchTerm} onChange={setSearchTerm} />
         </Box>
         <div className="flex gap-3">
-          <PermissionGate permission="customers:filter">
-            <FilterMenu
-              options={filterOptions}
-              onFilterChange={handleFilterChange}
-              activeFilters={{
-                status: status || 'all',
-              }}
-            />
-          </PermissionGate>
+          <FilterMenu
+            options={filterOptions}
+            onFilterChange={handleFilterChange}
+            activeFilters={{
+              status: status || 'all',
+            }}
+          />
           <ExportButton onClick={handleExport} isLoading={isExporting} />
         </div>
       </Box>

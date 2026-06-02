@@ -121,17 +121,17 @@ export const CustomerDetails = () => {
       {
         id: 'overview',
         label: 'Overview',
-        permission: 'customers:view_details:overview',
+        permission: 'customers:view',
       },
       {
         id: 'identity',
         label: 'Identity Details',
-        permission: 'customers:view_details:identity_details',
+        permission: 'customers:view',
       },
       {
         id: 'ratings',
         label: 'Ratings',
-        permission: 'customers:view_details:ratings_reviews',
+        permission: 'customers:view',
       },
     ],
     [],
@@ -205,13 +205,15 @@ export const CustomerDetails = () => {
           <StatusBadge status={customer.status as any} />
         </div>
 
-        <Button
-          variant="contained"
-          endIcon={<AltArrowDown />}
-          onClick={handleActionClick}
-        >
-          Action
-        </Button>
+        {hasPermission('customers:edit') || hasPermission('customers:activate_deactivate') ? (
+          <Button
+            variant="contained"
+            endIcon={<AltArrowDown />}
+            onClick={handleActionClick}
+          >
+            Action
+          </Button>
+        ) : null}
         <Menu
           anchorEl={anchorEl}
           open={openMenu}
@@ -225,10 +227,12 @@ export const CustomerDetails = () => {
             horizontal: 'right',
           }}
         >
-          <MenuItem onClick={handleEdit}>
-            <span className="text-base text-neutral-500">Edit Account</span>
-          </MenuItem>
-          {isActive && (
+          {hasPermission('customers:edit') && (
+            <MenuItem onClick={handleEdit}>
+              <span className="text-base text-neutral-500">Edit Account</span>
+            </MenuItem>
+          )}
+          {hasPermission('customers:activate_deactivate') && isActive && (
             <MenuItem
               onClick={() => handleStatusChangeClick('inactive')}
               sx={{ color: colors.green[50] }}
@@ -236,7 +240,7 @@ export const CustomerDetails = () => {
               <span className="text-base text-red-500">Deactivate Account</span>
             </MenuItem>
           )}
-          {isDeactivated && (
+          {hasPermission('customers:activate_deactivate') && isDeactivated && (
             <MenuItem
               onClick={() => handleStatusChangeClick('reactivate')}
               sx={{ color: 'success.main' }}

@@ -18,10 +18,12 @@ import { toast } from 'sonner'
 import { useCoupons } from './api/use-coupons'
 import { getCouponColumns } from './components/columns'
 import type { Coupon } from './types'
+import { usePermissionsContext } from '@/hooks/permissions-context'
 
 export const Coupons = () => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+  const { hasPermission } = usePermissionsContext()
   const { page, setPage, pageSize, setPageSize, search, setSearch } =
     useTableParams()
   const debouncedSearch = useDebounce(search, 500)
@@ -115,29 +117,31 @@ export const Coupons = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-4xl">Coupons</h1>
-        <Button
-          variant="contained"
-          onClick={() => navigate(path.DASHBOARD.COUPON_CREATE)}
-          endIcon={
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M4.16663 10.0003H15.8333M9.99996 4.16699V15.8337"
-                stroke="white"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          }
-        >
-          CREATE COUPON
-        </Button>
+        {hasPermission('coupons:create') && (
+          <Button
+            variant="contained"
+            onClick={() => navigate(path.DASHBOARD.COUPON_CREATE)}
+            endIcon={
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4.16663 10.0003H15.8333M9.99996 4.16699V15.8337"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            }
+          >
+            CREATE COUPON
+          </Button>
+        )}
       </div>
 
       <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
@@ -154,7 +158,9 @@ export const Coupons = () => {
             onFilterChange={handleFilterChange}
             activeFilters={{ status: status || 'all' }}
           />
-          <ExportButton onClick={handleExport} isLoading={isExporting} />
+          {hasPermission('coupons:export') && (
+            <ExportButton onClick={handleExport} isLoading={isExporting} />
+          )}
         </div>
       </Box>
 

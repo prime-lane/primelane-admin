@@ -143,7 +143,7 @@ export const useUpdateDriver = (id?: string) => {
       if (!id) throw new Error('Driver ID is required')
       const response = await apiClient.patch<{ user: Driver }>(
         e.DRIVERS.BY_ID(id),
-        data,
+        { ...data, user_type: 'driver' },
       )
       return response.data
     },

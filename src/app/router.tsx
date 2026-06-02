@@ -139,7 +139,7 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: (
-          <RoutePermissionGate permission="dashboard:view">
+          <RoutePermissionGate permission="home:view">
             <Suspense fallback={<Loading />}>
               <Home />
             </Suspense>
@@ -159,7 +159,7 @@ export const router = createBrowserRouter([
       {
         path: path.DASHBOARD.CUSTOMER_DETAILS,
         element: (
-          <RoutePermissionGate permission="customers:view_details">
+          <RoutePermissionGate permission="customers:view">
             <Suspense fallback={<Loading />}>
               <CustomerDetails />
             </Suspense>
@@ -187,7 +187,7 @@ export const router = createBrowserRouter([
       {
         path: path.DASHBOARD.DRIVER_DETAILS,
         element: (
-          <RoutePermissionGate permission="drivers:view_details">
+          <RoutePermissionGate permission="drivers:view">
             <Suspense fallback={<Loading />}>
               <DriverDetails />
             </Suspense>
@@ -215,9 +215,11 @@ export const router = createBrowserRouter([
       {
         path: path.DASHBOARD.PRICING_CONFIG_DETAILS,
         element: (
-          <Suspense fallback={<Loading />}>
-            <PricingConfigDetails />
-          </Suspense>
+          <RoutePermissionGate permission="price_configurations:edit">
+            <Suspense fallback={<Loading />}>
+              <PricingConfigDetails />
+            </Suspense>
+          </RoutePermissionGate>
         ),
       },
       {
@@ -233,7 +235,7 @@ export const router = createBrowserRouter([
       {
         path: path.DASHBOARD.TRIP_DETAILS,
         element: (
-          <RoutePermissionGate permission="trips:view_details">
+          <RoutePermissionGate permission="trips:view">
             <Suspense fallback={<Loading />}>
               <TripDetails />
             </Suspense>
@@ -287,7 +289,7 @@ export const router = createBrowserRouter([
       {
         path: path.DASHBOARD.FINANCE.CUSTOMER_WALLET,
         element: (
-          <RoutePermissionGate permission="wallet:view">
+          <RoutePermissionGate permission="finance:view_customer_wallet">
             <Suspense fallback={<Loading />}>
               <CustomerWallet />
             </Suspense>
@@ -297,7 +299,7 @@ export const router = createBrowserRouter([
       {
         path: path.DASHBOARD.FINANCE.TRANSACTIONS,
         element: (
-          <RoutePermissionGate permission="transaction:view">
+          <RoutePermissionGate permission="finance:view_commissions">
             <Suspense fallback={<Loading />}>
               <Transactions />
             </Suspense>
@@ -307,7 +309,7 @@ export const router = createBrowserRouter([
       {
         path: path.DASHBOARD.FINANCE.REFUND,
         element: (
-          <RoutePermissionGate permission="refund:view">
+          <RoutePermissionGate permission="finance:view_refunds">
             <Suspense fallback={<Loading />}>
               <Refund />
             </Suspense>
@@ -317,7 +319,7 @@ export const router = createBrowserRouter([
       {
         path: path.DASHBOARD.COUPONS,
         element: (
-          <RoutePermissionGate permission="coupon:view">
+          <RoutePermissionGate permission="coupons:view">
             <Suspense fallback={<Loading />}>
               <Coupons />
             </Suspense>
@@ -327,25 +329,31 @@ export const router = createBrowserRouter([
       {
         path: path.DASHBOARD.COUPON_CREATE,
         element: (
-          <Suspense fallback={<Loading />}>
-            <CouponForm mode="create" />
-          </Suspense>
+          <RoutePermissionGate permission="coupons:create">
+            <Suspense fallback={<Loading />}>
+              <CouponForm mode="create" />
+            </Suspense>
+          </RoutePermissionGate>
         ),
       },
       {
         path: path.DASHBOARD.COUPON_DETAILS,
         element: (
-          <Suspense fallback={<Loading />}>
-            <CouponDetails />
-          </Suspense>
+          <RoutePermissionGate permission="coupons:view">
+            <Suspense fallback={<Loading />}>
+              <CouponDetails />
+            </Suspense>
+          </RoutePermissionGate>
         ),
       },
       {
         path: path.DASHBOARD.COUPON_EDIT,
         element: (
-          <Suspense fallback={<Loading />}>
-            <CouponForm mode="edit" />
-          </Suspense>
+          <RoutePermissionGate permission="coupons:edit">
+            <Suspense fallback={<Loading />}>
+              <CouponForm mode="edit" />
+            </Suspense>
+          </RoutePermissionGate>
         ),
       },
       {
@@ -361,7 +369,7 @@ export const router = createBrowserRouter([
       {
         path: path.DASHBOARD.ROLES_PERMISSIONS,
         element: (
-          <RoutePermissionGate permission="rbac:view">
+          <RoutePermissionGate permission="rbac:create_role">
             <Suspense fallback={<Loading />}>
               <RolesManagement />
             </Suspense>

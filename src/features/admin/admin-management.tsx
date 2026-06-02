@@ -123,33 +123,29 @@ export const AdminManagement = () => {
           />
         </Box>
         <div className="flex gap-3">
-          <PermissionGate permission="admin_management:filter">
-            <FilterMenu
-              options={[
-                {
-                  label: 'Status',
-                  key: 'status',
-                  type: 'select',
-                  options: [
-                    { label: 'All', value: 'all' },
-                    { label: 'Pending', value: 'pending' },
-                    { label: 'Active', value: 'active' },
-                    { label: 'Deactivated', value: 'deactivated' },
-                  ],
-                },
-                {
-                  label: 'Date Joined',
-                  key: 'date_joined',
-                  type: 'date-range',
-                },
-              ]}
-              onFilterChange={handleFilterChange}
-              activeFilters={{ status: status || 'all' }}
-            />
-          </PermissionGate>
-          <PermissionGate permission="admin_management:export">
-            <ExportButton onClick={handleExport} isLoading={isExporting} />
-          </PermissionGate>
+          <FilterMenu
+            options={[
+              {
+                label: 'Status',
+                key: 'status',
+                type: 'select',
+                options: [
+                  { label: 'All', value: 'all' },
+                  { label: 'Pending', value: 'pending' },
+                  { label: 'Active', value: 'active' },
+                  { label: 'Deactivated', value: 'deactivated' },
+                ],
+              },
+              {
+                label: 'Date Joined',
+                key: 'date_joined',
+                type: 'date-range',
+              },
+            ]}
+            onFilterChange={handleFilterChange}
+            activeFilters={{ status: status || 'all' }}
+          />
+          <ExportButton onClick={handleExport} isLoading={isExporting} />
         </div>
       </Box>
 

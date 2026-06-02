@@ -165,27 +165,27 @@ export const DriverDetails = () => {
       {
         id: 'overview',
         label: 'Overview',
-        permission: 'drivers:view_details',
+        permission: 'drivers:view',
       },
       {
         id: 'identity',
         label: 'Identity Details',
-        permission: 'drivers:view_details',
+        permission: 'drivers:view',
       },
       {
         id: 'license',
         label: 'Driver License Details',
-        permission: 'drivers:view_details',
+        permission: 'drivers:view',
       },
       {
         id: 'vehicle',
         label: 'Vehicle Details',
-        permission: 'drivers:view_details',
+        permission: 'drivers:view',
       },
       {
         id: 'ratings',
         label: 'Ratings',
-        permission: 'drivers:view_details',
+        permission: 'drivers:view',
       },
     ],
     [],
@@ -259,13 +259,15 @@ export const DriverDetails = () => {
           <StatusBadge status={driver.status as any} />
         </div>
 
-        <Button
-          variant="contained"
-          endIcon={<AltArrowDown />}
-          onClick={handleActionClick}
-        >
-          Action
-        </Button>
+        {hasPermission('drivers:edit') || hasPermission('drivers:activate_deactivate') ? (
+          <Button
+            variant="contained"
+            endIcon={<AltArrowDown />}
+            onClick={handleActionClick}
+          >
+            Action
+          </Button>
+        ) : null}
         <Menu
           anchorEl={anchorEl}
           open={openMenu}
@@ -279,29 +281,28 @@ export const DriverDetails = () => {
             horizontal: 'right',
           }}
         >
-          <MenuItem onClick={handleEdit}>
-            <span className="text-base text-neutral-500">Edit Account</span>
-          </MenuItem>
-          {/* <MenuItem onClick={() => handleStatusChangeClick('vehicle_category')}>
-            <span className="text-base text-neutral-500">
-              Update vehicle category
-            </span>
-          </MenuItem> */}
-          {driver.status === 'active' ? (
-            <MenuItem
-              onClick={() => handleStatusChangeClick('inactive')}
-              sx={{ color: colors.green[50] }}
-            >
-              <span className="text-base text-red-500">Deactivate Account</span>
+          {hasPermission('drivers:edit') && (
+            <MenuItem onClick={handleEdit}>
+              <span className="text-base text-neutral-500">Edit Account</span>
             </MenuItem>
-          ) : (
-            <MenuItem
-              onClick={() => handleStatusChangeClick('reactivate')}
-              sx={{ color: 'success.main' }}
-              disabled={!kycDetails?.is_vehicle_set}
-            >
-              <span className="text-base text-green-500">Activate Account</span>
-            </MenuItem>
+          )}
+          {hasPermission('drivers:activate_deactivate') && (
+            driver.status === 'active' ? (
+              <MenuItem
+                onClick={() => handleStatusChangeClick('inactive')}
+                sx={{ color: colors.green[50] }}
+              >
+                <span className="text-base text-red-500">Deactivate Account</span>
+              </MenuItem>
+            ) : (
+              <MenuItem
+                onClick={() => handleStatusChangeClick('reactivate')}
+                sx={{ color: 'success.main' }}
+                disabled={!kycDetails?.is_vehicle_set}
+              >
+                <span className="text-base text-green-500">Activate Account</span>
+              </MenuItem>
+            )
           )}
         </Menu>
 

@@ -2,6 +2,7 @@ import { Menu, MenuItem } from '@mui/material'
 import { useState } from 'react'
 import type { ReactNode } from 'react'
 import type { Coupon } from '../types'
+import { usePermissionsContext } from '@/hooks/permissions-context'
 
 interface CouponActionMenuProps {
   coupon: Coupon
@@ -32,6 +33,11 @@ export const CouponActionMenu = ({
   stopPropagation = false,
 }: CouponActionMenuProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const { hasPermission } = usePermissionsContext()
+
+  const canEdit = hasPermission('coupons:edit')
+  const canExport = hasPermission('coupons:export')
+  const canToggle = hasPermission('coupons:toggle')
 
   const handleClose = () => setAnchorEl(null)
 
@@ -43,6 +49,8 @@ export const CouponActionMenu = ({
   const withOptionalStop = (event: React.MouseEvent<HTMLElement>) => {
     if (stopPropagation) event.stopPropagation()
   }
+
+  if (!canEdit && !canExport && !canToggle) return null
 
   return (
     <>
@@ -71,62 +79,68 @@ export const CouponActionMenu = ({
           },
         }}
       >
-        <MenuItem
-          onClick={(event) => {
-            withOptionalStop(event)
-            onEdit(coupon)
-            handleClose()
-          }}
-          sx={{
-            ...baseItemSx,
-            bgcolor: '#F3F4F6',
-            '&:hover': { bgcolor: '#EAECEF' },
-          }}
-        >
-          <span className="text-xs font-medium uppercase tracking-tight text-neutral-500">
-            Edit Coupon
-          </span>
-        </MenuItem>
-
-        <MenuItem
-          onClick={(event) => {
-            withOptionalStop(event)
-            onExportUsage(coupon)
-            handleClose()
-          }}
-          disabled={isExporting}
-          sx={{
-            ...baseItemSx,
-            bgcolor: '#F3F4F6',
-            '&:hover': { bgcolor: '#EAECEF' },
-          }}
-        >
-          <span className="text-xs font-medium uppercase tracking-tight text-neutral-500">
-            {isExporting ? 'Exporting...' : 'Export Usage Record'}
-          </span>
-        </MenuItem>
-
-        <MenuItem
-          onClick={(event) => {
-            withOptionalStop(event)
-            onToggle(coupon)
-            handleClose()
-          }}
-          sx={{
-            ...baseItemSx,
-            bgcolor: coupon.is_active ? '#FDEEEE' : '#EBF8EF',
-            '&:hover': {
-              bgcolor: coupon.is_active ? '#FBE3E3' : '#DDF2E3',
-            },
-          }}
-        >
-          <span
-            className="text-xs font-medium uppercase tracking-tight"
-            style={{ color: coupon.is_active ? '#DC2626' : '#16A34A' }}
+        {canEdit && (
+          <MenuItem
+            onClick={(event) => {
+              withOptionalStop(event)
+              onEdit(coupon)
+              handleClose()
+            }}
+            sx={{
+              ...baseItemSx,
+              bgcolor: '#F3F4F6',
+              '&:hover': { bgcolor: '#EAECEF' },
+            }}
           >
-            {coupon.is_active ? 'Disable Coupon' : 'Enable Coupon'}
-          </span>
-        </MenuItem>
+            <span className="text-xs font-medium uppercase tracking-tight text-neutral-500">
+              Edit Coupon
+            </span>
+          </MenuItem>
+        )}
+
+        {canExport && (
+          <MenuItem
+            onClick={(event) => {
+              withOptionalStop(event)
+              onExportUsage(coupon)
+              handleClose()
+            }}
+            disabled={isExporting}
+            sx={{
+              ...baseItemSx,
+              bgcolor: '#F3F4F6',
+              '&:hover': { bgcolor: '#EAECEF' },
+            }}
+          >
+            <span className="text-xs font-medium uppercase tracking-tight text-neutral-500">
+              {isExporting ? 'Exporting...' : 'Export Usage Record'}
+            </span>
+          </MenuItem>
+        )}
+
+        {canToggle && (
+          <MenuItem
+            onClick={(event) => {
+              withOptionalStop(event)
+              onToggle(coupon)
+              handleClose()
+            }}
+            sx={{
+              ...baseItemSx,
+              bgcolor: coupon.is_active ? '#FDEEEE' : '#EBF8EF',
+              '&:hover': {
+                bgcolor: coupon.is_active ? '#FBE3E3' : '#DDF2E3',
+              },
+            }}
+          >
+            <span
+              className="text-xs font-medium uppercase tracking-tight"
+              style={{ color: coupon.is_active ? '#DC2626' : '#16A34A' }}
+            >
+              {coupon.is_active ? 'Disable Coupon' : 'Enable Coupon'}
+            </span>
+          </MenuItem>
+        )}
       </Menu>
     </>
   )
