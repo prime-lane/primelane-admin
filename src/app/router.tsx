@@ -61,6 +61,11 @@ const PricingConfigDetails = lazy(() =>
     default: module.PricingConfigDetails,
   })),
 )
+const DailyRentalHours = lazy(() =>
+  import('@/features/pricing-config/daily-rental-hours').then((module) => ({
+    default: module.DailyRentalHours,
+  })),
+)
 const Trips = lazy(() =>
   import('@/features/trips/trips').then((module) => ({
     default: module.Trips,
@@ -208,6 +213,16 @@ export const router = createBrowserRouter([
           <RoutePermissionGate permission="price_configurations:view">
             <Suspense fallback={<Loading />}>
               <PricingConfig />
+            </Suspense>
+          </RoutePermissionGate>
+        ),
+      },
+      {
+        path: path.DASHBOARD.PRICING_CONFIG_HOURS,
+        element: (
+          <RoutePermissionGate permission="price_configurations:edit">
+            <Suspense fallback={<Loading />}>
+              <DailyRentalHours />
             </Suspense>
           </RoutePermissionGate>
         ),

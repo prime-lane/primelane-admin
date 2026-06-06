@@ -25,14 +25,25 @@ export const airportTransferSchema = z.object({
 })
 
 export const dailySchema = z.object({
-  half_day_hours: num('Half-day hours is required'),
   half_day_fare: koboNum('Half-day fare is required'),
-  full_day_hours: num('Full-day hours is required'),
   full_day_fare: koboNum('Full-day fare is required'),
   free_wait_time: num('Free wait time is required'),
   cancellation_percentage: num('Cancellation % is required', 100),
   extra_time_cost: koboNum('Extra time cost is required'),
   grace_period_mins: num('Grace period is required'),
+})
+
+// Half/full-day hours are a business-wide policy (single global value) that
+// lives on AppConfig, not per-category. Minimum of 1 hour mirrors the API DTO.
+const hoursNum = (msg: string) =>
+  z.preprocess(
+    (v) => (v === '' || v === null || v === undefined ? undefined : Number(v)),
+    z.number({ error: msg }).int(msg).min(1, 'Must be at least 1 hour'),
+  )
+
+export const dailyHoursSchema = z.object({
+  half_day_hours: hoursNum('Half-day hours is required'),
+  full_day_hours: hoursNum('Full-day hours is required'),
 })
 
 export const fleetSchema = z.object({
@@ -49,3 +60,4 @@ export const fleetSchema = z.object({
 export type AirportTransferFormData = z.infer<typeof airportTransferSchema>
 export type DailyFormData = z.infer<typeof dailySchema>
 export type FleetFormData = z.infer<typeof fleetSchema>
+export type DailyHoursFormData = z.infer<typeof dailyHoursSchema>

@@ -76,6 +76,9 @@ export const API_ENDPOINTS = {
     UPDATE_CATEGORY: (vehicleId: string) =>
       `/vehicles/update-category/${vehicleId}`,
   },
+  APP_CONFIG: {
+    ROOT: '/app-config',
+  },
   VEHICLES: {
     BY_DRIVER_ID: (id: string) => `/vehicles/driver/${id}`,
     MANAGE_STATUS: (id: string, action: ActivationStatus) =>

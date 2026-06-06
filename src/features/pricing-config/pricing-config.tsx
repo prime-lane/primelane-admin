@@ -57,6 +57,40 @@ const PricingRow = ({
   )
 }
 
+// Daily rental half/full-day hours are a single business-wide value (AppConfig),
+// not per-category — so this row links to the dedicated hours config page.
+const DailyHoursRow = () => {
+  const navigate = useNavigate()
+  const { hasPermission } = usePermissionsContext()
+  return (
+    <div className="flex items-center justify-between">
+      <span className="text-base text-black">Half &amp; Full Day Hours</span>
+      {hasPermission('price_configurations:edit') && (
+        <Button
+          variant="text"
+          size="small"
+          onClick={() => navigate(path.DASHBOARD.PRICING_CONFIG_HOURS)}
+          sx={{
+            bgcolor: 'neutral.100',
+            fontWeight: 500,
+            fontSize: '0.875rem',
+            textTransform: 'none',
+            px: 3,
+            py: 1,
+            borderRadius: '4px',
+            height: '28px',
+            '&:hover': {
+              bgcolor: 'neutral.200',
+            },
+          }}
+        >
+          Edit
+        </Button>
+      )}
+    </div>
+  )
+}
+
 export const PricingConfig = () => {
   const { data: categoriesData, isLoading, error } = useVehicleCategories()
 
@@ -96,6 +130,11 @@ export const PricingConfig = () => {
               />
             ))}
           </div>
+        </section>
+
+        <section className="space-y-4">
+          <SectionHeader title="Daily Rental Hour Configuration" />
+          <DailyHoursRow />
         </section>
 
         {/* <section className="space-y-4">

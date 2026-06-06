@@ -202,9 +202,7 @@ const DailyForm = ({
   useEffect(() => {
     if (categoryData) {
       reset({
-        half_day_hours: categoryData.daily_rental_half_day_hours,
         half_day_fare: fromKobo(categoryData.daily_rental_half_day_fare),
-        full_day_hours: categoryData.daily_rental_full_day_hours,
         full_day_fare: fromKobo(categoryData.daily_rental_full_day_fare),
         free_wait_time: categoryData.daily_rental_free_wait_time,
         cancellation_percentage:
@@ -217,9 +215,7 @@ const DailyForm = ({
 
   const onSubmit = (data: DailyFormData) => {
     updateConfig({
-      half_day_hours: Number(data.half_day_hours),
       half_day_fare: toKobo(data.half_day_fare),
-      full_day_hours: Number(data.full_day_hours),
       full_day_fare: toKobo(data.full_day_fare),
       free_wait_time: Number(data.free_wait_time),
       cancellation_percentage: Number(data.cancellation_percentage),
@@ -237,19 +233,6 @@ const DailyForm = ({
             Half-Day Fare
           </h2>
           <div className="space-y-4">
-            <Field
-              label="No. of hours"
-              hint="No. of hours for half-day"
-              error={errors.half_day_hours?.message}
-            >
-              <TextField
-                fullWidth
-                type="number"
-                size="medium"
-                {...register('half_day_hours')}
-                error={!!errors.half_day_hours}
-              />
-            </Field>
             <Field
               label="Fixed Price"
               hint="Price for half-day"
@@ -273,19 +256,6 @@ const DailyForm = ({
             Full Day Fare
           </h2>
           <div className="space-y-4">
-            <Field
-              label="No. of hours"
-              hint="No. of hours for full-day"
-              error={errors.full_day_hours?.message}
-            >
-              <TextField
-                fullWidth
-                type="number"
-                size="medium"
-                {...register('full_day_hours')}
-                error={!!errors.full_day_hours}
-              />
-            </Field>
             <Field
               label="Fixed Price"
               hint="Price for full-day"
