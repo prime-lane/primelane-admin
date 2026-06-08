@@ -75,7 +75,7 @@ export const CustomerOverview = ({
         <div className="grid md:grid-cols-4 grid-cols-1 gap-4">
           <TripSummaryCard
             label="Completed"
-            value={stats?.total_accepted_rides || 0}
+            value={stats?.total_completed_rides || 0}
           />
           <TripSummaryCard
             label="Wallet Balance"

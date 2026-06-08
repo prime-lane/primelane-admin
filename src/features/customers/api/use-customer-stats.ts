@@ -4,6 +4,7 @@ import { apiClient } from '@/services/api-client'
 export interface CustomerStats {
   total_rides: number
   total_cancelled_rides: number
+  total_completed_rides: number
   cancellation_rate: number
   total_accepted_rides: number
   total_spent: number
