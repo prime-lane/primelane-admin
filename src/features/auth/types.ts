@@ -22,7 +22,7 @@ export interface AuthResponse {
 }
 
 export interface SignInRequest {
-  email: string
+  identifier: string
   password: string
   user_type: 'admin'
 }

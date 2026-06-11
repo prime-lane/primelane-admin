@@ -39,7 +39,7 @@ export const useSignIn = () => {
       queryClient.setQueryData(['user'], data.user)
 
       toast.success(message || 'OTP sent')
-      navigate(path.AUTH.OTP, { state: { email: payload.email } })
+      navigate(path.AUTH.OTP, { state: { email: payload.identifier } })
     },
   })
 }

@@ -18,7 +18,7 @@ export const SignIn = () => {
   } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      email: '',
+      identifier: '',
       password: '',
     },
   })
@@ -42,14 +42,14 @@ export const SignIn = () => {
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <TextField
-          {...register('email')}
+          {...register('identifier')}
           hiddenLabel
           fullWidth
           size="medium"
           label="Email"
           placeholder="johndoe@mail.com"
-          error={!!errors.email}
-          helperText={errors.email?.message}
+          error={!!errors.identifier}
+          helperText={errors.identifier?.message}
           disabled={isSubmitting || signIn.isPending}
           slotProps={{
             input: {
