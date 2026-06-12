@@ -45,7 +45,7 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
           </span>
           {row.original.rider_id && (
             <span className="text-xs text-gray-500">
-              #{row.original?.rider_id?.substring(0, 8).toUpperCase()}
+              #{row.original?.rider?.custom_user_id} {/* truncate to 'RIDi122...OKP' and add a copy button */}
             </span>
           )}
         </div>
@@ -68,7 +68,7 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
             </span>
             {row.original.driver_id && (
               <span className="text-xs text-gray-500">
-                {row.original?.driver_id?.substring(0, 8).toUpperCase()}
+                {row.original?.driver?.custom_user_id} {/* truncate to 'RIDi122...OKP' and add a copy button */}
               </span>
             )}
           </div>
