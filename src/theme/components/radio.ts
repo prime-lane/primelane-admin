@@ -24,6 +24,10 @@ export const MuiRadio: Components['MuiRadio'] = {
       '&.Mui-checked': {
         color: colors.base.black,
       },
+      '&.Mui-disabled': {
+        color: colors.neutral[400],
+        opacity: 0.5,
+      },
     },
   },
 }
@@ -34,6 +38,15 @@ export const MuiFormControlLabel: Components['MuiFormControlLabel'] = {
       fontSize: '0.875rem',
       fontWeight: 400,
       color: colors.neutral[700],
+      '&.Mui-disabled': {
+        color: colors.neutral[400],
+      },
+    },
+    root: {
+      '&.Mui-disabled': {
+        opacity: 0.5,
+        cursor: 'not-allowed',
+      },
     },
   },
 }

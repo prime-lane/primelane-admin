@@ -1,6 +1,7 @@
 import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
 import { ErrorState } from '@/components/ui/loading-error-states'
+import { InfoCircle } from '@solar-icons/react'
 import { useVehicleCategories } from '@/features/pricing-config/api/use-vehicle-categories'
 import {
   formatToLocalTimeZone,
@@ -287,6 +288,23 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
           </div>
 
           <div className="max-w-lg mx-auto space-y-4">
+            {isEdit && (
+              <div className="flex items-start gap-2 rounded-md border border-blue-200 bg-blue-50 px-3 py-2.5 text-blue-800">
+                <InfoCircle
+                  size={18}
+                  className="mt-0.5 shrink-0 text-blue-500"
+                />
+                <p className="text-sm">
+                  Only the{' '}
+                  <span className="font-medium">description</span>,{' '}
+                  <span className="font-medium">usage limit</span> (for
+                  multiple-use coupons), and{' '}
+                  <span className="font-medium">end date</span> can be updated.
+                  All other fields are locked once a coupon is created.
+                </p>
+              </div>
+            )}
+
             <section className="space-y-4">
               <h2 className="text-base">Coupon</h2>
               <div className="space-y-4">
@@ -393,7 +411,7 @@ export const CouponForm = ({ mode }: CouponFormProps) => {
                     <FormControlLabel
                       key={opt.value}
                       value={opt.value}
-                      control={<Radio size="small" />}
+                      control={<Radio size="small" disabled={isEdit} />}
                       label={opt.label}
                       sx={toggleSx(usageType === opt.value)}
                     />
