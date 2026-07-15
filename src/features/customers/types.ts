@@ -61,6 +61,9 @@ export interface Wallet {
 
 export interface Transaction {
   id: string
+  custom_trxn_id?: string
+  custom_user_id?: string
+  custom_ride_id?: string | null
   user_id: string
   first_name: string
   last_name: string

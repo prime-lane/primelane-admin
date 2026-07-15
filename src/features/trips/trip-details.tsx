@@ -1,5 +1,6 @@
 import { path } from '@/app/paths'
 import { AppBreadcrumbs } from '@/components/ui/app-breadcrumbs'
+import { CopyButton } from '@/components/ui/copy-button'
 import { ErrorState } from '@/components/ui/loading-error-states'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { useCategoryName } from '@/features/pricing-config/hooks/use-category-name'
@@ -25,6 +26,7 @@ interface DetailRowProps {
   bold?: boolean
   indent?: boolean
   full?: boolean
+  copyValue?: string
 }
 
 const DetailRow = ({
@@ -35,6 +37,7 @@ const DetailRow = ({
   bold,
   indent,
   full = false,
+  copyValue,
 }: DetailRowProps) => (
   <div className={`flex items-center gap-4 ${indent ? 'pl-4' : ''}`}>
     <span
@@ -43,7 +46,7 @@ const DetailRow = ({
       {label}
     </span>
     {!full && (
-      <div className="flex items-end text-right w-full ml-auto gap-2">
+      <div className="flex items-center justify-end text-right w-full ml-auto gap-2">
         {isLink && linkTo ? (
           <Link
             to={linkTo}
@@ -59,6 +62,7 @@ const DetailRow = ({
             {value}
           </span>
         )}
+        {copyValue && <CopyButton textToCopy={copyValue} />}
       </div>
     )}
   </div>
@@ -132,7 +136,11 @@ export const TripDetails = () => {
 
       <div className="space-y-6 max-w-lg mx-auto">
         <div className="flex flex-col gap-6">
-          <DetailRow label="Booking ID" value={trip.custom_ride_id || id} />
+          <DetailRow
+            label="Booking ID"
+            value={trip.custom_ride_id || id}
+            copyValue={trip.custom_ride_id || id}
+          />
           {slots.length > 0 ? (
             <>
               <DetailRow
@@ -148,6 +156,7 @@ export const TripDetails = () => {
                   ':id',
                   trip.rider_id,
                 )}
+                copyValue={trip.rider?.custom_user_id}
               />
               {trip.no_of_vehicles != null && (
                 <DetailRow
@@ -173,6 +182,7 @@ export const TripDetails = () => {
                   ':id',
                   trip.rider_id,
                 )}
+                copyValue={trip.rider?.custom_user_id}
               />
             </>
           )}
@@ -197,7 +207,7 @@ export const TripDetails = () => {
                     key={slot.id}
                     className="flex items-start gap-4 border-b border-neutral-100 last:border-0 pb-4 last:pb-0"
                   >
-                    <div className="w-60 shrink-0">
+                    <div className="w-60 shrink-0 flex items-center gap-0.5">
                       <Link
                         to={path.DASHBOARD.DRIVER_DETAILS.replace(
                           ':id',
@@ -208,6 +218,9 @@ export const TripDetails = () => {
                         {driverName}
                         <ExternalLink size={11} />
                       </Link>
+                      {slot.driver?.custom_user_id && (
+                        <CopyButton textToCopy={slot.driver.custom_user_id} />
+                      )}
                     </div>
                     <div className="flex flex-col gap-0.5">
                       <span className="text-sm font-medium text-neutral-900">
@@ -246,6 +259,7 @@ export const TripDetails = () => {
                   ? path.DASHBOARD.DRIVER_DETAILS.replace(':id', trip.driver_id)
                   : undefined
               }
+              copyValue={trip.driver.custom_user_id}
             />
             {trip.driver_vehicle && (
               <DetailRow

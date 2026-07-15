@@ -65,7 +65,7 @@ export const API_ENDPOINTS = {
     MY_TRANSACTIONS: '/transactions',
   },
   TRIPS: {
-    ROOT: '/rides',
+    ROOT: '/rides/admin/bookings',
     BY_ID: (id: string) => `/rides/${id}`,
   },
   VEHICLE_CATEGORIES: {

@@ -43,10 +43,13 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
               ? `${row.original.rider.first_name} ${row.original.rider.last_name}`
               : 'N/A'}
           </span>
-          {row.original.rider_id && (
-            <span className="text-xs text-gray-500">
-              #{row.original?.rider?.custom_user_id} {/* truncate to 'RIDi122...OKP' and add a copy button */}
-            </span>
+          {row.original.rider_id && row.original?.rider?.custom_user_id && (
+            <div className="flex items-center gap-0.5">
+              <span className="text-xs text-gray-500">
+                #{row.original?.rider?.custom_user_id}
+              </span>
+              <CopyButton textToCopy={row.original.rider.custom_user_id} />
+            </div>
           )}
         </div>
       ),
@@ -66,10 +69,13 @@ export const useTripColumns = (): ColumnDef<Trip>[] => {
             >
               {name}
             </span>
-            {row.original.driver_id && (
-              <span className="text-xs text-gray-500">
-                {row.original?.driver?.custom_user_id} {/* truncate to 'RIDi122...OKP' and add a copy button */}
-              </span>
+            {row.original.driver_id && row.original?.driver?.custom_user_id && (
+              <div className="flex items-center gap-0.5">
+                <span className="text-xs text-gray-500">
+                  {row.original?.driver?.custom_user_id}
+                </span>
+                <CopyButton textToCopy={row.original.driver.custom_user_id} />
+              </div>
             )}
           </div>
         )

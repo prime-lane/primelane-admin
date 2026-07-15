@@ -11,14 +11,17 @@ export const useTransactionColumns = (): ColumnDef<Transaction>[] => {
     {
       accessorKey: 'id',
       header: 'Transaction ID',
-      cell: ({ row }) => (
-        <div className="flex items-center gap-0.5">
-          <span className="text-sm text-neutral-800">
-            {row.original.id.substring(0, 8).toUpperCase()}
-          </span>
-          <CopyButton textToCopy={row.original.id} />
-        </div>
-      ),
+      cell: ({ row }) => {
+        const trxnId =
+          row.original.custom_trxn_id ||
+          row.original.id.substring(0, 8).toUpperCase()
+        return (
+          <div className="flex items-center gap-0.5">
+            <span className="text-sm text-neutral-800">{trxnId}</span>
+            <CopyButton textToCopy={trxnId} />
+          </div>
+        )
+      },
     },
     {
       accessorKey: 'created_at',
@@ -92,14 +95,17 @@ export const useRefundColumns = (): ColumnDef<Transaction>[] => {
     {
       accessorKey: 'id',
       header: 'Transaction ID',
-      cell: ({ row }) => (
-        <div className="flex items-center gap-0.5">
-          <span className="text-sm text-neutral-800">
-            {row.original.id.substring(0, 8).toUpperCase()}
-          </span>
-          <CopyButton textToCopy={row.original.id} />
-        </div>
-      ),
+      cell: ({ row }) => {
+        const trxnId =
+          row.original.custom_trxn_id ||
+          row.original.id.substring(0, 8).toUpperCase()
+        return (
+          <div className="flex items-center gap-0.5">
+            <span className="text-sm text-neutral-800">{trxnId}</span>
+            <CopyButton textToCopy={trxnId} />
+          </div>
+        )
+      },
     },
     {
       accessorKey: 'created_at',
@@ -114,7 +120,7 @@ export const useRefundColumns = (): ColumnDef<Transaction>[] => {
       accessorKey: 'ride_id',
       header: 'Trip ID / Type',
       cell: ({ row }) => {
-        const tripId = row.original.ride_id || '—'
+        const tripId = row.original.custom_ride_id || '—'
         const category = row.original.category || '—'
         return (
           <div className="flex flex-col gap-0.5">
@@ -122,8 +128,8 @@ export const useRefundColumns = (): ColumnDef<Transaction>[] => {
               <span className="text-sm font-medium text-neutral-800">
                 {tripId}
               </span>
-              {row.original.ride_id && (
-                <CopyButton textToCopy={row.original.ride_id} />
+              {row.original.custom_ride_id && (
+                <CopyButton textToCopy={row.original.custom_ride_id} />
               )}
             </div>
             <span className="text-xs text-gray-500">{category}</span>
@@ -159,14 +165,17 @@ export const useCustomerWalletColumns = (): ColumnDef<Transaction>[] => {
     {
       accessorKey: 'id',
       header: 'Transaction ID',
-      cell: ({ row }) => (
-        <div className="flex items-center gap-0.5">
-          <span className="text-sm text-neutral-800">
-            {row.original.id.substring(0, 8).toUpperCase()}
-          </span>
-          <CopyButton textToCopy={row.original.id} />
-        </div>
-      ),
+      cell: ({ row }) => {
+        const trxnId =
+          row.original.custom_trxn_id ||
+          row.original.id.substring(0, 8).toUpperCase()
+        return (
+          <div className="flex items-center gap-0.5">
+            <span className="text-sm text-neutral-800">{trxnId}</span>
+            <CopyButton textToCopy={trxnId} />
+          </div>
+        )
+      },
     },
     {
       accessorKey: 'created_at',
@@ -186,10 +195,12 @@ export const useCustomerWalletColumns = (): ColumnDef<Transaction>[] => {
             <p className="text-sm text-black">
               {`${row.original.first_name || ''} ${row.original.last_name || ''}`}
             </p>
-            <span className="text-xs text-neutral-500">
-              {row.original.ride_id?.substring(0, 12).toUpperCase()}
-              <CopyButton textToCopy={`${row.original.ride_id}`} />
-            </span>
+            {row.original.custom_user_id && (
+              <span className="inline-flex items-center gap-0.5 text-xs text-neutral-500">
+                {row.original.custom_user_id}
+                <CopyButton textToCopy={row.original.custom_user_id} />
+              </span>
+            )}
           </div>
         </div>
       ),
