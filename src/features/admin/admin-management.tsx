@@ -8,7 +8,7 @@ import { Box, Button } from '@mui/material'
 import { UserPlus } from '@solar-icons/react'
 import { useState, useMemo, useCallback } from 'react'
 import { useQueryState, parseAsString } from 'nuqs'
-import { useAdmins } from './api/use-admins'
+import { useAdmins, useResendAdminInvite } from './api/use-admins'
 import { getAdminColumns } from './components/columns'
 import { InviteAdminModal } from './components/invite-admin-modal'
 import { EditAdminModal } from './components/edit-admin-modal'
@@ -48,6 +48,7 @@ export const AdminManagement = () => {
 
   const { mutate: manageStatus } = useManageUserStatus(statusTargetId)
   const { mutate: initializePasswordReset } = useInitializePasswordReset()
+  const { mutate: resendInvite } = useResendAdminInvite()
 
   const handleFilterChange = (key: string, value: any) => {
     setPage(1)
@@ -93,8 +94,11 @@ export const AdminManagement = () => {
           initializePasswordReset({ user_id: admin.id })
         },
         onToggleStatus: handleToggleStatus,
+        onResendInvite: (admin) => {
+          resendInvite(admin.email)
+        },
       }),
-    [handleToggleStatus, initializePasswordReset],
+    [handleToggleStatus, initializePasswordReset, resendInvite],
   )
 
   return (

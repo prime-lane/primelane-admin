@@ -12,6 +12,7 @@ interface AdminActionMenuProps {
   onEdit: (admin: Admin) => void
   onResetPassword: (admin: Admin) => void
   onToggleStatus: (admin: Admin) => void
+  onResendInvite: (admin: Admin) => void
 }
 
 const baseItemSx = {
@@ -27,11 +28,14 @@ export const AdminActionMenu = ({
   onEdit,
   onResetPassword,
   onToggleStatus,
+  onResendInvite,
 }: AdminActionMenuProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const { hasPermission } = usePermissionsContext()
 
   const canEdit = hasPermission('admin_management:edit')
+  const canResendInvite =
+    admin.status === 'pending' && hasPermission('admin_management:invite')
 
   const handleClose = () => setAnchorEl(null)
 
@@ -44,7 +48,7 @@ export const AdminActionMenu = ({
 
   const isActive = admin.status === 'active'
 
-  if (!canEdit) return null
+  if (!canEdit && !canResendInvite) return null
 
   return (
     <>
@@ -69,59 +73,84 @@ export const AdminActionMenu = ({
           },
         }}
       >
-        <MenuItem
-          onClick={(event) => {
-            stop(event)
-            onEdit(admin)
-            handleClose()
-          }}
-          sx={{
-            ...baseItemSx,
-            bgcolor: '#F3F4F6',
-            '&:hover': { bgcolor: '#EAECEF' },
-          }}
-        >
-          <span className="text-xs font-medium uppercase tracking-tight text-neutral-500">
-            Edit Account
-          </span>
-        </MenuItem>
-
-        <MenuItem
-          onClick={(event) => {
-            stop(event)
-            onResetPassword(admin)
-            handleClose()
-          }}
-          sx={{
-            ...baseItemSx,
-            bgcolor: '#F3F4F6',
-            '&:hover': { bgcolor: '#EAECEF' },
-          }}
-        >
-          <span className="text-xs font-medium uppercase tracking-tight text-neutral-500">
-            Reset Password
-          </span>
-        </MenuItem>
-
-        <MenuItem
-          onClick={(event) => {
-            stop(event)
-            onToggleStatus(admin)
-            handleClose()
-          }}
-          sx={{
-            ...baseItemSx,
-            bgcolor: isActive ? '#FDEEEE' : '#EBF8EF',
-            '&:hover': { bgcolor: isActive ? '#FBE3E3' : '#DDF2E3' },
-          }}
-        >
-          <span
-            className="text-xs font-medium uppercase tracking-tight"
-            style={{ color: isActive ? '#DC2626' : '#16A34A' }}
+        {canEdit && (
+          <MenuItem
+            onClick={(event) => {
+              stop(event)
+              onEdit(admin)
+              handleClose()
+            }}
+            sx={{
+              ...baseItemSx,
+              bgcolor: '#F3F4F6',
+              '&:hover': { bgcolor: '#EAECEF' },
+            }}
           >
-            {isActive ? 'Deactivate Account' : 'Activate Account'}
-          </span>
-        </MenuItem>
+            <span className="text-xs font-medium uppercase tracking-tight text-neutral-500">
+              Edit Account
+            </span>
+          </MenuItem>
+        )}
+
+        {canResendInvite && (
+          <MenuItem
+            onClick={(event) => {
+              stop(event)
+              onResendInvite(admin)
+              handleClose()
+            }}
+            sx={{
+              ...baseItemSx,
+              bgcolor: '#F3F4F6',
+              '&:hover': { bgcolor: '#EAECEF' },
+            }}
+          >
+            <span className="text-xs font-medium uppercase tracking-tight text-neutral-500">
+              Resend Invite
+            </span>
+          </MenuItem>
+        )}
+
+        {canEdit && (
+          <MenuItem
+            onClick={(event) => {
+              stop(event)
+              onResetPassword(admin)
+              handleClose()
+            }}
+            sx={{
+              ...baseItemSx,
+              bgcolor: '#F3F4F6',
+              '&:hover': { bgcolor: '#EAECEF' },
+            }}
+          >
+            <span className="text-xs font-medium uppercase tracking-tight text-neutral-500">
+              Reset Password
+            </span>
+          </MenuItem>
+        )}
+
+        {canEdit && (
+          <MenuItem
+            onClick={(event) => {
+              stop(event)
+              onToggleStatus(admin)
+              handleClose()
+            }}
+            sx={{
+              ...baseItemSx,
+              bgcolor: isActive ? '#FDEEEE' : '#EBF8EF',
+              '&:hover': { bgcolor: isActive ? '#FBE3E3' : '#DDF2E3' },
+            }}
+          >
+            <span
+              className="text-xs font-medium uppercase tracking-tight"
+              style={{ color: isActive ? '#DC2626' : '#16A34A' }}
+            >
+              {isActive ? 'Deactivate Account' : 'Activate Account'}
+            </span>
+          </MenuItem>
+        )}
       </Menu>
     </>
   )

@@ -11,12 +11,14 @@ interface AdminColumnActions {
   onEdit: (admin: Admin) => void
   onResetPassword: (admin: Admin) => void
   onToggleStatus: (admin: Admin) => void
+  onResendInvite: (admin: Admin) => void
 }
 
 export const getAdminColumns = ({
   onEdit,
   onResetPassword,
   onToggleStatus,
+  onResendInvite,
 }: AdminColumnActions): ColumnDef<Admin>[] => [
   {
     accessorKey: 'custom_user_id',
@@ -82,6 +84,7 @@ export const getAdminColumns = ({
         onEdit={onEdit}
         onResetPassword={onResetPassword}
         onToggleStatus={onToggleStatus}
+        onResendInvite={onResendInvite}
         trigger={(openMenu) => (
           <IconButton size="small" onClick={openMenu}>
             <MenuDots size={24} color="#525866" />

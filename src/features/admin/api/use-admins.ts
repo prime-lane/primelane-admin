@@ -79,6 +79,24 @@ export const useInviteAdmin = () => {
   })
 }
 
+export const useResendAdminInvite = () => {
+  return useMutation({
+    mutationFn: async (email: string) => {
+      const response = await apiClient.post<{ message: string }>(
+        e.AUTH.ADMIN_INVITE_RESEND,
+        { email },
+      )
+      return response
+    },
+    onSuccess: (response) => {
+      toast.success(response.message || 'Invite resent successfully')
+    },
+    onError: (error: any) => {
+      toast.error(error.message || 'Failed to resend invite')
+    },
+  })
+}
+
 export const useUpdateAdmin = (id?: string) => {
   const queryClient = useQueryClient()
 
