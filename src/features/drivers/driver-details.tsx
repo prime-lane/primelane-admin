@@ -298,7 +298,6 @@ export const DriverDetails = () => {
               <MenuItem
                 onClick={() => handleStatusChangeClick('reactivate')}
                 sx={{ color: 'success.main' }}
-                disabled={!kycDetails?.is_vehicle_set}
               >
                 <span className="text-base text-green-500">Activate Account</span>
               </MenuItem>
